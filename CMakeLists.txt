@@ -26,12 +26,14 @@ ELSE(MATLAB_FOUND)
   MESSAGE(FATAL_ERROR "Matlab not found")
 ENDIF(MATLAB_FOUND)
 
-include_directories(${MATLAB_INCLUDE_DIR})
+find_package(NIX REQUIRED)
+
+include_directories(${MATLAB_INCLUDE_DIR} ${NIX_INCLUDE_DIR})
 
 set(SOURCE_FILES main.cpp)
 add_library(nix_mx SHARED ${SOURCE_FILES})
 
-target_link_libraries(nix_mx ${MATLAB_LIBRARIES})
+target_link_libraries(nix_mx ${MATLAB_LIBRARIES} ${NIX_LIBRARIES})
 set_target_properties(nix_mx PROPERTIES
 		              VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
 		              SOVERSION ${VERSION_ABI})
