@@ -321,12 +321,17 @@ static void data_array_describe(const extractor &input, infusor &output)
     box<nix::DataArray> eb = input.handle<nix::DataArray>(1);
     nix::DataArray da = eb.get();
 
-    std::vector<const char *> fields = { "name", "id", "shape", "dimensions" };
+    std::vector<const char *> fields = { "name", "id", "shape",  "unit", "dimensions", "label"};
     mxArray *sa =  mxCreateStructMatrix(1, 1, fields.size(), fields.data());
 
     mxSetFieldByNumber(sa, 0, 0, mxCreateString(da.name().c_str()));
     mxSetFieldByNumber(sa, 0, 1, mxCreateString(da.id().c_str()));
     mxSetFieldByNumber(sa, 0, 2, ndsize_to_mxarray(da.dataExtent()));
+
+    boost::optional<std::string> unit = da.unit();
+    if (unit) {
+        mxSetFieldByNumber(sa, 0, 3, mxCreateString(unit->c_str()));
+    }
 
     size_t ndims = da.dimensionCount();
 
@@ -352,7 +357,13 @@ static void data_array_describe(const extractor &input, infusor &output)
         mxSetCell(dims, i, ca);
     }
 
-    mxSetFieldByNumber(sa, 0, 3, dims);
+    mxSetFieldByNumber(sa, 0, 4, dims);
+
+
+    boost::optional<std::string> label = da.label();
+    if (unit) {
+        mxSetFieldByNumber(sa, 0, 5, mxCreateString(label->c_str()));
+    }
 
     output.set(0, sa);
 }
