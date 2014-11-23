@@ -37,41 +37,84 @@ mxArray* vector_to_array(const std::vector<T> &v) {
 
 
 // *** nix entities holder ***
+
 template<typename T>
-struct holder {
-    T obj;
+struct entity_to_id { };
+
+template<>
+struct entity_to_id<nix::File> {
+    static constexpr int value() { return 1; }
 };
 
-template<typename T>
-struct box {
+template<>
+struct entity_to_id<nix::Block> {
+    static constexpr int value() { return 2; }
+};
 
-    box() : ptr(nullptr) { }
+template<>
+struct entity_to_id<nix::DataArray> {
+    static constexpr int value() { return 3; }
+};
 
-    box(T entity) : ptr(nullptr) {
-        set(entity);
-    }
 
-    box(uint64_t handle) {
-        ptr = reinterpret_cast<holder<T>*>(handle);
-    }
 
-    void set(T obj) {
-        if (ptr == nullptr) {
-            ptr = new holder<T>();
+class handle {
+public:
+
+    template<typename T>
+    handle(const T &obj) : et(new cell<T>(obj)) { }
+    handle(uint64_t h) : et(reinterpret_cast<entity *>(h)) { }
+
+    template<typename T>
+    T get() const {
+        if (et == nullptr) {
+            throw std::runtime_error("called get on empty handle");
         }
 
-        ptr->obj = obj;
+        int eid = entity_to_id<T>::value();
+        if (eid != et->id) {
+            throw std::runtime_error("tried to get a entity of wrong type");
+        }
+
+        return dynamic_cast<cell<T> *>(et)->obj;
     }
 
-    T get() {
-        return ptr->obj;
+    uint64_t address() const {
+        return reinterpret_cast<uint64_t >(et);
     }
 
-    uint64_t handle() const {
-        return reinterpret_cast<uint64_t >(ptr);
+    void destroy() {
+        et->destory();
+        delete et;
+        et = nullptr;
     }
 
-    holder<T> *ptr;
+private:
+    struct entity {
+
+        template<typename T>
+        entity(const T &e) : id(entity_to_id<T>::value()) { }
+
+        int id;
+
+        virtual void destory() = 0;
+
+        virtual ~entity() { }
+    };
+
+    template<typename T>
+    struct cell : public entity {
+        cell(const T &obj) : entity(obj), obj(obj) { }
+
+        virtual void destory() override {
+            obj = nix::none;
+        }
+
+        T obj;
+    };
+
+
+    entity *et;
 };
 
 
@@ -134,10 +177,10 @@ public:
     }
 
     template<typename T>
-    box<T> handle(int pos) const {
+    T entity(int pos) const {
         uint64_t address = uint64(pos);
-        box<T> eb(address);
-        return eb;
+        handle h(address);
+        return h.get<T>();
     }
 
     mxClassID class_id(int pos) const {
@@ -175,9 +218,8 @@ public:
         array[pos] = arr;
     }
 
-    template<typename T>
-    void set(int pos, box<T> &eb) {
-        set(pos, eb.handle());
+    void set(int pos, const handle &h) {
+        set(pos, h.address());
     }
 
 private:
@@ -193,17 +235,17 @@ static void open_file(const extractor &input, infusor &output)
     std::string name = input.str(1);
 
     nix::File fn = nix::File::open(name, nix::FileMode::ReadWrite);
-    box<nix::File> fb = box<nix::File>(fn);
+    handle h = handle(fn);
 
-    output.set(0, fb);
+    output.set(0, h);
 }
 
 static void list_blocks(const extractor &input, infusor &output)
 {
     mexPrintf("[+] list_blocks\n");
-    box<nix::File> eb = input.handle<nix::File>(1);
+    nix::File fd = input.entity<nix::File>(1);
 
-    std::vector<nix::Block> blocks = eb.get().blocks();
+    std::vector<nix::Block> blocks = fd.blocks();
 
     std::vector<const char *> fields = { "name", "id" };
 
@@ -220,9 +262,8 @@ static void list_blocks(const extractor &input, infusor &output)
 static void list_data_arrays(const extractor &input, infusor &output)
 {
     mexPrintf("[+] list_data_arrays\n");
-    box<nix::File> eb = input.handle<nix::File>(1);
-    nix::File nf = eb.get();
 
+    nix::File nf = input.entity<nix::File>(1);
     nix::Block block = nf.getBlock(input.str(2));
 
     std::vector<nix::DataArray> arr = block.dataArrays();
@@ -242,22 +283,18 @@ static void list_data_arrays(const extractor &input, infusor &output)
 static void open_block(const extractor &input, infusor &output)
 {
     mexPrintf("[+] list_data_arrays\n");
-    box<nix::File> eb = input.handle<nix::File>(1);
-    nix::File nf = eb.get();
-
+    nix::File nf = input.entity<nix::File>(1);
     nix::Block block = nf.getBlock(input.str(2));
-
-    box<nix::Block> bb = box<nix::Block>(block);
+    handle bb = handle(block);
     output.set(0, bb);
 }
 
 static void open_data_array(const extractor &input, infusor &output)
 {
     mexPrintf("[+] list_data_arrays\n");
-    box<nix::Block> eb = input.handle<nix::Block>(1);
-    nix::Block block = eb.get();
+    nix::Block block = input.entity<nix::Block>(1);
     nix::DataArray da = block.getDataArray(input.str(2));
-    box<nix::DataArray> bd = box<nix::DataArray>(da);
+    handle bd = handle(da);
     output.set(0, bd);
 }
 
@@ -348,8 +385,7 @@ static mxArray *dim_to_struct(nix::RangeDimension dim) {
 static void data_array_describe(const extractor &input, infusor &output)
 {
     mexPrintf("[+] block_describe_data_array\n");
-    box<nix::DataArray> eb = input.handle<nix::DataArray>(1);
-    nix::DataArray da = eb.get();
+    nix::DataArray da = input.entity<nix::DataArray>(1);
 
     std::vector<const char *> fields = { "name", "id", "shape",  "unit", "dimensions", "label",
                                          "polynom_coefficients"};
@@ -408,8 +444,7 @@ static void data_array_describe(const extractor &input, infusor &output)
 static void data_array_read_all(const extractor &input, infusor &output)
 {
     mexPrintf("[+] block_describe_data_array\n");
-    box<nix::DataArray> eb = input.handle<nix::DataArray>(1);
-    nix::DataArray da = eb.get();
+    nix::DataArray da = input.entity<nix::DataArray>(1);
 
     nix::NDSize size = da.dataExtent();
     std::vector<mwSize> dims(size.size());
