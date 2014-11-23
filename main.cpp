@@ -351,7 +351,8 @@ static void data_array_describe(const extractor &input, infusor &output)
     box<nix::DataArray> eb = input.handle<nix::DataArray>(1);
     nix::DataArray da = eb.get();
 
-    std::vector<const char *> fields = { "name", "id", "shape",  "unit", "dimensions", "label"};
+    std::vector<const char *> fields = { "name", "id", "shape",  "unit", "dimensions", "label",
+                                         "polynom_coefficients"};
     mxArray *sa =  mxCreateStructMatrix(1, 1, fields.size(), fields.data());
 
     mxSetFieldByNumber(sa, 0, 0, mxCreateString(da.name().c_str()));
@@ -393,6 +394,12 @@ static void data_array_describe(const extractor &input, infusor &output)
     boost::optional<std::string> label = da.label();
     if (unit) {
         mxSetFieldByNumber(sa, 0, 5, mxCreateString(label->c_str()));
+    }
+
+    std::vector<double> pc = da.polynomCoefficients();
+
+    if (!pc.empty()) {
+        mxSetFieldByNumber(sa, 0, 6, vector_to_array(pc));
     }
 
     output.set(0, sa);
