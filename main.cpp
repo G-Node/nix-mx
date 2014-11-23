@@ -6,6 +6,36 @@
 
 #include <nix.hpp>
 
+// *** datatype converter
+
+template<typename T>
+struct to_mx_class_id {
+
+    static mxClassID value() {
+        nix::DataType dtype = nix::to_data_type<T>::value;
+        switch (dtype) {
+            case nix::DataType::Double:
+                return mxDOUBLE_CLASS;
+
+            default:
+                mexErrMsgIdAndTxt("MATLAB:toclassid:notimplemented", "Implement me!");
+                return mxVOID_CLASS;
+        }
+    }
+
+};
+
+
+template<typename T>
+mxArray* vector_to_array(const std::vector<T> &v) {
+    mxClassID klass_id = to_mx_class_id<T>::value();
+    mxArray *data = mxCreateNumericMatrix(1, v.size(), klass_id, mxREAL);
+    double *ptr = mxGetPr(data);
+    memcpy(ptr, v.data(), sizeof(T) * v.size());
+    return data;
+}
+
+
 // *** nix entities holder ***
 template<typename T>
 struct holder {
