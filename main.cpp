@@ -232,6 +232,13 @@ private:
 
 // *** functions ***
 
+static void entity_destory(const extractor &input, infusor &output)
+{
+    mexPrintf("[+] entity_destory\n");
+    handle h = input.hdl(1);
+    h.destroy();
+}
+
 static void open_file(const extractor &input, infusor &output)
 {
     input.require_arguments({mxCHAR_CLASS, mxCHAR_CLASS}, true);
@@ -480,6 +487,7 @@ fendpoint(std::string name, fn_t fn) : name(name), fn(fn) {}
 };
 
 const std::vector<fendpoint> funcs = {
+        {"Entity::destroy", entity_destory},
         {"File::open", open_file},
         {"File::listBlocks", list_blocks},
         {"File::listDataArrays", list_data_arrays},
