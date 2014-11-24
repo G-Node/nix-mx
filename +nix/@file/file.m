@@ -15,7 +15,8 @@ classdef file < nix.entity
         end
         
         function b = block(obj, name)
-            b = nix_mx('File::openBlock', obj.nix_handle, name);
+            bh = nix_mx('File::openBlock', obj.nix_handle, name);
+            b = nix.block(bh);
         end
     end
     
