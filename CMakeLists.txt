@@ -30,7 +30,7 @@ find_package(NIX REQUIRED)
 
 include_directories(${MATLAB_INCLUDE_DIR} ${NIX_INCLUDE_DIR})
 
-set(SOURCE_FILES main.cpp)
+file(GLOB SOURCE_FILES "." "*.cpp" "*.cc")
 add_library(nix_mx SHARED ${SOURCE_FILES})
 
 target_link_libraries(nix_mx ${MATLAB_LIBRARIES} ${NIX_LIBRARIES})
