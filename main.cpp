@@ -38,6 +38,15 @@ mxArray* vector_to_array(const std::vector<T> &v) {
     return data;
 }
 
+template<>
+mxArray* vector_to_array(const std::vector<std::string> &v) {
+    mxArray *data = mxCreateCellMatrix(1, v.size());
+    for (size_t i = 0; i < v.size(); i++) {
+        mxSetCell(data, i, mxCreateString(v[i].c_str()));
+    }
+
+    return data;
+}
 
 // *** functions ***
 
