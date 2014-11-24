@@ -84,6 +84,7 @@ public:
     }
 
     void destroy() {
+        et->id = 0;
         et->destory();
         delete et;
         et = nullptr;
