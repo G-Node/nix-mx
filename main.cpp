@@ -62,7 +62,14 @@ class handle {
 public:
 
     template<typename T>
-    handle(const T &obj) : et(new cell<T>(obj)) { }
+    handle(const T &obj) : et(new cell<T>(obj)) {
+        //every time we create a new entity cell
+        //we increase the lock count by one so
+        //we don't get unloaded before we have
+        //destructed/destroyed all the entities
+        mexLock();
+    }
+
     handle(uint64_t h) : et(reinterpret_cast<entity *>(h)) { }
 
     template<typename T>
@@ -84,7 +91,6 @@ public:
     }
 
     void destroy() {
-        et->id = 0;
         et->destory();
         delete et;
         et = nullptr;
@@ -100,7 +106,13 @@ private:
 
         virtual void destory() = 0;
 
-        virtual ~entity() { }
+        virtual ~entity() {
+
+            //counterpart of mexLock in handle's ctor,
+            // look there for more information
+            mexUnlock();
+            id = 0;
+        }
     };
 
     template<typename T>
