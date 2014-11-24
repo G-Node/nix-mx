@@ -189,13 +189,15 @@ static mxArray *nmCreateScalar(uint32_t val) {
 
 static mxArray *dim_to_struct(nix::SetDimension dim) {
 
-    std::vector<const char *> fields = { "type", "type_id", "label" };
+    std::vector<const char *> fields = { "type", "type_id", "labels" };
     mxArray *sa =  mxCreateStructMatrix(1, 1, fields.size(), fields.data());
 
     mxSetFieldByNumber(sa, 0, 0, mxCreateString("set"));
     mxSetFieldByNumber(sa, 0, 1, nmCreateScalar(1));
 
     std::vector<std::string> labels = dim.labels();
+    mxSetFieldByNumber(sa, 0, 2, vector_to_array(labels));
+
     return sa;
 }
 
