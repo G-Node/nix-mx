@@ -178,9 +178,13 @@ public:
 
     template<typename T>
     T entity(int pos) const {
+        return hdl(pos).get<T>();
+    }
+
+    handle hdl(int pos) const {
         uint64_t address = uint64(pos);
         handle h(address);
-        return h.get<T>();
+        return h;
     }
 
     mxClassID class_id(int pos) const {
