@@ -128,6 +128,26 @@ static void open_data_array(const extractor &input, infusor &output)
     output.set(0, bd);
 }
 
+static void block_list_data_arrays(const extractor &input, infusor &output)
+{
+    mexPrintf("[+] list_data_arrays\n");
+
+    nix::Block block = input.entity<nix::Block>(1);
+    std::vector<nix::DataArray> arr = block.dataArrays();
+    
+    std::vector<const char *> fields = { "name", "id" };
+
+    mxArray *sa =  mxCreateStructMatrix(arr.size(), 1, fields.size(), fields.data());
+
+    for (size_t n = 0; n < arr.size(); n++) {
+        mxSetFieldByNumber(sa, n, 0, mxCreateString(arr[n].name().c_str()));
+        mxSetFieldByNumber(sa, n, 1, mxCreateString(arr[n].id().c_str()));
+    }
+
+    output.set(0, sa);
+}
+
+
 
 static mxArray * ndsize_to_mxarray(const nix::NDSize &size)
 {
@@ -311,6 +331,7 @@ const std::vector<fendpoint> funcs = {
         {"File::listDataArrays", list_data_arrays},
         {"File::openBlock", open_block},
         {"Block::openDataArray", open_data_array},
+        {"Block::listDataArrays", block_list_data_arrays},
         {"DataArray::describe", data_array_describe},
         {"DataArray::readAll", data_array_read_all}
 };
