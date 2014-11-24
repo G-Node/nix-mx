@@ -226,11 +226,20 @@ static mxArray *dim_to_struct(nix::SampledDimension dim) {
 
 static mxArray *dim_to_struct(nix::RangeDimension dim) {
 
-    std::vector<const char *> fields = { "type", "type_id" };
+    std::vector<const char *> fields = { "type", "type_id", "ticks", "unit"};
     mxArray *sa =  mxCreateStructMatrix(1, 1, fields.size(), fields.data());
 
     mxSetFieldByNumber(sa, 0, 0, mxCreateString("range"));
     mxSetFieldByNumber(sa, 0, 1, nmCreateScalar(3));
+
+    std::vector<double> ticks = dim.ticks();
+    mxSetFieldByNumber(sa, 0, 2, vector_to_array(ticks));
+
+    boost::optional<std::string> unit = dim.unit();
+    if (unit) {
+        mxSetFieldByNumber(sa, 0, 3, mxCreateString(unit->c_str()));
+    }
+
     return sa;
 }
 
