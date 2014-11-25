@@ -21,7 +21,7 @@ struct to_mx_class_id {
                 return std::make_pair(mxDOUBLE_CLASS, mxREAL);
 
             default:
-                mexErrMsgIdAndTxt("MATLAB:toclassid:notimplemented", "Implement me!");
+                mexErrMsgIdAndTxt("nix:toclassid:notimplemented", "Implement me!");
                 return std::make_pair(mxVOID_CLASS, mxREAL);
         }
     }
@@ -366,9 +366,9 @@ void mexFunction(int            nlhs,
             try {
                 fn.fn(input, output);
             } catch (std::exception &e) {
-                mexErrMsgIdAndTxt("MATLAB:arg:dispatch", e.what());
+                mexErrMsgIdAndTxt("nix:arg:dispatch", e.what());
             } catch (...) {
-                mexErrMsgIdAndTxt("MATLAB:arg:dispatch", "unkown exception");
+                mexErrMsgIdAndTxt("nix:arg:dispatch", "unkown exception");
             }
             processed = true;
             break;
@@ -376,7 +376,7 @@ void mexFunction(int            nlhs,
     }
 
     if (!processed) {
-        mexErrMsgIdAndTxt("MATLAB:arg:dispatch", "Unkown command");
+        mexErrMsgIdAndTxt("nix:arg:dispatch", "Unkown command");
     }
 }
 
