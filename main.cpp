@@ -14,15 +14,15 @@
 template<typename T>
 struct to_mx_class_id {
 
-    static mxClassID value() {
+    static std::pair<mxClassID, mxComplexity> value() {
         nix::DataType dtype = nix::to_data_type<T>::value;
         switch (dtype) {
             case nix::DataType::Double:
-                return mxDOUBLE_CLASS;
+                return std::make_pair(mxDOUBLE_CLASS, mxREAL);
 
             default:
                 mexErrMsgIdAndTxt("MATLAB:toclassid:notimplemented", "Implement me!");
-                return mxVOID_CLASS;
+                return std::make_pair(mxVOID_CLASS, mxREAL);
         }
     }
 
@@ -31,8 +31,8 @@ struct to_mx_class_id {
 
 template<typename T>
 mxArray* vector_to_array(const std::vector<T> &v) {
-    mxClassID klass_id = to_mx_class_id<T>::value();
-    mxArray *data = mxCreateNumericMatrix(1, v.size(), klass_id, mxREAL);
+    std::pair<mxClassID, mxComplexity> klass = to_mx_class_id<T>::value();
+    mxArray *data = mxCreateNumericMatrix(1, v.size(), klass.first, klass.second);
     double *ptr = mxGetPr(data);
     memcpy(ptr, v.data(), sizeof(T) * v.size());
     return data;
