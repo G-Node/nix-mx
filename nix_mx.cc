@@ -82,6 +82,16 @@ mxArray* make_mx_array(const boost::optional<T> &opt) {
 
     return nullptr;
 }
+
+template<typename T>
+mxArray* make_mx_array(T val, typename std::enable_if<std::is_arithmetic<T>::value >::type* = nullptr) {
+    std::pair<mxClassID, mxComplexity> klass = to_mx_class_id<T>::value();
+    mxArray *arr = mxCreateNumericMatrix(1, 1, klass.first, klass.second);
+    void *data = mxGetData(arr);
+    memcpy(data, &val, sizeof(T));
+    return arr;
+}
+
 struct struct_builder {
 
     struct_builder(std::vector<size_t> dims, std::vector<const char *> f)
