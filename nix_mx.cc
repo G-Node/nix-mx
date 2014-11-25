@@ -30,7 +30,7 @@ struct to_mx_class_id {
 
 
 template<typename T>
-mxArray* vector_to_array(const std::vector<T> &v) {
+mxArray* make_mx_array(const std::vector<T> &v) {
     std::pair<mxClassID, mxComplexity> klass = to_mx_class_id<T>::value();
     mxArray *data = mxCreateNumericMatrix(1, v.size(), klass.first, klass.second);
     double *ptr = mxGetPr(data);
@@ -39,7 +39,7 @@ mxArray* vector_to_array(const std::vector<T> &v) {
 }
 
 template<>
-mxArray* vector_to_array(const std::vector<std::string> &v) {
+mxArray* make_mx_array(const std::vector<std::string> &v) {
     mxArray *data = mxCreateCellMatrix(1, v.size());
     for (size_t i = 0; i < v.size(); i++) {
         mxSetCell(data, i, mxCreateString(v[i].c_str()));
@@ -77,13 +77,14 @@ static void list_blocks(const extractor &input, infusor &output)
 
     std::vector<nix::Block> blocks = fd.blocks();
 
-    std::vector<const char *> fields = { "name", "id" };
+    std::vector<const char *> fields = { "name", "id", "type" };
 
     mxArray *sa =  mxCreateStructMatrix(blocks.size(), 1, fields.size(), fields.data());
 
     for (size_t n = 0; n < blocks.size(); n++) {
         mxSetFieldByNumber(sa, n, 0, mxCreateString(blocks[n].name().c_str()));
         mxSetFieldByNumber(sa, n, 1, mxCreateString(blocks[n].id().c_str()));
+        mxSetFieldByNumber(sa, n, 2, mxCreateString(blocks[n].type().c_str()));
     }
 
     output.set(0, sa);
@@ -196,7 +197,7 @@ static mxArray *dim_to_struct(nix::SetDimension dim) {
     mxSetFieldByNumber(sa, 0, 1, nmCreateScalar(1));
 
     std::vector<std::string> labels = dim.labels();
-    mxSetFieldByNumber(sa, 0, 2, vector_to_array(labels));
+    mxSetFieldByNumber(sa, 0, 2, make_mx_array(labels));
 
     return sa;
 }
@@ -233,7 +234,7 @@ static mxArray *dim_to_struct(nix::RangeDimension dim) {
     mxSetFieldByNumber(sa, 0, 1, nmCreateScalar(3));
 
     std::vector<double> ticks = dim.ticks();
-    mxSetFieldByNumber(sa, 0, 2, vector_to_array(ticks));
+    mxSetFieldByNumber(sa, 0, 2, make_mx_array(ticks));
 
     boost::optional<std::string> unit = dim.unit();
     if (unit) {
@@ -296,7 +297,7 @@ static void data_array_describe(const extractor &input, infusor &output)
     std::vector<double> pc = da.polynomCoefficients();
 
     if (!pc.empty()) {
-        mxSetFieldByNumber(sa, 0, 6, vector_to_array(pc));
+        mxSetFieldByNumber(sa, 0, 6, make_mx_array(pc));
     }
 
     output.set(0, sa);
