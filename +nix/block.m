@@ -14,7 +14,8 @@ classdef Block < nix.Entity
         end
         
         function da = data_array(obj, id_or_name)
-           da = nix_mx('Block::openDataArray', obj.nix_handle, id_or_name); 
+           dh = nix_mx('Block::openDataArray', obj.nix_handle, id_or_name); 
+           da = nix.DataArray(dh);
         end
     end
     
