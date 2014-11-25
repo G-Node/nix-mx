@@ -29,6 +29,11 @@ struct to_mx_class_id {
 };
 
 
+mxArray* make_mx_array(const std::string &s)
+{
+    return mxCreateString(s.c_str());
+}
+
 template<typename T>
 mxArray* make_mx_array(const std::vector<T> &v) {
     std::pair<mxClassID, mxComplexity> klass = to_mx_class_id<T>::value();
@@ -82,9 +87,9 @@ static void list_blocks(const extractor &input, infusor &output)
     mxArray *sa =  mxCreateStructMatrix(blocks.size(), 1, fields.size(), fields.data());
 
     for (size_t n = 0; n < blocks.size(); n++) {
-        mxSetFieldByNumber(sa, n, 0, mxCreateString(blocks[n].name().c_str()));
-        mxSetFieldByNumber(sa, n, 1, mxCreateString(blocks[n].id().c_str()));
-        mxSetFieldByNumber(sa, n, 2, mxCreateString(blocks[n].type().c_str()));
+        mxSetFieldByNumber(sa, n, 0, make_mx_array(blocks[n].name()));
+        mxSetFieldByNumber(sa, n, 1, make_mx_array(blocks[n].id()));
+        mxSetFieldByNumber(sa, n, 2, make_mx_array(blocks[n].type()));
     }
 
     output.set(0, sa);
@@ -104,8 +109,8 @@ static void list_data_arrays(const extractor &input, infusor &output)
     mxArray *sa =  mxCreateStructMatrix(arr.size(), 1, fields.size(), fields.data());
 
     for (size_t n = 0; n < arr.size(); n++) {
-        mxSetFieldByNumber(sa, n, 0, mxCreateString(arr[n].name().c_str()));
-        mxSetFieldByNumber(sa, n, 1, mxCreateString(arr[n].id().c_str()));
+        mxSetFieldByNumber(sa, n, 0, make_mx_array(arr[n].name()));
+        mxSetFieldByNumber(sa, n, 1, make_mx_array(arr[n].id()));
     }
 
     output.set(0, sa);
@@ -141,8 +146,8 @@ static void block_list_data_arrays(const extractor &input, infusor &output)
     mxArray *sa =  mxCreateStructMatrix(arr.size(), 1, fields.size(), fields.data());
 
     for (size_t n = 0; n < arr.size(); n++) {
-        mxSetFieldByNumber(sa, n, 0, mxCreateString(arr[n].name().c_str()));
-        mxSetFieldByNumber(sa, n, 1, mxCreateString(arr[n].id().c_str()));
+        mxSetFieldByNumber(sa, n, 0, make_mx_array(arr[n].name()));
+        mxSetFieldByNumber(sa, n, 1, make_mx_array(arr[n].id()));
     }
 
     output.set(0, sa);
