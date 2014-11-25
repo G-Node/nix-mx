@@ -61,6 +61,11 @@ mxArray* make_mx_array(const std::vector<T> &v) {
 
 template<>
 mxArray* make_mx_array(const std::vector<std::string> &v) {
+
+    if (v.empty()) {
+        return nullptr;
+    }
+
     mxArray *data = mxCreateCellMatrix(1, v.size());
     for (size_t i = 0; i < v.size(); i++) {
         mxSetCell(data, i, mxCreateString(v[i].c_str()));
