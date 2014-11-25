@@ -1,13 +1,13 @@
-classdef file < nix.entity
+classdef File < nix.Entity
     %FILE nix File object
     
     properties
     end
     
     methods
-        function obj = file(path)
+        function obj = File(path)
            h = nix_mx('File::open', path); 
-           obj@nix.entity(h);
+           obj@nix.Entity(h);
         end
         
         function blocks = listBlocks(obj)
@@ -16,7 +16,7 @@ classdef file < nix.entity
         
         function b = block(obj, name)
             bh = nix_mx('File::openBlock', obj.nix_handle, name);
-            b = nix.block(bh);
+            b = nix.Block(bh);
         end
     end
     

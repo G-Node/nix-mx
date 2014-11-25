@@ -1,12 +1,12 @@
-classdef block < nix.entity
+classdef Block < nix.Entity
     %FILE nix Block object
     
     properties
     end
     
     methods
-        function obj = block(h)
-           obj@nix.entity(h);
+        function obj = Block(h)
+           obj@nix.Entity(h);
         end
         
         function das = data_arrays(obj)

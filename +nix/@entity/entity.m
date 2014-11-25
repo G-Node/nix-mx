@@ -1,4 +1,4 @@
-classdef entity < handle
+classdef Entity < handle
     %ENTITY base class for nix entities
     %   handles object lifetime
     
@@ -7,7 +7,7 @@ classdef entity < handle
     end
     
     methods
-        function obj = entity(h)
+        function obj = Entity(h)
             obj.nix_handle = h;
         end
         function delete(obj)
