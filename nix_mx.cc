@@ -34,6 +34,15 @@ mxArray* make_mx_array(const std::string &s)
     return mxCreateString(s.c_str());
 }
 
+
+mxArray* make_mx_array(uint32_t val)
+{
+    mxArray *arr = mxCreateNumericMatrix(1, 1, mxUINT32_CLASS, mxREAL);
+    void *data = mxGetData(arr);
+    memcpy(data, &val, sizeof(uint32_t));
+    return arr;
+}
+
 template<typename T>
 mxArray* make_mx_array(const std::vector<T> &v) {
     std::pair<mxClassID, mxComplexity> klass = to_mx_class_id<T>::value();
@@ -52,6 +61,54 @@ mxArray* make_mx_array(const std::vector<std::string> &v) {
 
     return data;
 }
+
+struct struct_builder {
+
+    struct_builder(std::vector<size_t> dims, std::vector<const char *> f)
+        : n(0), pos(0), fields(f) {
+        sa = mxCreateStructArray(dims.size(), dims.data(), fields.size(), fields.data());
+    }
+
+    template<typename T>
+    void set(T&& value) {
+        set(pos++, std::forward<T>(value));
+    }
+
+    template<typename T>
+    void set(const std::string &key, T&& value) {
+        mxSetFieldByNumber(sa, n, pos++, std::forward<T>(value));
+    }
+
+    template<typename T>
+    void set(const int field_idx, T&& value) {
+        set(n, field_idx, std::forward<T>(value));
+    }
+
+    template<typename T>
+    void set(const mwIndex struct_idx, const int field_idx, T&& value) {
+        mxSetFieldByNumber(sa, struct_idx, field_idx, make_mx_array(std::forward<T>(value)));
+    }
+
+    mwIndex next() {
+        pos = 0;
+        return ++n;
+    }
+
+    int skip() {
+        return ++pos;
+    }
+
+    mxArray *array() {
+        return sa;
+    }
+
+private:
+    mxArray *sa;
+    mwIndex n;
+    int pos;
+
+    std::vector<const char *> fields;
+};
 
 // *** functions ***
 
@@ -82,17 +139,17 @@ static void list_blocks(const extractor &input, infusor &output)
 
     std::vector<nix::Block> blocks = fd.blocks();
 
-    std::vector<const char *> fields = { "name", "id", "type" };
+    struct_builder sb({blocks.size()}, {"name", "id", "type"});
 
-    mxArray *sa =  mxCreateStructMatrix(blocks.size(), 1, fields.size(), fields.data());
+    for (const auto &b : blocks) {
+        sb.set(b.name());
+        sb.set(b.id());
+        sb.set(b.type());
 
-    for (size_t n = 0; n < blocks.size(); n++) {
-        mxSetFieldByNumber(sa, n, 0, make_mx_array(blocks[n].name()));
-        mxSetFieldByNumber(sa, n, 1, make_mx_array(blocks[n].id()));
-        mxSetFieldByNumber(sa, n, 2, make_mx_array(blocks[n].type()));
+        sb.next();
     }
 
-    output.set(0, sa);
+    output.set(0, sb.array());
 }
 
 static void open_block(const extractor &input, infusor &output)
@@ -119,18 +176,18 @@ static void block_list_data_arrays(const extractor &input, infusor &output)
 
     nix::Block block = input.entity<nix::Block>(1);
     std::vector<nix::DataArray> arr = block.dataArrays();
-    
-    std::vector<const char *> fields = { "name", "id", "type" };
 
-    mxArray *sa =  mxCreateStructMatrix(arr.size(), 1, fields.size(), fields.data());
+    struct_builder sb({arr.size()}, {"name", "id", "type"});
 
-    for (size_t n = 0; n < arr.size(); n++) {
-        mxSetFieldByNumber(sa, n, 0, make_mx_array(arr[n].name()));
-        mxSetFieldByNumber(sa, n, 1, make_mx_array(arr[n].id()));
-        mxSetFieldByNumber(sa, n, 2, make_mx_array(arr[n].type()));
+    for (const auto &da : arr) {
+        sb.set(da.name());
+        sb.set(da.id());
+        sb.set(da.type());
+
+        sb.next();
     }
 
-    output.set(0, sa);
+    output.set(0, sb.array());
 }
 
 
@@ -175,16 +232,13 @@ static mxArray *nmCreateScalar(uint32_t val) {
 
 static mxArray *dim_to_struct(nix::SetDimension dim) {
 
-    std::vector<const char *> fields = { "type", "type_id", "labels" };
-    mxArray *sa =  mxCreateStructMatrix(1, 1, fields.size(), fields.data());
+    struct_builder sb({1}, { "type", "type_id", "labels" });
 
-    mxSetFieldByNumber(sa, 0, 0, mxCreateString("set"));
-    mxSetFieldByNumber(sa, 0, 1, nmCreateScalar(1));
+    sb.set("set");
+    sb.set(1);
+    sb.set(dim.labels());
 
-    std::vector<std::string> labels = dim.labels();
-    mxSetFieldByNumber(sa, 0, 2, make_mx_array(labels));
-
-    return sa;
+    return sb.array();
 }
 
 
