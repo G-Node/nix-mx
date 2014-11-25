@@ -95,28 +95,6 @@ static void list_blocks(const extractor &input, infusor &output)
     output.set(0, sa);
 }
 
-static void list_data_arrays(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] list_data_arrays\n");
-
-    nix::File nf = input.entity<nix::File>(1);
-    nix::Block block = nf.getBlock(input.str(2));
-
-    std::vector<nix::DataArray> arr = block.dataArrays();
-
-    std::vector<const char *> fields = { "name", "id" , "type"};
-
-    mxArray *sa =  mxCreateStructMatrix(arr.size(), 1, fields.size(), fields.data());
-
-    for (size_t n = 0; n < arr.size(); n++) {
-        mxSetFieldByNumber(sa, n, 0, make_mx_array(arr[n].name()));
-        mxSetFieldByNumber(sa, n, 1, make_mx_array(arr[n].id()));
-        mxSetFieldByNumber(sa, n, 2, make_mx_array(arr[n].type()));
-    }
-
-    output.set(0, sa);
-}
-
 static void open_block(const extractor &input, infusor &output)
 {
     mexPrintf("[+] list_data_arrays\n");
@@ -347,7 +325,6 @@ const std::vector<fendpoint> funcs = {
         {"Entity::destroy", entity_destory},
         {"File::open", open_file},
         {"File::listBlocks", list_blocks},
-        {"File::listDataArrays", list_data_arrays},
         {"File::openBlock", open_block},
         {"Block::openDataArray", open_data_array},
         {"Block::listDataArrays", block_list_data_arrays},
