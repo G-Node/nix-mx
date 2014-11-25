@@ -20,6 +20,13 @@ struct to_mx_class_id {
             case nix::DataType::Double:
                 return std::make_pair(mxDOUBLE_CLASS, mxREAL);
 
+            case nix::DataType::Int64:
+                return std::make_pair(mxINT64_CLASS, mxREAL);
+
+            case nix::DataType::Int32:
+                return std::make_pair(mxINT32_CLASS, mxREAL);
+
+
             default:
                 mexErrMsgIdAndTxt("nix:toclassid:notimplemented", "Implement me!");
                 return std::make_pair(mxVOID_CLASS, mxREAL);
