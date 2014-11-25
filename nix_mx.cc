@@ -104,13 +104,14 @@ static void list_data_arrays(const extractor &input, infusor &output)
 
     std::vector<nix::DataArray> arr = block.dataArrays();
 
-    std::vector<const char *> fields = { "name", "id" };
+    std::vector<const char *> fields = { "name", "id" , "type"};
 
     mxArray *sa =  mxCreateStructMatrix(arr.size(), 1, fields.size(), fields.data());
 
     for (size_t n = 0; n < arr.size(); n++) {
         mxSetFieldByNumber(sa, n, 0, make_mx_array(arr[n].name()));
         mxSetFieldByNumber(sa, n, 1, make_mx_array(arr[n].id()));
+        mxSetFieldByNumber(sa, n, 2, make_mx_array(arr[n].type()));
     }
 
     output.set(0, sa);
@@ -141,13 +142,14 @@ static void block_list_data_arrays(const extractor &input, infusor &output)
     nix::Block block = input.entity<nix::Block>(1);
     std::vector<nix::DataArray> arr = block.dataArrays();
     
-    std::vector<const char *> fields = { "name", "id" };
+    std::vector<const char *> fields = { "name", "id", "type" };
 
     mxArray *sa =  mxCreateStructMatrix(arr.size(), 1, fields.size(), fields.data());
 
     for (size_t n = 0; n < arr.size(); n++) {
         mxSetFieldByNumber(sa, n, 0, make_mx_array(arr[n].name()));
         mxSetFieldByNumber(sa, n, 1, make_mx_array(arr[n].id()));
+        mxSetFieldByNumber(sa, n, 2, make_mx_array(arr[n].type()));
     }
 
     output.set(0, sa);
