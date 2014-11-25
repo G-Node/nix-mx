@@ -26,7 +26,6 @@ struct to_mx_class_id {
             case nix::DataType::Int32:
                 return std::make_pair(mxINT32_CLASS, mxREAL);
 
-
             default:
                 mexErrMsgIdAndTxt("nix:toclassid:notimplemented", "Implement me!");
                 return std::make_pair(mxVOID_CLASS, mxREAL);
@@ -39,15 +38,6 @@ struct to_mx_class_id {
 mxArray* make_mx_array(const std::string &s)
 {
     return mxCreateString(s.c_str());
-}
-
-
-mxArray* make_mx_array(uint32_t val)
-{
-    mxArray *arr = mxCreateNumericMatrix(1, 1, mxUINT32_CLASS, mxREAL);
-    void *data = mxGetData(arr);
-    memcpy(data, &val, sizeof(uint32_t));
-    return arr;
 }
 
 template<typename T>
