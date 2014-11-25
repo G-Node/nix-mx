@@ -74,6 +74,14 @@ mxArray* make_mx_array(const std::vector<std::string> &v) {
     return data;
 }
 
+template<typename T>
+mxArray* make_mx_array(const boost::optional<T> &opt) {
+    if (opt) {
+        make_mx_array(*opt);
+    }
+
+    return nullptr;
+}
 struct struct_builder {
 
     struct_builder(std::vector<size_t> dims, std::vector<const char *> f)
