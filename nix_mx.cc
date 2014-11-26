@@ -82,6 +82,19 @@ mxArray* make_mx_array(T val, typename std::enable_if<std::is_arithmetic<T>::val
     return arr;
 }
 
+static mxArray* make_mx_array(const nix::NDSize &size)
+{
+    mxArray *res = mxCreateNumericMatrix(1, size.size(), mxUINT64_CLASS, mxREAL);
+    void *ptr = mxGetData(res);
+    uint64_t *data = static_cast<uint64_t *>(ptr);
+
+    for (size_t i = 0; i < size.size(); i++) {
+        data[i] = static_cast<uint64_t>(size[i]);
+    }
+
+    return res;
+}
+
 struct struct_builder {
 
     struct_builder(std::vector<size_t> dims, std::vector<const char *> f)
@@ -106,7 +119,11 @@ struct struct_builder {
 
     template<typename T>
     void set(const mwIndex struct_idx, const int field_idx, T&& value) {
-        mxSetFieldByNumber(sa, struct_idx, field_idx, make_mx_array(std::forward<T>(value)));
+        set(struct_idx, field_idx, make_mx_array(std::forward<T>(value)));
+    }
+
+    void set(const mwIndex struct_idx, const int field_idx, mxArray *value) {
+        mxSetFieldByNumber(sa, struct_idx, field_idx, value);
     }
 
     mwIndex next() {
@@ -211,20 +228,6 @@ static void block_list_data_arrays(const extractor &input, infusor &output)
 }
 
 
-
-static mxArray * ndsize_to_mxarray(const nix::NDSize &size)
-{
-    mxArray *res = mxCreateNumericMatrix(1, size.size(), mxUINT64_CLASS, mxREAL);
-    void *ptr = mxGetData(res);
-    uint64_t *data = static_cast<uint64_t *>(ptr);
-
-    for (size_t i = 0; i < size.size(); i++) {
-        data[i] = static_cast<uint64_t>(size[i]);
-    }
-
-    return res;
-}
-
 static nix::NDSize mx_array_to_ndsize(const mxArray *arr) {
 
     size_t m = mxGetM(arr);
@@ -299,18 +302,14 @@ static void data_array_describe(const extractor &input, infusor &output)
     mexPrintf("[+] block_describe_data_array\n");
     nix::DataArray da = input.entity<nix::DataArray>(1);
 
-    std::vector<const char *> fields = { "name", "id", "shape",  "unit", "dimensions", "label",
-                                         "polynom_coefficients"};
-    mxArray *sa =  mxCreateStructMatrix(1, 1, fields.size(), fields.data());
+    struct_builder sb({1}, {"name", "id", "shape",  "unit", "dimensions", "label",
+                "polynom_coefficients"});
 
-    mxSetFieldByNumber(sa, 0, 0, mxCreateString(da.name().c_str()));
-    mxSetFieldByNumber(sa, 0, 1, mxCreateString(da.id().c_str()));
-    mxSetFieldByNumber(sa, 0, 2, ndsize_to_mxarray(da.dataExtent()));
 
-    boost::optional<std::string> unit = da.unit();
-    if (unit) {
-        mxSetFieldByNumber(sa, 0, 3, mxCreateString(unit->c_str()));
-    }
+    sb.set(da.name());
+    sb.set(da.id());
+    sb.set(da.dataExtent());
+    sb.set(da.unit());
 
     size_t ndims = da.dimensionCount();
 
@@ -336,21 +335,11 @@ static void data_array_describe(const extractor &input, infusor &output)
         mxSetCell(dims, i, ca);
     }
 
-    mxSetFieldByNumber(sa, 0, 4, dims);
+    sb.set(dims);
+    sb.set(da.label());
+    sb.set(da.polynomCoefficients());
 
-
-    boost::optional<std::string> label = da.label();
-    if (unit) {
-        mxSetFieldByNumber(sa, 0, 5, mxCreateString(label->c_str()));
-    }
-
-    std::vector<double> pc = da.polynomCoefficients();
-
-    if (!pc.empty()) {
-        mxSetFieldByNumber(sa, 0, 6, make_mx_array(pc));
-    }
-
-    output.set(0, sa);
+    output.set(0, sb.array());
 }
 
 static void data_array_read_all(const extractor &input, infusor &output)
