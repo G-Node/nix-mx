@@ -11,17 +11,17 @@ struct entity_to_id { };
 
 template<>
 struct entity_to_id<nix::File> {
-    static constexpr int value() { return 1; }
+    static int value() { return 1; }
 };
 
 template<>
 struct entity_to_id<nix::Block> {
-    static constexpr int value() { return 2; }
+    static int value() { return 2; }
 };
 
 template<>
 struct entity_to_id<nix::DataArray> {
-    static constexpr int value() { return 3; }
+    static int value() { return 3; }
 };
 
 
