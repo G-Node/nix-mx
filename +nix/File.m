@@ -1,5 +1,5 @@
 classdef File < nix.Entity
-    %FILE nix File object
+    %File nix File object
     
     properties
     end

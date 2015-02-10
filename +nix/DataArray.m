@@ -1,5 +1,5 @@
 classdef DataArray < nix.Entity
-    %FILE nix DataArray object
+    %DataArray nix DataArray object
     
     properties
     end

@@ -1,5 +1,5 @@
 classdef Block < nix.Entity
-    %FILE nix Block object
+    %Block nix Block object
     
     properties
     end
