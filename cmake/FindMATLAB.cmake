@@ -53,17 +53,19 @@ IF(WIN32)
       OR ("${MATLAB_ROOT}" STREQUAL "/registry"))
   ENDFOREACH(MATVER)
 
-  # Directory name depending on whether the Windows architecture is 32
-  # bit or 64 bit
-  set(CMAKE_SIZEOF_VOID_P 8) # Note: For some weird reason this variable is undefined in my system...
-  IF(CMAKE_SIZEOF_VOID_P MATCHES "4")
-    SET(WINDIR "win32")
-  ELSEIF(CMAKE_SIZEOF_VOID_P MATCHES "8")
-    SET(WINDIR "win64")
-  ELSE(CMAKE_SIZEOF_VOID_P MATCHES "4")
-    MESSAGE(FATAL_ERROR
-      "CMAKE_SIZEOF_VOID_P (${CMAKE_SIZEOF_VOID_P}) doesn't indicate a valid platform")
-  ENDIF(CMAKE_SIZEOF_VOID_P MATCHES "4")
+  EXECUTE_PROCESS(COMMAND "${MATLAB_ROOT}/bin/mexext.bat"
+                  OUTPUT_VARIABLE MATLAB_MEXEXT
+                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  IF(NOT MATLAB_MEXEXT)
+     MESSAGE(FATAL_ERROR "mexext.bat not found. Meh!")
+  ENDIF()
+
+  IF(MATLAB_MEXEXT STREQUAL "mexw32")
+      SET(WINDIR "win32")
+  ELSE()
+      SET(WINDIR "win64")
+  ENDIF()
 
   # Folder where the MEX libraries are, depending of the Windows compiler
   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 6")
@@ -110,12 +112,6 @@ IF(WIN32)
     "mex.h"
     "${MATLAB_ROOT}/extern/include"
     )
-
-   EXECUTE_PROCESS(
-       COMMAND "${MATLAB_ROOT}/bin/mexext.bat"
-       OUTPUT_VARIABLE MATLAB_MEXEXT
-       OUTPUT_STRIP_TRAILING_WHITESPACE
-       )
 
 ELSE(WIN32)
 
