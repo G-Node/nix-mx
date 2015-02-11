@@ -323,7 +323,7 @@ void mexFunction(int            nlhs,
 				fn.fn(input, output);
 			} catch (const std::invalid_argument &e) {
 				mexErrMsgIdAndTxt("nix:arg:inval", e.what());
-            } catch (std::exception &e) {
+            } catch (const std::exception &e) {
                 mexErrMsgIdAndTxt("nix:arg:dispatch", e.what());
             } catch (...) {
                 mexErrMsgIdAndTxt("nix:arg:dispatch", "unkown exception");
