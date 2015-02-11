@@ -3,6 +3,9 @@
 #define NIX_MX_ARGUMENTS_H
 
 #include "handle.h"
+#include "datatypes.h"
+
+#include <stdexcept>
 
 // *** argument helpers ***
 
@@ -39,6 +42,20 @@ public:
 
         return res;
     }
+
+	void check_arg_type(int pos, nix::DataType dtype) const {
+		if (pos < 0) {
+			throw std::invalid_argument("negative position");
+		}
+
+		size_t n = static_cast<size_t>(pos);
+		check_size(n);
+
+		if (dtype_mex2nix(array[n]) != dtype) {
+			mexPrintf("Throing wront tyoe");
+			throw std::invalid_argument("wrong type");
+		}
+	}
 
 protected:
     T **array;
