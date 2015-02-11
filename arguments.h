@@ -89,8 +89,7 @@ public:
     }
 
     handle hdl(int pos) const {
-        uint64_t address = uint64(pos);
-        handle h(address);
+        handle h = uint64(pos);
         return h;
     }
 
