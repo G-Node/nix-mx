@@ -77,6 +77,8 @@ public:
 
 
     uint64_t uint64(int pos) const {
+		check_arg_type(pos, nix::DataType::UInt64);
+
         const void *data = mxGetData(array[pos]);
         uint64_t res;
         memcpy(&res, data, sizeof(uint64_t));
