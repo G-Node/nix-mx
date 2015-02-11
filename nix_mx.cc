@@ -158,12 +158,20 @@ static void entity_destory(const extractor &input, infusor &output)
 
 static void open_file(const extractor &input, infusor &output)
 {
-    input.require_arguments({mxCHAR_CLASS, mxCHAR_CLASS}, true);
     mexPrintf("[+] open_file\n");
 
-    std::string name = input.str(1);
+	std::string name = input.str(1);
+	uint8_t omode = input.num<uint8_t>(2);
+	nix::FileMode mode;
 
-    nix::File fn = nix::File::open(name, nix::FileMode::ReadWrite);
+	switch (omode) {
+	case 0: mode = nix::FileMode::ReadOnly; break;
+	case 1: mode = nix::FileMode::ReadWrite; break;
+	case 2: mode = nix::FileMode::Overwrite; break;
+	default: throw std::invalid_argument("unkown open mode");
+	}
+
+    nix::File fn = nix::File::open(name, mode);
     handle h = handle(fn);
 
     output.set(0, h);

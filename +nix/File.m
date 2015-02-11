@@ -1,12 +1,11 @@
 classdef File < nix.Entity
     %File nix File object
-    
-    properties
-    end
-    
     methods
-        function obj = File(path)
-           h = nix_mx('File::open', path); 
+        function obj = File(path, mode)
+            if ~exist('mode', 'var')
+                mode = FileMode.ReadWrite; %default to ReadWrite
+            end
+           h = nix_mx('File::open', path, mode); 
            obj@nix.Entity(h);
         end
         
