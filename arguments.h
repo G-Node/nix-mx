@@ -67,7 +67,8 @@ public:
     extractor(const mxArray **arr, int n) : argument_helper(arr, n) { }
 
     std::string str(int pos) const {
-        //make sure it is a string
+		check_arg_type(pos, nix::DataType::String);
+
         char *tmp = mxArrayToString(array[pos]);
         std::string the_string(tmp);
         mxFree(tmp);
