@@ -30,7 +30,7 @@ class handle {
 public:
 
     template<typename T>
-    handle(const T &obj) : et(new cell<T>(obj)) {
+    explicit handle(const T &obj) : et(new cell<T>(obj)) {
         //every time we create a new entity cell
         //we increase the lock count by one so
         //we don't get unloaded before we have
@@ -38,7 +38,7 @@ public:
         mexLock();
     }
 
-    handle(uint64_t h) : et(reinterpret_cast<entity *>(h)) { }
+    explicit handle(uint64_t h) : et(reinterpret_cast<entity *>(h)) { }
 
     template<typename T>
     T get() const {

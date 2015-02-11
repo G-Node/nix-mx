@@ -96,7 +96,7 @@ public:
     }
 
     handle hdl(int pos) const {
-		handle h = uint64(pos);
+		handle h = handle(uint64(pos));
         return h;
     }
 
