@@ -118,12 +118,12 @@ public:
     infusor(mxArray **arr, int n) : argument_helper(arr, n) { }
 
 	template<typename T>
-	void set(int pos, T &&value) {
+	void set(size_t pos, T &&value) {
 		mxArray *array = make_mx_array(std::forward<T>(value));
 		set(pos, array);
 	}
 
-    void set(int pos, mxArray *arr) {
+    void set(size_t pos, mxArray *arr) {
         array[pos] = arr;
     }
 
