@@ -395,8 +395,10 @@ void mexFunction(int            nlhs,
     bool processed = false;
     for (const auto &fn : funcs) {
         if (fn.name == cmd) {
-            try {
-                fn.fn(input, output);
+			try {
+				fn.fn(input, output);
+			} catch (const std::invalid_argument &e) {
+				mexErrMsgIdAndTxt("nix:arg:inval", e.what());
             } catch (std::exception &e) {
                 mexErrMsgIdAndTxt("nix:arg:dispatch", e.what());
             } catch (...) {
