@@ -8,6 +8,7 @@ classdef Block < nix.Entity
     properties(Dependent)
         name
         type
+        id
     end
     
     methods
@@ -22,6 +23,10 @@ classdef Block < nix.Entity
         
         function type = get.type(block)
             type = block.info.type;
+        end
+        
+        function id = get.id(block)
+           id = block.info.id; 
         end
         
         function das = data_arrays(obj)
