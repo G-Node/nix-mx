@@ -12,7 +12,7 @@ public:
 
     argument_helper(T **arg, size_t n) : array(arg), number(n) { }
 
-    bool check_size(int pos, bool fatal = false) const {
+    bool check_size(size_t pos, bool fatal = false) const {
         bool res = pos + 1 > number;
         return res;
     }
