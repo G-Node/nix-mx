@@ -11,6 +11,8 @@
 
 #include <mex.h>
 
+#include "handle.h"
+
 template<typename T>
 struct to_mx_class_id {
 
@@ -39,6 +41,7 @@ inline mxArray* make_mx_array(const std::string &s)
 {
 	return mxCreateString(s.c_str());
 }
+
 
 template<typename T>
 mxArray* make_mx_array(const std::vector<T> &v) {
@@ -83,5 +86,10 @@ mxArray* make_mx_array(T val, typename std::enable_if<std::is_arithmetic<T>::val
 }
 
 mxArray* make_mx_array(const nix::NDSize &size);
+
+inline mxArray* make_mx_array(const handle &h)
+{
+	return make_mx_array(h.address());
+}
 
 #endif
