@@ -122,6 +122,20 @@ static void open_block(const extractor &input, infusor &output)
     output.set(0, bb);
 }
 
+static void block_describe(const extractor &input, infusor &output)
+{
+	mexPrintf("[+] block::describe\n");
+	nix::Block block = input.entity<nix::Block>(1);
+
+	struct_builder sb({ 1 }, { "name", "id", "type" });
+
+	sb.set(block.name());
+	sb.set(block.id());
+	sb.set(block.type());
+	
+	output.set(0, sb.array());
+}
+
 static void open_data_array(const extractor &input, infusor &output)
 {
     mexPrintf("[+] list_data_arrays\n");
@@ -297,6 +311,7 @@ const std::vector<fendpoint> funcs = {
         {"File::open", open_file},
         {"File::listBlocks", list_blocks},
         {"File::openBlock", open_block},
+		{"Block::describe", block_describe},
         {"Block::openDataArray", open_data_array},
         {"Block::listDataArrays", block_list_data_arrays},
         {"DataArray::describe", data_array_describe},
