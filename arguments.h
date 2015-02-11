@@ -14,6 +14,9 @@ public:
 
     bool check_size(size_t pos, bool fatal = false) const {
         bool res = pos + 1 > number;
+		if (!res && fatal) {
+			throw std::out_of_range("argument position is out of bounds");
+		}
         return res;
     }
 
