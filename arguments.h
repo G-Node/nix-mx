@@ -52,7 +52,6 @@ public:
 		check_size(n);
 
 		if (dtype_mex2nix(array[n]) != dtype) {
-			mexPrintf("Throing wront tyoe");
 			throw std::invalid_argument("wrong type");
 		}
 	}
@@ -96,7 +95,7 @@ public:
     }
 
     handle hdl(int pos) const {
-        handle h = uint64(pos);
+		handle h = uint64(pos);
         return h;
     }
 
@@ -117,7 +116,17 @@ class infusor : public argument_helper<mxArray> {
 public:
     infusor(mxArray **arr, int n) : argument_helper(arr, n) { }
 
-    void set(int pos, std::string str) {
+	template<typename T>
+	void set(int pos, const T &value) {
+		nix::DataType dtype = nix::to_data_type<T>::value;
+		DType2 mex_type = dtype_nix2mex(dtype);
+		array[pos] = mxCreateNumericMatrix(1, 1, mex_type.cid, mex_type.clx);
+		void *pointer = mxGetPr(array[pos]);
+		memcpy(pointer, &value, sizeof(value));
+	}
+
+	template<>
+    void set<std::string>(int pos, const std::string &str) {
         if (check_size(pos)) {
             return;
         }
@@ -125,17 +134,12 @@ public:
         array[pos] = mxCreateString(str.c_str());
     }
 
-    void set(int pos, uint64_t v) {
-        array[pos] = mxCreateNumericMatrix(1, 1, mxUINT64_CLASS, mxREAL);
-        void *pointer = mxGetPr(array[pos]);
-        memcpy(pointer, &v, sizeof(v));
-    }
-
     void set(int pos, mxArray *arr) {
         array[pos] = arr;
     }
 
-    void set(int pos, const handle &h) {
+	template<>
+    void set<handle>(int pos, const handle &h) {
         set(pos, h.address());
     }
 
