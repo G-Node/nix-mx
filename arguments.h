@@ -4,6 +4,7 @@
 
 #include "handle.h"
 #include "datatypes.h"
+#include "mkarray.h"
 
 #include <stdexcept>
 
