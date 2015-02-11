@@ -75,14 +75,19 @@ public:
         return the_string;
     }
 
+	template<typename T>
+	T num(int pos) const {
+		nix::DataType dtype = nix::to_data_type<T>::value;
+		check_arg_type(pos, dtype);
+
+		const void *data = mxGetData(array[pos]);
+		T res;
+		memcpy(&res, data, sizeof(T));
+		return res;
+	}
 
     uint64_t uint64(int pos) const {
-		check_arg_type(pos, nix::DataType::UInt64);
-
-        const void *data = mxGetData(array[pos]);
-        uint64_t res;
-        memcpy(&res, data, sizeof(uint64_t));
-        return res;
+		return num<uint64_t>(pos);
     }
 
     template<typename T>
