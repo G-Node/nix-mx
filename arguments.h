@@ -118,30 +118,13 @@ public:
     infusor(mxArray **arr, int n) : argument_helper(arr, n) { }
 
 	template<typename T>
-	void set(int pos, const T &value) {
-		nix::DataType dtype = nix::to_data_type<T>::value;
-		DType2 mex_type = dtype_nix2mex(dtype);
-		array[pos] = mxCreateNumericMatrix(1, 1, mex_type.cid, mex_type.clx);
-		void *pointer = mxGetPr(array[pos]);
-		memcpy(pointer, &value, sizeof(value));
+	void set(int pos, T &&value) {
+		mxArray *array = make_mx_array(std::forward<T>(value));
+		set(pos, array);
 	}
-
-	template<>
-    void set<std::string>(int pos, const std::string &str) {
-        if (check_size(pos)) {
-            return;
-        }
-
-        array[pos] = mxCreateString(str.c_str());
-    }
 
     void set(int pos, mxArray *arr) {
         array[pos] = arr;
-    }
-
-	template<>
-    void set<handle>(int pos, const handle &h) {
-        set(pos, h.address());
     }
 
 private:
