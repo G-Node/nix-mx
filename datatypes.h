@@ -9,6 +9,8 @@ inline nix::DataType dtype_mex2nix(const mxArray *array) {
 	mxClassID cid = mxGetClassID(array);
 	
 	switch (cid) {
+	case mxLOGICAL_CLASS: return nix::DataType::Bool;
+
 	case mxCHAR_CLASS:   return nix::DataType::String;
 	case mxOPAQUE_CLASS: return nix::DataType::Opaque;
 
@@ -42,6 +44,8 @@ inline DType2 dtype_nix2mex (nix::DataType dtype) {
 	dt.is_valid = true;
 
 	switch (dtype) {
+	case nix::DataType::Bool: dt.cid = mxLOGICAL_CLASS; break;
+
 	case nix::DataType::String: dt.cid = mxCHAR_CLASS; break;
 
 	case nix::DataType::Float: dt.cid = mxSINGLE_CLASS; break;
