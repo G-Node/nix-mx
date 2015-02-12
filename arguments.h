@@ -74,6 +74,10 @@ public:
 	T num(size_t pos) const {
 		nix::DataType dtype = nix::to_data_type<T>::value;
 		check_arg_type(pos, dtype);
+		
+		if (mxGetNumberOfElements(array[pos]) < 1) {
+			throw std::runtime_error("array empty");
+		}
 
 		const void *data = mxGetData(array[pos]);
 		T res;
