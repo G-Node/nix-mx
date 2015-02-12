@@ -89,6 +89,12 @@ public:
     uint64_t uint64(int pos) const {
 		return num<uint64_t>(pos);
     }
+	bool logical(size_t pos) const {
+		check_arg_type(pos, nix::DataType::Bool);
+
+		const mxLogical *l = mxGetLogicals(array[pos]);
+		return l[0];
+	}
 
     template<typename T>
     T entity(int pos) const {
