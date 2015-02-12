@@ -44,15 +44,10 @@ public:
         return res;
     }
 
-	void check_arg_type(int pos, nix::DataType dtype) const {
-		if (pos < 0) {
-			throw std::invalid_argument("negative position");
-		}
+	void check_arg_type(size_t pos, nix::DataType dtype) const {
+		check_size(pos);
 
-		size_t n = static_cast<size_t>(pos);
-		check_size(n);
-
-		if (dtype_mex2nix(array[n]) != dtype) {
+		if (dtype_mex2nix(array[pos]) != dtype) {
 			throw std::invalid_argument("wrong type");
 		}
 	}
@@ -66,7 +61,7 @@ class extractor : public argument_helper<const mxArray> {
 public:
     extractor(const mxArray **arr, int n) : argument_helper(arr, n) { }
 
-    std::string str(int pos) const {
+    std::string str(size_t pos) const {
 		check_arg_type(pos, nix::DataType::String);
 
         char *tmp = mxArrayToString(array[pos]);
@@ -76,7 +71,7 @@ public:
     }
 
 	template<typename T>
-	T num(int pos) const {
+	T num(size_t pos) const {
 		nix::DataType dtype = nix::to_data_type<T>::value;
 		check_arg_type(pos, dtype);
 
@@ -94,20 +89,20 @@ public:
 	}
 
     template<typename T>
-    T entity(int pos) const {
+    T entity(size_t pos) const {
         return hdl(pos).get<T>();
     }
 
-    handle hdl(int pos) const {
+    handle hdl(size_t pos) const {
 		handle h = handle(num<uint64_t>(pos));
         return h;
     }
 
-    mxClassID class_id(int pos) const {
+    mxClassID class_id(size_t pos) const {
         return mxGetClassID(array[pos]);
     }
 
-    bool is_str(int pos) const {
+    bool is_str(size_t pos) const {
         mxClassID category = class_id(pos);
         return category == mxCHAR_CLASS;
     }
