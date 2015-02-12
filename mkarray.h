@@ -54,12 +54,17 @@ mxArray* make_mx_array(const boost::optional<T> &opt) {
 }
 
 template<typename T>
-mxArray* make_mx_array(T val, typename std::enable_if<std::is_arithmetic<T>::value >::type* = nullptr) {
+typename std::enable_if<std::is_arithmetic<T>::value, mxArray>::type* make_mx_array(T val) {
 	DType2 dtype = dtype_nix2mex(nix::to_data_type<T>::value);
 	mxArray *arr = mxCreateNumericMatrix(1, 1, dtype.cid, dtype.clx);
 	void *data = mxGetData(arr);
 	memcpy(data, &val, sizeof(T));
 	return arr;
+}
+
+template<>
+inline mxArray* make_mx_array<bool>(bool val) {
+	return mxCreateLogicalScalar(val);
 }
 
 mxArray* make_mx_array(const nix::NDSize &size);
