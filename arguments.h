@@ -86,9 +86,6 @@ public:
 		return res;
 	}
 
-    uint64_t uint64(int pos) const {
-		return num<uint64_t>(pos);
-    }
 	bool logical(size_t pos) const {
 		check_arg_type(pos, nix::DataType::Bool);
 
@@ -102,7 +99,7 @@ public:
     }
 
     handle hdl(int pos) const {
-		handle h = handle(uint64(pos));
+		handle h = handle(num<uint64_t>(pos));
         return h;
     }
 
