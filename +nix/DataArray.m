@@ -16,7 +16,7 @@ classdef DataArray < nix.Entity
             nfo = nix_mx('DataArray::describe', obj.nix_handle);
         end
         
-        function data = read_all_double(obj)
+        function data = read_all(obj)
            data = nix_mx('DataArray::readAll', obj.nix_handle); 
         end
     end
