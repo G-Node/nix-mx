@@ -3,7 +3,7 @@ classdef File < nix.Entity
     methods
         function obj = File(path, mode)
             if ~exist('mode', 'var')
-                mode = FileMode.ReadWrite; %default to ReadWrite
+                mode = nix.FileMode.ReadWrite; %default to ReadWrite
             end
             h = nix_mx('File::open', path, mode); 
             obj@nix.Entity(h);
