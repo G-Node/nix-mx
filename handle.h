@@ -24,6 +24,31 @@ struct entity_to_id<nix::DataArray> {
     static int value() { return 3; }
 };
 
+template<>
+struct entity_to_id<nix::Tag> {
+    static int value() { return 4; }
+};
+
+template<>
+struct entity_to_id<nix::Source> {
+    static int value() { return 5; }
+};
+
+template<>
+struct entity_to_id<nix::Feature> {
+    static int value() { return 6; }
+};
+
+template<>
+struct entity_to_id<nix::MultiTag> {
+    static int value() { return 7; }
+};
+
+template<>
+struct entity_to_id<nix::Section> {
+    static int value() { return 8; }
+};
+
 
 
 class handle {
