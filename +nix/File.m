@@ -5,10 +5,10 @@ classdef File < nix.Entity
             if ~exist('mode', 'var')
                 mode = FileMode.ReadWrite; %default to ReadWrite
             end
-           h = nix_mx('File::open', path, mode); 
-           obj@nix.Entity(h);
+            h = nix_mx('File::open', path, mode); 
+            obj@nix.Entity(h);
         end
-        
+
         function blocks = listBlocks(obj)
             blocks = nix_mx('File::listBlocks', obj.nix_handle);
         end
