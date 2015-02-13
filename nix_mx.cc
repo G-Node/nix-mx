@@ -337,11 +337,18 @@ static void data_array_read_all(const extractor &input, infusor &output)
         dims[i] = static_cast<mwSize>(size[i]);
     }
 
-    mxArray *data = mxCreateNumericArray(size.size(), dims.data(), mxDOUBLE_CLASS, mxREAL);
+    nix::DataType da_type = da.dataType();
+    DType2 dtype = dtype_nix2mex(da_type);
+
+    if (!dtype.is_valid) {
+        throw std::domain_error("Unsupported data type");
+    }
+
+    mxArray *data = mxCreateNumericArray(dims.size(), dims.data(), dtype.cid, dtype.clx);
     double *ptr = mxGetPr(data);
 
     nix::NDSize offset(size.size(), 0);
-    da.getData(nix::DataType::Double , ptr, size, offset);
+    da.getData(da_type, ptr, size, offset);
 
     output.set(0, data);
 }
