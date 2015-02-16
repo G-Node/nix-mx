@@ -2,3 +2,6 @@ build/
 .DS_Store
 ._*
 *.asv
+
+# test sample files
+tests/*.h5
