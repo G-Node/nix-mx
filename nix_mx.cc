@@ -40,6 +40,19 @@ static void open_file(const extractor &input, infusor &output)
     output.set(0, h);
 }
 
+static void file_describe(const extractor &input, infusor &output)
+{
+	mexPrintf("[+] file_describe\n");
+	nix::File fd = input.entity<nix::File>(1);
+
+	struct_builder sb({ 1 }, { "blockCount", "sectionCount" });
+
+	sb.set(fd.blockCount());
+	sb.set(fd.sectionCount());
+
+	output.set(0, sb.array());
+}
+
 static void list_blocks(const extractor &input, infusor &output)
 {
     mexPrintf("[+] list_blocks\n");
@@ -67,6 +80,35 @@ static void open_block(const extractor &input, infusor &output)
     nix::Block block = nf.getBlock(input.str(2));
     handle bb = handle(block);
     output.set(0, bb);
+}
+
+static void list_sections(const extractor &input, infusor &output)
+{
+	mexPrintf("[+] list_sections\n");
+	nix::File fd = input.entity<nix::File>(1);
+
+	std::vector<nix::Section> secs = fd.sections();
+
+	struct_builder sb({ secs.size() }, { "name", "id", "type" });
+
+	for (const auto &b : secs) {
+		sb.set(b.name());
+		sb.set(b.id());
+		sb.set(b.type());
+
+		sb.next();
+	}
+
+	output.set(0, sb.array());
+}
+
+static void open_section(const extractor &input, infusor &output)
+{
+	mexPrintf("[+] open_section\n");
+	nix::File nf = input.entity<nix::File>(1);
+	nix::Section sec = nf.getSection(input.str(2));
+	handle bb = handle(sec);
+	output.set(0, bb);
 }
 
 static void block_describe(const extractor &input, infusor &output)
@@ -544,8 +586,11 @@ fendpoint(std::string name, fn_t fn) : name(name), fn(fn) {}
 const std::vector<fendpoint> funcs = {
         {"Entity::destroy", entity_destroy},
         {"File::open", open_file},
+		{"File::describe", file_describe},
         {"File::listBlocks", list_blocks},
         {"File::openBlock", open_block},
+		{"File::listSections", list_sections},
+		{"File::openSection", open_section},
         {"Block::describe", block_describe},
         {"Block::openDataArray", open_data_array},
         {"Block::listDataArrays", block_list_data_arrays},
