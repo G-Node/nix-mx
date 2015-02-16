@@ -78,6 +78,7 @@ try
     currBlockList = test_file.listBlocks();
     %-- retrieve first Block from list by its ID
     getBlockByID = test_file.block(currBlockList(1).id);
+    assert(strcmp(getBlockByID.id, '7b59c0b9-b200-4b53-951d-6851dbd1cdc8'));
     disp('Test open block by ID from HDF5 file ... OK');
     clear; %-- close handles
 catch me
@@ -92,9 +93,14 @@ try
     currBlockList = test_file.listBlocks();
     %-- retrieve first Block from list by its name
     getBlockByName = test_file.block(currBlockList(1).name);
+    assert(strcmp(getBlockByName.name, 'joe097'));
     disp('Test open block by name from HDF5 file ... OK');
     clear; %-- close handles
 catch me
     disp('Test open block by name from HDF5 file ... ERROR');
     rethrow(me);
 end;
+
+%% TODO Test Open metadata
+
+

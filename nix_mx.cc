@@ -147,7 +147,7 @@ static void block_has_multi_tag(const extractor &input, infusor &output)
 {
     mexPrintf("[+] block_has_multi_tag\n");
     nix::Block block = input.entity<nix::Block>(1);
-    output.set(0, gen_has_entity(block.hasMultiTag(input.str(2)), { "hasMultiTags" }));
+    output.set(0, gen_has_entity(block.hasMultiTag(input.str(2)), { "hasMultiTag" }));
 }
 
 static void multi_tag_has_positions(const extractor &input, infusor &output){
