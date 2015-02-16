@@ -1,5 +1,6 @@
 % Runner for all other tests.
+% ToDo: create proper testfile, loose the 24mb one
 
-TestFile
+TestFile;
 
 disp('Tests completed successfully. Bye.')
