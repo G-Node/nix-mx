@@ -11,6 +11,7 @@
 #include "struct.h"
 
 #include "MXFile.h"
+#include "nix2mx.h"
 
 // *** functions ***
 
@@ -103,12 +104,7 @@ static void multi_tag_list_references_array(const extractor &input, infusor &out
 }
 
 
-static mxArray* has_entity(bool boolIn, std::vector<const char *> currLabel){
-    uint8_t currHas = boolIn ? 1 : 0;
-    struct_builder sb({ 1 }, currLabel);
-    sb.set(currHas);
-    return sb.array();
-}
+
 
 static void has_tag(const extractor &input, infusor &output)
 {
@@ -185,68 +181,6 @@ static void block_list_multi_tags(const extractor &input, infusor &output)
         sb.next();
     }
     output.set(0, sb.array());
-}
-
-static nix::NDSize mx_array_to_ndsize(const mxArray *arr) {
-
-    size_t m = mxGetM(arr);
-    size_t n = mxGetN(arr);
-
-    //if (m != 1 && n != 1)
-
-    size_t k = std::max(n, m);
-    nix::NDSize size(k);
-
-    double *data = mxGetPr(arr);
-    for (size_t i = 0; i < size.size(); i++) {
-        size[i] = static_cast<nix::NDSize::value_type>(data[i]);
-    }
-
-    return size;
-}
-
-static mxArray *nmCreateScalar(uint32_t val) {
-    mxArray *arr = mxCreateNumericMatrix(1, 1, mxUINT32_CLASS, mxREAL);
-    void *data = mxGetData(arr);
-    memcpy(data, &val, sizeof(uint32_t));
-    return arr;
-}
-
-static mxArray *dim_to_struct(nix::SetDimension dim) {
-
-    struct_builder sb({1}, { "type", "type_id", "labels" });
-
-    sb.set("set");
-    sb.set(1);
-    sb.set(dim.labels());
-
-    return sb.array();
-}
-
-
-static mxArray *dim_to_struct(nix::SampledDimension dim) {
-
-    struct_builder sb({1}, {"type", "type_id", "interval", "label", "unit"});
-
-    sb.set("sampled");
-    sb.set(2);
-    sb.set(dim.samplingInterval());
-    sb.set(dim.label());
-    sb.set(dim.unit());
-
-    return sb.array();
-}
-
-static mxArray *dim_to_struct(nix::RangeDimension dim) {
-
-    struct_builder sb({1}, {"type", "type_id", "ticks", "unit"});
-
-    sb.set("range");
-    sb.set(3);
-    sb.set(dim.ticks());
-    sb.set(dim.unit());
-
-    return sb.array();
 }
 
 static void data_array_describe(const extractor &input, infusor &output)
