@@ -8,44 +8,9 @@
 #include "handle.h"
 #include "arguments.h"
 #include "struct.h"
+#include "nix2mx.h"
 
 namespace nixdataarray {
-
-    static mxArray *dim_to_struct(nix::SetDimension dim) {
-
-        struct_builder sb({ 1 }, { "type", "type_id", "labels" });
-
-        sb.set("set");
-        sb.set(1);
-        sb.set(dim.labels());
-
-        return sb.array();
-    }
-
-    static mxArray *dim_to_struct(nix::SampledDimension dim) {
-
-        struct_builder sb({ 1 }, { "type", "type_id", "interval", "label", "unit" });
-
-        sb.set("sampled");
-        sb.set(2);
-        sb.set(dim.samplingInterval());
-        sb.set(dim.label());
-        sb.set(dim.unit());
-
-        return sb.array();
-    }
-
-    static mxArray *dim_to_struct(nix::RangeDimension dim) {
-
-        struct_builder sb({ 1 }, { "type", "type_id", "ticks", "unit" });
-
-        sb.set("range");
-        sb.set(3);
-        sb.set(dim.ticks());
-        sb.set(dim.unit());
-
-        return sb.array();
-    }
 
     void describe(const extractor &input, infusor &output)
     {
@@ -72,13 +37,13 @@ namespace nixdataarray {
 
             switch (da_dims[i].dimensionType()) {
             case nix::DimensionType::Set:
-                ca = nixdataarray::dim_to_struct(da_dims[i].asSetDimension());
+                ca = dim_to_struct(da_dims[i].asSetDimension());
                 break;
             case nix::DimensionType::Range:
-                ca = nixdataarray::dim_to_struct(da_dims[i].asRangeDimension());
+                ca = dim_to_struct(da_dims[i].asRangeDimension());
                 break;
             case nix::DimensionType::Sample:
-                ca = nixdataarray::dim_to_struct(da_dims[i].asSampledDimension());
+                ca = dim_to_struct(da_dims[i].asSampledDimension());
                 break;
             }
 
