@@ -9,8 +9,10 @@
 #include "handle.h"
 #include "arguments.h"
 #include "struct.h"
+#include "nix2mx.h"
 
 #include "nixfile.h"
+#include "nixsection.h"
 #include "nixblock.h"
 #include "nixdataarray.h"
 #include "nixsource.h"
@@ -26,32 +28,6 @@ static void entity_destroy(const extractor &input, infusor &output)
     h.destroy();
 }
 
-static nix::NDSize mx_array_to_ndsize(const mxArray *arr) {
-
-    size_t m = mxGetM(arr);
-    size_t n = mxGetN(arr);
-
-    //if (m != 1 && n != 1)
-
-    size_t k = std::max(n, m);
-    nix::NDSize size(k);
-
-    double *data = mxGetPr(arr);
-    for (size_t i = 0; i < size.size(); i++) {
-        size[i] = static_cast<nix::NDSize::value_type>(data[i]);
-    }
-
-    return size;
-}
-
-static mxArray *nmCreateScalar(uint32_t val) {
-    mxArray *arr = mxCreateNumericMatrix(1, 1, mxUINT32_CLASS, mxREAL);
-    void *data = mxGetData(arr);
-    memcpy(data, &val, sizeof(uint32_t));
-    return arr;
-}
-
-
 // *** ***
 
 typedef void (*fn_t)(const extractor &input, infusor &output);
@@ -65,13 +41,19 @@ fendpoint(std::string name, fn_t fn) : name(name), fn(fn) {}
 };
 
 const std::vector<fendpoint> funcs = {
-        { "Entity::destroy", entity_destroy },
+        {"Entity::destroy", entity_destroy},
+
+        // File
         { "File::open", nixfile::open },
         { "File::describe", nixfile::describe },
         { "File::listBlocks", nixfile::list_blocks },
         { "File::openBlock", nixfile::open_block },
+        { "File::blocks", nixfile::blocks },
         { "File::listSections", nixfile::list_sections },
         { "File::openSection", nixfile::open_section },
+        { "File::sections", nixfile::sections },
+
+        // Block
         { "Block::describe", nixblock::describe },
         { "Block::listDataArrays", nixblock::list_data_arrays },
         { "Block::openDataArray", nixblock::open_data_array },
@@ -84,9 +66,13 @@ const std::vector<fendpoint> funcs = {
         { "Block::listMultiTags", nixblock::list_multi_tags },
         { "Block::openMultiTag", nixblock::open_multi_tag },
         { "Block::openMetadataSection", nixblock::open_metadata_section },
+
+        // Data Array
         { "DataArray::describe", nixdataarray::describe },
         { "DataArray::readAll", nixdataarray::read_all },
         { "DataArray::openMetadataSection", nixdataarray::open_metadata_section },
+
+        // Tag
         { "Tag::describe", nixtag::describe },
         { "Tag::listReferences", nixtag::list_references_array },
         { "Tag::listFeatures", nixtag::list_features },
@@ -95,6 +81,8 @@ const std::vector<fendpoint> funcs = {
         { "Tag::openFeature", nixtag::open_feature },
         { "Tag::openSource", nixtag::open_source },
         { "Tag::openMetadataSection", nixtag::open_metadata_section },
+
+        // Multi Tag
         { "MultiTag::describe", nixmultitag::describe },
         { "MultiTag::listReferences", nixmultitag::list_references_array },
         { "MultiTag::listFeatures", nixmultitag::list_features },
@@ -106,13 +94,28 @@ const std::vector<fendpoint> funcs = {
         { "MultiTag::openFeature", nixmultitag::open_features },
         { "MultiTag::openSource", nixmultitag::open_source },
         { "MultiTag::openMetadataSection", nixmultitag::open_metadata_section },
+
+        // Source
         { "Source::describe", nixsource::describe },
         { "Source::listSources", nixsource::list_sources },
         { "Source::openSource", nixsource::open_source },
         { "Source::openMetadataSection", nixsource::open_metadata_section },
+
+        // Feature
         { "Feature::describe", nixfeature::describe },
         { "Feature::linkType", nixfeature::link_type },
-        { "Feature::openData", nixfeature::open_data }
+        { "Feature::openData", nixfeature::open_data },
+
+        // Section
+        { "Section::describe", nixsection::describe },
+        { "Section::link", nixsection::link },
+        { "Section::parent", nixsection::parent },
+        { "Section::hasSection", nixsection::has_section },
+        { "Section::openSection", nixsection::open_section },
+        { "Section::listSections", nixsection::list_sections },
+        { "Section::sections", nixsection::sections },
+        { "Section::hasProperty", nixsection::has_property },
+        { "Section::listProperties", nixsection::list_properties }
 };
 
 // main entry point
