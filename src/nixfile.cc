@@ -12,8 +12,6 @@ namespace nixfile {
 
 void open(const extractor &input, infusor &output)
 {
-    mexPrintf("[+] open_file\n");
-
     std::string name = input.str(1);
     uint8_t omode = input.num<uint8_t>(2);
     nix::FileMode mode;
@@ -33,7 +31,6 @@ void open(const extractor &input, infusor &output)
 
 void describe(const extractor &input, infusor &output)
 {
-    mexPrintf("[+] file_describe\n");
     nix::File fd = input.entity<nix::File>(1);
 
     struct_builder sb({ 1 }, { "blockCount", "sectionCount" });
@@ -46,7 +43,6 @@ void describe(const extractor &input, infusor &output)
 
 void list_blocks(const extractor &input, infusor &output)
 {
-    mexPrintf("[+] list_blocks\n");
     nix::File fd = input.entity<nix::File>(1);
 
     std::vector<nix::Block> blocks = fd.blocks();
@@ -66,7 +62,6 @@ void list_blocks(const extractor &input, infusor &output)
 
 void open_block(const extractor &input, infusor &output)
 {
-    mexPrintf("[+] open_block\n");
     nix::File nf = input.entity<nix::File>(1);
     nix::Block block = nf.getBlock(input.str(2));
     handle bb = handle(block);
@@ -90,7 +85,6 @@ void blocks(const extractor &input, infusor &output)
 
 void list_sections(const extractor &input, infusor &output)
 {
-    mexPrintf("[+] list_sections\n");
     nix::File fd = input.entity<nix::File>(1);
 
     std::vector<nix::Section> secs = fd.sections();
@@ -110,7 +104,6 @@ void list_sections(const extractor &input, infusor &output)
 
 void open_section(const extractor &input, infusor &output)
 {
-    mexPrintf("[+] open_section\n");
     nix::File nf = input.entity<nix::File>(1);
     nix::Section sec = nf.getSection(input.str(2));
     handle bb = handle(sec);
