@@ -13,7 +13,8 @@
 #include "MXFile.h"
 #include "MXBlock.h"
 #include "MXDataArray.h"
-
+#include "MXSource.h"
+#include "MXFeature.h"
 
 // *** functions ***
 
@@ -58,14 +59,6 @@ static void multi_tag_open_extents(const extractor &input, infusor &output)
     nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
     output.set(0, gen_open_data_array(currMTag.extents()));
 }
-
-static void feature_open_data(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] feature_open_data\n");
-    nix::Feature currFeat = input.entity < nix::Feature > (1);
-    output.set(0, gen_open_data_array(currFeat.data()));
-}
-
 
 // handle list data arrays
 static mxArray* gen_list_data_arrays(std::vector<nix::DataArray> daIn){
@@ -203,13 +196,6 @@ static mxArray* gen_list_sources(std::vector<nix::Source> sourceIn){
     return sb.array();
 }
 
-static void source_list_sources(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] source_list_sources\n");
-    nix::Source currSource = input.entity<nix::Source>(1);
-    output.set(0, gen_list_sources(currSource.sources()));
-}
-
 static void tag_list_sources(const extractor &input, infusor &output)
 {
     mexPrintf("[+] tag_list_sources\n");
@@ -230,13 +216,6 @@ static handle gen_open_source(nix::Source sourceIn){
     nix::Source currSource = sourceIn;
     handle currSourceHandle = handle(currSource);
     return currSourceHandle;
-}
-
-static void source_open_source(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] source_open_source\n");
-    nix::Source currSource = input.entity<nix::Source>(1);
-    output.set(0, gen_open_source(currSource.getSource(input.str(2))));
 }
 
 static void tag_open_source(const extractor &input, infusor &output)
@@ -283,13 +262,6 @@ static handle gen_open_metadata_section(nix::Section secIn){
     return currTagMDSecHandle;
 }
 
-static void source_open_metadata_section(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] source_open_metadata_section\n");
-    nix::Source currTag = input.entity<nix::Source>(1);
-    output.set(0, gen_open_metadata_section(currTag.metadata()));
-}
-
 static void tag_open_metadata_section(const extractor &input, infusor &output)
 {
     mexPrintf("[+] tag_open_metadata_section\n");
@@ -321,42 +293,6 @@ static void multi_tag_describe(const extractor &input, infusor &output)
     sb.set(currMTag.sourceCount());
     sb.set(currMTag.referenceCount());
 
-    output.set(0, sb.array());
-}
-
-
-// handle source entity
-static void source_describe(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] source_describe\n");
-    nix::Source currSource = input.entity<nix::Source>(1);
-    struct_builder sb({ 1 }, {"id", "type", "name", "definition", "sourceCount"});
-    sb.set(currSource.id());
-    sb.set(currSource.type());
-    sb.set(currSource.name());
-    sb.set(currSource.definition());
-    sb.set(currSource.sourceCount());
-    output.set(0, sb.array());
-}
-
-
-//handle feature entity
-static void feature_describe(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] feature_describe\n");
-    nix::Feature currFeat = input.entity<nix::Feature>(1);
-    struct_builder sb({ 1 }, {"id"});
-    sb.set(currFeat.id());
-    output.set(0, sb.array());
-}
-
-static void feature_link_type(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] feature_link_type\n");
-    nix::Feature currFeat = input.entity<nix::Feature>(1);
-    //TODO properly implement link type
-    struct_builder sb({ 1 }, { "linkType" });
-    sb.set("linkType");
     output.set(0, sb.array());
 }
 
@@ -415,13 +351,13 @@ const std::vector<fendpoint> funcs = {
         {"MultiTag::openFeature", multi_tag_open_features},
         {"MultiTag::openSource", multi_tag_open_source},
         {"MultiTag::openMetadataSection", multi_tag_open_metadata_section},
-        {"Source::describe", source_describe},
-        {"Source::listSources", source_list_sources},
-        {"Source::openSource", source_open_source},
-        {"Source::openMetadataSection", source_open_metadata_section},
-        {"Feature::describe", feature_describe},
-        {"Feature::linkType", feature_link_type},
-        {"Feature::openData", feature_open_data}
+        { "Source::describe", nixsource::describe },
+        { "Source::listSources", nixsource::list_sources },
+        { "Source::openSource", nixsource::open_source },
+        { "Source::openMetadataSection", nixsource::open_metadata_section },
+        { "Feature::describe", nixfeature::describe },
+        { "Feature::linkType", nixfeature::link_type },
+        { "Feature::openData", nixfeature::open_data }
 };
 
 // main entry point
