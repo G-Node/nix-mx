@@ -62,11 +62,10 @@ try
     test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
 
     assert(length(test_file.listBlocks()) == 4);
-    disp('Test listing blocks from HDF5 file ... OK');
     clear; %-- close handles
-    %test_file.delete();
+    disp('Test listing blocks from HDF5 file ... OK');
+
 catch me
-    %test_file.delete();
     disp('Test listing blocks from HDF5 file ... ERROR');
     rethrow(me);
 end;
@@ -76,8 +75,8 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    %-- retrieve first Block from list by its ID
     getBlockByID = test_file.block(currBlockList(1).id);
+
     assert(strcmp(getBlockByID.id, '7b59c0b9-b200-4b53-951d-6851dbd1cdc8'));
     disp('Test open block by ID from HDF5 file ... OK');
     clear; %-- close handles
@@ -91,8 +90,8 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    %-- retrieve first Block from list by its name
     getBlockByName = test_file.block(currBlockList(1).name);
+
     assert(strcmp(getBlockByName.name, 'joe097'));
     disp('Test open block by name from HDF5 file ... OK');
     clear; %-- close handles
@@ -102,5 +101,7 @@ catch me
 end;
 
 %% TODO Test Open metadata
+
+disp('Test open metadata from file ... TODO');
 
 

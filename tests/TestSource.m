@@ -13,7 +13,7 @@ try
     %-- TODO: get a testfile with nested sources
     assert(size(getSourceFromBlock.list_sources(),1) == 0);
     clear; %-- close handles
-    disp('Test list sources from source ... OK');
+    disp('Test list sources from source ... TODO');
     
 catch me
     disp('Test list sources from source ... ERROR');
@@ -35,7 +35,7 @@ try
     %getSourceByID = getSourceFromBlock.open_source(currSourceList(1,1).id);
     %assert(strcmp(getSourceByID.id, ''));
     clear; %-- close handles
-    disp('Test open source by ID from source ... OK');
+    disp('Test open source by ID from source ... TODO');
     
 catch me
     disp('Test open source by ID from source ... ERROR');
@@ -56,7 +56,7 @@ try
     %getSourceByName = getSourceFromBlock.open_source(currSourceList(1,1).name);
     %assert(strcmp(getSourceByName.name, ''));
     clear; %-- close handles
-    disp('Test open source by name from source ... OK');
+    disp('Test open source by name from source ... TODO');
     
 catch me
     disp('Test open source by name from source ... ERROR');
@@ -77,7 +77,7 @@ try
     assert(strcmp(getSourceFromBlock.open_metadata(),'TODO: implement MetadataSection'));
     
     clear; %-- close handles
-    disp('Test open metadata from source ... OK');
+    disp('Test open metadata from source ... TODO');
 
 catch me
     disp('Test open metadata from source ... ERROR');

@@ -87,7 +87,7 @@ classdef Tag < nix.Entity
             %feature = nix.Feature(featureHandle);
         end;
 
-        function dataArray = open_referenced_data_array(obj, id_or_name)
+        function dataArray = open_reference(obj, id_or_name)
             daHandle = nix_mx('Tag::openReferenceDataArray', obj.nix_handle, id_or_name);
             dataArray = nix.DataArray(daHandle);
         end;
