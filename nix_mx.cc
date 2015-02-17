@@ -8,60 +8,9 @@
 
 #include "handle.h"
 #include "arguments.h"
+#include "struct.h"
 
-// *** datatype converter
-
-struct struct_builder {
-
-    struct_builder(std::vector<size_t> dims, std::vector<const char *> f)
-        : n(0), pos(0), fields(f) {
-        sa = mxCreateStructArray(dims.size(), dims.data(), fields.size(), fields.data());
-    }
-
-    template<typename T>
-    void set(T&& value) {
-        set(pos++, std::forward<T>(value));
-    }
-
-    template<typename T>
-    void set(const std::string &key, T&& value) {
-        mxSetFieldByNumber(sa, n, pos++, std::forward<T>(value));
-    }
-
-    template<typename T>
-    void set(const int field_idx, T&& value) {
-        set(n, field_idx, std::forward<T>(value));
-    }
-
-    template<typename T>
-    void set(const mwIndex struct_idx, const int field_idx, T&& value) {
-        set(struct_idx, field_idx, make_mx_array(std::forward<T>(value)));
-    }
-
-    void set(const mwIndex struct_idx, const int field_idx, mxArray *value) {
-        mxSetFieldByNumber(sa, struct_idx, field_idx, value);
-    }
-
-    mwIndex next() {
-        pos = 0;
-        return ++n;
-    }
-
-    int skip() {
-        return ++pos;
-    }
-
-    mxArray *array() {
-        return sa;
-    }
-
-private:
-    mxArray *sa;
-    mwIndex n;
-    int pos;
-
-    std::vector<const char *> fields;
-};
+#include "MXFile.h"
 
 // *** functions ***
 
@@ -70,56 +19,6 @@ static void entity_destroy(const extractor &input, infusor &output)
     mexPrintf("[+] entity_destroy\n");
     handle h = input.hdl(1);
     h.destroy();
-}
-
-static void open_file(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] open_file\n");
-
-    std::string name = input.str(1);
-    uint8_t omode = input.num<uint8_t>(2);
-    nix::FileMode mode;
-
-    switch (omode) {
-    case 0: mode = nix::FileMode::ReadOnly; break;
-    case 1: mode = nix::FileMode::ReadWrite; break;
-    case 2: mode = nix::FileMode::Overwrite; break;
-    default: throw std::invalid_argument("unkown open mode");
-    }
-
-    nix::File fn = nix::File::open(name, mode);
-    handle h = handle(fn);
-
-    output.set(0, h);
-}
-
-static void list_blocks(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] list_blocks\n");
-    nix::File fd = input.entity<nix::File>(1);
-
-    std::vector<nix::Block> blocks = fd.blocks();
-
-    struct_builder sb({blocks.size()}, {"name", "id", "type"});
-
-    for (const auto &b : blocks) {
-        sb.set(b.name());
-        sb.set(b.id());
-        sb.set(b.type());
-
-        sb.next();
-    }
-
-    output.set(0, sb.array());
-}
-
-static void open_block(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] open_block\n");
-    nix::File nf = input.entity<nix::File>(1);
-    nix::Block block = nf.getBlock(input.str(2));
-    handle bb = handle(block);
-    output.set(0, bb);
 }
 
 static void block_describe(const extractor &input, infusor &output)
@@ -596,9 +495,12 @@ fendpoint(std::string name, fn_t fn) : name(name), fn(fn) {}
 
 const std::vector<fendpoint> funcs = {
         {"Entity::destroy", entity_destroy},
-        {"File::open", open_file},
-        {"File::listBlocks", list_blocks},
-        {"File::openBlock", open_block},
+        { "File::open", nixfile::open },
+        { "File::describe", nixfile::describe },
+        { "File::listBlocks", nixfile::list_blocks },
+        { "File::openBlock", nixfile::open_block },
+        { "File::listSections", nixfile::list_sections },
+        { "File::openSection", nixfile::open_section },
         {"Block::describe", block_describe},
         {"Block::openDataArray", open_data_array},
         {"Block::listDataArrays", block_list_data_arrays},

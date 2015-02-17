@@ -17,8 +17,8 @@ classdef Block < nix.Entity
     
     methods
         function obj = Block(h)
-           obj@nix.Entity(h);
-           obj.info = nix_mx('Block::describe', obj.nix_handle);
+            obj@nix.Entity(h);
+            obj.info = nix_mx('Block::describe', obj.nix_handle);
         end;
         
         function name = get.name(block)

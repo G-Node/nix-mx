@@ -32,10 +32,10 @@ ENDIF(MATLAB_FOUND)
 
 find_package(NIX REQUIRED)
 
-include_directories(${MATLAB_INCLUDE_DIR} ${NIX_INCLUDE_DIR})
+include_directories(${MATLAB_INCLUDE_DIR} ${NIX_INCLUDE_DIR} "include" "include/utils")
 
-file(GLOB SOURCE_FILES "." "*.cpp" "*.cc")
-file(GLOB INCLUDE_FILES "." "*.h" "*.hpp")
+file(GLOB_RECURSE SOURCE_FILES "." "*.cpp" "*.cc")
+file(GLOB_RECURSE INCLUDE_FILES "." "*.h" "*.hpp")
 
 if(NOT WIN32)
   set(LIBTYPE SHARED)
