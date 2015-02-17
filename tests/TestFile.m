@@ -1,4 +1,4 @@
-% Tests for the nix.File objects
+% Tests for the nix.File object
 
 %% Test: Open HDF5 file in ReadOnly mode
 try

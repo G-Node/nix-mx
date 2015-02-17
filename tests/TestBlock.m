@@ -1,4 +1,4 @@
-% Tests for the nix.File objects
+% Tests for the nix.Block object
 
 %% Test: List data arrays
 try
@@ -265,5 +265,23 @@ try
     
 catch me
     disp('Test block has tag by name ... ERROR');
+    rethrow(me);
+end;
+
+%% Test: Open metadata
+try
+    clear; %-- ensure clean workspace
+    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    currBlockList = test_file.listBlocks();
+    getBlock = test_file.block(currBlockList(1,1).name);
+
+    %-- ToDo implement proper test for metadata once metadata is implemented
+    assert(strcmp(getBlock.open_metadata(),'TODO: implement MetadataSection'));
+    
+    clear; %-- close handles
+    disp('Test open metadata from block ... OK');
+
+catch me
+    disp('Test open metadata from block ... ERROR');
     rethrow(me);
 end;

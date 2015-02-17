@@ -1,4 +1,7 @@
-% Runner for all other tests.
+%-- Runner for all other tests.
+
+%-- add required paths for matlab
+addpath(fullfile(pwd, 'build'));
 
 TestFile;
 
@@ -14,3 +17,6 @@ disp('Tests completed successfully. Bye.')
 TestFile;
 
 TestBlock;
+
+TestSource;
+
