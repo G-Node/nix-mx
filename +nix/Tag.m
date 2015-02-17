@@ -27,9 +27,9 @@ classdef Tag < nix.Entity
 
     methods
         function obj = Tag(h)
-           obj@nix.Entity(h);
-           obj.info = nix_mx('Tag::describe', obj.nix_handle);
-           
+            obj@nix.Entity(h);
+            obj.info = nix_mx('Tag::describe', obj.nix_handle);
+
             obj.referencesCache = {};
             obj.featuresCache = {};
             obj.sourcesCache = {};
@@ -112,8 +112,7 @@ classdef Tag < nix.Entity
 
         function feature = open_feature(obj, id_or_name)
             featureHandle = nix_mx('Tag::openFeature', obj.nix_handle, id_or_name);
-            feature = 'TODO: implement feature';
-            %feature = nix.Feature(featureHandle);
+            feature = nix.Feature(featureHandle);
         end;
 
         function feat = get.features(obj)
