@@ -15,6 +15,7 @@
 #include "MXDataArray.h"
 #include "MXSource.h"
 #include "MXFeature.h"
+#include "MXTag.h"
 
 // *** functions ***
 
@@ -30,13 +31,6 @@ static handle gen_open_data_array(nix::DataArray inDa){
     nix::DataArray da = inDa;
     handle h = handle(da);
     return h;
-}
-
-static void tag_open_data_array(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] tag_open_data_array\n");
-    nix::Tag currTag = input.entity<nix::Tag>(1);
-    output.set(0, gen_open_data_array(currTag.getReference(input.str(2))));
 }
 
 static void multi_tag_open_references(const extractor &input, infusor &output)
@@ -74,13 +68,6 @@ static mxArray* gen_list_data_arrays(std::vector<nix::DataArray> daIn){
         sb.next();
     }
     return sb.array();
-}
-
-static void tag_list_references_array(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] tag_list_references\n");
-    nix::Tag currTag = input.entity<nix::Tag>(1);
-    output.set(0, gen_list_data_arrays(currTag.references()));
 }
 
 static void multi_tag_list_references_array(const extractor &input, infusor &output)
@@ -130,31 +117,6 @@ static mxArray *nmCreateScalar(uint32_t val) {
     return arr;
 }
 
-// handle tag entity
-static void tag_describe(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] tag_describe\n");
-
-    nix::Tag currTag = input.entity<nix::Tag>(1);
-
-    struct_builder sb({ 1 }, { "id", "type", "name", "definition", "position", "extent", 
-                    "units", "featureCount", "sourceCount", "referenceCount" });
-
-    sb.set(currTag.id());
-    sb.set(currTag.type());
-    sb.set(currTag.name());
-    sb.set(currTag.definition());
-    sb.set(currTag.position());
-    sb.set(currTag.extent());
-    sb.set(currTag.units());
-    sb.set(currTag.featureCount());
-    sb.set(currTag.sourceCount());
-    sb.set(currTag.referenceCount());
-
-    output.set(0, sb.array());
-}
-
-
 // handle list features
 static mxArray* gen_list_features(std::vector<nix::Feature> featIn){
     std::vector<nix::Feature> arr = featIn;
@@ -164,13 +126,6 @@ static mxArray* gen_list_features(std::vector<nix::Feature> featIn){
         sb.next();
     }
     return sb.array();
-}
-
-static void tag_list_features(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] tag_list_features\n");
-    nix::Tag currTag = input.entity<nix::Tag>(1);
-    output.set(0, gen_list_features(currTag.features()));
 }
 
 static void multi_tag_list_features(const extractor &input, infusor &output)
@@ -196,13 +151,6 @@ static mxArray* gen_list_sources(std::vector<nix::Source> sourceIn){
     return sb.array();
 }
 
-static void tag_list_sources(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] tag_list_sources\n");
-    nix::Tag currTag = input.entity<nix::Tag>(1);
-    output.set(0, gen_list_sources(currTag.sources()));
-}
-
 static void multi_tag_list_sources(const extractor &input, infusor &output)
 {
     mexPrintf("[+] multi_tag_list_sources\n");
@@ -216,13 +164,6 @@ static handle gen_open_source(nix::Source sourceIn){
     nix::Source currSource = sourceIn;
     handle currSourceHandle = handle(currSource);
     return currSourceHandle;
-}
-
-static void tag_open_source(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] tag_open_source\n");
-    nix::Tag currTag = input.entity<nix::Tag>(1);
-    output.set(0, gen_open_source(currTag.getSource(input.str(2))));
 }
 
 static void multi_tag_open_source(const extractor &input, infusor &output)
@@ -240,13 +181,6 @@ static handle gen_open_feature(nix::Feature featIn){
     return currTagFeatHandle;
 }
 
-static void tag_open_feature(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] tag_open_feature\n");
-    nix::Tag currTag = input.entity<nix::Tag>(1);
-    output.set(0, gen_open_feature(currTag.getFeature(input.str(2))));
-}
-
 static void multi_tag_open_features(const extractor &input, infusor &output)
 {
     mexPrintf("[+] multi_tag_open_features\n");
@@ -260,13 +194,6 @@ static handle gen_open_metadata_section(nix::Section secIn){
     nix::Section currMDSec = secIn;
     handle currTagMDSecHandle = handle(currMDSec);
     return currTagMDSecHandle;
-}
-
-static void tag_open_metadata_section(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] tag_open_metadata_section\n");
-    nix::Tag currTag = input.entity<nix::Tag>(1);
-    output.set(0, gen_open_metadata_section(currTag.metadata()));
 }
 
 static void multi_tag_open_metadata_section(const extractor &input, infusor &output)
@@ -332,14 +259,14 @@ const std::vector<fendpoint> funcs = {
         { "DataArray::describe", nixda::describe },
         { "DataArray::readAll", nixda::read_all },
         { "DataArray::openMetadataSection", nixda::open_metadata_section },
-        {"Tag::describe", tag_describe},
-        {"Tag::listReferences", tag_list_references_array},
-        {"Tag::listFeatures", tag_list_features},
-        {"Tag::listSources", tag_list_sources},
-        {"Tag::openReferenceDataArray", tag_open_data_array},
-        {"Tag::openFeature", tag_open_feature},
-        {"Tag::openSource", tag_open_source},
-        {"Tag::openMetadataSection", tag_open_metadata_section},
+        { "Tag::describe", nixtag::describe },
+        { "Tag::listReferences", nixtag::list_references_array },
+        { "Tag::listFeatures", nixtag::list_features },
+        { "Tag::listSources", nixtag::list_sources },
+        { "Tag::openReferenceDataArray", nixtag::open_data_array },
+        { "Tag::openFeature", nixtag::open_feature },
+        { "Tag::openSource", nixtag::open_source },
+        { "Tag::openMetadataSection", nixtag::open_metadata_section },
         {"MultiTag::describe", multi_tag_describe},
         {"MultiTag::listReferences", multi_tag_list_references_array},
         {"MultiTag::listFeatures", multi_tag_list_features},
