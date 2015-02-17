@@ -9,9 +9,10 @@
 #include "handle.h"
 #include "arguments.h"
 #include "struct.h"
+#include "nix2mx.h"
 
 #include "nixfile.h"
-#include "nix2mx.h"
+#include "nixsection.h"
 
 // *** functions ***
 
@@ -429,12 +430,16 @@ fendpoint(std::string name, fn_t fn) : name(name), fn(fn) {}
 
 const std::vector<fendpoint> funcs = {
         {"Entity::destroy", entity_destroy},
+
+        // File
         { "File::open", nixfile::open },
         { "File::describe", nixfile::describe },
         { "File::listBlocks", nixfile::list_blocks },
         { "File::openBlock", nixfile::open_block },
         { "File::listSections", nixfile::list_sections },
         { "File::openSection", nixfile::open_section },
+
+        // Block
         {"Block::describe", block_describe},
         {"Block::openDataArray", open_data_array},
         {"Block::listDataArrays", block_list_data_arrays},
@@ -444,8 +449,23 @@ const std::vector<fendpoint> funcs = {
         {"Block::hasMultiTag", has_multi_tag},
         {"Block::openMultiTag", open_multi_tag},
         {"Block::listMultiTags", block_list_multi_tags},
+
+        // Section
+        { "Section::describe", nixsection::describe },
+        { "Section::link", nixsection::link },
+        { "Section::parent", nixsection::parent },
+        { "Section::hasSection", nixsection::has_section },
+        { "Section::openSection", nixsection::open_section },
+        { "Section::listSections", nixsection::list_sections },
+        { "Section::sections", nixsection::sections },
+        { "Section::hasProperty", nixsection::has_property },
+        { "Section::listProperties", nixsection::list_properties },
+
+        // Data Array
         {"DataArray::describe", data_array_describe},
         {"DataArray::readAll", data_array_read_all},
+
+        // Tag
         {"Tag::describe", tag_describe},
         {"Tag::listReferences", tag_list_references_array},
         {"Tag::listFeatures", tag_list_features},
@@ -454,6 +474,8 @@ const std::vector<fendpoint> funcs = {
         {"Tag::openFeature", tag_open_feature},
         {"Tag::openSource", tag_open_source},
         {"Tag::openMetadataSection", tag_open_metadata_section},
+
+        // MultiTag
         {"MultiTag::describe", multi_tag_describe},
         {"MultiTag::listReferences", multi_tag_list_references_array},
         {"MultiTag::listFeatures", multi_tag_list_features},

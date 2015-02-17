@@ -9,10 +9,7 @@ classdef File < nix.Entity
     
     properties(Dependent)
         blocks
-        blockCount
-        
         sections
-        sectionCount
     end
     
     methods
@@ -40,10 +37,6 @@ classdef File < nix.Entity
             bh = nix_mx('File::openBlock', obj.nix_handle, id_or_name);
             b = nix.Block(bh);
         end
-
-        function blockCount = get.blockCount(obj)
-            blockCount = obj.info.blockCount;
-        end;
         
         function blocks = get.blocks(obj)
             blk_list = obj.listBlocks();
@@ -71,10 +64,6 @@ classdef File < nix.Entity
         function section = openSection(obj, id_or_name)
            h = nix_mx('File::openSection', obj.nix_handle, id_or_name); 
            section = nix.Section(h);
-        end;
-        
-        function sectionCount = get.sectionCount(obj)
-            sectionCount = obj.info.sectionCount;
         end;
         
         function sections = get.sections(obj)

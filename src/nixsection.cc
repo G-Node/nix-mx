@@ -16,13 +16,14 @@ void describe(const extractor &input, infusor &output)
     nix::Section section = input.entity<nix::Section>(1);
 
     struct_builder sb({ 1 }, { 
-        "repository", "mapping", "sectionCount", "propertyCount" 
+        "name", "id", "type", "repository", "mapping"
     });
 
+    sb.set(section.name());
+    sb.set(section.id());
+    sb.set(section.type());
     sb.set(section.repository());
     sb.set(section.mapping());
-    sb.set(section.sectionCount());
-    sb.set(section.propertyCount());
 
     output.set(0, sb.array());
 }
@@ -51,12 +52,56 @@ void has_section(const extractor &input, infusor &output)
     output.set(0, has_entity(section.hasSection(input.str(2)), { "hasSection" }));
 }
 
-void open_section(const extractor &input, infusor &output);
+void open_section(const extractor &input, infusor &output)
+{
+    nix::Section section = input.entity<nix::Section>(1);
+    nix::Section sec = section.getSection(input.str(2));
+    handle h = handle(sec);
+    output.set(0, h);
+}
 
-void list_sections(const extractor &input, infusor &output);
+void list_sections(const extractor &input, infusor &output)
+{
+    nix::Section section = input.entity<nix::Section>(1);
+    std::vector<nix::Section> sections = section.sections();
 
-void has_property(const extractor &input, infusor &output);
+    struct_builder sb({ sections.size() }, { "name", "id", "type" });
 
-void list_properties(const extractor &input, infusor &output);
+    for (const auto &b : sections) {
+        sb.set(b.name());
+        sb.set(b.id());
+        sb.set(b.type());
+
+        sb.next();
+    }
+
+    output.set(0, sb.array());
+}
+
+void sections(const extractor &input, infusor &output)
+{
+    nix::Section section = input.entity<nix::Section>(1);
+    std::vector<nix::Section> sections = section.sections();
+
+    const mwSize size = static_cast<mwSize>(sections.size());
+    mxArray *lst = mxCreateCellArray(1, &size);
+
+    for (int i = 0; i < sections.size(); i++) {
+        mxSetCell(lst, i, make_mx_array(handle(sections[i])));
+    }
+
+    output.set(0, lst);
+}
+
+void has_property(const extractor &input, infusor &output)
+{
+    nix::Section section = input.entity<nix::Section>(1);
+    output.set(0, has_entity(section.hasProperty(input.str(2)), { "hasProperty" }));
+}
+
+void list_properties(const extractor &input, infusor &output)
+{
+
+}
 
 } // namespace nixfile
