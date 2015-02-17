@@ -11,6 +11,7 @@
 #include "struct.h"
 
 #include "MXFile.h"
+#include "MXBlock.h"
 
 // *** functions ***
 
@@ -21,37 +22,11 @@ static void entity_destroy(const extractor &input, infusor &output)
     h.destroy();
 }
 
-static void block_describe(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_describe\n");
-    nix::Block block = input.entity<nix::Block>(1);
-
-    struct_builder sb({ 1 }, { "id", "type", "name", "sourceCount", "dataArrayCount", "tagCount", "multiTagCount" });
-
-    sb.set(block.id());
-    sb.set(block.type());
-    sb.set(block.name());
-    sb.set(block.sourceCount());
-    sb.set(block.dataArrayCount());
-    sb.set(block.tagCount());
-    sb.set(block.multiTagCount());
-
-    output.set(0, sb.array());
-}
-
-
 // handle open data array
 static handle gen_open_data_array(nix::DataArray inDa){
     nix::DataArray da = inDa;
     handle h = handle(da);
     return h;
-}
-
-static void block_open_data_array(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_open_data_array\n");
-    nix::Block block = input.entity<nix::Block>(1);
-    output.set(0, gen_open_data_array(block.getDataArray(input.str(2))));
 }
 
 static void tag_open_data_array(const extractor &input, infusor &output)
@@ -106,13 +81,6 @@ static mxArray* gen_list_data_arrays(std::vector<nix::DataArray> daIn){
     return sb.array();
 }
 
-static void block_list_data_arrays(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_list_data_arrays\n");
-    nix::Block block = input.entity<nix::Block>(1);
-    output.set(0, gen_list_data_arrays(block.dataArrays()));
-}
-
 static void tag_list_references_array(const extractor &input, infusor &output)
 {
     mexPrintf("[+] tag_list_references\n");
@@ -136,86 +104,10 @@ static mxArray* gen_has_entity(bool boolIn, std::vector<const char *> currLabel)
     return sb.array();
 }
 
-static void block_has_tag(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_has_tag\n");
-    nix::Block block = input.entity<nix::Block>(1);
-    output.set(0, gen_has_entity(block.hasTag(input.str(2)), { "hasTag" }));
-}
-
-static void block_has_multi_tag(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_has_multi_tag\n");
-    nix::Block block = input.entity<nix::Block>(1);
-    output.set(0, gen_has_entity(block.hasMultiTag(input.str(2)), { "hasMultiTag" }));
-}
-
 static void multi_tag_has_positions(const extractor &input, infusor &output){
     mexPrintf("[+] multi_tag_has_positions\n");
     nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
     output.set(0, gen_has_entity(currMTag.hasPositions(), { "hasPositions" }));
-}
-
-static void block_open_tag(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_open_tag\n");
-    nix::Block block = input.entity<nix::Block>(1);
-    nix::Tag currTag = block.getTag(input.str(2));
-    handle currBlockTagHandle = handle(currTag);
-    output.set(0, currBlockTagHandle);
-}
-
-static void block_list_tags(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_list_tags\n");
-
-    nix::Block block = input.entity<nix::Block>(1);
-    std::vector<nix::Tag> arr = block.tags();
-
-    struct_builder sb({ arr.size() }, { "id", "type", "name", "definition", "position", "extent", "units" });
-
-    for (const auto &da : arr) {
-        sb.set(da.id());
-        sb.set(da.type());
-        sb.set(da.name());
-        sb.set(da.definition());
-        sb.set(da.position());
-        sb.set(da.extent());
-        sb.set(da.units());
-
-        sb.next();
-    }
-    output.set(0, sb.array());
-}
-
-static void block_open_multi_tag(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_open_multi_tag\n");
-    nix::Block block = input.entity<nix::Block>(1);
-    nix::MultiTag currMultiTag = block.getMultiTag(input.str(2));
-    handle currBlockMultiTagHandle = handle(currMultiTag);
-    output.set(0, currBlockMultiTagHandle);
-}
-
-static void block_list_multi_tags(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_list_multi_tags\n");
-
-    nix::Block block = input.entity<nix::Block>(1);
-    std::vector<nix::MultiTag> arr = block.multiTags();
-
-    struct_builder sb({ arr.size() }, { "id", "type", "name", "definition", "units" });
-
-    for (const auto &da : arr) {
-        sb.set(da.id());
-        sb.set(da.type());
-        sb.set(da.name());
-        sb.set(da.definition());
-        sb.set(da.units());
-
-        sb.next();
-    }
-    output.set(0, sb.array());
 }
 
 static nix::NDSize mx_array_to_ndsize(const mxArray *arr) {
@@ -418,13 +310,6 @@ static mxArray* gen_list_sources(std::vector<nix::Source> sourceIn){
     return sb.array();
 }
 
-static void block_list_sources(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_list_sources\n");
-    nix::Block currSource = input.entity<nix::Block>(1);
-    output.set(0, gen_list_sources(currSource.sources()));
-}
-
 static void source_list_sources(const extractor &input, infusor &output)
 {
     mexPrintf("[+] source_list_sources\n");
@@ -452,13 +337,6 @@ static handle gen_open_source(nix::Source sourceIn){
     nix::Source currSource = sourceIn;
     handle currSourceHandle = handle(currSource);
     return currSourceHandle;
-}
-
-static void block_open_source(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_open_source\n");
-    nix::Block currSource = input.entity<nix::Block>(1);
-    output.set(0, gen_open_source(currSource.getSource(input.str(2))));
 }
 
 static void source_open_source(const extractor &input, infusor &output)
@@ -510,13 +388,6 @@ static handle gen_open_metadata_section(nix::Section secIn){
     nix::Section currMDSec = secIn;
     handle currTagMDSecHandle = handle(currMDSec);
     return currTagMDSecHandle;
-}
-
-static void block_open_metadata_section(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_open_metadata_section\n");
-    nix::Block currTag = input.entity<nix::Block>(1);
-    output.set(0, gen_open_metadata_section(currTag.metadata()));
 }
 
 static void data_array_open_metadata_section(const extractor &input, infusor &output)
@@ -624,18 +495,18 @@ const std::vector<fendpoint> funcs = {
         { "File::openBlock", nixfile::open_block },
         { "File::listSections", nixfile::list_sections },
         { "File::openSection", nixfile::open_section },
-        {"Block::describe", block_describe},
-        {"Block::listDataArrays", block_list_data_arrays},
-        {"Block::openDataArray", block_open_data_array},
-        {"Block::listSources", block_list_sources},
-        {"Block::openSource", block_open_source},
-        {"Block::hasTag", block_has_tag},
-        {"Block::listTags", block_list_tags},
-        {"Block::openTag", block_open_tag},
-        {"Block::hasMultiTag", block_has_multi_tag},
-        {"Block::listMultiTags", block_list_multi_tags},
-        {"Block::openMultiTag", block_open_multi_tag},
-        {"Block::openMetadataSection", block_open_metadata_section},
+        {"Block::describe", nixblock::describe},
+        {"Block::listDataArrays", nixblock::list_data_arrays},
+        {"Block::openDataArray", nixblock::open_data_array},
+        {"Block::listSources", nixblock::list_sources},
+        {"Block::openSource", nixblock::open_source},
+        {"Block::hasTag", nixblock::has_tag},
+        {"Block::listTags", nixblock::list_tags},
+        {"Block::openTag", nixblock::open_tag},
+        {"Block::hasMultiTag", nixblock::has_multi_tag},
+        {"Block::listMultiTags", nixblock::list_multi_tags},
+        {"Block::openMultiTag", nixblock::open_multi_tag},
+        {"Block::openMetadataSection", nixblock::open_metadata_section},
         {"DataArray::describe", data_array_describe},
         {"DataArray::readAll", data_array_read_all},
         {"DataArray::openMetadataSection", data_array_open_metadata_section},
