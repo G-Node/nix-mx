@@ -12,6 +12,8 @@
 
 #include "MXFile.h"
 #include "MXBlock.h"
+#include "MXDataArray.h"
+
 
 // *** functions ***
 
@@ -133,115 +135,6 @@ static mxArray *nmCreateScalar(uint32_t val) {
     void *data = mxGetData(arr);
     memcpy(data, &val, sizeof(uint32_t));
     return arr;
-}
-
-static mxArray *dim_to_struct(nix::SetDimension dim) {
-
-    struct_builder sb({1}, { "type", "type_id", "labels" });
-
-    sb.set("set");
-    sb.set(1);
-    sb.set(dim.labels());
-
-    return sb.array();
-}
-
-static mxArray *dim_to_struct(nix::SampledDimension dim) {
-
-    struct_builder sb({1}, {"type", "type_id", "interval", "label", "unit"});
-
-    sb.set("sampled");
-    sb.set(2);
-    sb.set(dim.samplingInterval());
-    sb.set(dim.label());
-    sb.set(dim.unit());
-
-    return sb.array();
-}
-
-static mxArray *dim_to_struct(nix::RangeDimension dim) {
-
-    struct_builder sb({1}, {"type", "type_id", "ticks", "unit"});
-
-    sb.set("range");
-    sb.set(3);
-    sb.set(dim.ticks());
-    sb.set(dim.unit());
-
-    return sb.array();
-}
-
-static void data_array_describe(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_describe_data_array\n");
-    nix::DataArray da = input.entity<nix::DataArray>(1);
-
-    struct_builder sb({ 1 }, { "id", "type", "name", "definition", "label", 
-            "shape", "unit", "dimensions", "polynom_coefficients" });
-
-    sb.set(da.id());
-    sb.set(da.type());
-    sb.set(da.name());
-    sb.set(da.definition());
-    sb.set(da.label());
-    sb.set(da.dataExtent());
-    sb.set(da.unit());
-
-    size_t ndims = da.dimensionCount();
-
-    mxArray *dims = mxCreateCellMatrix(1, ndims);
-    std::vector<nix::Dimension> da_dims = da.dimensions();
-
-    for(size_t i = 0; i < ndims; i++) {
-        mxArray *ca;
-
-        switch(da_dims[i].dimensionType()) {
-            case nix::DimensionType::Set:
-                ca = dim_to_struct(da_dims[i].asSetDimension());
-                break;
-            case nix::DimensionType::Range:
-                ca = dim_to_struct(da_dims[i].asRangeDimension());
-                break;
-            case nix::DimensionType::Sample:
-                ca = dim_to_struct(da_dims[i].asSampledDimension());
-                break;
-        }
-
-        mxSetCell(dims, i, ca);
-    }
-
-    sb.set(dims);
-    sb.set(da.polynomCoefficients());
-
-    output.set(0, sb.array());
-}
-
-static void data_array_read_all(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] block_describe_data_array\n");
-    nix::DataArray da = input.entity<nix::DataArray>(1);
-
-    nix::NDSize size = da.dataExtent();
-    std::vector<mwSize> dims(size.size());
-
-    for (size_t i = 0; i < size.size(); i++) {
-        dims[i] = static_cast<mwSize>(size[i]);
-    }
-
-    nix::DataType da_type = da.dataType();
-    DType2 dtype = dtype_nix2mex(da_type);
-
-    if (!dtype.is_valid) {
-        throw std::domain_error("Unsupported data type");
-    }
-
-    mxArray *data = mxCreateNumericArray(dims.size(), dims.data(), dtype.cid, dtype.clx);
-    double *ptr = mxGetPr(data);
-
-    nix::NDSize offset(size.size(), 0);
-    da.getData(da_type, ptr, size, offset);
-
-    output.set(0, data);
 }
 
 // handle tag entity
@@ -390,13 +283,6 @@ static handle gen_open_metadata_section(nix::Section secIn){
     return currTagMDSecHandle;
 }
 
-static void data_array_open_metadata_section(const extractor &input, infusor &output)
-{
-    mexPrintf("[+] data_array_open_metadata_section\n");
-    nix::DataArray currTag = input.entity<nix::DataArray>(1);
-    output.set(0, gen_open_metadata_section(currTag.metadata()));
-}
-
 static void source_open_metadata_section(const extractor &input, infusor &output)
 {
     mexPrintf("[+] source_open_metadata_section\n");
@@ -488,29 +374,28 @@ fendpoint(std::string name, fn_t fn) : name(name), fn(fn) {}
 };
 
 const std::vector<fendpoint> funcs = {
-        {"Entity::destroy", entity_destroy},
+        { "Entity::destroy", entity_destroy },
         { "File::open", nixfile::open },
         { "File::describe", nixfile::describe },
         { "File::listBlocks", nixfile::list_blocks },
         { "File::openBlock", nixfile::open_block },
         { "File::listSections", nixfile::list_sections },
         { "File::openSection", nixfile::open_section },
-        {"Block::describe", nixblock::describe},
-        {"Block::listDataArrays", nixblock::list_data_arrays},
-        {"Block::openDataArray", nixblock::open_data_array},
-        {"Block::listSources", nixblock::list_sources},
-        {"Block::openSource", nixblock::open_source},
-        {"Block::hasTag", nixblock::has_tag},
-        {"Block::listTags", nixblock::list_tags},
-        {"Block::openTag", nixblock::open_tag},
-        {"Block::hasMultiTag", nixblock::has_multi_tag},
-        {"Block::listMultiTags", nixblock::list_multi_tags},
-        {"Block::openMultiTag", nixblock::open_multi_tag},
-        {"Block::openMetadataSection", nixblock::open_metadata_section},
-        {"DataArray::describe", data_array_describe},
-        {"DataArray::readAll", data_array_read_all},
-        {"DataArray::openMetadataSection", data_array_open_metadata_section},
-        // TODO implement dimensions
+        { "Block::describe", nixblock::describe },
+        { "Block::listDataArrays", nixblock::list_data_arrays },
+        { "Block::openDataArray", nixblock::open_data_array },
+        { "Block::listSources", nixblock::list_sources },
+        { "Block::openSource", nixblock::open_source },
+        { "Block::hasTag", nixblock::has_tag },
+        { "Block::listTags", nixblock::list_tags },
+        { "Block::openTag", nixblock::open_tag },
+        { "Block::hasMultiTag", nixblock::has_multi_tag },
+        { "Block::listMultiTags", nixblock::list_multi_tags },
+        { "Block::openMultiTag", nixblock::open_multi_tag },
+        { "Block::openMetadataSection", nixblock::open_metadata_section },
+        { "DataArray::describe", nixda::describe },
+        { "DataArray::readAll", nixda::read_all },
+        { "DataArray::openMetadataSection", nixda::open_metadata_section },
         {"Tag::describe", tag_describe},
         {"Tag::listReferences", tag_list_references_array},
         {"Tag::listFeatures", tag_list_features},
