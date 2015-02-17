@@ -11,11 +11,11 @@ classdef Tag < nix.Entity
         name
         definition
         position
-        units
         extent
+        units
         featuresCount
         sourcesCount
-        dataArrayReferenceCount
+        referenceCount
     end;
 
     methods
@@ -44,12 +44,12 @@ classdef Tag < nix.Entity
             position = tag.info.position;
         end;
 
-        function units = get.units(tag)
-            units = tag.info.units;
-        end;
-
         function extent = get.extent(tag)
             extent = tag.info.extent;
+        end;
+
+        function units = get.units(tag)
+            units = tag.info.units;
         end;
 
         function featuresCount = get.featuresCount(tag)
@@ -60,8 +60,8 @@ classdef Tag < nix.Entity
              sourcesCount = tag.info.sourcesCount;
         end;
 
-        function dataArrayReferenceCount = get.dataArrayReferenceCount(tag)
-            dataArrayReferenceCount = tag.info.dataArrayReferenceCount;
+        function referenceCount = get.referenceCount(tag)
+            referenceCount = tag.info.referenceCount;
         end;
         
         function refList = list_references(obj)
@@ -78,8 +78,7 @@ classdef Tag < nix.Entity
 
         function source = open_source(obj, id_or_name)
             sourceHandle = nix_mx('Tag::openSource', obj.nix_handle, id_or_name);
-            source = 'TODO: implement source';
-            %source = nix.Source(sourceHandle);
+            source = nix.Source(sourceHandle);
         end;
 
         function feature = open_feature(obj, id_or_name)
@@ -88,7 +87,7 @@ classdef Tag < nix.Entity
             %feature = nix.Feature(featureHandle);
         end;
 
-        function dataArray = open_referenced_data_array(obj, id_or_name)
+        function dataArray = open_reference(obj, id_or_name)
             daHandle = nix_mx('Tag::openReferenceDataArray', obj.nix_handle, id_or_name);
             dataArray = nix.DataArray(daHandle);
         end;
