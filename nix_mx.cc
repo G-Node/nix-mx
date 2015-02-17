@@ -436,8 +436,10 @@ const std::vector<fendpoint> funcs = {
         { "File::describe", nixfile::describe },
         { "File::listBlocks", nixfile::list_blocks },
         { "File::openBlock", nixfile::open_block },
+        { "File::blocks", nixfile::blocks },
         { "File::listSections", nixfile::list_sections },
         { "File::openSection", nixfile::open_section },
+        { "File::sections", nixfile::sections },
 
         // Block
         {"Block::describe", block_describe},

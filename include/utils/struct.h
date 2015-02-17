@@ -1,3 +1,6 @@
+#ifndef NIX_MX_STRUCT_H
+#define NIX_MX_STRUCT_H
+
 #include "mkarray.h"
 #include "mex.h"
 
@@ -64,3 +67,5 @@ private:
 
 	std::vector<const char *> fields;
 };
+
+#endif

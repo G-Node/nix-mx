@@ -39,14 +39,14 @@ classdef File < nix.Entity
         end
         
         function blocks = get.blocks(obj)
-            blk_list = obj.listBlocks();
+            blk_list = nix_mx('File::blocks', obj.nix_handle);
             
             % Blocks are cached
             if length(obj.blocksCache) ~= length(blk_list)
                 obj.blocksCache = cell(length(blk_list), 1);
                         
                 for i = 1:length(blk_list)
-                    obj.blocksCache{i} = obj.openBlock(blk_list(i).id);
+                    obj.blocksCache{i} = nix.Block(blk_list{i});
                 end
             end
                 
@@ -67,14 +67,14 @@ classdef File < nix.Entity
         end;
         
         function sections = get.sections(obj)
-            secs_list = obj.listSections();
+            secs_list = nix_mx('File::sections', obj.nix_handle);
             
             % Sections are cached
             if length(obj.sectionsCache) ~= length(secs_list)
                 obj.sectionsCache = cell(length(secs_list), 1);
                         
                 for i = 1:length(secs_list)
-                    obj.sectionsCache{i} = obj.openSection(secs_list(i).id);
+                    obj.sectionsCache{i} = nix.Section(secs_list{i});
                 end
             end
                 

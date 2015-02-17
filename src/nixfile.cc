@@ -73,6 +73,21 @@ void open_block(const extractor &input, infusor &output)
     output.set(0, bb);
 }
 
+void blocks(const extractor &input, infusor &output)
+{
+    nix::File nf = input.entity<nix::File>(1);
+    std::vector<nix::Block> blocks = nf.blocks();
+
+    const mwSize size = static_cast<mwSize>(blocks.size());
+    mxArray *lst = mxCreateCellArray(1, &size);
+
+    for (int i = 0; i < blocks.size(); i++) {
+        mxSetCell(lst, i, make_mx_array(handle(blocks[i])));
+    }
+
+    output.set(0, lst);
+}
+
 void list_sections(const extractor &input, infusor &output)
 {
     mexPrintf("[+] list_sections\n");
@@ -100,6 +115,21 @@ void open_section(const extractor &input, infusor &output)
     nix::Section sec = nf.getSection(input.str(2));
     handle bb = handle(sec);
     output.set(0, bb);
+}
+
+void sections(const extractor &input, infusor &output)
+{
+    nix::File nf = input.entity<nix::File>(1);
+    std::vector<nix::Section> sections = nf.sections();
+
+    const mwSize size = static_cast<mwSize>(sections.size());
+    mxArray *lst = mxCreateCellArray(1, &size);
+
+    for (int i = 0; i < sections.size(); i++) {
+        mxSetCell(lst, i, make_mx_array(handle(sections[i])));
+    }
+
+    output.set(0, lst);
 }
 
 } // namespace nixfile
