@@ -22,7 +22,6 @@
 
 static void entity_destroy(const extractor &input, infusor &output)
 {
-    mexPrintf("[+] entity_destroy\n");
     handle h = input.hdl(1);
     h.destroy();
 }
@@ -127,7 +126,7 @@ void mexFunction(int            nlhs,
 
     std::string cmd = input.str(0);
 
-    mexPrintf("[F] %s\n", cmd.c_str());
+    //mexPrintf("[F] %s\n", cmd.c_str());
 
     bool processed = false;
     for (const auto &fn : funcs) {

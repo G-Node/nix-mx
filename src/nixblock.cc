@@ -13,7 +13,6 @@ namespace nixblock {
 
     void describe(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] block_describe\n");
         nix::Block block = input.entity<nix::Block>(1);
 
         struct_builder sb({ 1 }, { "id", "type", "name", "sourceCount", "dataArrayCount", "tagCount", "multiTagCount" });
@@ -31,42 +30,36 @@ namespace nixblock {
 
     void open_data_array(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] block_open_data_array\n");
         nix::Block block = input.entity<nix::Block>(1);
         output.set(0, nixgen::open_data_array(block.getDataArray(input.str(2))));
     }
 
     void list_data_arrays(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] block_list_data_arrays\n");
         nix::Block block = input.entity<nix::Block>(1);
         output.set(0, nixgen::list_data_arrays(block.dataArrays()));
     }
 
     void list_sources(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] block_list_sources\n");
         nix::Block currSource = input.entity<nix::Block>(1);
         output.set(0, nixgen::list_sources(currSource.sources()));
     }
 
     void open_source(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] block_open_source\n");
         nix::Block currSource = input.entity<nix::Block>(1);
         output.set(0, nixgen::open_source(currSource.getSource(input.str(2))));
     }
 
     void has_tag(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] block_has_tag\n");
         nix::Block block = input.entity<nix::Block>(1);
         output.set(0, nixgen::has_entity(block.hasTag(input.str(2)), { "hasTag" }));
     }
 
     void open_tag(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] block_open_tag\n");
         nix::Block block = input.entity<nix::Block>(1);
         nix::Tag currTag = block.getTag(input.str(2));
         handle currBlockTagHandle = handle(currTag);
@@ -75,8 +68,6 @@ namespace nixblock {
 
     void list_tags(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] block_list_tags\n");
-
         nix::Block block = input.entity<nix::Block>(1);
         std::vector<nix::Tag> arr = block.tags();
 
@@ -98,14 +89,12 @@ namespace nixblock {
 
     void has_multi_tag(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] block_has_multi_tag\n");
         nix::Block block = input.entity<nix::Block>(1);
         output.set(0, nixgen::has_entity(block.hasMultiTag(input.str(2)), { "hasMultiTag" }));
     }
 
     void open_multi_tag(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] block_open_multi_tag\n");
         nix::Block block = input.entity<nix::Block>(1);
         nix::MultiTag currMultiTag = block.getMultiTag(input.str(2));
         handle currBlockMultiTagHandle = handle(currMultiTag);
@@ -114,8 +103,6 @@ namespace nixblock {
 
     void list_multi_tags(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] block_list_multi_tags\n");
-
         nix::Block block = input.entity<nix::Block>(1);
         std::vector<nix::MultiTag> arr = block.multiTags();
 
@@ -135,7 +122,6 @@ namespace nixblock {
 
     void open_metadata_section(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] block_open_metadata_section\n");
         nix::Block currTag = input.entity<nix::Block>(1);
         output.set(0, nixgen::open_metadata_section(currTag.metadata()));
     }

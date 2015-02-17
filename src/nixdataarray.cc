@@ -49,7 +49,6 @@ namespace nixdataarray {
 
     void describe(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] describe_data_array\n");
         nix::DataArray da = input.entity<nix::DataArray>(1);
 
         struct_builder sb({ 1 }, { "id", "type", "name", "definition", "label",
@@ -94,7 +93,6 @@ namespace nixdataarray {
 
     void read_all(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] data_array_read_all\n");
         nix::DataArray da = input.entity<nix::DataArray>(1);
 
         nix::NDSize size = da.dataExtent();
@@ -122,7 +120,6 @@ namespace nixdataarray {
 
     void open_metadata_section(const extractor &input, infusor &output)
     {
-        mexPrintf("[+] data_array_open_metadata_section\n");
         nix::DataArray currTag = input.entity<nix::DataArray>(1);
         output.set(0, nixgen::open_metadata_section(currTag.metadata()));
     }
