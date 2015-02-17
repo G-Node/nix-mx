@@ -74,4 +74,49 @@ namespace nixtag {
         output.set(0, nixgen::open_metadata_section(currTag.metadata()));
     }
 
+    void references(const extractor &input, infusor &output)
+    {
+        nix::Tag tag = input.entity<nix::Tag>(1);
+        std::vector<nix::DataArray> arr = tag.references();
+
+        const mwSize size = static_cast<mwSize>(arr.size());
+        mxArray *lst = mxCreateCellArray(1, &size);
+
+        for (int i = 0; i < arr.size(); i++) {
+            mxSetCell(lst, i, make_mx_array(handle(arr[i])));
+        }
+
+        output.set(0, lst);
+    }
+
+    void features(const extractor &input, infusor &output)
+    {
+        nix::Tag tag = input.entity<nix::Tag>(1);
+        std::vector<nix::Feature> arr = tag.features();
+
+        const mwSize size = static_cast<mwSize>(arr.size());
+        mxArray *lst = mxCreateCellArray(1, &size);
+
+        for (int i = 0; i < arr.size(); i++) {
+            mxSetCell(lst, i, make_mx_array(handle(arr[i])));
+        }
+
+        output.set(0, lst);
+    }
+
+    void sources(const extractor &input, infusor &output)
+    {
+        nix::Tag tag = input.entity<nix::Tag>(1);
+        std::vector<nix::Source> arr = tag.sources();
+
+        const mwSize size = static_cast<mwSize>(arr.size());
+        mxArray *lst = mxCreateCellArray(1, &size);
+
+        for (int i = 0; i < arr.size(); i++) {
+            mxSetCell(lst, i, make_mx_array(handle(arr[i])));
+        }
+
+        output.set(0, lst);
+    }
+
 } // namespace nixtag
