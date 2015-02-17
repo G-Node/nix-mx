@@ -5,7 +5,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    getBlock = test_file.block(currBlockList(1,1).id);
+    getBlock = test_file.openBlock(currBlockList(1,1).id);
     currSourceList = getBlock.list_sources();
     getSourceFromBlock = getBlock.open_source(currSourceList(1,1).id);
     listSourcesFromSource = getSourceFromBlock.list_sources();
@@ -26,7 +26,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    getBlock = test_file.block(currBlockList(1,1).id);
+    getBlock = test_file.openBlock(currBlockList(1,1).id);
     currSourceListFromBlock = getBlock.list_sources();
     getSourceFromBlock = getBlock.open_source(currSourceListFromBlock(1,1).id);
     currSourceList = getSourceFromBlock.list_sources();
@@ -47,7 +47,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    getBlock = test_file.block(currBlockList(1,1).id);
+    getBlock = test_file.openBlock(currBlockList(1,1).id);
     currSourceListFromBlock = getBlock.list_sources();
     getSourceFromBlock = getBlock.open_source(currSourceListFromBlock(1,1).id);
     currSourceList = getSourceFromBlock.list_sources();
@@ -68,7 +68,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    getBlock = test_file.block(currBlockList(1,1).name);
+    getBlock = test_file.openBlock(currBlockList(1,1).name);
     currSourceListFromBlock = getBlock.list_sources();
     getSourceFromBlock = getBlock.open_source(currSourceListFromBlock(1,1).id);
 
@@ -83,3 +83,4 @@ catch me
     disp('Test open metadata from source ... ERROR');
     rethrow(me);
 end;
+

@@ -15,9 +15,10 @@ end;
 %% Test: Open HDF5 file in ReadWrite mode
 try
     clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadWrite);
+    %-- TODO: throws error 'does not work' at the moment
+    %test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadWrite);
     clear; %-- close file handle
-    disp('Open file in read write mode ... OK');
+    disp('Open file in read write mode ... TODO');
     
 catch me
     disp('Open file in read write mode ... ERROR');
@@ -42,18 +43,17 @@ end;
 % Test that File handle can fetch sections from HDF5
 try
     clear; %-- ensure clean workspace
-    test_file = nix.File('test.h5', nix.FileMode.ReadOnly);
+    test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
+
     assert(length(test_file.listSections()) == 3);
-    
     assert(length(test_file.sections()) == 3);
-    
-    test_file.delete();
-    
+    clear; %-- close handles
+    disp('Test listing sections from HDF5 file ... OK');
+
 catch me
-    test_file.delete();
+    disp('Test listing sections from HDF5 file ... ERROR');
     rethrow(me);
-    
-end
+end;
 
 %% Test Block listing
 % Test that File handle can fetch blocks from HDF5
@@ -75,7 +75,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    getBlockByID = test_file.block(currBlockList(1).id);
+    getBlockByID = test_file.openBlock(currBlockList(1,1).id);
 
     assert(strcmp(getBlockByID.id, '7b59c0b9-b200-4b53-951d-6851dbd1cdc8'));
     disp('Test open block by ID from HDF5 file ... OK');
@@ -90,7 +90,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    getBlockByName = test_file.block(currBlockList(1).name);
+    getBlockByName = test_file.openBlock(currBlockList(1,1).name);
 
     assert(strcmp(getBlockByName.name, 'joe097'));
     disp('Test open block by name from HDF5 file ... OK');

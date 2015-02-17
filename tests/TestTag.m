@@ -5,7 +5,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    currBlock = test_file.block(currBlockList(1,1).name);
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
     currTagList = currBlock.list_tags();
     currTag = currBlock.open_tag(currTagList(1,1).id);
 
@@ -23,7 +23,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    currBlock = test_file.block(currBlockList(1,1).name);
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
     currTagList = currBlock.list_tags();
     currTag = currBlock.open_tag(currTagList(1,1).id);
 
@@ -42,7 +42,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    currBlock = test_file.block(currBlockList(1,1).name);
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
     currTagList = currBlock.list_tags();
     currTag = currBlock.open_tag(currTagList(1,1).id);
 
@@ -61,7 +61,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    currBlock = test_file.block(currBlockList(1,1).name);
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
     currTagList = currBlock.list_tags();
     currTag = currBlock.open_tag(currTagList(1,1).id);
     currSourceList = currTag.list_sources();
@@ -82,7 +82,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    currBlock = test_file.block(currBlockList(1,1).name);
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
     currTagList = currBlock.list_tags();
     currTag = currBlock.open_tag(currTagList(1,1).id);
     currSourceList = currTag.list_sources();
@@ -103,7 +103,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    currBlock = test_file.block(currBlockList(1,1).name);
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
     currTagList = currBlock.list_tags();
     currTag = currBlock.open_tag(currTagList(1,1).id);
     currFeatList = currTag.list_features();
@@ -124,7 +124,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    currBlock = test_file.block(currBlockList(1,1).name);
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
     currTagList = currBlock.list_tags();
     currTag = currBlock.open_tag(currTagList(1,1).id);
     currFeatList = currTag.list_features();
@@ -145,7 +145,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    currBlock = test_file.block(currBlockList(1,1).name);
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
     currTagList = currBlock.list_tags();
     currTag = currBlock.open_tag(currTagList(1,1).id);
     currRefList = currTag.list_references();
@@ -165,7 +165,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    currBlock = test_file.block(currBlockList(1,1).name);
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
     currTagList = currBlock.list_tags();
     currTag = currBlock.open_tag(currTagList(1,1).id);
     currRefList = currTag.list_references();
@@ -185,7 +185,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    currBlock = test_file.block(currBlockList(1,1).name);
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
     currTagList = currBlock.list_tags();
     currTag = currBlock.open_tag(currTagList(1,1).id);
 
@@ -199,3 +199,4 @@ catch me
     disp('Test open metadata from tag ... ERROR');
     rethrow(me);
 end;
+

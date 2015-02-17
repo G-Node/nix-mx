@@ -3,11 +3,6 @@
 %-- add required paths for matlab
 addpath(fullfile(pwd, 'build'));
 
-TestFile;
-
-disp('Tests completed successfully. Bye.')
-
-
 %-- ToDo: create proper testfile, loose the 24mb one
 
 %-- All current tests use the first block from file 'test.h5' with
@@ -23,4 +18,6 @@ TestSource;
 TestDataArray;
 
 TestTag;
+
+disp('Tests completed successfully. Bye.');
 

@@ -5,7 +5,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    getBlock = test_file.block(currBlockList(1,1).name);
+    getBlock = test_file.openBlock(currBlockList(1,1).name);
     daList = getBlock.data_arrays();
     currDataArray = getBlock.data_array(daList(1,1).id);
 
@@ -23,7 +23,7 @@ try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
-    getBlock = test_file.block(currBlockList(1,1).name);
+    getBlock = test_file.openBlock(currBlockList(1,1).name);
     daList = getBlock.data_arrays();
     currDataArray = getBlock.data_array(daList(1,1).id);
 
@@ -37,3 +37,4 @@ catch me
     disp('Test open metadata from DataArray ... ERROR');
     rethrow(me);
 end;
+
