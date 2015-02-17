@@ -1,4 +1,4 @@
-#include "MXGenerics.h"
+#include "nixgen.h"
 
 #include "mex.h"
 
@@ -8,7 +8,7 @@
 #include "arguments.h"
 #include "struct.h"
 
-namespace gen {
+namespace nixgen {
 
     handle open_data_array(nix::DataArray inDa)
     {
@@ -88,6 +88,4 @@ namespace gen {
         return currTagMDSecHandle;
     }
 
-
-
-} // namespace gen
+} // namespace nixgen

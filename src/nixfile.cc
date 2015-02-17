@@ -1,4 +1,4 @@
-#include "MXFile.h"
+#include "nixfile.h"
 
 #include "mex.h"
 

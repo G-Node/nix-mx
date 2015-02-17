@@ -1,5 +1,5 @@
-#include "MXFeature.h"
-#include "MXGenerics.h"
+#include "nixfeature.h"
+#include "nixgen.h"
 
 #include "mex.h"
 
@@ -24,7 +24,7 @@ namespace nixfeature {
     {
         mexPrintf("[+] feature_open_data\n");
         nix::Feature currFeat = input.entity < nix::Feature >(1);
-        output.set(0, gen::open_data_array(currFeat.data()));
+        output.set(0, nixgen::open_data_array(currFeat.data()));
     }
 
     void link_type(const extractor &input, infusor &output)

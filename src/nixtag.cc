@@ -1,5 +1,5 @@
-#include "MXTag.h"
-#include "MXGenerics.h"
+#include "nixtag.h"
+#include "nixgen.h"
 
 #include "mex.h"
 
@@ -38,49 +38,49 @@ namespace nixtag {
     {
         mexPrintf("[+] tag_open_data_array\n");
         nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, gen::open_data_array(currTag.getReference(input.str(2))));
+        output.set(0, nixgen::open_data_array(currTag.getReference(input.str(2))));
     }
 
     void list_references_array(const extractor &input, infusor &output)
     {
         mexPrintf("[+] tag_list_references\n");
         nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, gen::list_data_arrays(currTag.references()));
+        output.set(0, nixgen::list_data_arrays(currTag.references()));
     }
 
     void list_features(const extractor &input, infusor &output)
     {
         mexPrintf("[+] tag_list_features\n");
         nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, gen::list_features(currTag.features()));
+        output.set(0, nixgen::list_features(currTag.features()));
     }
 
     void list_sources(const extractor &input, infusor &output)
     {
         mexPrintf("[+] tag_list_sources\n");
         nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, gen::list_sources(currTag.sources()));
+        output.set(0, nixgen::list_sources(currTag.sources()));
     }
 
     void open_feature(const extractor &input, infusor &output)
     {
         mexPrintf("[+] tag_open_feature\n");
         nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, gen::open_feature(currTag.getFeature(input.str(2))));
+        output.set(0, nixgen::open_feature(currTag.getFeature(input.str(2))));
     }
 
     void open_source(const extractor &input, infusor &output)
     {
         mexPrintf("[+] tag_open_source\n");
         nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, gen::open_source(currTag.getSource(input.str(2))));
+        output.set(0, nixgen::open_source(currTag.getSource(input.str(2))));
     }
 
     void open_metadata_section(const extractor &input, infusor &output)
     {
         mexPrintf("[+] tag_open_metadata_section\n");
         nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, gen::open_metadata_section(currTag.metadata()));
+        output.set(0, nixgen::open_metadata_section(currTag.metadata()));
     }
 
 } // namespace nixtag

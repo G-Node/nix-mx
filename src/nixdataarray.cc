@@ -1,5 +1,5 @@
-#include "MXDataArray.h"
-#include "MXGenerics.h"
+#include "nixdataarray.h"
+#include "nixgen.h"
 
 #include "mex.h"
 
@@ -9,7 +9,7 @@
 #include "arguments.h"
 #include "struct.h"
 
-namespace nixda {
+namespace nixdataarray {
 
     static mxArray *dim_to_struct(nix::SetDimension dim) {
 
@@ -73,13 +73,13 @@ namespace nixda {
 
             switch (da_dims[i].dimensionType()) {
             case nix::DimensionType::Set:
-                ca = nixda::dim_to_struct(da_dims[i].asSetDimension());
+                ca = nixdataarray::dim_to_struct(da_dims[i].asSetDimension());
                 break;
             case nix::DimensionType::Range:
-                ca = nixda::dim_to_struct(da_dims[i].asRangeDimension());
+                ca = nixdataarray::dim_to_struct(da_dims[i].asRangeDimension());
                 break;
             case nix::DimensionType::Sample:
-                ca = nixda::dim_to_struct(da_dims[i].asSampledDimension());
+                ca = nixdataarray::dim_to_struct(da_dims[i].asSampledDimension());
                 break;
             }
 
@@ -124,7 +124,7 @@ namespace nixda {
     {
         mexPrintf("[+] data_array_open_metadata_section\n");
         nix::DataArray currTag = input.entity<nix::DataArray>(1);
-        output.set(0, gen::open_metadata_section(currTag.metadata()));
+        output.set(0, nixgen::open_metadata_section(currTag.metadata()));
     }
 
-} // namespace nixda
+} // namespace nixdataarray

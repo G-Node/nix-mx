@@ -3,7 +3,7 @@
 
 #include "arguments.h"
 
-namespace gen {
+namespace nixgen {
 
     handle open_data_array(nix::DataArray inDa);
 
@@ -21,6 +21,6 @@ namespace gen {
 
     handle open_metadata_section(nix::Section secIn);
 
-} // namespace gen
+} // namespace nixgen
 
 #endif

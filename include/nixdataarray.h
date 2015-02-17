@@ -3,7 +3,7 @@
 
 #include "arguments.h"
 
-namespace nixda {
+namespace nixdataarray {
 
     void describe(const extractor &input, infusor &output);
     
@@ -11,6 +11,6 @@ namespace nixda {
 
     void open_metadata_section(const extractor &input, infusor &output);
 
-} // namespace nixda
+} // namespace nixdataarray
 
 #endif

@@ -10,13 +10,13 @@
 #include "arguments.h"
 #include "struct.h"
 
-#include "MXFile.h"
-#include "MXBlock.h"
-#include "MXDataArray.h"
-#include "MXSource.h"
-#include "MXFeature.h"
-#include "MXTag.h"
-#include "MXMultiTag.h"
+#include "nixfile.h"
+#include "nixblock.h"
+#include "nixdataarray.h"
+#include "nixsource.h"
+#include "nixfeature.h"
+#include "nixtag.h"
+#include "nixmultitag.h"
 
 // *** functions ***
 
@@ -85,9 +85,9 @@ const std::vector<fendpoint> funcs = {
         { "Block::listMultiTags", nixblock::list_multi_tags },
         { "Block::openMultiTag", nixblock::open_multi_tag },
         { "Block::openMetadataSection", nixblock::open_metadata_section },
-        { "DataArray::describe", nixda::describe },
-        { "DataArray::readAll", nixda::read_all },
-        { "DataArray::openMetadataSection", nixda::open_metadata_section },
+        { "DataArray::describe", nixdataarray::describe },
+        { "DataArray::readAll", nixdataarray::read_all },
+        { "DataArray::openMetadataSection", nixdataarray::open_metadata_section },
         { "Tag::describe", nixtag::describe },
         { "Tag::listReferences", nixtag::list_references_array },
         { "Tag::listFeatures", nixtag::list_features },
