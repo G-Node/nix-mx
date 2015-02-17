@@ -10,7 +10,7 @@
 #include "arguments.h"
 #include "struct.h"
 
-#include "MXFile.h"
+#include "nixfile.h"
 #include "nix2mx.h"
 
 // *** functions ***
