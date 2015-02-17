@@ -34,6 +34,21 @@ namespace nixblock {
         output.set(0, nixgen::open_data_array(block.getDataArray(input.str(2))));
     }
 
+    void data_arrays(const extractor &input, infusor &output)
+    {
+        nix::Block block = input.entity<nix::Block>(1);
+        std::vector<nix::DataArray> dataArrays = block.dataArrays();
+
+        const mwSize size = static_cast<mwSize>(dataArrays.size());
+        mxArray *lst = mxCreateCellArray(1, &size);
+
+        for (int i = 0; i < dataArrays.size(); i++) {
+            mxSetCell(lst, i, make_mx_array(handle(dataArrays[i])));
+        }
+
+        output.set(0, lst);
+    }
+
     void list_data_arrays(const extractor &input, infusor &output)
     {
         nix::Block block = input.entity<nix::Block>(1);
@@ -50,6 +65,21 @@ namespace nixblock {
     {
         nix::Block currSource = input.entity<nix::Block>(1);
         output.set(0, nixgen::open_source(currSource.getSource(input.str(2))));
+    }
+
+    void sources(const extractor &input, infusor &output)
+    {
+        nix::Block block = input.entity<nix::Block>(1);
+        std::vector<nix::Source> sources = block.sources();
+
+        const mwSize size = static_cast<mwSize>(sources.size());
+        mxArray *lst = mxCreateCellArray(1, &size);
+
+        for (int i = 0; i < sources.size(); i++) {
+            mxSetCell(lst, i, make_mx_array(handle(sources[i])));
+        }
+
+        output.set(0, lst);
     }
 
     void has_tag(const extractor &input, infusor &output)
@@ -87,6 +117,21 @@ namespace nixblock {
         output.set(0, sb.array());
     }
 
+    void tags(const extractor &input, infusor &output)
+    {
+        nix::Block block = input.entity<nix::Block>(1);
+        std::vector<nix::Tag> tags = block.tags();
+
+        const mwSize size = static_cast<mwSize>(tags.size());
+        mxArray *lst = mxCreateCellArray(1, &size);
+
+        for (int i = 0; i < tags.size(); i++) {
+            mxSetCell(lst, i, make_mx_array(handle(tags[i])));
+        }
+
+        output.set(0, lst);
+    }
+
     void has_multi_tag(const extractor &input, infusor &output)
     {
         nix::Block block = input.entity<nix::Block>(1);
@@ -118,6 +163,21 @@ namespace nixblock {
             sb.next();
         }
         output.set(0, sb.array());
+    }
+
+    void multitags(const extractor &input, infusor &output)
+    {
+        nix::Block block = input.entity<nix::Block>(1);
+        std::vector<nix::MultiTag> arr = block.multiTags();
+
+        const mwSize size = static_cast<mwSize>(arr.size());
+        mxArray *lst = mxCreateCellArray(1, &size);
+
+        for (int i = 0; i < arr.size(); i++) {
+            mxSetCell(lst, i, make_mx_array(handle(arr[i])));
+        }
+
+        output.set(0, lst);
     }
 
     void open_metadata_section(const extractor &input, infusor &output)

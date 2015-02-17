@@ -6,7 +6,7 @@ try
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
     getBlock = test_file.openBlock(currBlockList(1,1).name);
-    assert(size(getBlock.data_arrays(),1) == 198);
+    assert(size(getBlock.list_data_arrays(),1) == 198);
     clear; %-- close handles
     disp('Test list data array from block ... OK');
     
@@ -66,7 +66,7 @@ try
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
     getBlock = test_file.openBlock(currBlockList(1,1).name);
-    currDataArrayList = getBlock.data_arrays();
+    currDataArrayList = getBlock.list_data_arrays();
     getDataArrayByID = getBlock.data_array(currDataArrayList(1,1).id);
     
     assert(strcmp(getDataArrayByID.id, 'e0ca39b7-632f-47c9-968c-c65e6db58719'));
@@ -84,7 +84,7 @@ try
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
     getBlock = test_file.openBlock(currBlockList(1,1).name);
-    currDataArrayList = getBlock.data_arrays();
+    currDataArrayList = getBlock.list_data_arrays();
     getDataArrayByName = getBlock.data_array(currDataArrayList(1,1).name);
     
     assert(strcmp(getDataArrayByName.id, 'e0ca39b7-632f-47c9-968c-c65e6db58719'));

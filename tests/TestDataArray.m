@@ -6,7 +6,7 @@ try
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
     getBlock = test_file.openBlock(currBlockList(1,1).name);
-    daList = getBlock.data_arrays();
+    daList = getBlock.list_data_arrays();
     currDataArray = getBlock.data_array(daList(1,1).id);
 
     assert(size(currDataArray.read_all(),1) == 36);
@@ -24,7 +24,7 @@ try
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     currBlockList = test_file.listBlocks();
     getBlock = test_file.openBlock(currBlockList(1,1).name);
-    daList = getBlock.data_arrays();
+    daList = getBlock.list_data_arrays();
     currDataArray = getBlock.data_array(daList(1,1).id);
 
     %-- ToDo implement proper test for metadata once metadata is implemented
