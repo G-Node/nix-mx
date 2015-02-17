@@ -3,6 +3,7 @@
 #include "mex.h"
 #include <nix.hpp>
 
+#include "nixgen.h"
 #include "handle.h"
 #include "arguments.h"
 #include "struct.h"
@@ -49,7 +50,7 @@ void parent(const extractor &input, infusor &output)
 void has_section(const extractor &input, infusor &output)
 {
     nix::Section section = input.entity<nix::Section>(1);
-    output.set(0, has_entity(section.hasSection(input.str(2)), { "hasSection" }));
+    output.set(0, nixgen::has_entity(section.hasSection(input.str(2)), { "hasSection" }));
 }
 
 void open_section(const extractor &input, infusor &output)
@@ -96,7 +97,7 @@ void sections(const extractor &input, infusor &output)
 void has_property(const extractor &input, infusor &output)
 {
     nix::Section section = input.entity<nix::Section>(1);
-    output.set(0, has_entity(section.hasProperty(input.str(2)), { "hasProperty" }));
+    output.set(0, nixgen::has_entity(section.hasProperty(input.str(2)), { "hasProperty" }));
 }
 
 void list_properties(const extractor &input, infusor &output)

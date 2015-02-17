@@ -11,13 +11,6 @@
 #include "struct.h"
 
 
-mxArray* has_entity(bool boolIn, std::vector<const char *> currLabel){
-    uint8_t currHas = boolIn ? 1 : 0;
-    struct_builder sb({ 1 }, currLabel);
-    sb.set(currHas);
-    return sb.array();
-}
-
 mxArray *nmCreateScalar(uint32_t val) {
     mxArray *arr = mxCreateNumericMatrix(1, 1, mxUINT32_CLASS, mxREAL);
     void *data = mxGetData(arr);
