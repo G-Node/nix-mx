@@ -496,11 +496,11 @@ fendpoint(std::string name, fn_t fn) : name(name), fn(fn) {}
 const std::vector<fendpoint> funcs = {
         {"Entity::destroy", entity_destroy},
         { "File::open", nixfile::open },
-		{ "File::describe", nixfile::describe },
-		{ "File::listBlocks", nixfile::list_blocks },
-		{ "File::openBlock", nixfile::open_block },
-		{ "File::listSections", nixfile::list_sections },
-		{ "File::openSection", nixfile::open_section },
+        { "File::describe", nixfile::describe },
+        { "File::listBlocks", nixfile::list_blocks },
+        { "File::openBlock", nixfile::open_block },
+        { "File::listSections", nixfile::list_sections },
+        { "File::openSection", nixfile::open_section },
         {"Block::describe", block_describe},
         {"Block::openDataArray", open_data_array},
         {"Block::listDataArrays", block_list_data_arrays},
@@ -540,7 +540,7 @@ void mexFunction(int            nlhs,
     extractor input(rhs, nrhs);
     infusor   output(lhs, nlhs);
 
-	std::string cmd = input.str(0);
+    std::string cmd = input.str(0);
 
     mexPrintf("[F] %s\n", cmd.c_str());
 
