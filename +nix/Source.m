@@ -3,6 +3,7 @@ classdef Source < nix.Entity
     
     properties(Hidden)
         info
+        sourcesCache
     end;
     
     properties(Dependent)
@@ -11,12 +12,15 @@ classdef Source < nix.Entity
         name
         definition
         sourceCount
+        
+        sources
     end;
     
     methods
         function obj = Source(h)
            obj@nix.Entity(h);
            obj.info = nix_mx('Source::describe', obj.nix_handle);
+           obj.sourcesCache = {};
         end;
         
         function id = get.id(source)
@@ -39,6 +43,10 @@ classdef Source < nix.Entity
             sourceCount = source.info.sourceCount;
         end;
         
+        % ------------------
+        % Sources methods
+        % ------------------
+        
         function sourcesList = list_sources(obj)
             sourcesList = nix_mx('Source::listSources', obj.nix_handle);
         end;
@@ -48,6 +56,24 @@ classdef Source < nix.Entity
            source = nix.Source(sourceHandle);
         end;
 
+        function sources = get.sources(obj)
+            sList = nix_mx('Source::sources', obj.nix_handle);
+            
+            if length(obj.sourcesCache) ~= length(sList)
+                obj.sourcesCache = cell(length(sList), 1);
+
+                for i = 1:length(sList)
+                    obj.sourcesCache{i} = nix.Source(sList{i});
+                end;
+            end;
+
+            sources = obj.sourcesCache;
+        end;
+        
+        % ------------------
+        % Metadata methods
+        % ------------------
+        
         function metadata = open_metadata(obj)
             metadataHandle = nix_mx('Source::openMetadataSection', obj.nix_handle);
             metadata = 'TODO: implement MetadataSection';

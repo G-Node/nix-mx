@@ -109,6 +109,7 @@ const std::vector<fendpoint> funcs = {
         { "Source::describe", nixsource::describe },
         { "Source::listSources", nixsource::list_sources },
         { "Source::openSource", nixsource::open_source },
+        { "Source::sources", nixsource::sources },
         { "Source::openMetadataSection", nixsource::open_metadata_section },
 
         // Feature
