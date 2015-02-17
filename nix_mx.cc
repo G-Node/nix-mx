@@ -540,7 +540,7 @@ void mexFunction(int            nlhs,
     extractor input(rhs, nrhs);
     infusor   output(lhs, nlhs);
 
-	std::string cmd = input.str(0);
+    std::string cmd = input.str(0);
 
     mexPrintf("[F] %s\n", cmd.c_str());
 
