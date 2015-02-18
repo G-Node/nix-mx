@@ -197,20 +197,45 @@ catch me
     rethrow(me);
 end;
 
+%% Test: Has metadata
+try
+    clear; %-- ensure clean workspace
+    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+
+    assert(~getBlock.has_metadata());
+    disp('Test Block: has empty metadata ... OK');
+    
+    %-- ToDo implement test for exising metadata
+    %getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    %assert(getBlock.has_metadata())
+    disp('Test Block: has existing metadata ... TODO (proper testfile)');
+    
+    clear; %-- close handles
+
+catch me
+    disp('Test Block: has empty/existing metadata ... ERROR');
+    rethrow(me);
+end;
+
 %% Test: Open metadata
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
 
-    %-- ToDo implement proper test for metadata once metadata is implemented
-    assert(strcmp(getBlock.open_metadata(),'TODO: implement MetadataSection'));
+    assert(isempty(getBlock.open_metadata()))
+    disp('Test Block: open empty metadata ... OK');
+    
+    %-- ToDo implement test for exising metadata
+    %getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    %assert(~isempty(getBlock.open_metadata()))
+    disp('Test Block: open existing metadata ... TODO (proper testfile)');
     
     clear; %-- close handles
-    disp('Test Block: open metadata ... TODO');
 
 catch me
-    disp('Test Block: open metadata ... ERROR');
+    disp('Test Block: open empty/existing metadata ... ERROR');
     rethrow(me);
 end;
 

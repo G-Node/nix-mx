@@ -69,11 +69,13 @@ const std::vector<fendpoint> funcs = {
         { "Block::listMultiTags", nixblock::list_multi_tags },
         { "Block::openMultiTag", nixblock::open_multi_tag },
         { "Block::multiTags", nixblock::multitags },
+        { "Block::hasMetadataSection", nixblock::has_metadata_section },
         { "Block::openMetadataSection", nixblock::open_metadata_section },
 
         // Data Array
         { "DataArray::describe", nixdataarray::describe },
         { "DataArray::readAll", nixdataarray::read_all },
+        { "DataArray::hasMetadataSection", nixdataarray::has_metadata_section },
         { "DataArray::openMetadataSection", nixdataarray::open_metadata_section },
 
         // Tag
@@ -87,6 +89,7 @@ const std::vector<fendpoint> funcs = {
         { "Tag::openReferenceDataArray", nixtag::open_data_array },
         { "Tag::openFeature", nixtag::open_feature },
         { "Tag::openSource", nixtag::open_source },
+        { "Tag::hasMetadataSection", nixtag::has_metadata_section },
         { "Tag::openMetadataSection", nixtag::open_metadata_section },
 
         // Multi Tag
@@ -103,6 +106,7 @@ const std::vector<fendpoint> funcs = {
         { "MultiTag::openReferences", nixmultitag::open_references },
         { "MultiTag::openFeature", nixmultitag::open_features },
         { "MultiTag::openSource", nixmultitag::open_source },
+        { "MultiTag::hasMetadataSection", nixmultitag::has_metadata_section },
         { "MultiTag::openMetadataSection", nixmultitag::open_metadata_section },
 
         // Source
@@ -110,6 +114,7 @@ const std::vector<fendpoint> funcs = {
         { "Source::listSources", nixsource::list_sources },
         { "Source::openSource", nixsource::open_source },
         { "Source::sources", nixsource::sources },
+        { "Source::hasMetadataSection", nixsource::has_metadata_section },
         { "Source::openMetadataSection", nixsource::open_metadata_section },
 
         // Feature

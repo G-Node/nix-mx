@@ -180,10 +180,16 @@ namespace nixblock {
         output.set(0, lst);
     }
 
+    void has_metadata_section(const extractor &input, infusor &output)
+    {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        output.set(0, nixgen::has_metadata_section(currObj.metadata()));
+    }
+
     void open_metadata_section(const extractor &input, infusor &output)
     {
-        nix::Block currTag = input.entity<nix::Block>(1);
-        output.set(0, nixgen::open_metadata_section(currTag.metadata()));
+        nix::Block currObj = input.entity<nix::Block>(1);
+        output.set(0, nixgen::open_metadata_section(currObj.metadata()));
     }
 
 } // namespace nixblock

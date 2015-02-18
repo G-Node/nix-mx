@@ -13,85 +13,91 @@ namespace nixmultitag {
 
     void describe(const extractor &input, infusor &output)
     {
-        nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
 
         struct_builder sb({ 1 }, { "id", "type", "name", "definition", "units", "featureCount", "sourceCount", "referenceCount" });
-        sb.set(currMTag.id());
-        sb.set(currMTag.type());
-        sb.set(currMTag.name());
-        sb.set(currMTag.definition());
-        sb.set(currMTag.units());
-        sb.set(currMTag.featureCount());
-        sb.set(currMTag.sourceCount());
-        sb.set(currMTag.referenceCount());
+        sb.set(currObj.id());
+        sb.set(currObj.type());
+        sb.set(currObj.name());
+        sb.set(currObj.definition());
+        sb.set(currObj.units());
+        sb.set(currObj.featureCount());
+        sb.set(currObj.sourceCount());
+        sb.set(currObj.referenceCount());
 
         output.set(0, sb.array());
     }
 
     void open_references(const extractor &input, infusor &output)
     {
-        nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
-        output.set(0, nixgen::open_data_array(currMTag.getReference(input.str(2))));
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        output.set(0, nixgen::open_data_array(currObj.getReference(input.str(2))));
     }
 
     void open_positions(const extractor &input, infusor &output)
     {
-        nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
-        output.set(0, nixgen::open_data_array(currMTag.positions()));
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        output.set(0, nixgen::open_data_array(currObj.positions()));
     }
 
     void open_extents(const extractor &input, infusor &output)
     {
-        nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
-        output.set(0, nixgen::open_data_array(currMTag.extents()));
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        output.set(0, nixgen::open_data_array(currObj.extents()));
     }
 
     void list_references_array(const extractor &input, infusor &output)
     {
-        nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
-        output.set(0, nixgen::list_data_arrays(currMTag.references()));
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        output.set(0, nixgen::list_data_arrays(currObj.references()));
     }
 
     void has_positions(const extractor &input, infusor &output)
     {
-        nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
-        output.set(0, nixgen::has_entity(currMTag.hasPositions(), { "hasPositions" }));
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        output.set(0, nixgen::has_entity(currObj.hasPositions(), { "hasPositions" }));
     }
 
     void list_features(const extractor &input, infusor &output)
     {
-        nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
-        output.set(0, nixgen::list_features(currMTag.features()));
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        output.set(0, nixgen::list_features(currObj.features()));
     }
 
     void list_sources(const extractor &input, infusor &output)
     {
-        nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
-        output.set(0, nixgen::list_sources(currMTag.sources()));
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        output.set(0, nixgen::list_sources(currObj.sources()));
     }
 
     void open_source(const extractor &input, infusor &output)
     {
-        nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
-        output.set(0, nixgen::open_source(currMTag.getSource(input.str(2))));
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        output.set(0, nixgen::open_source(currObj.getSource(input.str(2))));
     }
 
     void open_features(const extractor &input, infusor &output)
     {
-        nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
-        output.set(0, nixgen::open_feature(currMTag.getFeature(input.str(2))));
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        output.set(0, nixgen::open_feature(currObj.getFeature(input.str(2))));
+    }
+
+    void has_metadata_section(const extractor &input, infusor &output)
+    {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        output.set(0, nixgen::has_metadata_section(currObj.metadata()));
     }
 
     void open_metadata_section(const extractor &input, infusor &output)
     {
-        nix::MultiTag currMTag = input.entity<nix::MultiTag>(1);
-        output.set(0, nixgen::open_metadata_section(currMTag.metadata()));
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        output.set(0, nixgen::open_metadata_section(currObj.metadata()));
     }
 
     void references(const extractor &input, infusor &output)
     {
-        nix::MultiTag tag = input.entity<nix::MultiTag>(1);
-        std::vector<nix::DataArray> arr = tag.references();
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        std::vector<nix::DataArray> arr = currObj.references();
 
         const mwSize size = static_cast<mwSize>(arr.size());
         mxArray *lst = mxCreateCellArray(1, &size);
@@ -105,8 +111,8 @@ namespace nixmultitag {
 
     void features(const extractor &input, infusor &output)
     {
-        nix::MultiTag tag = input.entity<nix::MultiTag>(1);
-        std::vector<nix::Feature> arr = tag.features();
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        std::vector<nix::Feature> arr = currObj.features();
 
         const mwSize size = static_cast<mwSize>(arr.size());
         mxArray *lst = mxCreateCellArray(1, &size);
@@ -120,8 +126,8 @@ namespace nixmultitag {
 
     void sources(const extractor &input, infusor &output)
     {
-        nix::MultiTag tag = input.entity<nix::MultiTag>(1);
-        std::vector<nix::Source> arr = tag.sources();
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        std::vector<nix::Source> arr = currObj.sources();
 
         const mwSize size = static_cast<mwSize>(arr.size());
         mxArray *lst = mxCreateCellArray(1, &size);
