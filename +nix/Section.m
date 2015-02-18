@@ -51,6 +51,15 @@ classdef Section < nix.Entity
         % Section methods
         % ----------------
         
+        function section = parent(obj)
+           sh = nix_mx('Section::parent', obj.nix_handle); 
+           section = nix.Section(sh);
+        end;
+        
+        function lst = list_sections(obj)
+            lst = nix_mx('Section::listSections', obj.nix_handle);
+        end;
+        
         function sections = get.sections(obj)
             handles = nix_mx('Section::sections', obj.nix_handle);
             
@@ -65,6 +74,16 @@ classdef Section < nix.Entity
                 
             sections = obj.sectionsCache;
         end
+        
+        function section = open_section(obj, id_or_name)
+           sh = nix_mx('Section::openSection', obj.nix_handle, id_or_name); 
+           section = nix.Section(sh);
+        end;
+        
+        function hs = has_section(obj, id_or_name)
+            r = nix_mx('Section::hasSection', obj.nix_handle, id_or_name);
+            hs = logical(r.hasSection);
+        end;
         
         % ----------------
         % Property methods
