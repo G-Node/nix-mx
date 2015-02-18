@@ -3,6 +3,7 @@
 #include "mex.h"
 #include <nix.hpp>
 
+#include "nixgen.h"
 #include "handle.h"
 #include "arguments.h"
 #include "struct.h"
@@ -10,6 +11,26 @@
 
 
 namespace nixsection {
+
+static mxArray* array_from_value(nix::Value v)
+{
+    mxArray *res;
+    nix::DataType dtype = v.type();
+
+    switch (dtype) {
+    case nix::DataType::Bool: res = make_mx_array(v.get<bool>()); break;
+    case nix::DataType::String: res = make_mx_array(v.get<std::string>()); break;
+    case nix::DataType::Double: res = make_mx_array(v.get<double>()); break;
+    case nix::DataType::Int32: res = make_mx_array(v.get<std::int32_t>()); break;
+    case nix::DataType::UInt32: res = make_mx_array(v.get<std::uint32_t>()); break;
+    case nix::DataType::Int64: res = make_mx_array(v.get<std::int64_t>()); break;
+    case nix::DataType::UInt64: res = make_mx_array(v.get<std::uint64_t>()); break;
+
+    default: res = make_mx_array(v.get<std::string>());
+    }
+
+    return res;
+}
 
 void describe(const extractor &input, infusor &output)
 {
@@ -49,7 +70,7 @@ void parent(const extractor &input, infusor &output)
 void has_section(const extractor &input, infusor &output)
 {
     nix::Section section = input.entity<nix::Section>(1);
-    output.set(0, has_entity(section.hasSection(input.str(2)), { "hasSection" }));
+    output.set(0, nixgen::has_entity(section.hasSection(input.str(2)), { "hasSection" }));
 }
 
 void open_section(const extractor &input, infusor &output)
@@ -96,12 +117,44 @@ void sections(const extractor &input, infusor &output)
 void has_property(const extractor &input, infusor &output)
 {
     nix::Section section = input.entity<nix::Section>(1);
-    output.set(0, has_entity(section.hasProperty(input.str(2)), { "hasProperty" }));
+    output.set(0, nixgen::has_entity(section.hasProperty(input.str(2)), { "hasProperty" }));
 }
 
 void list_properties(const extractor &input, infusor &output)
 {
+    nix::Section section = input.entity<nix::Section>(1);
+    std::vector<nix::Property> properties = section.properties();
 
+    const mwSize size = static_cast<mwSize>(properties.size());
+    mxArray *lst = mxCreateCellArray(1, &size);
+
+    for (int i = 0; i < properties.size(); i++) {
+
+        nix::Property pr = properties[i];
+        std::vector<nix::Value> values = pr.values();
+       
+        const mwSize vsize = static_cast<mwSize>(values.size());
+        mxArray *mx_values = mxCreateCellArray(1, &size);
+
+        for (int j = 0; j < values.size(); j++) {
+            mxSetCell(mx_values, j, array_from_value(values[j]));
+        }
+
+        struct_builder sb({ 1 }, {
+            "name", "id", "definition", "mapping", "unit", "values"
+        });
+
+        sb.set(pr.name());
+        sb.set(pr.id());
+        sb.set(pr.definition());
+        sb.set(pr.mapping());
+        sb.set(pr.unit());
+        sb.set(mx_values);
+
+        mxSetCell(lst, i, sb.array());
+    }
+
+    output.set(0, lst);
 }
 
 } // namespace nixfile

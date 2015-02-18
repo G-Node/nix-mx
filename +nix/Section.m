@@ -16,6 +16,7 @@ classdef Section < nix.Entity
         mapping
         
         sections
+        props
     end;
     
     methods
@@ -69,6 +70,9 @@ classdef Section < nix.Entity
         % Property methods
         % ----------------
         
+        function props = get.props(obj)
+            props = nix_mx('Section::listProperties', obj.nix_handle);
+        end
     end
     
 end

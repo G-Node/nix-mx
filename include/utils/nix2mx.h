@@ -6,8 +6,6 @@
 
 //nix::NDSize mx_array_to_ndsize(const mxArray *arr);
 
-mxArray* has_entity(bool boolIn, std::vector<const char *> currLabel);
-
 mxArray *nmCreateScalar(uint32_t val);
 
 mxArray *dim_to_struct(nix::SetDimension dim);
