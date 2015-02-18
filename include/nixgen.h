@@ -19,6 +19,8 @@ namespace nixgen {
 
     handle open_feature(nix::Feature featIn);
 
+    mxArray* has_metadata_section(nix::Section currSection);
+
     handle open_metadata_section(nix::Section secIn);
 
 } // namespace nixgen

@@ -69,12 +69,21 @@ classdef DataArray < nix.Entity
            data = permute(tmp, length(size(tmp)):-1:1);
         end;
         
-        function metadata = open_metadata(obj)
-            metadataHandle = nix_mx('DataArray::openMetadataSection', obj.nix_handle);
-            metadata = 'TODO: implement MetadataSection';
-            %metadata = nix.Section(metadataHandle);
+        % -----------------
+        % Metadata methods
+        % -----------------
+        
+        function hasMetadata = has_metadata(obj)
+            getHasMetadata = nix_mx('DataArray::hasMetadataSection', obj.nix_handle);
+            hasMetadata = logical(getHasMetadata.hasMetadataSection);
         end;
-
-    end
-    
+        
+        function metadata = open_metadata(obj)
+            metadata = {};
+            metadataHandle = nix_mx('DataArray::openMetadataSection', obj.nix_handle);
+            if obj.has_metadata()
+                metadata = nix.Section(metadataHandle);
+            end;
+        end;
+    end;
 end

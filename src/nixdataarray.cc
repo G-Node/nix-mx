@@ -88,10 +88,16 @@ namespace nixdataarray {
         output.set(0, data);
     }
 
+    void has_metadata_section(const extractor &input, infusor &output)
+    {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        output.set(0, nixgen::has_metadata_section(currObj.metadata()));
+    }
+
     void open_metadata_section(const extractor &input, infusor &output)
     {
-        nix::DataArray currTag = input.entity<nix::DataArray>(1);
-        output.set(0, nixgen::open_metadata_section(currTag.metadata()));
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        output.set(0, nixgen::open_metadata_section(currObj.metadata()));
     }
 
 } // namespace nixdataarray

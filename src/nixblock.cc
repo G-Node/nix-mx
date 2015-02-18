@@ -42,7 +42,7 @@ namespace nixblock {
         const mwSize size = static_cast<mwSize>(dataArrays.size());
         mxArray *lst = mxCreateCellArray(1, &size);
 
-        for (int i = 0; i < dataArrays.size(); i++) {
+        for (size_t i = 0; i < dataArrays.size(); i++) {
             mxSetCell(lst, i, make_mx_array(handle(dataArrays[i])));
         }
 
@@ -75,7 +75,7 @@ namespace nixblock {
         const mwSize size = static_cast<mwSize>(sources.size());
         mxArray *lst = mxCreateCellArray(1, &size);
 
-        for (int i = 0; i < sources.size(); i++) {
+        for (size_t i = 0; i < sources.size(); i++) {
             mxSetCell(lst, i, make_mx_array(handle(sources[i])));
         }
 
@@ -125,7 +125,7 @@ namespace nixblock {
         const mwSize size = static_cast<mwSize>(tags.size());
         mxArray *lst = mxCreateCellArray(1, &size);
 
-        for (int i = 0; i < tags.size(); i++) {
+        for (size_t i = 0; i < tags.size(); i++) {
             mxSetCell(lst, i, make_mx_array(handle(tags[i])));
         }
 
@@ -173,17 +173,23 @@ namespace nixblock {
         const mwSize size = static_cast<mwSize>(arr.size());
         mxArray *lst = mxCreateCellArray(1, &size);
 
-        for (int i = 0; i < arr.size(); i++) {
+        for (size_t i = 0; i < arr.size(); i++) {
             mxSetCell(lst, i, make_mx_array(handle(arr[i])));
         }
 
         output.set(0, lst);
     }
 
+    void has_metadata_section(const extractor &input, infusor &output)
+    {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        output.set(0, nixgen::has_metadata_section(currObj.metadata()));
+    }
+
     void open_metadata_section(const extractor &input, infusor &output)
     {
-        nix::Block currTag = input.entity<nix::Block>(1);
-        output.set(0, nixgen::open_metadata_section(currTag.metadata()));
+        nix::Block currObj = input.entity<nix::Block>(1);
+        output.set(0, nixgen::open_metadata_section(currObj.metadata()));
     }
 
 } // namespace nixblock

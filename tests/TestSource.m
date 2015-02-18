@@ -44,22 +44,49 @@ catch me
     rethrow(me);
 end;
 
+%% Test: Has metadata
+try
+    clear; %-- ensure clean workspace
+    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+
+    
+    getSource = getBlock.open_source(getBlock.sources{1,1}.id);
+    assert(~getSource.has_metadata());
+    disp('Test Source: has empty metadata ... OK');
+    
+    %-- ToDo implement test for empty metadata
+    %getSource = getBlock.open_source(getBlock.sources{1,1}.id);
+    %assert(getSource.has_metadata())
+    disp('Test Source: has existing metadata ... TODO (proper testfile)');
+    
+    clear; %-- close handles
+
+catch me
+    disp('Test Source: has empty/existing metadata ... ERROR');
+    rethrow(me);
+end;
+
 %% Test: Open metadata
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.id);
-    getSFromB = getBlock.open_source(getBlock.sources{1,1}.id);
-
-    %-- TODO implement proper test for metadata once metadata is implemented
-    %-- TODO implement testfile where a source links to metadata
-    assert(strcmp(getSFromB.open_metadata(),'TODO: implement MetadataSection'));
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    
+    getSource = getBlock.open_source(getBlock.sources{1,1}.id);
+    assert(isempty(getSource.open_metadata()))
+    disp('Test Source: open empty metadata ... OK');
+    
+    %-- ToDo implement test for empty metadata
+    %getSource = getBlock.open_source(getBlock.sources{1,1}.id);
+    %assert(~isempty(getSource.open_metadata()))
+    disp('Test Source: open existing metadata ... TODO (proper testfile)');
     
     clear; %-- close handles
-    disp('Test Source: open metadata ... TODO');
 
 catch me
-    disp('Test Source: open metadata ... ERROR');
+    disp('Test Source: open empty/existing metadata ... ERROR');
     rethrow(me);
 end;
+
 

@@ -159,12 +159,19 @@ classdef Tag < nix.Entity
         % ------------------
         % Metadata methods
         % ------------------
+
+        function hasMetadata = has_metadata(obj)
+            getHasMetadata = nix_mx('Tag::hasMetadataSection', obj.nix_handle);
+            hasMetadata = logical(getHasMetadata.hasMetadataSection);
+        end;
         
         function metadata = open_metadata(obj)
+            metadata = {};
             metadataHandle = nix_mx('Tag::openMetadataSection', obj.nix_handle);
-            metadata = 'TODO: implement MetadataSection';
-            %metadata = nix.Section(metadataHandle);
+            if obj.has_metadata()
+                metadata = nix.Section(metadataHandle);
+            end;
         end;
-    end;
 
+    end;
 end
