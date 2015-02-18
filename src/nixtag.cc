@@ -25,9 +25,9 @@ namespace nixtag {
         sb.set(currTag.position());
         sb.set(currTag.extent());
         sb.set(currTag.units());
-        sb.set(currTag.featureCount());
-        sb.set(currTag.sourceCount());
-        sb.set(currTag.referenceCount());
+        sb.set(static_cast<mwSize>(currTag.featureCount()));
+        sb.set(static_cast<mwSize>(currTag.sourceCount()));
+        sb.set(static_cast<mwSize>(currTag.referenceCount()));
 
         output.set(0, sb.array());
     }

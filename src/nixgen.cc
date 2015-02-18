@@ -61,7 +61,7 @@ namespace nixgen {
             sb.set(da.type());
             sb.set(da.name());
             sb.set(da.definition());
-            sb.set(da.sourceCount());
+            sb.set(static_cast<mwSize>(da.sourceCount()));
             sb.next();
         }
         return sb.array();

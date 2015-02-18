@@ -21,9 +21,9 @@ namespace nixmultitag {
         sb.set(currMTag.name());
         sb.set(currMTag.definition());
         sb.set(currMTag.units());
-        sb.set(currMTag.featureCount());
-        sb.set(currMTag.sourceCount());
-        sb.set(currMTag.referenceCount());
+        sb.set(static_cast<mwSize>(currMTag.featureCount()));
+        sb.set(static_cast<mwSize>(currMTag.sourceCount()));
+        sb.set(static_cast<mwSize>(currMTag.referenceCount()));
 
         output.set(0, sb.array());
     }
