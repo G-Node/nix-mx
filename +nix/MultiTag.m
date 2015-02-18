@@ -3,6 +3,9 @@ classdef MultiTag < nix.Entity
 
     properties(Hidden)
         info
+        referencesCache
+        featuresCache
+        sourcesCache
     end;
     
     properties(Dependent)
@@ -14,12 +17,20 @@ classdef MultiTag < nix.Entity
         featureCount
         sourceCount
         referenceCount
+        
+        references
+        features
+        sources
     end;
 
     methods
         function obj = MultiTag(h)
-           obj@nix.Entity(h);
-           obj.info = nix_mx('MultiTag::describe', obj.nix_handle);
+            obj@nix.Entity(h);
+            obj.info = nix_mx('MultiTag::describe', obj.nix_handle);
+
+            obj.referencesCache = {};
+            obj.featuresCache = {};
+            obj.sourcesCache = {};
         end;
         
         function id = get.id(tag)
@@ -54,17 +65,90 @@ classdef MultiTag < nix.Entity
             referenceCount = tag.info.referenceCount;
         end;
         
+        % ------------------
+        % References methods
+        % ------------------
+        
         function refList = list_references(obj)
             refList = nix_mx('MultiTag::listReferences', obj.nix_handle);
         end;
 
+        function dataArray = open_reference(obj, id_or_name)
+            daHandle = nix_mx('MultiTag::openReferences', obj.nix_handle, id_or_name);
+            dataArray = nix.DataArray(daHandle);
+        end;
+
+        function da = get.references(obj)
+            da_list = nix_mx('MultiTag::references', obj.nix_handle);
+            
+            if length(obj.referencesCache) ~= length(da_list)
+                obj.referencesCache = cell(length(da_list), 1);
+
+                for i = 1:length(da_list)
+                    obj.referencesCache{i} = nix.DataArray(da_list{i});
+                end;
+            end;
+
+            da = obj.referencesCache;
+        end;
+
+        % ------------------
+        % Features methods
+        % ------------------
+        
         function featureList = list_features(obj)
             featureList = nix_mx('MultiTag::listFeatures', obj.nix_handle);
         end;
 
+        function feature = open_feature(obj, id_or_name)
+            featureHandle = nix_mx('MultiTag::openFeatures', obj.nix_handle, id_or_name);
+            feature = nix.Feature(featureHandle);
+        end;
+
+        function feat = get.features(obj)
+            featList = nix_mx('MultiTag::features', obj.nix_handle);
+            
+            if length(obj.featuresCache) ~= length(featList)
+                obj.featuresCache = cell(length(featList), 1);
+
+                for i = 1:length(featList)
+                    obj.featuresCache{i} = nix.Feature(featList{i});
+                end;
+            end;
+
+            feat = obj.featuresCache;
+        end;
+        
+        % ------------------
+        % Sources methods
+        % ------------------
+
         function sourceList = list_sources(obj)
             sourceList = nix_mx('MultiTag::listSources', obj.nix_handle);
         end;
+
+        function source = open_source(obj, id_or_name)
+            sourceHandle = nix_mx('MultiTag::openSource', obj.nix_handle, id_or_name);
+            source = nix.Source(sourceHandle);
+        end;
+
+        function sources = get.sources(obj)
+            sList = nix_mx('MultiTag::sources', obj.nix_handle);
+            
+            if length(obj.sourcesCache) ~= length(sList)
+                obj.sourcesCache = cell(length(sList), 1);
+
+                for i = 1:length(sList)
+                    obj.sourcesCache{i} = nix.Source(sList{i});
+                end;
+            end;
+
+            sources = obj.sourcesCache;
+        end;
+
+        % ------------------
+        % Positions methods
+        % ------------------
 
         function hasPositions = has_positions(obj)
             getHasPositions = nix_mx('MultiTag::hasPositions', obj.nix_handle);
@@ -80,27 +164,19 @@ classdef MultiTag < nix.Entity
             end;
         end;
         
+        % ------------------
+        % Extents methods
+        % ------------------
+
         function extents = open_extent(obj)
             extentsHandle = nix_mx('MultiTag::openExtents', obj.nix_handle);
             extents = nix.DataArray(extentsHandle);
         end;
         
-        function source = open_source(obj, id_or_name)
-            sourceHandle = nix_mx('MultiTag::openSource', obj.nix_handle, id_or_name);
-            source = nix.Source(sourceHandle);
-        end;
-
-        function feature = open_feature(obj, id_or_name)
-            featureHandle = nix_mx('MultiTag::openFeatures', obj.nix_handle, id_or_name);
-            feature = 'TODO: implement feature';
-            %feature = nix.Feature(featureHandle);
-        end;
-
-        function dataArray = open_reference(obj, id_or_name)
-            daHandle = nix_mx('MultiTag::openReferences', obj.nix_handle, id_or_name);
-            dataArray = nix.DataArray(daHandle);
-        end;
-
+        % ------------------
+        % Metadata methods
+        % ------------------
+        
         function metadata = open_metadata(obj)
             metadataHandle = nix_mx('MultiTag::openMetadataSection', obj.nix_handle);
             metadata = 'TODO: implement MetadataSection';

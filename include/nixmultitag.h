@@ -27,6 +27,12 @@ namespace nixmultitag {
 
     void open_metadata_section(const extractor &input, infusor &output);
 
+    void references(const extractor &input, infusor &output);
+
+    void features(const extractor &input, infusor &output);
+
+    void sources(const extractor &input, infusor &output);
+
 } // namespace nixmultitag
 
 #endif

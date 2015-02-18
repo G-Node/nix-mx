@@ -1,65 +1,46 @@
 % Tests for the nix.Source object
 
-%% Test: List sources
+%% Test: List/fetch sources
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).id);
-    currSourceList = getBlock.list_sources();
-    getSourceFromBlock = getBlock.open_source(currSourceList(1,1).id);
-    listSourcesFromSource = getSourceFromBlock.list_sources();
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.id);
+    getSourceFromBlock = getBlock.open_source(getBlock.sources{1,1}.id);
 
     %-- TODO: get a testfile with nested sources
     assert(size(getSourceFromBlock.list_sources(),1) == 0);
-    clear; %-- close handles
-    disp('Test list sources from source ... TODO');
+    disp('Test Source: list sources ... TODO (proper testfile)');
     
+    assert(size(getSourceFromBlock.sources(), 1) == 0);
+    disp('Test Source: fetch sources ... TODO (proper testfile)');
+
+    clear; %-- close handles
+
 catch me
-    disp('Test list sources from source ... ERROR');
+    disp('Test Source: list/fetch sources ... ERROR');
     rethrow(me);
 end;
 
-%% Test: Open source by ID
-%-- TODO: get a testfile with nested sources
+%% Test: Open source by ID or name
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).id);
-    currSourceListFromBlock = getBlock.list_sources();
-    getSourceFromBlock = getBlock.open_source(currSourceListFromBlock(1,1).id);
-    currSourceList = getSourceFromBlock.list_sources();
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.id);
+    getSFromB = getBlock.open_source(getBlock.sources{1,1}.id);
     
     %-- TODO: comment in, when testfile with nested sources is available
-    %getSourceByID = getSourceFromBlock.open_source(currSourceList(1,1).id);
+    %getSourceByID = getSFromB.open_source(getSFromB.sources{1,1}.id);
     %assert(strcmp(getSourceByID.id, ''));
-    clear; %-- close handles
-    disp('Test open source by ID from source ... TODO');
-    
-catch me
-    disp('Test open source by ID from source ... ERROR');
-    rethrow(me);
-end;
+    disp('Test Source: open source by ID ... TODO (proper testfile)');
 
-%% Test: Open source by name
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).id);
-    currSourceListFromBlock = getBlock.list_sources();
-    getSourceFromBlock = getBlock.open_source(currSourceListFromBlock(1,1).id);
-    currSourceList = getSourceFromBlock.list_sources();
+    %getSourceByName = getSFromB.open_source(getSFromB.sources{1,1}.name);
+    %assert(strcmp(getSourceByName.id, ''));
+    disp('Test Source: open source by name ... TODO (proper testfile)');
     
-    %-- TODO: comment in, when testfile with nested sources is available
-    %getSourceByName = getSourceFromBlock.open_source(currSourceList(1,1).name);
-    %assert(strcmp(getSourceByName.name, ''));
     clear; %-- close handles
-    disp('Test open source by name from source ... TODO');
     
 catch me
-    disp('Test open source by name from source ... ERROR');
+    disp('Test Source: open source by ID/name ... ERROR');
     rethrow(me);
 end;
 
@@ -67,20 +48,18 @@ end;
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    currSourceListFromBlock = getBlock.list_sources();
-    getSourceFromBlock = getBlock.open_source(currSourceListFromBlock(1,1).id);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.id);
+    getSFromB = getBlock.open_source(getBlock.sources{1,1}.id);
 
-    %-- ToDo implement proper test for metadata once metadata is implemented
-    %-- ToDo implement testfile where a source links to metadata
-    assert(strcmp(getSourceFromBlock.open_metadata(),'TODO: implement MetadataSection'));
+    %-- TODO implement proper test for metadata once metadata is implemented
+    %-- TODO implement testfile where a source links to metadata
+    assert(strcmp(getSFromB.open_metadata(),'TODO: implement MetadataSection'));
     
     clear; %-- close handles
-    disp('Test open metadata from source ... TODO');
+    disp('Test Source: open metadata ... TODO');
 
 catch me
-    disp('Test open metadata from source ... ERROR');
+    disp('Test Source: open metadata ... ERROR');
     rethrow(me);
 end;
 

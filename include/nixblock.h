@@ -9,11 +9,15 @@ namespace nixblock {
 
     void open_data_array(const extractor &input, infusor &output);
 
+    void data_arrays(const extractor &input, infusor &output);
+
     void list_data_arrays(const extractor &input, infusor &output);
 
     void list_sources(const extractor &input, infusor &output);
 
     void open_source(const extractor &input, infusor &output);
+
+    void sources(const extractor &input, infusor &output);
 
     void has_tag(const extractor &input, infusor &output);
     
@@ -21,11 +25,15 @@ namespace nixblock {
 
     void list_tags(const extractor &input, infusor &output);
 
+    void tags(const extractor &input, infusor &output);
+
     void has_multi_tag(const extractor &input, infusor &output);
 
     void open_multi_tag(const extractor &input, infusor &output);
 
     void list_multi_tags(const extractor &input, infusor &output);
+
+    void multitags(const extractor &input, infusor &output);
 
     void open_metadata_section(const extractor &input, infusor &output);
 

@@ -1,270 +1,199 @@
 % Tests for the nix.Block object
 
-%% Test: List data arrays
+%% Test: List/fetch data arrays
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    assert(size(getBlock.data_arrays(),1) == 198);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+
+    assert(size(getBlock.list_data_arrays(),1) == 198);
+    disp('Test Block: list data array ... OK');
+
+    assert(size(getBlock.dataArrays,1) == 198);
+    disp('Test Block: fetch data array ... OK');
+    
     clear; %-- close handles
-    disp('Test list data array from block ... OK');
     
 catch me
-    disp('Test list data array from block ... ERROR');
+    disp('Test Block: list/fetch data array ... ERROR');
     rethrow(me);
 end;
 
-%% Test: List sources
+%% Test: List/fetch sources
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+
     assert(size(getBlock.list_sources(),1) == 1);
+    disp('Test Block: list sources ... OK');
+
+    assert(size(getBlock.sources(), 1) == 1);
+    disp('Test Block: fetch sources ... OK');
+    
     clear; %-- close handles
-    disp('Test list sources from block ... OK');
     
 catch me
-    disp('Test list sources from block ... ERROR');
+    disp('Test Block: list/fetch sources ... ERROR');
     rethrow(me);
 end;
 
-%% Test: List tags
+%% Test: List/fetch tags
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+
     assert(size(getBlock.list_tags(),1) == 198);
-    clear; %-- close handles
-    disp('Test list tags from block ... OK');
+    disp('Test Block: list tags ... OK');
+
+    assert(size(getBlock.tags(), 1) == 198);
+    disp('Test Block: fetch tags ... OK');
+    
+    clear; %-- close handles    
     
 catch me
-    disp('Test list tags from block ... ERROR');
+    disp('Test Block: list/fetch tags ... ERROR');
     rethrow(me);
 end;
 
-%% Test: List multitags
+%% Test: List/fetch multitags
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    
     assert(size(getBlock.list_multi_tags(),1) == 99);
-    clear; %-- close handles
-    disp('Test list multi tags from block ... OK');
+    disp('Test Block: list multi tags ... OK');
+
+    assert(size(getBlock.multiTags(), 1) == 99);
+    disp('Test Block: fetch multi tags ... OK');
+    clear; %-- close handles    
     
 catch me
-    disp('Test list multi tags from block ... ERROR');
+    disp('Test Block: list/fetch multi tags ... ERROR');
     rethrow(me);
 end;
 
-%% Test: Open data array by ID
+%% Test: Open data array by ID or name
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    currDataArrayList = getBlock.data_arrays();
-    getDataArrayByID = getBlock.data_array(currDataArrayList(1,1).id);
-    
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+
+    getDataArrayByID = getBlock.data_array(getBlock.dataArrays{1,1}.id);
     assert(strcmp(getDataArrayByID.id, 'e0ca39b7-632f-47c9-968c-c65e6db58719'));
-    clear; %-- close handles
-    disp('Test open data array by ID from block ... OK');
-    
-catch me
-    disp('Test open data array by ID from block ... ERROR');
-    rethrow(me);
-end;
+    disp('Test Block: open data array by ID ... OK');
 
-%% Test: Open data array by name
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    currDataArrayList = getBlock.data_arrays();
-    getDataArrayByName = getBlock.data_array(currDataArrayList(1,1).name);
-    
+    getDataArrayByName = getBlock.data_array(getBlock.dataArrays{1,1}.name);
     assert(strcmp(getDataArrayByName.id, 'e0ca39b7-632f-47c9-968c-c65e6db58719'));
+    disp('Test Block: open data array by name ... OK');
+
     clear; %-- close handles
-    disp('Test open data array by name from block ... OK');
     
 catch me
-    disp('Test open data array by name from block ... ERROR');
+    disp('Test Block: open data array by ID/name ... ERROR');
     rethrow(me);
 end;
 
-%% Test: Open tag by ID
+%% Test: Open tag by ID or name
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = getBlock.list_tags();
-    getTagByID = getBlock.open_tag(currTagList(1,1).id);
-    
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);    
+
+    getTagByID = getBlock.open_tag(getBlock.tags{1,1}.id);
     assert(strcmp(getTagByID.id, 'f49f4a56-0c93-4323-8e37-4b02b8cabb55'));
+    disp('Test Block: open tag by ID ... OK');
+
+    getTagByName = getBlock.open_tag(getBlock.tags{1,1}.name);
+    assert(strcmp(getTagByName.id, 'f49f4a56-0c93-4323-8e37-4b02b8cabb55'));
+    disp('Test Block: open tag by name ... OK');
+    
     clear; %-- close handles
-    disp('Test open tag by ID from block ... OK');
     
 catch me
-    disp('Test open tag by ID from block ... ERROR');
+    disp('Test Block: open tag by ID/name ... ERROR');
     rethrow(me);
 end;
 
-%% Test: Open tag by name
+%% Test: Open multi tag by ID or name
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = getBlock.list_tags();
-    getTagByName = getBlock.open_tag(currTagList(1,1).name);
-    
-    assert(strcmp(getTagByName.name, 'Arm movement epoch Trial 004'));
-    clear; %-- close handles
-    disp('Test open tag by name from block ... OK');
-    
-catch me
-    disp('Test open tag by name from block ... ERROR');
-    rethrow(me);
-end;
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);    
 
-%% Test: Open multi tag by ID
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    currMultiTagList = getBlock.list_multi_tags();
-    getMultiTagByID = getBlock.open_multi_tag(currMultiTagList(1,1).id);
-    
+    getMultiTagByID = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
     assert(strcmp(getMultiTagByID.id, '9e3fdaa5-a71c-4be0-91b3-9c35ed2d4723'));
+    disp('Test Block: open multi tag by ID ... OK');
+
+    getMultiTagByName = getBlock.open_multi_tag(getBlock.multiTags{1,1}.name);
+    assert(strcmp(getMultiTagByName.id, '9e3fdaa5-a71c-4be0-91b3-9c35ed2d4723'));
+    disp('Test Block: open multi tag by name ... OK');
+    
     clear; %-- close handles
-    disp('Test open multi tag by ID from block ... OK');
     
 catch me
-    disp('Test open multi tag by ID from block ... ERROR');
+    disp('Test Block: open multi tag by ID/name ... ERROR');
     rethrow(me);
 end;
 
-%% Test: Open multi tag by name
+%% Test: Open source by ID or name
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    currMultiTagList = getBlock.list_multi_tags();
-    getMultiTagByName = getBlock.open_multi_tag(currMultiTagList(1,1).name);
-    
-    assert(strcmp(getMultiTagByName.name, 'Spiketrain Unit 5 Trial 087'));
-    clear; %-- close handles
-    disp('Test open multi tag by name from block ... OK');
-    
-catch me
-    disp('Test open multi tag by name from block ... ERROR');
-    rethrow(me);
-end;
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);    
 
-%% Test: Open source by ID
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    currSourceList = getBlock.list_sources();
-    getSourceByID = getBlock.open_source(currSourceList(1,1).id);
-    
+    getSourceByID = getBlock.open_source(getBlock.sources{1,1}.id);
     assert(strcmp(getSourceByID.id, 'edf4c8b6-8569-4952-bcee-4203dd26571e'));
+    disp('Test Block: open source by ID ... OK');
+
+    getSourceByName = getBlock.open_source(getBlock.sources{1,1}.name);
+    assert(strcmp(getSourceByName.id, 'edf4c8b6-8569-4952-bcee-4203dd26571e'));
+    disp('Test Block: open source by name ... OK');
+
     clear; %-- close handles
-    disp('Test open source by ID from block ... OK');
     
 catch me
-    disp('Test open source by ID from block ... ERROR');
+    disp('Test Block: open source by ID/name ... ERROR');
     rethrow(me);
 end;
 
-%% Test: Open source by name
+%% Test: Block has multi tag by ID or name
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    currSourceList = getBlock.list_sources();
-    getSourceByName = getBlock.open_source(currSourceList(1,1).name);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);    
     
-    assert(strcmp(getSourceByName.name, 'Unit 5'));
+    assert(getBlock.has_multi_tag(getBlock.multiTags{1,1}.id));
+    disp('Test Block: has multi tag by ID ... OK');
+
+    assert(getBlock.has_multi_tag(getBlock.multiTags{1,1}.name));
+    disp('Test Block: has multi tag by name ... OK');
+    
     clear; %-- close handles
-    disp('Test open source by name from block ... OK');
     
 catch me
-    disp('Test open source by name from block ... ERROR');
+    disp('Test Block: has multi tag by ID/name ... ERROR');
     rethrow(me);
 end;
 
-%% Test: Block has multi tag by ID
+%% Test: Block has tag by ID or name
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    multiTagList = getBlock.list_multi_tags();
-    assert(getBlock.has_multi_tag(multiTagList(1,1).id));
-    clear; %-- close handles
-    disp('Test block has multi tag by ID ... OK');
-    
-catch me
-    disp('Test block has multi tag by ID ... ERROR');
-    rethrow(me);
-end;
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
 
-%% Test: Block has multi tag by name
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    multiTagList = getBlock.list_multi_tags();
-    assert(getBlock.has_multi_tag(multiTagList(1,1).name));
-    clear; %-- close handles
-    disp('Test block has multi tag by name ... OK');
-    
-catch me
-    disp('Test block has multi tag by name ... ERROR');
-    rethrow(me);
-end;
+    assert(getBlock.has_tag(getBlock.tags{1,1}.id));
+    disp('Test Block: has tag by ID ... OK');
 
-%% Test: Block has tag by ID
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    tagList = getBlock.list_tags();
-    assert(getBlock.has_tag(tagList(1,1).id));
-    clear; %-- close handles
-    disp('Test block has tag by ID ... OK');
-    
-catch me
-    disp('Test block has tag by ID ... ERROR');
-    rethrow(me);
-end;
+    assert(getBlock.has_tag(getBlock.tags{1,1}.name));
+    disp('Test Block: has tag by name ... OK');
 
-%% Test: Block has tag by name
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    tagList = getBlock.list_tags();
-    assert(getBlock.has_tag(tagList(1,1).name));
     clear; %-- close handles
-    disp('Test block has tag by name ... OK');
     
 catch me
-    disp('Test block has tag by name ... ERROR');
+    disp('Test Block: has tag by ID/name ... ERROR');
     rethrow(me);
 end;
 
@@ -272,17 +201,16 @@ end;
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
 
     %-- ToDo implement proper test for metadata once metadata is implemented
     assert(strcmp(getBlock.open_metadata(),'TODO: implement MetadataSection'));
     
     clear; %-- close handles
-    disp('Test open metadata from block ... OK');
+    disp('Test Block: open metadata ... TODO');
 
 catch me
-    disp('Test open metadata from block ... ERROR');
+    disp('Test Block: open metadata ... ERROR');
     rethrow(me);
 end;
 
