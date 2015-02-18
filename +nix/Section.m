@@ -46,15 +46,28 @@ classdef Section < nix.Entity
         function mapping = get.mapping(section)
            mapping = section.info.mapping;
         end;
+
+        function section = parent(obj)
+           sh = nix_mx('Section::parent', obj.nix_handle);
+           try
+               section = nix.Section(sh);
+           catch
+               section = {};
+           end;
+        end;
+        
+        function section = link(obj)
+           sh = nix_mx('Section::link', obj.nix_handle);
+           try
+               section = nix.Section(sh);
+           catch
+               section = {};
+           end;
+        end;
         
         % ----------------
         % Section methods
         % ----------------
-        
-        function section = parent(obj)
-           sh = nix_mx('Section::parent', obj.nix_handle); 
-           section = nix.Section(sh);
-        end;
         
         function lst = list_sections(obj)
             lst = nix_mx('Section::listSections', obj.nix_handle);

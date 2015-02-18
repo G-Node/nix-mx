@@ -24,6 +24,8 @@ TestTag;
 
 TestMultiTag;
 
+TestSection;
+
 %-- TODO: TestFeature
 
 disp('Tests completed successfully. Bye.');
