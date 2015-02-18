@@ -157,4 +157,4 @@ void list_properties(const extractor &input, infusor &output)
     output.set(0, lst);
 }
 
-} // namespace nixfile
+} // namespace nixsection
