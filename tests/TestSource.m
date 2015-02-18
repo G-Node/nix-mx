@@ -8,7 +8,6 @@ try
     getBlock = test_file.openBlock(currBlockList(1,1).id);
     currSourceList = getBlock.list_sources();
     getSourceFromBlock = getBlock.open_source(currSourceList(1,1).id);
-    listSourcesFromSource = getSourceFromBlock.list_sources();
 
     %-- TODO: get a testfile with nested sources
     assert(size(getSourceFromBlock.list_sources(),1) == 0);
@@ -17,6 +16,25 @@ try
     
 catch me
     disp('Test list sources from source ... ERROR');
+    rethrow(me);
+end;
+
+%% Test: Fetch sources
+try
+    clear; %-- ensure clean workspace
+    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    currBlockList = test_file.listBlocks();
+    getBlock = test_file.openBlock(currBlockList(1,1).id);
+    currSourceList = getBlock.list_sources();
+    getSourceFromBlock = getBlock.open_source(currSourceList(1,1).id);
+
+    %-- TODO: get a testfile with nested sources
+    assert(size(getSourceFromBlock.sources(), 1) == 0);
+    clear; %-- close handles
+    disp('Test fetch sources from source ... TODO');
+    
+catch me
+    disp('Test fetch sources from source ... ERROR');
     rethrow(me);
 end;
 

@@ -55,7 +55,23 @@ catch me
     rethrow(me);
 end;
 
-%% Test Block listing
+%% Test open section
+try
+    clear; %-- ensure clean workspace
+    test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
+    getSection = test_file.openSection(test_file.sections{1,1}.id);
+
+    assert(strcmp(getSection.name, 'General'));
+    clear; %-- close handles
+    disp('Test open section from HDF5 file ... OK');
+
+catch me
+    disp('Test open section from HDF5 file ... ERROR');
+    rethrow(me);
+end;
+
+
+%% Test list blocks
 % Test that File handle can fetch blocks from HDF5
 try
     clear; %-- ensure clean workspace
@@ -63,10 +79,24 @@ try
 
     assert(length(test_file.listBlocks()) == 4);
     clear; %-- close handles
-    disp('Test listing blocks from HDF5 file ... OK');
+    disp('Test list blocks from HDF5 file ... OK');
 
 catch me
-    disp('Test listing blocks from HDF5 file ... ERROR');
+    disp('Test list blocks from HDF5 file ... ERROR');
+    rethrow(me);
+end;
+
+%% Test fetch blocks
+try
+    clear; %-- ensure clean workspace
+    test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
+
+    assert(size(test_file.blocks(),1) == 4);
+    clear; %-- close handles
+    disp('Test fetch blocks from HDF5 file ... OK');
+
+catch me
+    disp('Test fetch blocks from HDF5 file ... ERROR');
     rethrow(me);
 end;
 
@@ -74,12 +104,12 @@ end;
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlockByID = test_file.openBlock(currBlockList(1,1).id);
+    getBlockByID = test_file.openBlock(test_file.blocks{1,1}.id);
 
     assert(strcmp(getBlockByID.id, '7b59c0b9-b200-4b53-951d-6851dbd1cdc8'));
-    disp('Test open block by ID from HDF5 file ... OK');
     clear; %-- close handles
+    disp('Test open block by ID from HDF5 file ... OK');
+
 catch me
     disp('Test open block by ID from HDF5 file ... ERROR');
     rethrow(me);
@@ -89,8 +119,7 @@ end;
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlockByName = test_file.openBlock(currBlockList(1,1).name);
+    getBlockByName = test_file.openBlock(test_file.blocks{1,1}.name);
 
     assert(strcmp(getBlockByName.name, 'joe097'));
     disp('Test open block by name from HDF5 file ... OK');
@@ -101,7 +130,6 @@ catch me
 end;
 
 %% TODO Test Open metadata
-
 disp('Test open metadata from file ... TODO');
 
 

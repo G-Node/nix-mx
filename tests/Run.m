@@ -3,6 +3,9 @@
 %-- add required paths for matlab
 addpath(fullfile(pwd, 'build'));
 
+disp('');
+disp('starting tests');
+
 %-- ToDo: create proper testfile, loose the 24mb one
 
 %-- All current tests use the first block from file 'test.h5' with

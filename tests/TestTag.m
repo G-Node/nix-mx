@@ -18,6 +18,24 @@ catch me
     rethrow(me);
 end;
 
+%% Test: Fetch references
+try
+    clear; %-- ensure clean workspace
+    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    currBlockList = test_file.listBlocks();
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
+    currTagList = currBlock.list_tags();
+    currTag = currBlock.open_tag(currTagList(1,1).id);
+
+    assert(size(currTag.references(), 1) == 1);
+    clear; %-- close handles
+    disp('Test fetch references from tag ... OK');
+    
+catch me
+    disp('Test fetch references from tag ... ERROR');
+    rethrow(me);
+end;
+
 %% Test: List sources
 try
     clear; %-- ensure clean workspace
@@ -37,6 +55,25 @@ catch me
     rethrow(me);
 end;
 
+%% Test: Fetch sources
+try
+    clear; %-- ensure clean workspace
+    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    currBlockList = test_file.listBlocks();
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
+    currTagList = currBlock.list_tags();
+    currTag = currBlock.open_tag(currTagList(1,1).id);
+
+    %-- ToDo get testfile with tag referencing a source
+    assert(size(currTag.sources(),1) == 0);
+    clear; %-- close handles
+    disp('Test fetch sources from tag ... OK');
+    
+catch me
+    disp('Test fetch sources from tag ... ERROR');
+    rethrow(me);
+end;
+
 %% Test: List features
 try
     clear; %-- ensure clean workspace
@@ -53,6 +90,25 @@ try
     
 catch me
     disp('Test list features from tag ... ERROR');
+    rethrow(me);
+end;
+
+%% Test: Fetch features
+try
+    clear; %-- ensure clean workspace
+    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    currBlockList = test_file.listBlocks();
+    currBlock = test_file.openBlock(currBlockList(1,1).name);
+    currTagList = currBlock.list_tags();
+    currTag = currBlock.open_tag(currTagList(1,1).id);
+
+    %-- ToDo get testfile with tag referencing a source
+    assert(size(currTag.features(),1) == 0);
+    clear; %-- close handles
+    disp('Test fetch features from tag ... OK');
+    
+catch me
+    disp('Test fetch features from tag ... ERROR');
     rethrow(me);
 end;
 

@@ -169,7 +169,6 @@ classdef Block < nix.Entity
         
         function mtags = get.multiTags(obj)
             mtList = nix_mx('Block::multiTags', obj.nix_handle);
-            disp(mtList{1});
             if length(obj.multiTagsCache) ~= length(mtList)
                 obj.multiTagsCache = cell(length(mtList), 1);
 
