@@ -76,7 +76,7 @@ void blocks(const extractor &input, infusor &output)
     const mwSize size = static_cast<mwSize>(blocks.size());
     mxArray *lst = mxCreateCellArray(1, &size);
 
-    for (int i = 0; i < blocks.size(); i++) {
+    for (size_t i = 0; i < blocks.size(); i++) {
         mxSetCell(lst, i, make_mx_array(handle(blocks[i])));
     }
 
@@ -118,7 +118,7 @@ void sections(const extractor &input, infusor &output)
     const mwSize size = static_cast<mwSize>(sections.size());
     mxArray *lst = mxCreateCellArray(1, &size);
 
-    for (int i = 0; i < sections.size(); i++) {
+    for (size_t i = 0; i < sections.size(); i++) {
         mxSetCell(lst, i, make_mx_array(handle(sections[i])));
     }
 
