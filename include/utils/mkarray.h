@@ -5,7 +5,7 @@
 
 #include <boost/optional.hpp>
 
-#include <string>
+#include <cstring>
 #include <vector>
 #include <cstdint>
 
