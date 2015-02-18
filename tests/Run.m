@@ -22,11 +22,9 @@ TestDataArray;
 
 TestTag;
 
-%-- TODO: TestMultiTag
+TestMultiTag;
 
 %-- TODO: TestFeature
-
-%-- TODO: TestSection
 
 disp('Tests completed successfully. Bye.');
 

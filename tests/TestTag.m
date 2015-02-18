@@ -81,7 +81,7 @@ try
     clear; %-- close handles
     
 catch me
-    disp('Test open source by ID/name ... ERROR');
+    disp('Test Tag: open source by ID/name ... ERROR');
     rethrow(me);
 end;
 
