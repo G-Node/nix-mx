@@ -1,238 +1,132 @@
 % Tests for the nix.Tag object
 
-%% Test: List references
+%% Test: List/fetch references
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
+    
+    assert(size(getTag.list_references(), 1) == 1);
+    disp('Test Tag: list references ... OK');
 
-    assert(size(currTag.list_references(),1) == 1);
-    clear; %-- close handles
-    disp('Test list references from tag ... OK');
+    assert(size(getTag.references(), 1) == 1);
+    disp('Test Tag: fetch references ... OK');
+    
+    clear; %-- close handles    
     
 catch me
-    disp('Test list references from tag ... ERROR');
+    disp('Test Tag: list/fetch references ... ERROR');
     rethrow(me);
 end;
 
-%% Test: Fetch references
+%% Test: List/fetch sources
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
-
-    assert(size(currTag.references(), 1) == 1);
-    clear; %-- close handles
-    disp('Test fetch references from tag ... OK');
-    
-catch me
-    disp('Test fetch references from tag ... ERROR');
-    rethrow(me);
-end;
-
-%% Test: List sources
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
 
     %-- ToDo get testfile with tag referencing a source
-    assert(size(currTag.list_sources(),1) == 0);
+    assert(size(getTag.list_sources(),1) == 0);
+    disp('Test Tag: list sources from tag ... TODO (proper testfile)');
+
+    assert(size(getTag.sources(),1) == 0);
+    disp('Test Tag: fetch sources ... TODO (proper testfile)');
+    
     clear; %-- close handles
-    disp('Test list sources from tag ... OK');
     
 catch me
-    disp('Test list sources from tag ... ERROR');
+    disp('Test Tag: list/fetch sources ... ERROR');
     rethrow(me);
 end;
 
-%% Test: Fetch sources
+%% Test: List/fetch features
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
 
     %-- ToDo get testfile with tag referencing a source
-    assert(size(currTag.sources(),1) == 0);
+    assert(size(getTag.list_features(),1) == 0);
+    disp('Test Tag: list features ... TODO (proper testfile)');
+
+    assert(size(getTag.features(),1) == 0);
+    disp('Test Tag: fetch features ... TODO (proper testfile)');
+    
     clear; %-- close handles
-    disp('Test fetch sources from tag ... OK');
     
 catch me
-    disp('Test fetch sources from tag ... ERROR');
+    disp('Test Tag: list/fetch features ... ERROR');
     rethrow(me);
 end;
 
-%% Test: List features
+%% Test: Open source by ID or name
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
-
-    %-- ToDo get testfile with tag referencing a source
-    assert(size(currTag.list_features(),1) == 0);
-    clear; %-- close handles
-    disp('Test list features from tag ... OK');
-    
-catch me
-    disp('Test list features from tag ... ERROR');
-    rethrow(me);
-end;
-
-%% Test: Fetch features
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
-
-    %-- ToDo get testfile with tag referencing a source
-    assert(size(currTag.features(),1) == 0);
-    clear; %-- close handles
-    disp('Test fetch features from tag ... OK');
-    
-catch me
-    disp('Test fetch features from tag ... ERROR');
-    rethrow(me);
-end;
-
-%% Test: Open source by ID
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
-    currSourceList = currTag.list_sources();
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
     
     %-- TODO: implement testfile with source referenced from a tag
-    %currSourceByID = currTag.open_source(currSourceList(1,1).id);
-    %assert(strcmp(currSourceByID.id, ''));
+    %getSourceByID = getTag.open_source(getTag.sources{1,1}.id);
+    %assert(strcmp(getSourceByID.id, ''));
+    disp('Test Tag: open source by ID ... TODO (proper testfile)');
+
+    %getSourceByName = getTag.open_source(getTag.sources{1,1}.name);
+    %assert(strcmp(getSourceByName.id, ''));
+    disp('Test Tag: open source by name ... TODO (proper testfile)');
+    
     clear; %-- close handles
-    disp('Test open source by ID from tag ... TODO');
     
 catch me
-    disp('Test open source by ID from tag ... ERROR');
+    disp('Test open source by ID/name ... ERROR');
     rethrow(me);
 end;
 
-%% Test: Open source by name
+%% Test: Open feature by ID or name
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
-    currSourceList = currTag.list_sources();
-    
-    %-- TODO: implement testfile with source referenced from a tag
-    %currSourceByName = currTag.open_source(currSourceList(1,1).name);
-    %assert(strcmp(currSourceByName.name, ''));
-    clear; %-- close handles
-    disp('Test open source by name from tag ... TODO');
-    
-catch me
-    disp('Test open source by name from tag ... ERROR');
-    rethrow(me);
-end;
-
-%% Test: Open feature by ID
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
-    currFeatList = currTag.list_features();
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
     
     %-- TODO: implement testfile with feature referenced from a tag
-    %currFeatByID = currTag.open_feature(currFeatList(1,1).id);
-    %assert(strcmp(currFeatByID.id, ''));
+    %getFeatByID = getTag.open_feature(getTag.features{1,1}.id);
+    %assert(strcmp(getFeatByID.id, ''));
+    disp('Test Tag: open feature by ID ... TODO (proper testfile)');
+
+    %getFeatByName = getTag.open_feature(getTag.features{1,1}.name);
+    %assert(strcmp(getFeatByName.id, ''));
+    disp('Test Tag: open feature by name ... TODO (proper testfile)');
+    
     clear; %-- close handles
-    disp('Test open feature by ID from tag ... TODO');
     
 catch me
-    disp('Test open feature by ID from tag ... ERROR');
+    disp('Test Tag: open feature by ID/name ... ERROR');
     rethrow(me);
 end;
 
-%% Test: Open feature by name
+%% Test: Open reference by ID or name
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
-    currFeatList = currTag.list_features();
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
     
-    %-- TODO: implement testfile with feature referenced from a tag
-    %currFeatByName = currTag.open_feature(currFeatList(1,1).name);
-    %assert(strcmp(currFeatByName.name, ''));
+    getRefByID = getTag.open_reference(getTag.references{1,1}.id);
+    assert(strcmp(getRefByID.id, '75138768-edc3-482e-894d-301f1dd66f8d'));
+    disp('Test Tag: open reference by ID ... OK');
+
+    getRefByName = getTag.open_reference(getTag.references{1,1}.name);
+    assert(strcmp(getRefByName.id, '75138768-edc3-482e-894d-301f1dd66f8d'));
+    disp('Test Tag: open reference by name ... OK');
+    
     clear; %-- close handles
-    disp('Test open feature by name from tag ... TODO');
     
 catch me
-    disp('Test open feature by name from tag ... ERROR');
-    rethrow(me);
-end;
-
-%% Test: Open reference by ID
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
-    currRefList = currTag.list_references();
-    currRefByID = currTag.open_reference(currRefList(1,1).id);
-
-    assert(strcmp(currRefByID.id, '75138768-edc3-482e-894d-301f1dd66f8d'));
-    clear; %-- close handles
-    disp('Test open reference by ID from tag ... OK');
-    
-catch me
-    disp('Test open reference by ID from tag ... ERROR');
-    rethrow(me);
-end;
-
-%% Test: Open reference by name
-try
-    clear; %-- ensure clean workspace
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
-    currRefList = currTag.list_references();
-    currRefByName = currTag.open_reference(currRefList(1,1).name);
-
-    assert(strcmp(currRefByName.name, 'SpikeActivity Unit 5 Trial 004'));
-    clear; %-- close handles
-    disp('Test open reference by name from tag ... OK');
-    
-catch me
-    disp('Test open reference by name from tag ... ERROR');
+    disp('Test Tag: open reference by ID/name ... ERROR');
     rethrow(me);
 end;
 
@@ -240,19 +134,17 @@ end;
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    currBlock = test_file.openBlock(currBlockList(1,1).name);
-    currTagList = currBlock.list_tags();
-    currTag = currBlock.open_tag(currTagList(1,1).id);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
 
     %-- TODO: implement proper test for metadata once metadata is implemented
-    assert(strcmp(currTag.open_metadata(),'TODO: implement MetadataSection'));
+    assert(strcmp(getTag.open_metadata(),'TODO: implement MetadataSection'));
     
     clear; %-- close handles
-    disp('Test open metadata from tag ... TODO');
+    disp('Test Tag: open metadata ... TODO');
 
 catch me
-    disp('Test open metadata from tag ... ERROR');
+    disp('Test Tag: open metadata ... ERROR');
     rethrow(me);
 end;
 

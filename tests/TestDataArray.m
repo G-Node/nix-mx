@@ -4,17 +4,16 @@
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    daList = getBlock.list_data_arrays();
-    currDataArray = getBlock.data_array(daList(1,1).id);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    getDataArray = getBlock.data_array(getBlock.dataArrays{1,1}.id);
 
-    assert(size(currDataArray.read_all(),1) == 36);
+    assert(size(getDataArray.read_all(),1) == 36);
+    disp('Test DataArray: read all data ... OK');
+
     clear; %-- close handles
-    disp('Test read all data from DataArray ... OK');
-    
+
 catch me
-    disp('Test read all data from DataArray ... ERROR');
+    disp('Test DataArray: read all data ... ERROR');
     rethrow(me);
 end;
 
@@ -22,19 +21,17 @@ end;
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    currBlockList = test_file.listBlocks();
-    getBlock = test_file.openBlock(currBlockList(1,1).name);
-    daList = getBlock.list_data_arrays();
-    currDataArray = getBlock.data_array(daList(1,1).id);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    getDataArray = getBlock.data_array(getBlock.dataArrays{1,1}.id);
 
     %-- ToDo implement proper test for metadata once metadata is implemented
-    assert(strcmp(currDataArray.open_metadata(),'TODO: implement MetadataSection'));
+    assert(strcmp(getDataArray.open_metadata(),'TODO: implement MetadataSection'));
     
     clear; %-- close handles
-    disp('Test open metadata from DataArray ... OK');
+    disp('Test DataArray: open metadata ... TODO');
 
 catch me
-    disp('Test open metadata from DataArray ... ERROR');
+    disp('Test DataArray: open metadata ... ERROR');
     rethrow(me);
 end;
 
