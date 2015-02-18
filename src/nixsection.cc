@@ -107,7 +107,7 @@ void sections(const extractor &input, infusor &output)
     const mwSize size = static_cast<mwSize>(sections.size());
     mxArray *lst = mxCreateCellArray(1, &size);
 
-    for (int i = 0; i < sections.size(); i++) {
+    for (size_t i = 0; i < sections.size(); i++) {
         mxSetCell(lst, i, make_mx_array(handle(sections[i])));
     }
 
@@ -128,7 +128,7 @@ void list_properties(const extractor &input, infusor &output)
     const mwSize size = static_cast<mwSize>(properties.size());
     mxArray *lst = mxCreateCellArray(1, &size);
 
-    for (int i = 0; i < properties.size(); i++) {
+    for (size_t i = 0; i < properties.size(); i++) {
 
         nix::Property pr = properties[i];
         std::vector<nix::Value> values = pr.values();
@@ -136,7 +136,7 @@ void list_properties(const extractor &input, infusor &output)
         const mwSize val_size = static_cast<mwSize>(values.size());
         mxArray *mx_values = mxCreateCellArray(1, &val_size);
 
-        for (int j = 0; j < values.size(); j++) {
+        for (size_t j = 0; j < values.size(); j++) {
             mxSetCell(mx_values, j, array_from_value(values[j]));
         }
 

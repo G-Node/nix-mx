@@ -63,15 +63,27 @@ classdef DataArray < nix.Entity
         end;
         
         function data = read_all(obj)
-           data = nix_mx('DataArray::readAll', obj.nix_handle); 
+           tmp = nix_mx('DataArray::readAll', obj.nix_handle);
+           % data must agree with file & dimensions
+           % see nixdataarray.cc(59), nixdataarray::read_all
+           data = permute(tmp, length(size(tmp)):-1:1);
+        end;
+        
+        % -----------------
+        % Metadata methods
+        % -----------------
+        
+        function hasMetadata = has_metadata(obj)
+            getHasMetadata = nix_mx('DataArray::hasMetadataSection', obj.nix_handle);
+            hasMetadata = logical(getHasMetadata.hasMetadataSection);
         end;
         
         function metadata = open_metadata(obj)
+            metadata = {};
             metadataHandle = nix_mx('DataArray::openMetadataSection', obj.nix_handle);
-            metadata = 'TODO: implement MetadataSection';
-            %metadata = nix.Section(metadataHandle);
+            if obj.has_metadata()
+                metadata = nix.Section(metadataHandle);
+            end;
         end;
-
-    end
-    
+    end;
 end

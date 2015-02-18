@@ -128,21 +128,47 @@ catch me
     rethrow(me);
 end;
 
+%% Test: Has metadata
+try
+    clear; %-- ensure clean workspace
+    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+
+    getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
+    assert(~getMultiTag.has_metadata());
+    disp('Test MultiTag: has empty metadata ... OK');
+    
+    %-- ToDo implement test for existing metadata
+    %getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{2,1}.id);
+    %assert(getMultiTag.has_metadata());
+    disp('Test MultiTag: has existing metadata ... TODO (proper testfile)');
+    
+    clear; %-- close handles
+
+catch me
+    disp('Test MultiTag: has empty/existing metadata ... ERROR');
+    rethrow(me);
+end;
+
 %% Test: Open metadata
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    
     getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
-
-    %-- TODO: implement proper test for metadata once metadata is implemented
-    assert(strcmp(getMultiTag.open_metadata(),'TODO: implement MetadataSection'));
+    assert(isempty(getMultiTag.open_metadata()))
+    disp('Test MultiTag: open empty metadata ... OK');
+    
+    %-- ToDo implement test for existing metadata
+    %getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{2,1}.id);
+    %assert(~isempty(getMultiTag.open_metadata()));
+    disp('Test MultiTag: open existing metadata ... TODO (proper testfile)');
     
     clear; %-- close handles
-    disp('Test MultiTag: open metadata ... TODO');
 
 catch me
-    disp('Test MultiTag: open metadata ... ERROR');
+    disp('Test MultiTag: open empty/existing metadata ... ERROR');
     rethrow(me);
 end;
 

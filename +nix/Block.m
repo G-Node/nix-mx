@@ -184,12 +184,18 @@ classdef Block < nix.Entity
         % Metadata methods
         % -----------------
         
-        function metadata = open_metadata(obj)
-            metadataHandle = nix_mx('Block::openMetadataSection', obj.nix_handle);
-            metadata = 'TODO: implement MetadataSection';
-            %metadata = nix.Section(metadataHandle);
+        function hasMetadata = has_metadata(obj)
+            getHasMetadata = nix_mx('Block::hasMetadataSection', obj.nix_handle);
+            hasMetadata = logical(getHasMetadata.hasMetadataSection);
         end;
         
-    end;
+        function metadata = open_metadata(obj)
+            metadata = {};
+            metadataHandle = nix_mx('Block::openMetadataSection', obj.nix_handle);
+            if obj.has_metadata()
+                metadata = nix.Section(metadataHandle);
+            end;
+        end;
 
+    end;
 end

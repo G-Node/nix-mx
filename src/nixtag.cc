@@ -13,76 +13,82 @@ namespace nixtag {
 
     void describe(const extractor &input, infusor &output)
     {
-        nix::Tag currTag = input.entity<nix::Tag>(1);
+        nix::Tag currObj = input.entity<nix::Tag>(1);
 
         struct_builder sb({ 1 }, { "id", "type", "name", "definition", "position", "extent",
             "units", "featureCount", "sourceCount", "referenceCount" });
 
-        sb.set(currTag.id());
-        sb.set(currTag.type());
-        sb.set(currTag.name());
-        sb.set(currTag.definition());
-        sb.set(currTag.position());
-        sb.set(currTag.extent());
-        sb.set(currTag.units());
-        sb.set(currTag.featureCount());
-        sb.set(currTag.sourceCount());
-        sb.set(currTag.referenceCount());
+        sb.set(currObj.id());
+        sb.set(currObj.type());
+        sb.set(currObj.name());
+        sb.set(currObj.definition());
+        sb.set(currObj.position());
+        sb.set(currObj.extent());
+        sb.set(currObj.units());
+        sb.set(currObj.featureCount());
+        sb.set(currObj.sourceCount());
+        sb.set(currObj.referenceCount());
 
         output.set(0, sb.array());
     }
 
     void open_data_array(const extractor &input, infusor &output)
     {
-        nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, nixgen::open_data_array(currTag.getReference(input.str(2))));
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        output.set(0, nixgen::open_data_array(currObj.getReference(input.str(2))));
     }
 
     void list_references_array(const extractor &input, infusor &output)
     {
-        nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, nixgen::list_data_arrays(currTag.references()));
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        output.set(0, nixgen::list_data_arrays(currObj.references()));
     }
 
     void list_features(const extractor &input, infusor &output)
     {
-        nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, nixgen::list_features(currTag.features()));
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        output.set(0, nixgen::list_features(currObj.features()));
     }
 
     void list_sources(const extractor &input, infusor &output)
     {
-        nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, nixgen::list_sources(currTag.sources()));
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        output.set(0, nixgen::list_sources(currObj.sources()));
     }
 
     void open_feature(const extractor &input, infusor &output)
     {
-        nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, nixgen::open_feature(currTag.getFeature(input.str(2))));
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        output.set(0, nixgen::open_feature(currObj.getFeature(input.str(2))));
     }
 
     void open_source(const extractor &input, infusor &output)
     {
-        nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, nixgen::open_source(currTag.getSource(input.str(2))));
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        output.set(0, nixgen::open_source(currObj.getSource(input.str(2))));
+    }
+
+    void has_metadata_section(const extractor &input, infusor &output)
+    {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        output.set(0, nixgen::has_metadata_section(currObj.metadata()));
     }
 
     void open_metadata_section(const extractor &input, infusor &output)
     {
-        nix::Tag currTag = input.entity<nix::Tag>(1);
-        output.set(0, nixgen::open_metadata_section(currTag.metadata()));
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        output.set(0, nixgen::open_metadata_section(currObj.metadata()));
     }
 
     void references(const extractor &input, infusor &output)
     {
-        nix::Tag tag = input.entity<nix::Tag>(1);
-        std::vector<nix::DataArray> arr = tag.references();
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        std::vector<nix::DataArray> arr = currObj.references();
 
         const mwSize size = static_cast<mwSize>(arr.size());
         mxArray *lst = mxCreateCellArray(1, &size);
 
-        for (int i = 0; i < arr.size(); i++) {
+        for (size_t i = 0; i < arr.size(); i++) {
             mxSetCell(lst, i, make_mx_array(handle(arr[i])));
         }
 
@@ -91,13 +97,13 @@ namespace nixtag {
 
     void features(const extractor &input, infusor &output)
     {
-        nix::Tag tag = input.entity<nix::Tag>(1);
-        std::vector<nix::Feature> arr = tag.features();
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        std::vector<nix::Feature> arr = currObj.features();
 
         const mwSize size = static_cast<mwSize>(arr.size());
         mxArray *lst = mxCreateCellArray(1, &size);
 
-        for (int i = 0; i < arr.size(); i++) {
+        for (size_t i = 0; i < arr.size(); i++) {
             mxSetCell(lst, i, make_mx_array(handle(arr[i])));
         }
 
@@ -106,13 +112,13 @@ namespace nixtag {
 
     void sources(const extractor &input, infusor &output)
     {
-        nix::Tag tag = input.entity<nix::Tag>(1);
-        std::vector<nix::Source> arr = tag.sources();
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        std::vector<nix::Source> arr = currObj.sources();
 
         const mwSize size = static_cast<mwSize>(arr.size());
         mxArray *lst = mxCreateCellArray(1, &size);
 
-        for (int i = 0; i < arr.size(); i++) {
+        for (size_t i = 0; i < arr.size(); i++) {
             mxSetCell(lst, i, make_mx_array(handle(arr[i])));
         }
 

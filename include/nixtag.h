@@ -19,6 +19,8 @@ namespace nixtag {
 
     void open_source(const extractor &input, infusor &output);
 
+    void has_metadata_section(const extractor &input, infusor &output);
+
     void open_metadata_section(const extractor &input, infusor &output);
 
     void references(const extractor &input, infusor &output);

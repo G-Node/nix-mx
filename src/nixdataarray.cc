@@ -61,10 +61,15 @@ namespace nixdataarray {
         nix::DataArray da = input.entity<nix::DataArray>(1);
 
         nix::NDSize size = da.dataExtent();
-        std::vector<mwSize> dims(size.size());
+        const size_t len = size.size();
+        std::vector<mwSize> dims(len);
 
-        for (size_t i = 0; i < size.size(); i++) {
-            dims[i] = static_cast<mwSize>(size[i]);
+        //NB: matlab is column-major, while HDF5 is row-major
+        //    data is correct with this, but dimensions don't
+        //    agree with the file anymore. Transpose it in matlab
+        //    (DataArray.read_all)
+        for (size_t i = 0; i < len; i++) {
+            dims[len - (i + 1)] = static_cast<mwSize>(size[i]);
         }
 
         nix::DataType da_type = da.dataType();
@@ -83,10 +88,16 @@ namespace nixdataarray {
         output.set(0, data);
     }
 
+    void has_metadata_section(const extractor &input, infusor &output)
+    {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        output.set(0, nixgen::has_metadata_section(currObj.metadata()));
+    }
+
     void open_metadata_section(const extractor &input, infusor &output)
     {
-        nix::DataArray currTag = input.entity<nix::DataArray>(1);
-        output.set(0, nixgen::open_metadata_section(currTag.metadata()));
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        output.set(0, nixgen::open_metadata_section(currObj.metadata()));
     }
 
 } // namespace nixdataarray

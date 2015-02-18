@@ -130,21 +130,45 @@ catch me
     rethrow(me);
 end;
 
+%% Test: Has metadata
+try
+    clear; %-- ensure clean workspace
+    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+
+    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
+    assert(~getTag.has_metadata());
+    disp('Test Tag: has empty metadata ... OK');
+    
+    getTag = getBlock.open_tag(getBlock.tags{2,1}.id);
+    assert(getTag.has_metadata());
+    disp('Test Tag: has existing metadata ... OK');
+    
+    clear; %-- close handles
+
+catch me
+    disp('Test Tag: has empty/existing metadata ... ERROR');
+    rethrow(me);
+end;
+
 %% Test: Open metadata
 try
     clear; %-- ensure clean workspace
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
-
-    %-- TODO: implement proper test for metadata once metadata is implemented
-    assert(strcmp(getTag.open_metadata(),'TODO: implement MetadataSection'));
+    assert(isempty(getTag.open_metadata()))
+    disp('Test Tag: open empty metadata ... OK');
+    
+    getTag = getBlock.open_tag(getBlock.tags{2,1}.id);
+    assert(~isempty(getTag.open_metadata()));
+    disp('Test Tag: open existing metadata ... OK');
     
     clear; %-- close handles
-    disp('Test Tag: open metadata ... TODO');
 
 catch me
-    disp('Test Tag: open metadata ... ERROR');
+    disp('Test Tag: open empty/existing metadata ... ERROR');
     rethrow(me);
 end;
 

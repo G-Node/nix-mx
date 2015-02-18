@@ -41,6 +41,18 @@ namespace nixgen {
         return sb.array();
     }
 
+    mxArray* has_metadata_section(nix::Section currSection)
+    {
+        bool hasMetadataSection = false;
+        // check if an actual, initialized section has been returned
+        if (currSection != nix::none)
+        {
+            hasMetadataSection = true;
+        }
+
+        return nixgen::has_entity(hasMetadataSection, { "hasMetadataSection" });
+    }
+
     mxArray* list_features(std::vector<nix::Feature> featIn)
     {
         std::vector<nix::Feature> arr = featIn;
