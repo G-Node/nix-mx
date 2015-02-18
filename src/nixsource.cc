@@ -19,7 +19,7 @@ namespace nixsource {
         sb.set(currSource.type());
         sb.set(currSource.name());
         sb.set(currSource.definition());
-        sb.set(currSource.sourceCount());
+        sb.set(static_cast<mwSize>(currSource.sourceCount()));
         output.set(0, sb.array());
     }
 

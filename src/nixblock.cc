@@ -20,10 +20,10 @@ namespace nixblock {
         sb.set(block.id());
         sb.set(block.type());
         sb.set(block.name());
-        sb.set(block.sourceCount());
-        sb.set(block.dataArrayCount());
-        sb.set(block.tagCount());
-        sb.set(block.multiTagCount());
+        sb.set(static_cast<mwSize>(block.sourceCount()));
+        sb.set(static_cast<mwSize>(block.dataArrayCount()));
+        sb.set(static_cast<mwSize>(block.tagCount()));
+        sb.set(static_cast<mwSize>(block.multiTagCount()));
 
         output.set(0, sb.array());
     }
