@@ -102,7 +102,7 @@ namespace nixmultitag {
         const mwSize size = static_cast<mwSize>(arr.size());
         mxArray *lst = mxCreateCellArray(1, &size);
 
-        for (int i = 0; i < arr.size(); i++) {
+        for (size_t i = 0; i < arr.size(); i++) {
             mxSetCell(lst, i, make_mx_array(handle(arr[i])));
         }
 
@@ -117,7 +117,7 @@ namespace nixmultitag {
         const mwSize size = static_cast<mwSize>(arr.size());
         mxArray *lst = mxCreateCellArray(1, &size);
 
-        for (int i = 0; i < arr.size(); i++) {
+        for (size_t i = 0; i < arr.size(); i++) {
             mxSetCell(lst, i, make_mx_array(handle(arr[i])));
         }
 
@@ -132,7 +132,7 @@ namespace nixmultitag {
         const mwSize size = static_cast<mwSize>(arr.size());
         mxArray *lst = mxCreateCellArray(1, &size);
 
-        for (int i = 0; i < arr.size(); i++) {
+        for (size_t i = 0; i < arr.size(); i++) {
             mxSetCell(lst, i, make_mx_array(handle(arr[i])));
         }
 
