@@ -7,7 +7,7 @@ try
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getDataArray = getBlock.data_array(getBlock.dataArrays{1,1}.id);
 
-    assert(size(getDataArray.read_all(),1) == 36);
+    assert(size(getDataArray.read_all(),2) == 36);
     disp('Test DataArray: read all data ... OK');
 
     clear; %-- close handles
