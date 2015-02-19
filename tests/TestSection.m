@@ -1,90 +1,61 @@
-% Tests for the nix.Section object
+function funcs = testSection
+%TESTFILE % Tests for the nix.Section object
+%   Detailed explanation goes here
 
+    funcs{1} = @test_list_subsections;
+    funcs{2} = @test_open_section;
+    funcs{3} = @test_parent;
+    funcs{4} = @test_has_section;
+    funcs{5} = @test_attrs;
+    funcs{6} = @test_properties;
+end
+
+function [] = test_list_subsections( varargin )
 %% Test: List/fetch subsections
-try
-    clear; %-- ensure clean workspace
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     s1 = f.sections{3};
 
     assert(size(s1.list_sections(),1) == 4);
-    disp('Test Section: fetch subsections ... OK');
-
     assert(size(s1.sections, 1) == 4);
-    disp('Test Section: list subsections ... OK');
-   
-    clear; %-- close handles
-    
-catch me
-    disp('Test Section: list/fetch subsections ... ERROR');
-    rethrow(me);
-end;
+end
 
+function [] = test_open_section( varargin )
 %% Test: Open subsection by ID or name
-try
-    clear; %-- ensure clean workspace
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     s1 = f.sections{3};
 
     sid = s1.sections{1}.id;
     s2 = s1.open_section(sid);
     assert(strcmp(s2.id, sid));
-    disp('Test Section: open subsection by ID ... OK');
 
     name = s1.sections{1}.name;
     s2 = s1.open_section(name);
     assert(strcmp(s2.id, s1.sections{1}.id));
-    disp('Test Section: open subsection by name ... OK');
+end
 
-    clear; %-- close handles
-    
-catch me
-    disp('Test Section: open subsection by ID/name ... ERROR');
-    rethrow(me);
-end;
-
+function [] = test_parent( varargin )
 %% Test: get parent section
-try
-    clear; %-- ensure clean workspace
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     s1 = f.sections{3};
 
     assert(isempty(s1.parent));
-    disp('Test Section: root section parent ... OK');
 
     s2 = s1.sections{1};
     assert(strcmp(s2.parent.id, s1.id));
-    disp('Test Section: child section parent ... OK');
+end
 
-    clear; %-- close handles
-    
-catch me
-    disp('Test Section: get parent ... ERROR');
-    rethrow(me);
-end;
-
+function [] = test_has_section( varargin )
 %% Test: Has Section
-try
-    clear; %-- ensure clean workspace
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     root = f.sections{3};
     child = root.sections{1};
 
     assert(root.has_section(child.id));
-    disp('Test Section: has child ... OK');
-    
     assert(~root.has_section('whatever'));
-    disp('Test Section: has no nonexistent child ... OK');
-    
-    clear; %-- close handles
+end
 
-catch me
-    disp('Test Section: has Section ... ERROR');
-    rethrow(me);
-end;
-
+function [] = test_attrs( varargin )
 %% Test: Access Attributes / Links
-try
-    clear; %-- ensure clean workspace
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     s1 = f.sections{3};
     
@@ -92,25 +63,16 @@ try
     assert(strcmp(s1.type, 'nix.metadata.section'));
     assert(isempty(s1.repository));
     assert(isempty(s1.mapping));
-    disp('Test Section: attributes ... OK');
     
     subj = s1.sections{1}.sections{1}.link;
     assert(strcmp(subj.name, 'Subject'));
     
     emp_ty = s1.sections{1}.link;
     assert(isempty(emp_ty));
-    disp('Test Section: linking ... OK');
-    
-    clear; %-- close handles
+end
 
-catch me
-    disp('Test Section: attributes ... ERROR');
-    rethrow(me);
-end;
-
+function [] = test_properties( varargin )
 %% Test: Properties
-try
-    clear; %-- ensure clean workspace
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     trial = f.sections{2}.sections{2}.sections{1};
     
@@ -121,10 +83,4 @@ try
     assert(p1.values{1} == 1);
     
     assert(isempty(f.sections{3}.props));
-    
-    clear; %-- close handles
-
-catch me
-    disp('Test Section: attributes ... ERROR');
-    rethrow(me);
-end;
+end
