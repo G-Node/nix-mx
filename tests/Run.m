@@ -17,17 +17,17 @@ disp('starting tests');
 
 % individual tests
 t1 = testFile();
-%t2 = testBlock();
+t2 = testBlock();
 %t2 = testSource();
 %t2 = testDataArray();
 %t2 = testTag();
 %t2 = testMultiTag();
-%t2 = testSection();
+t7 = testSection();
 
 %-- TODO: TestFeature
 
 % concatenate all test handles
-all_tests = {t1{:}};
+all_tests = {t1{:}, t2{:}, t7{:}};
 
 for i = 1:length(all_tests)
     wrapper(all_tests{i}, stats);
