@@ -1,4 +1,4 @@
-function [ ] = wrapper( func, stats )
+function stats = wrapper( func, stats )
 %WRAPPER Wrapper function for every test that catches the exception
 %   and prints out detaied report.
 

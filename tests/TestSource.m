@@ -1,8 +1,15 @@
-% Tests for the nix.Source object
+function funcs = testSource
+%TESTSOURCE tests for Source
+%   Detailed explanation goes here
+
+    funcs{1} = @test_list_fetch_sources;
+    funcs{2} = @test_open_source;
+    funcs{3} = @test_has_metadata;
+    funcs{4} = @test_open_metadata;
+end
 
 %% Test: List/fetch sources
-try
-    clear; %-- ensure clean workspace
+function [] = test_list_fetch_sources( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.id);
     getSourceFromBlock = getBlock.open_source(getBlock.sources{1,1}.id);
@@ -13,17 +20,10 @@ try
     
     assert(size(getSourceFromBlock.sources(), 1) == 0);
     disp('Test Source: fetch sources ... TODO (proper testfile)');
-
-    clear; %-- close handles
-
-catch me
-    disp('Test Source: list/fetch sources ... ERROR');
-    rethrow(me);
-end;
+end
 
 %% Test: Open source by ID or name
-try
-    clear; %-- ensure clean workspace
+function [] = test_open_source( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.id);
     getSFromB = getBlock.open_source(getBlock.sources{1,1}.id);
@@ -36,57 +36,33 @@ try
     %getSourceByName = getSFromB.open_source(getSFromB.sources{1,1}.name);
     %assert(strcmp(getSourceByName.id, ''));
     disp('Test Source: open source by name ... TODO (proper testfile)');
-    
-    clear; %-- close handles
-    
-catch me
-    disp('Test Source: open source by ID/name ... ERROR');
-    rethrow(me);
-end;
+end
 
 %% Test: Has metadata
-try
-    clear; %-- ensure clean workspace
+function [] = test_has_metadata( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-
     
     getSource = getBlock.open_source(getBlock.sources{1,1}.id);
     assert(~getSource.has_metadata());
-    disp('Test Source: has empty metadata ... OK');
     
     %-- ToDo implement test for empty metadata
     %getSource = getBlock.open_source(getBlock.sources{1,1}.id);
     %assert(getSource.has_metadata())
     disp('Test Source: has existing metadata ... TODO (proper testfile)');
-    
-    clear; %-- close handles
-
-catch me
-    disp('Test Source: has empty/existing metadata ... ERROR');
-    rethrow(me);
-end;
+end
 
 %% Test: Open metadata
-try
-    clear; %-- ensure clean workspace
+function [] = test_open_metadata( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     
     getSource = getBlock.open_source(getBlock.sources{1,1}.id);
     assert(isempty(getSource.open_metadata()))
-    disp('Test Source: open empty metadata ... OK');
     
     %-- ToDo implement test for empty metadata
     %getSource = getBlock.open_source(getBlock.sources{1,1}.id);
     %assert(~isempty(getSource.open_metadata()))
     disp('Test Source: open existing metadata ... TODO (proper testfile)');
-    
-    clear; %-- close handles
-
-catch me
-    disp('Test Source: open empty/existing metadata ... ERROR');
-    rethrow(me);
-end;
-
+end
 

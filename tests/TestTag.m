@@ -1,28 +1,29 @@
-% Tests for the nix.Tag object
+function funcs = testTag
+%TESTTag tests for Tag
+%   Detailed explanation goes here
+
+    funcs{1} = @test_list_fetch_references;
+    funcs{2} = @test_list_fetch_sources;
+    funcs{3} = @test_list_fetch_features;
+    funcs{4} = @test_open_source;
+    funcs{5} = @test_open_feature;
+    funcs{6} = @test_open_reference;
+    funcs{7} = @test_has_metadata;
+    funcs{8} = @test_open_metadata;
+end
 
 %% Test: List/fetch references
-try
-    clear; %-- ensure clean workspace
+function [] = test_list_fetch_references( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
     
     assert(size(getTag.list_references(), 1) == 1);
-    disp('Test Tag: list references ... OK');
-
     assert(size(getTag.references(), 1) == 1);
-    disp('Test Tag: fetch references ... OK');
-    
-    clear; %-- close handles    
-    
-catch me
-    disp('Test Tag: list/fetch references ... ERROR');
-    rethrow(me);
-end;
+end
 
 %% Test: List/fetch sources
-try
-    clear; %-- ensure clean workspace
+function [] = test_list_fetch_sources( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
@@ -33,17 +34,11 @@ try
 
     assert(size(getTag.sources(),1) == 0);
     disp('Test Tag: fetch sources ... TODO (proper testfile)');
-    
-    clear; %-- close handles
-    
-catch me
-    disp('Test Tag: list/fetch sources ... ERROR');
-    rethrow(me);
-end;
+end
+
 
 %% Test: List/fetch features
-try
-    clear; %-- ensure clean workspace
+function [] = test_list_fetch_features( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
@@ -54,17 +49,10 @@ try
 
     assert(size(getTag.features(),1) == 0);
     disp('Test Tag: fetch features ... TODO (proper testfile)');
-    
-    clear; %-- close handles
-    
-catch me
-    disp('Test Tag: list/fetch features ... ERROR');
-    rethrow(me);
-end;
+end
 
 %% Test: Open source by ID or name
-try
-    clear; %-- ensure clean workspace
+function [] = test_open_source( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
@@ -77,17 +65,11 @@ try
     %getSourceByName = getTag.open_source(getTag.sources{1,1}.name);
     %assert(strcmp(getSourceByName.id, ''));
     disp('Test Tag: open source by name ... TODO (proper testfile)');
-    
-    clear; %-- close handles
-    
-catch me
-    disp('Test Tag: open source by ID/name ... ERROR');
-    rethrow(me);
-end;
+end
+
 
 %% Test: Open feature by ID or name
-try
-    clear; %-- ensure clean workspace
+function [] = test_open_feature( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
@@ -100,75 +82,44 @@ try
     %getFeatByName = getTag.open_feature(getTag.features{1,1}.name);
     %assert(strcmp(getFeatByName.id, ''));
     disp('Test Tag: open feature by name ... TODO (proper testfile)');
-    
-    clear; %-- close handles
-    
-catch me
-    disp('Test Tag: open feature by ID/name ... ERROR');
-    rethrow(me);
-end;
+end
+
 
 %% Test: Open reference by ID or name
-try
-    clear; %-- ensure clean workspace
+function [] = test_open_reference( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
     
     getRefByID = getTag.open_reference(getTag.references{1,1}.id);
     assert(strcmp(getRefByID.id, '75138768-edc3-482e-894d-301f1dd66f8d'));
-    disp('Test Tag: open reference by ID ... OK');
 
     getRefByName = getTag.open_reference(getTag.references{1,1}.name);
     assert(strcmp(getRefByName.id, '75138768-edc3-482e-894d-301f1dd66f8d'));
-    disp('Test Tag: open reference by name ... OK');
-    
-    clear; %-- close handles
-    
-catch me
-    disp('Test Tag: open reference by ID/name ... ERROR');
-    rethrow(me);
-end;
+end
+
 
 %% Test: Has metadata
-try
-    clear; %-- ensure clean workspace
+function [] = test_has_metadata( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
 
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
     assert(~getTag.has_metadata());
-    disp('Test Tag: has empty metadata ... OK');
     
     getTag = getBlock.open_tag(getBlock.tags{2,1}.id);
     assert(getTag.has_metadata());
-    disp('Test Tag: has existing metadata ... OK');
-    
-    clear; %-- close handles
-
-catch me
-    disp('Test Tag: has empty/existing metadata ... ERROR');
-    rethrow(me);
-end;
+end
 
 %% Test: Open metadata
-try
-    clear; %-- ensure clean workspace
+function [] = test_open_metadata( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
     assert(isempty(getTag.open_metadata()))
-    disp('Test Tag: open empty metadata ... OK');
     
     getTag = getBlock.open_tag(getBlock.tags{2,1}.id);
     assert(~isempty(getTag.open_metadata()));
-    disp('Test Tag: open existing metadata ... OK');
-    
-    clear; %-- close handles
-
-catch me
-    disp('Test Tag: open empty/existing metadata ... ERROR');
-    rethrow(me);
-end;
+end
 
