@@ -2,13 +2,13 @@ function funcs = testDataArray
 %TESTDATAARRAY tests for DataArray
 %   Detailed explanation goes here
 
-    funcs{1} = @data_array_open_data;
-    funcs{2} = @data_array_has_metadata;
-    funcs{3} = @data_array_open_metadata;
+    funcs{1} = @test_open_data;
+    funcs{2} = @test_has_metadata;
+    funcs{3} = @test_open_metadata;
 end
 
 %% Test: Read all data from DataArray
-function [] = data_array_open_data( varargin )
+function [] = test_open_data( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getDataArray = getBlock.data_array(getBlock.dataArrays{1,1}.id);
@@ -17,7 +17,7 @@ function [] = data_array_open_data( varargin )
 end
 
 %% Test: Has metadata
-function [] = data_array_has_metadata( varargin )
+function [] = test_has_metadata( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
 
@@ -31,7 +31,7 @@ function [] = data_array_has_metadata( varargin )
 end
 
 %% Test: Open metadata
-function [] = data_array_open_metadata( varargin )
+function [] = test_open_metadata( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     

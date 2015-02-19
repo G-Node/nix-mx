@@ -2,18 +2,18 @@ function funcs = testTag
 %TESTTag tests for Tag
 %   Detailed explanation goes here
 
-    funcs{1} = @tag_list_fetch_references;
-    funcs{2} = @tag_list_fetch_sources;
-    funcs{3} = @tag_list_fetch_features;
-    funcs{4} = @tag_open_source;
-    funcs{5} = @tag_open_feature;
-    funcs{6} = @tag_open_reference;
-    funcs{7} = @tag_has_metadata;
-    funcs{8} = @tag_open_metadata;
+    funcs{1} = @test_list_fetch_references;
+    funcs{2} = @test_list_fetch_sources;
+    funcs{3} = @test_list_fetch_features;
+    funcs{4} = @test_open_source;
+    funcs{5} = @test_open_feature;
+    funcs{6} = @test_open_reference;
+    funcs{7} = @test_has_metadata;
+    funcs{8} = @test_open_metadata;
 end
 
 %% Test: List/fetch references
-function [] = tag_list_fetch_references( varargin )
+function [] = test_list_fetch_references( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
@@ -23,7 +23,7 @@ function [] = tag_list_fetch_references( varargin )
 end
 
 %% Test: List/fetch sources
-function [] = tag_list_fetch_sources( varargin )
+function [] = test_list_fetch_sources( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
@@ -38,7 +38,7 @@ end
 
 
 %% Test: List/fetch features
-function [] = tag_list_fetch_features( varargin )
+function [] = test_list_fetch_features( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
@@ -52,7 +52,7 @@ function [] = tag_list_fetch_features( varargin )
 end
 
 %% Test: Open source by ID or name
-function [] = tag_open_source( varargin )
+function [] = test_open_source( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
@@ -69,7 +69,7 @@ end
 
 
 %% Test: Open feature by ID or name
-function [] = tag_open_feature( varargin )
+function [] = test_open_feature( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
@@ -86,7 +86,7 @@ end
 
 
 %% Test: Open reference by ID or name
-function [] = tag_open_reference( varargin )
+function [] = test_open_reference( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
@@ -100,7 +100,7 @@ end
 
 
 %% Test: Has metadata
-function [] = tag_has_metadata( varargin )
+function [] = test_has_metadata( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
 
@@ -112,7 +112,7 @@ function [] = tag_has_metadata( varargin )
 end
 
 %% Test: Open metadata
-function [] = tag_open_metadata( varargin )
+function [] = test_open_metadata( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     
