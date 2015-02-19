@@ -10,6 +10,7 @@
 #include <cstdint>
 
 #include <mex.h>
+#include <DataType.hpp>
 
 #include "handle.h"
 #include "datatypes.h"
@@ -18,6 +19,10 @@ inline mxArray* make_mx_array(const std::string &s)
 {
 	return mxCreateString(s.c_str());
 }
+
+mxArray *make_mx_array(const nix::Value &value);
+
+mxArray* make_mx_array(const nix::NDSize &size);
 
 
 template<typename T>
@@ -39,6 +44,26 @@ inline mxArray* make_mx_array(const std::vector<std::string> &v) {
 	mxArray *data = mxCreateCellMatrix(1, v.size());
 	for (size_t i = 0; i < v.size(); i++) {
 		mxSetCell(data, i, mxCreateString(v[i].c_str()));
+	}
+
+	return data;
+}
+
+template<>
+inline mxArray* make_mx_array(const std::vector<nix::Value> &v) {
+	if (v.empty()) {
+		return nullptr;
+	}
+
+	nix::DataType ntype = v[0].type();
+	mxArray *data;
+	if (ntype == nix::DataType::Nothing) {
+		data = nullptr; //fixme: something else?
+	} else {
+		data = mxCreateCellMatrix(1, v.size());
+		for (size_t i = 0; i < v.size(); i++) {
+			mxSetCell(data, i, make_mx_array(v[i]));
+		}
 	}
 
 	return data;
@@ -67,13 +92,9 @@ inline mxArray* make_mx_array<bool>(bool val) {
 	return mxCreateLogicalScalar(val);
 }
 
-mxArray* make_mx_array(const nix::NDSize &size);
-
 inline mxArray* make_mx_array(const handle &h)
 {
 	return make_mx_array(h.address());
 }
-
-mxArray *make_mx_array(const nix::Value &value);
 
 #endif
