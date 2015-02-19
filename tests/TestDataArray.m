@@ -1,25 +1,23 @@
-% Tests for the nix.DataArray object
+function funcs = testDataArray
+%TESTDATAARRAY tests for DataArray
+%   Detailed explanation goes here
+
+    funcs{1} = @data_array_open_data;
+    funcs{2} = @data_array_has_metadata;
+    funcs{3} = @data_array_open_metadata;
+end
 
 %% Test: Read all data from DataArray
-try
-    clear; %-- ensure clean workspace
+function [] = data_array_open_data( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getDataArray = getBlock.data_array(getBlock.dataArrays{1,1}.id);
 
     assert(size(getDataArray.read_all(),2) == 36);
-    disp('Test DataArray: read all data ... OK');
-
-    clear; %-- close handles
-
-catch me
-    disp('Test DataArray: read all data ... ERROR');
-    rethrow(me);
-end;
+end
 
 %% Test: Has metadata
-try
-    clear; %-- ensure clean workspace
+function [] = data_array_has_metadata( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
 
@@ -30,18 +28,10 @@ try
     
     getDataArray = getBlock.data_array(getBlock.dataArrays{1,1}.id);
     assert(getDataArray.has_metadata())
-    disp('Test DataArray: has existing metadata ... OK');
-    
-    clear; %-- close handles
-
-catch me
-    disp('Test DataArray: has empty/existing metadata ... ERROR');
-    rethrow(me);
-end;
+end
 
 %% Test: Open metadata
-try
-    clear; %-- ensure clean workspace
+function [] = data_array_open_metadata( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     
@@ -52,12 +42,5 @@ try
     
     getDataArray = getBlock.data_array(getBlock.dataArrays{1,1}.id);
     assert(~isempty(getDataArray.open_metadata()))
-    disp('Test DataArray: open existing metadata ... OK');
-    
-    clear; %-- close handles
-
-catch me
-    disp('Test DataArray: open empty/existing metadata ... ERROR');
-    rethrow(me);
-end;
+end
 
