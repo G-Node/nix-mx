@@ -1,5 +1,8 @@
 %-- Runner for all other tests.
 
+stats.okCount = 0;
+stats.errorCount = 0;
+
 %-- add required paths for matlab
 addpath(fullfile(pwd, 'build'));
 
@@ -12,21 +15,22 @@ disp('starting tests');
 %--     id: 7b59c0b9-b200-4b53-951d-6851dbd1cdc8
 %--     name: joe097
 
-TestFile;
-
-TestBlock;
-
-TestSource;
-
-TestDataArray;
-
-TestTag;
-
-TestMultiTag;
-
-TestSection;
+% individual tests
+t1 = testFile();
+%t2 = testBlock();
+%t2 = testSource();
+%t2 = testDataArray();
+%t2 = testTag();
+%t2 = testMultiTag();
+%t2 = testSection();
 
 %-- TODO: TestFeature
 
-disp('Tests completed successfully. Bye.');
+% concatenate all test handles
+all_tests = {t1{:}};
 
+for i = 1:length(all_tests)
+    wrapper(all_tests{i}, stats);
+end;
+
+disp('Tests completed successfully. Bye.');
