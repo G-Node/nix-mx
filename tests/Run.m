@@ -16,13 +16,13 @@ disp([10 'starting tests']);
 %--     name: joe097
 
 % individual tests
-t1 = testFile();
-t2 = testBlock();
-t3 = testSource();
-t4 = testDataArray();
-t5 = testTag();
-t6 = testMultiTag();
-t7 = testSection();
+t1 = TestFile();
+t2 = TestBlock();
+t3 = TestSource();
+t4 = TestDataArray();
+t5 = TestTag();
+t6 = TestMultiTag();
+t7 = TestSection();
 
 %-- TODO: TestFeature
 
