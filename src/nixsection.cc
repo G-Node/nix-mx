@@ -12,26 +12,6 @@
 
 namespace nixsection {
 
-static mxArray* array_from_value(nix::Value v)
-{
-    mxArray *res;
-    nix::DataType dtype = v.type();
-
-    switch (dtype) {
-    case nix::DataType::Bool: res = make_mx_array(v.get<bool>()); break;
-    case nix::DataType::String: res = make_mx_array(v.get<std::string>()); break;
-    case nix::DataType::Double: res = make_mx_array(v.get<double>()); break;
-    case nix::DataType::Int32: res = make_mx_array(v.get<std::int32_t>()); break;
-    case nix::DataType::UInt32: res = make_mx_array(v.get<std::uint32_t>()); break;
-    case nix::DataType::Int64: res = make_mx_array(v.get<std::int64_t>()); break;
-    case nix::DataType::UInt64: res = make_mx_array(v.get<std::uint64_t>()); break;
-
-    default: res = make_mx_array(v.get<std::string>());
-    }
-
-    return res;
-}
-
 void describe(const extractor &input, infusor &output)
 {
     nix::Section section = input.entity<nix::Section>(1);
@@ -137,7 +117,7 @@ void list_properties(const extractor &input, infusor &output)
         mxArray *mx_values = mxCreateCellArray(1, &val_size);
 
         for (size_t j = 0; j < values.size(); j++) {
-            mxSetCell(mx_values, j, array_from_value(values[j]));
+            mxSetCell(mx_values, j, make_mx_array(values[j]));
         }
 
         struct_builder sb({ 1 }, {
