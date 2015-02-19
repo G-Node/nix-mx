@@ -74,4 +74,6 @@ inline mxArray* make_mx_array(const handle &h)
 	return make_mx_array(h.address());
 }
 
+mxArray *make_mx_array(const nix::Value &value);
+
 #endif
