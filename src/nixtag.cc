@@ -125,4 +125,20 @@ namespace nixtag {
         output.set(0, lst);
     }
 
+    void retrieve_data(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        double index = input.num<double>(2);
+
+        mxArray *data = make_mx_array(currObj.retrieveData(index));
+        output.set(0, data);
+    }
+
+    void retrieve_feature_data(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        double index = input.num<double>(2);
+
+        mxArray *data = make_mx_array(currObj.retrieveFeatureData(index));
+        output.set(0, data);
+    }
+
 } // namespace nixtag

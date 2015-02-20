@@ -95,6 +95,16 @@ classdef Tag < nix.Entity
             [obj.referencesCache, da] = nix.Utils.fetchObjList(obj.updatedAt, ...
                 'Tag::references', obj.nix_handle, obj.referencesCache, @nix.DataArray);
         end;
+        
+        function data = retrieve_data(obj, index)
+            % convert Matlab-like to C-like index
+            assert(index > 0, 'Subscript indices must be positive');
+            tmp = nix_mx('Tag::retrieveData', obj.nix_handle, index - 1);
+            
+            % data must agree with file & dimensions
+            % see mkarray.cc(42)
+            data = permute(tmp, length(size(tmp)):-1:1);
+        end;
 
         % ------------------
         % Features methods
@@ -112,6 +122,16 @@ classdef Tag < nix.Entity
         function feat = get.features(obj)
             [obj.featuresCache, feat] = nix.Utils.fetchObjList(obj.updatedAt, ...
                 'Tag::features', obj.nix_handle, obj.featuresCache, @nix.Feature);
+        end;
+        
+        function data = retrieve_feature_data(obj, index)
+            % convert Matlab-like to C-like index
+            assert(index > 0, 'Subscript indices must be positive');
+            tmp = nix_mx('Tag::featureRetrieveData', obj.nix_handle, index - 1);
+            
+            % data must agree with file & dimensions
+            % see mkarray.cc(42)
+            data = permute(tmp, length(size(tmp)):-1:1);
         end;
         
         % ------------------

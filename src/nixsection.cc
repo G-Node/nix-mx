@@ -34,8 +34,15 @@ void link(const extractor &input, infusor &output)
     nix::Section section = input.entity<nix::Section>(1);
 
     nix::Section linked = section.link();
-    handle lh = handle(linked);
-    output.set(0, lh);
+
+    if (linked) {
+        handle lh = handle(linked);
+        output.set(0, lh);
+    }
+    else
+    {
+        output.set(0, uint64_t(0));
+    }
 }
 
 void parent(const extractor &input, infusor &output)

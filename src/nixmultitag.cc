@@ -139,4 +139,22 @@ namespace nixmultitag {
         output.set(0, lst);
     }
 
+    void retrieve_data(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        double p_index = input.num<double>(2);
+        double f_index = input.num<double>(3);
+
+        mxArray *data = make_mx_array(currObj.retrieveData(p_index, f_index));
+        output.set(0, data);
+    }
+
+    void retrieve_feature_data(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        double p_index = input.num<double>(2);
+        double f_index = input.num<double>(3);
+
+        mxArray *data = make_mx_array(currObj.retrieveFeatureData(p_index, f_index));
+        output.set(0, data);
+    }
+
 } // namespace nixmultitag

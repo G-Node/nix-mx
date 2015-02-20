@@ -65,7 +65,7 @@ classdef DataArray < nix.Entity
         function data = read_all(obj)
            tmp = nix_mx('DataArray::readAll', obj.nix_handle);
            % data must agree with file & dimensions
-           % see nixdataarray.cc(59), nixdataarray::read_all
+           % see mkarray.cc(42)
            data = permute(tmp, length(size(tmp)):-1:1);
         end;
         
