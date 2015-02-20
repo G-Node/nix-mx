@@ -125,11 +125,4 @@ namespace nixtag {
         output.set(0, lst);
     }
 
-    void updated_at(const extractor &input, infusor &output)
-    {
-        nix::Tag curr = input.entity<nix::Tag>(1);
-        time_t uat = curr.updatedAt();
-        output.set(0, uat);
-    }
-
 } // namespace nixtag

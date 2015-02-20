@@ -78,14 +78,6 @@ classdef Tag < nix.Entity
             referenceCount = tag.info.referenceCount;
         end;
 
-        % ----------------
-        % get updated at
-        % ----------------
-
-        function ua = updatedAt(obj)
-            ua = nix_mx('Tag::updatedAt', obj.nix_handle);
-        end;
-        
         % ------------------
         % References methods
         % ------------------

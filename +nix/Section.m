@@ -66,14 +66,6 @@ classdef Section < nix.Entity
         end;
         
         % ----------------
-        % get updated at
-        % ----------------
-
-        function ua = updatedAt(obj)
-            ua = nix_mx('Section::updatedAt', obj.nix_handle);
-        end;
-        
-        % ----------------
         % Section methods
         % ----------------
         

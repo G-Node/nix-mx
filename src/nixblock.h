@@ -39,8 +39,6 @@ namespace nixblock {
 
     void open_metadata_section(const extractor &input, infusor &output);
 
-    void updated_at(const extractor &input, infusor &output);
-
 } // namespace nixblock
 
 #endif

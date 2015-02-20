@@ -62,11 +62,4 @@ namespace nixsource {
         output.set(0, lst);
     }
 
-    void updated_at(const extractor &input, infusor &output)
-    {
-        nix::Source curr = input.entity<nix::Source>(1);
-        time_t uat = curr.updatedAt();
-        output.set(0, uat);
-    }
-
 } // namespace nixsource

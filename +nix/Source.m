@@ -45,14 +45,6 @@ classdef Source < nix.Entity
             sourceCount = source.info.sourceCount;
         end;
         
-        % ----------------
-        % get updated at
-        % ----------------
-
-        function ua = updatedAt(obj)
-            ua = nix_mx('Source::updatedAt', obj.nix_handle);
-        end;
-        
         % ------------------
         % Sources methods
         % ------------------

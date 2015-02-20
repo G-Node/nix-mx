@@ -17,8 +17,6 @@ namespace nixsource {
 
     void sources(const extractor &input, infusor &output);
 
-    void updated_at(const extractor &input, infusor &output);
-
 } // namespace nixsource
 
 #endif

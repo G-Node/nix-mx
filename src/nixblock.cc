@@ -192,11 +192,4 @@ namespace nixblock {
         output.set(0, nixgen::open_metadata_section(currObj.metadata()));
     }
 
-    void updated_at(const extractor &input, infusor &output)
-    {
-        nix::Block curr = input.entity<nix::Block>(1);
-        time_t uat = curr.updatedAt();
-        output.set(0, uat);
-    }
-
 } // namespace nixblock

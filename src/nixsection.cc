@@ -137,11 +137,4 @@ void list_properties(const extractor &input, infusor &output)
     output.set(0, lst);
 }
 
-void updated_at(const extractor &input, infusor &output)
-{
-    nix::Section curr = input.entity<nix::Section>(1);
-    time_t uat = curr.updatedAt();
-    output.set(0, uat);
-}
-
 } // namespace nixsection

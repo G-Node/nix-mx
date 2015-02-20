@@ -1,5 +1,6 @@
 classdef Utils
     methods(Static)
+
         function [currCache, retCell] = fetchObjList(currUpdatedAt, nixMxFunc, handle, currCache, objConstructor)
             if currCache.lastUpdate ~= currUpdatedAt
                 currList = nix_mx(nixMxFunc, handle);

@@ -67,14 +67,6 @@ classdef Block < nix.Entity
             multiTagCount = block.info.multiTagCount;
         end;
         
-        % ----------------
-        % get updated at
-        % ----------------
-
-        function ua = updatedAt(obj)
-            ua = nix_mx('Block::updatedAt', obj.nix_handle);
-        end;
-        
         % -----------------
         % DataArray methods
         % -----------------

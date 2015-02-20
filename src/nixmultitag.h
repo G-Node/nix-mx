@@ -35,8 +35,6 @@ namespace nixmultitag {
 
     void sources(const extractor &input, infusor &output);
 
-    void updated_at(const extractor &input, infusor &output);
-
 } // namespace nixmultitag
 
 #endif

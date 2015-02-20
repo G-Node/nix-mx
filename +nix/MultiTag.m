@@ -68,14 +68,6 @@ classdef MultiTag < nix.Entity
             referenceCount = tag.info.referenceCount;
         end;
         
-        % ----------------
-        % get updated at
-        % ----------------
-
-        function ua = updatedAt(obj)
-            ua = nix_mx('MultiTag::updatedAt', obj.nix_handle);
-        end;
-        
         % ------------------
         % References methods
         % ------------------
