@@ -23,6 +23,8 @@ void has_property(const extractor &input, infusor &output);
 
 void list_properties(const extractor &input, infusor &output);
 
+void updated_at(const extractor &input, infusor &output);
+
 } // namespace nixfile
 
 #endif

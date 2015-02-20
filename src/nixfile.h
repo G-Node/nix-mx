@@ -21,6 +21,8 @@ void open_section(const extractor &input, infusor &output);
 
 void sections(const extractor &input, infusor &output);
 
+void updated_at(const extractor &input, infusor &output);
+
 } // namespace nixfile
 
 #endif

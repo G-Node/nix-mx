@@ -125,4 +125,11 @@ void sections(const extractor &input, infusor &output)
     output.set(0, lst);
 }
 
+void updated_at(const extractor &input, infusor &output)
+{
+    nix::File curr = input.entity<nix::File>(1);
+    time_t uat = curr.updatedAt();
+    output.set(0, uat);
+}
+
 } // namespace nixfile

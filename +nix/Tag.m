@@ -30,9 +30,12 @@ classdef Tag < nix.Entity
             obj@nix.Entity(h);
             obj.info = nix_mx('Tag::describe', obj.nix_handle);
 
-            obj.referencesCache = {};
-            obj.featuresCache = {};
-            obj.sourcesCache = {};
+            obj.referencesCache.lastUpdate = 0;
+            obj.referencesCache.data = {};
+            obj.featuresCache.lastUpdate = 0;
+            obj.featuresCache.data = {};
+            obj.sourcesCache.lastUpdate = 0;
+            obj.sourcesCache.data = {};
         end;
         
         function id = get.id(tag)
@@ -75,6 +78,14 @@ classdef Tag < nix.Entity
             referenceCount = tag.info.referenceCount;
         end;
 
+        % ----------------
+        % get updated at
+        % ----------------
+
+        function ua = updatedAt(obj)
+            ua = nix_mx('Tag::updatedAt', obj.nix_handle);
+        end;
+        
         % ------------------
         % References methods
         % ------------------
@@ -89,17 +100,8 @@ classdef Tag < nix.Entity
         end;
 
         function da = get.references(obj)
-            da_list = nix_mx('Tag::references', obj.nix_handle);
-            
-            if length(obj.referencesCache) ~= length(da_list)
-                obj.referencesCache = cell(length(da_list), 1);
-
-                for i = 1:length(da_list)
-                    obj.referencesCache{i} = nix.DataArray(da_list{i});
-                end;
-            end;
-
-            da = obj.referencesCache;
+            [obj.referencesCache, da] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                'Tag::references', obj.nix_handle, obj.referencesCache, @nix.DataArray);
         end;
 
         % ------------------
@@ -116,17 +118,8 @@ classdef Tag < nix.Entity
         end;
 
         function feat = get.features(obj)
-            featList = nix_mx('Tag::features', obj.nix_handle);
-            
-            if length(obj.featuresCache) ~= length(featList)
-                obj.featuresCache = cell(length(featList), 1);
-
-                for i = 1:length(featList)
-                    obj.featuresCache{i} = nix.Feature(featList{i});
-                end;
-            end;
-
-            feat = obj.featuresCache;
+            [obj.featuresCache, feat] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                'Tag::features', obj.nix_handle, obj.featuresCache, @nix.Feature);
         end;
         
         % ------------------
@@ -143,17 +136,8 @@ classdef Tag < nix.Entity
         end;
 
         function sources = get.sources(obj)
-            sList = nix_mx('Tag::sources', obj.nix_handle);
-            
-            if length(obj.sourcesCache) ~= length(sList)
-                obj.sourcesCache = cell(length(sList), 1);
-
-                for i = 1:length(sList)
-                    obj.sourcesCache{i} = nix.Source(sList{i});
-                end;
-            end;
-
-            sources = obj.sourcesCache;
+            [obj.sourcesCache, sources] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                'Tag::sources', obj.nix_handle, obj.sourcesCache, @nix.Source);
         end;
 
         % ------------------

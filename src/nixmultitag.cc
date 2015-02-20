@@ -139,4 +139,11 @@ namespace nixmultitag {
         output.set(0, lst);
     }
 
+    void updated_at(const extractor &input, infusor &output)
+    {
+        nix::MultiTag curr = input.entity<nix::MultiTag>(1);
+        time_t uat = curr.updatedAt();
+        output.set(0, uat);
+    }
+
 } // namespace nixmultitag

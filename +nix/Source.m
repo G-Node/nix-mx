@@ -20,7 +20,9 @@ classdef Source < nix.Entity
         function obj = Source(h)
            obj@nix.Entity(h);
            obj.info = nix_mx('Source::describe', obj.nix_handle);
-           obj.sourcesCache = {};
+           
+           obj.sourcesCache.lastUpdate = 0;
+           obj.sourcesCache.data = {};
         end;
         
         function id = get.id(source)
@@ -35,12 +37,20 @@ classdef Source < nix.Entity
            name = source.info.name;
         end;
         
-         function type = get.definition(source)
+        function type = get.definition(source)
             type = source.info.definition;
         end;
         
-       function sourceCount = get.sourceCount(source)
+        function sourceCount = get.sourceCount(source)
             sourceCount = source.info.sourceCount;
+        end;
+        
+        % ----------------
+        % get updated at
+        % ----------------
+
+        function ua = updatedAt(obj)
+            ua = nix_mx('Source::updatedAt', obj.nix_handle);
         end;
         
         % ------------------
@@ -57,17 +67,8 @@ classdef Source < nix.Entity
         end;
 
         function sources = get.sources(obj)
-            sList = nix_mx('Source::sources', obj.nix_handle);
-            
-            if length(obj.sourcesCache) ~= length(sList)
-                obj.sourcesCache = cell(length(sList), 1);
-
-                for i = 1:length(sList)
-                    obj.sourcesCache{i} = nix.Source(sList{i});
-                end;
-            end;
-
-            sources = obj.sourcesCache;
+            [obj.sourcesCache, sources] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                'Source::sources', obj.nix_handle, obj.sourcesCache, @nix.Source);
         end;
         
         % ------------------

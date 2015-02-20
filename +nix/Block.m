@@ -29,10 +29,14 @@ classdef Block < nix.Entity
             obj@nix.Entity(h);
             obj.info = nix_mx('Block::describe', obj.nix_handle);
             
-            obj.dataArraysCache = {};
-            obj.sourcesCache = {};
-            obj.tagsCache = {};
-            obj.multiTagsCache = {};
+            obj.dataArraysCache.lastUpdate = 0;
+            obj.dataArraysCache.data = {};
+            obj.sourcesCache.lastUpdate = 0;
+            obj.sourcesCache.data = {};
+            obj.tagsCache.lastUpdate = 0;
+            obj.tagsCache.data = {};
+            obj.multiTagsCache.lastUpdate = 0;
+            obj.multiTagsCache.data = {};
         end;
         
         function id = get.id(block)
@@ -63,6 +67,14 @@ classdef Block < nix.Entity
             multiTagCount = block.info.multiTagCount;
         end;
         
+        % ----------------
+        % get updated at
+        % ----------------
+
+        function ua = updatedAt(obj)
+            ua = nix_mx('Block::updatedAt', obj.nix_handle);
+        end;
+        
         % -----------------
         % DataArray methods
         % -----------------
@@ -77,17 +89,8 @@ classdef Block < nix.Entity
         end;
         
         function da = get.dataArrays(obj)
-            da_list = nix_mx('Block::dataArrays', obj.nix_handle);
-            
-            if length(obj.dataArraysCache) ~= length(da_list)
-                obj.dataArraysCache = cell(length(da_list), 1);
-
-                for i = 1:length(da_list)
-                    obj.dataArraysCache{i} = nix.DataArray(da_list{i});
-                end;
-            end;
-
-            da = obj.dataArraysCache;
+            [obj.dataArraysCache, da] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                'Block::dataArrays', obj.nix_handle, obj.dataArraysCache, @nix.DataArray);
         end;
         
         % -----------------
@@ -104,17 +107,8 @@ classdef Block < nix.Entity
         end;
 
         function sources = get.sources(obj)
-            sList = nix_mx('Block::sources', obj.nix_handle);
-            
-            if length(obj.sourcesCache) ~= length(sList)
-                obj.sourcesCache = cell(length(sList), 1);
-
-                for i = 1:length(sList)
-                    obj.sourcesCache{i} = nix.Source(sList{i});
-                end;
-            end;
-
-            sources = obj.sourcesCache;
+            [obj.sourcesCache, sources] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                'Block::sources', obj.nix_handle, obj.sourcesCache, @nix.Source);
         end;
         
         % -----------------
@@ -140,17 +134,8 @@ classdef Block < nix.Entity
         end;
         
         function tags = get.tags(obj)
-            tList = nix_mx('Block::tags', obj.nix_handle);
-            
-            if length(obj.tagsCache) ~= length(tList)
-                obj.tagsCache = cell(length(tList), 1);
-
-                for i = 1:length(tList)
-                    obj.tagsCache{i} = nix.Tag(tList{i});
-                end;
-            end;
-
-            tags = obj.tagsCache;
+            [obj.tagsCache, tags] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                'Block::tags', obj.nix_handle, obj.tagsCache, @nix.Tag);
         end;
         
         % -----------------
@@ -168,16 +153,8 @@ classdef Block < nix.Entity
         end;
         
         function mtags = get.multiTags(obj)
-            mtList = nix_mx('Block::multiTags', obj.nix_handle);
-            if length(obj.multiTagsCache) ~= length(mtList)
-                obj.multiTagsCache = cell(length(mtList), 1);
-
-                for i = 1:length(mtList)
-                    obj.multiTagsCache{i} = nix.MultiTag(mtList{i});
-                end;
-            end;
-
-            mtags = obj.multiTagsCache;
+            [obj.multiTagsCache, mtags] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                'Block::multiTags', obj.nix_handle, obj.multiTagsCache, @nix.MultiTag);
         end;
         
         % -----------------

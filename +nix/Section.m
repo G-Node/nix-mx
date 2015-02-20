@@ -4,7 +4,6 @@ classdef Section < nix.Entity
     
     properties(Hidden)
         info
-        
         sectionsCache
     end;
     
@@ -24,7 +23,8 @@ classdef Section < nix.Entity
            obj@nix.Entity(h);
            obj.info = nix_mx('Section::describe', obj.nix_handle);
            
-           obj.sectionsCache = {};
+           obj.sectionsCache.lastUpdate = 0;
+           obj.sectionsCache.data = {};
         end;
         
         function name = get.name(section)
@@ -66,6 +66,14 @@ classdef Section < nix.Entity
         end;
         
         % ----------------
+        % get updated at
+        % ----------------
+
+        function ua = updatedAt(obj)
+            ua = nix_mx('Section::updatedAt', obj.nix_handle);
+        end;
+        
+        % ----------------
         % Section methods
         % ----------------
         
@@ -74,18 +82,8 @@ classdef Section < nix.Entity
         end;
         
         function sections = get.sections(obj)
-            handles = nix_mx('Section::sections', obj.nix_handle);
-            
-            % Subsections are cached
-            if length(obj.sectionsCache) ~= length(handles)
-                obj.sectionsCache = cell(length(handles), 1);
-                        
-                for i = 1:length(handles)
-                    obj.sectionsCache{i} = nix.Section(handles{i});
-                end
-            end
-                
-            sections = obj.sectionsCache;
+            [obj.sectionsCache, sections] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                'Section::sections', obj.nix_handle, obj.sectionsCache, @nix.Section);
         end
         
         function section = open_section(obj, id_or_name)

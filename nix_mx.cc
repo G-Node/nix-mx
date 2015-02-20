@@ -52,6 +52,7 @@ const std::vector<fendpoint> funcs = {
         { "File::listSections", nixfile::list_sections },
         { "File::openSection", nixfile::open_section },
         { "File::sections", nixfile::sections },
+        { "File::updatedAt", nixfile::updated_at },
 
         // Block
         { "Block::describe", nixblock::describe },
@@ -71,6 +72,7 @@ const std::vector<fendpoint> funcs = {
         { "Block::multiTags", nixblock::multitags },
         { "Block::hasMetadataSection", nixblock::has_metadata_section },
         { "Block::openMetadataSection", nixblock::open_metadata_section },
+        { "Block::updatedAt", nixblock::updated_at },
 
         // Data Array
         { "DataArray::describe", nixdataarray::describe },
@@ -91,6 +93,7 @@ const std::vector<fendpoint> funcs = {
         { "Tag::openSource", nixtag::open_source },
         { "Tag::hasMetadataSection", nixtag::has_metadata_section },
         { "Tag::openMetadataSection", nixtag::open_metadata_section },
+        { "Tag::updatedAt", nixtag::updated_at },
 
         // Multi Tag
         { "MultiTag::describe", nixmultitag::describe },
@@ -108,6 +111,7 @@ const std::vector<fendpoint> funcs = {
         { "MultiTag::openSource", nixmultitag::open_source },
         { "MultiTag::hasMetadataSection", nixmultitag::has_metadata_section },
         { "MultiTag::openMetadataSection", nixmultitag::open_metadata_section },
+        { "MultiTag::updatedAt", nixmultitag::updated_at },
 
         // Source
         { "Source::describe", nixsource::describe },
@@ -116,6 +120,7 @@ const std::vector<fendpoint> funcs = {
         { "Source::sources", nixsource::sources },
         { "Source::hasMetadataSection", nixsource::has_metadata_section },
         { "Source::openMetadataSection", nixsource::open_metadata_section },
+        { "Source::updatedAt", nixsource::updated_at },
 
         // Feature
         { "Feature::describe", nixfeature::describe },
@@ -131,7 +136,8 @@ const std::vector<fendpoint> funcs = {
         { "Section::listSections", nixsection::list_sections },
         { "Section::sections", nixsection::sections },
         { "Section::hasProperty", nixsection::has_property },
-        { "Section::listProperties", nixsection::list_properties }
+        { "Section::listProperties", nixsection::list_properties },
+        { "Section::updatedAt", nixsection::updated_at }
 };
 
 // main entry point
