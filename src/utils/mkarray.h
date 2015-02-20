@@ -10,7 +10,6 @@
 #include <cstdint>
 
 #include <mex.h>
-#include <DataType.hpp>
 
 #include "handle.h"
 #include "datatypes.h"
@@ -24,6 +23,7 @@ mxArray *make_mx_array(const nix::Value &value);
 
 mxArray* make_mx_array(const nix::NDSize &size);
 
+mxArray *make_mx_array(const nix::DataSet &da);
 
 template<typename T>
 mxArray* make_mx_array(const std::vector<T> &v) {
