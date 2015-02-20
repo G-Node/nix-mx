@@ -88,8 +88,8 @@ classdef MultiTag < nix.Entity
         
         function data = retrieve_data(obj, pos_index, ref_index)
             % convert Matlab-like to C-like index
-            assert(pos_index > 0, 'Indices must be positive');
-            assert(ref_index > 0, 'Indices must be positive');
+            assert(pos_index > 0, 'Position index must be positive');
+            assert(ref_index > 0, 'Reference index must be positive');
             tmp = nix_mx('MultiTag::retrieveData', obj.nix_handle, ...
                 pos_index - 1, ref_index - 1);
             
@@ -118,8 +118,8 @@ classdef MultiTag < nix.Entity
 
         function data = retrieve_feature_data(obj, pos_index, fea_index)
             % convert Matlab-like to C-like index
-            assert(pos_index > 0, 'Indices must be positive');
-            assert(fea_index > 0, 'Indices must be positive');
+            assert(pos_index > 0, 'Position index must be positive');
+            assert(fea_index > 0, 'Feature index must be positive');
             tmp = nix_mx('MultiTag::featureRetrieveData', obj.nix_handle, ...
                 pos_index - 1, fea_index - 1);
             
