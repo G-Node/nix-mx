@@ -32,7 +32,8 @@ static void entity_updated_at(const extractor &input, infusor &output)
 {
     const handle::entity *curr = input.hdl(1).the_entity();
     time_t uat = curr->updated_at();
-    output.set(0, uat);
+    uint64_t the_time = static_cast<uint64_t>(uat);
+    output.set(0, the_time);
 }
 
 // *** ***
