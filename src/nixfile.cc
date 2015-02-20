@@ -35,9 +35,6 @@ void describe(const extractor &input, infusor &output)
 
     struct_builder sb({ 1 }, { "blockCount", "sectionCount" });
 
-    sb.set(fd.blockCount());
-    sb.set(fd.sectionCount());
-
     output.set(0, sb.array());
 }
 

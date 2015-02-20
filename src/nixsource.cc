@@ -19,7 +19,6 @@ namespace nixsource {
         sb.set(currObj.type());
         sb.set(currObj.name());
         sb.set(currObj.definition());
-        sb.set(currObj.sourceCount());
         output.set(0, sb.array());
     }
 

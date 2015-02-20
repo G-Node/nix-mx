@@ -21,9 +21,6 @@ namespace nixmultitag {
         sb.set(currObj.name());
         sb.set(currObj.definition());
         sb.set(currObj.units());
-        sb.set(currObj.featureCount());
-        sb.set(currObj.sourceCount());
-        sb.set(currObj.referenceCount());
 
         output.set(0, sb.array());
     }
