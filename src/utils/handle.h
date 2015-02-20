@@ -49,10 +49,27 @@ struct entity_to_id<nix::Section> {
     static int value() { return 8; }
 };
 
-
-
 class handle {
 public:
+    struct entity {
+
+        template<typename T>
+        entity(const T &e) : id(entity_to_id<T>::value()) { }
+
+        int id;
+
+        virtual void destory() = 0;
+
+        virtual time_t updated_at() const = 0;
+
+        virtual ~entity() {
+
+            //counterpart of mexLock in handle's ctor,
+            // look there for more information
+            mexUnlock();
+            id = 0;
+        }
+    };
 
     template<typename T>
     explicit handle(const T &obj) : et(new cell<T>(obj)) {
@@ -89,31 +106,21 @@ public:
         et = nullptr;
     }
 
+    const entity *the_entity() const {
+        return et;
+    }
+
 private:
-    struct entity {
-
-        template<typename T>
-        entity(const T &e) : id(entity_to_id<T>::value()) { }
-
-        int id;
-
-        virtual void destory() = 0;
-
-        virtual ~entity() {
-
-            //counterpart of mexLock in handle's ctor,
-            // look there for more information
-            mexUnlock();
-            id = 0;
-        }
-    };
-
     template<typename T>
     struct cell : public entity {
         cell(const T &obj) : entity(obj), obj(obj) { }
 
         virtual void destory() override {
             obj = nix::none;
+        }
+
+        virtual time_t updated_at() const override {
+            return obj.updatedAt();
         }
 
         T obj;

@@ -28,6 +28,13 @@ static void entity_destroy(const extractor &input, infusor &output)
     h.destroy();
 }
 
+static void entity_updated_at(const extractor &input, infusor &output)
+{
+    const handle::entity *curr = input.hdl(1).the_entity();
+    time_t uat = curr->updated_at();
+    output.set(0, uat);
+}
+
 // *** ***
 
 typedef void (*fn_t)(const extractor &input, infusor &output);
@@ -41,7 +48,8 @@ fendpoint(std::string name, fn_t fn) : name(name), fn(fn) {}
 };
 
 const std::vector<fendpoint> funcs = {
-        {"Entity::destroy", entity_destroy},
+        { "Entity::destroy", entity_destroy },
+        { "Entity::updatedAt", entity_updated_at },
 
         // File
         { "File::open", nixfile::open },

@@ -10,9 +10,14 @@ classdef Entity < handle
         function obj = Entity(h)
             obj.nix_handle = h;
         end
+        
         function delete(obj)
             nix_mx('Entity::destroy', obj.nix_handle);
         end
+        
+        function ua = updatedAt(obj)
+            ua = nix_mx('Entity::updatedAt', obj.nix_handle);
+        end;
     end
     
 end

@@ -3,8 +3,8 @@ classdef File < nix.Entity
     
     properties(Hidden)
         info
-        blocksCache
-        sectionsCache
+        blocksCache;
+        sectionsCache;
     end;
     
     properties(Dependent)
@@ -19,12 +19,15 @@ classdef File < nix.Entity
             end
             h = nix_mx('File::open', path, mode); 
             obj@nix.Entity(h);
+
+            obj.blocksCache.lastUpdate = 0;
+            obj.blocksCache.data = {};
+            obj.sectionsCache.lastUpdate = 0;
+            obj.sectionsCache.data = {};
             
             obj.info = nix_mx('File::describe', obj.nix_handle);
-            obj.blocksCache = {};
-            obj.sectionsCache = {};
         end
-
+        
         % ----------------
         % Block methods
         % ----------------
@@ -39,18 +42,8 @@ classdef File < nix.Entity
         end
         
         function blocks = get.blocks(obj)
-            blk_list = nix_mx('File::blocks', obj.nix_handle);
-            
-            % Blocks are cached
-            if length(obj.blocksCache) ~= length(blk_list)
-                obj.blocksCache = cell(length(blk_list), 1);
-                        
-                for i = 1:length(blk_list)
-                    obj.blocksCache{i} = nix.Block(blk_list{i});
-                end
-            end
-                
-            blocks = obj.blocksCache;
+            [obj.blocksCache, blocks] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                'File::blocks', obj.nix_handle, obj.blocksCache, @nix.Block);
         end
         
         % ----------------
@@ -64,23 +57,13 @@ classdef File < nix.Entity
         function section = openSection(obj, id_or_name)
            h = nix_mx('File::openSection', obj.nix_handle, id_or_name); 
            section = nix.Section(h);
-        end;
+        end
         
         function sections = get.sections(obj)
-            secs_list = nix_mx('File::sections', obj.nix_handle);
-            
-            % Sections are cached
-            if length(obj.sectionsCache) ~= length(secs_list)
-                obj.sectionsCache = cell(length(secs_list), 1);
-                        
-                for i = 1:length(secs_list)
-                    obj.sectionsCache{i} = nix.Section(secs_list{i});
-                end
-            end
-                
-            sections = obj.sectionsCache;
-        end
+            [obj.sectionsCache, sections] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                'File::sections', obj.nix_handle, obj.sectionsCache, @nix.Section);
+        end;
+
     end
-    
 end
 
