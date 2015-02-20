@@ -1,4 +1,4 @@
-function funcs = testTag
+function funcs = TestTag
 %TESTTag tests for Tag
 %   Detailed explanation goes here
 
@@ -10,6 +10,8 @@ function funcs = testTag
     funcs{6} = @test_open_reference;
     funcs{7} = @test_has_metadata;
     funcs{8} = @test_open_metadata;
+    funcs{9} = @test_retrieve_data;
+    funcs{10} = @test_retrieve_feature_data;
 end
 
 %% Test: List/fetch references
@@ -123,3 +125,18 @@ function [] = test_open_metadata( varargin )
     assert(~isempty(getTag.open_metadata()));
 end
 
+%% Test: Retrieve data
+function [] = test_retrieve_data( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    b = f.blocks{1};
+    tag = b.tags{1};
+    
+    data = tag.retrieve_data(1);
+    assert(~isempty(data));
+end
+
+%% Test: Retrieve feature data
+function [] = test_retrieve_feature_data( varargin )
+    % TODO
+    disp('Test Tag: retrieve feature ... TODO (proper testfile)');
+end

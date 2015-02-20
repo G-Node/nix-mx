@@ -100,6 +100,8 @@ const std::vector<fendpoint> funcs = {
         { "Tag::openSource", nixtag::open_source },
         { "Tag::hasMetadataSection", nixtag::has_metadata_section },
         { "Tag::openMetadataSection", nixtag::open_metadata_section },
+        { "Tag::retrieveData", nixtag::retrieve_data },
+        { "Tag::featureRetrieveData", nixtag::retrieve_feature_data },
 
         // Multi Tag
         { "MultiTag::describe", nixmultitag::describe },
