@@ -58,9 +58,9 @@ classdef Section < nix.Entity
         
         function section = link(obj)
            sh = nix_mx('Section::link', obj.nix_handle);
-           try
+           if sh ~= 0
                section = nix.Section(sh);
-           catch
+           else
                section = {};
            end;
         end;
