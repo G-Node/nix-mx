@@ -119,13 +119,8 @@ void list_properties(const extractor &input, infusor &output)
 
         nix::Property pr = properties[i];
         std::vector<nix::Value> values = pr.values();
-       
-        const mwSize val_size = static_cast<mwSize>(values.size());
-        mxArray *mx_values = mxCreateCellArray(1, &val_size);
 
-        for (size_t j = 0; j < values.size(); j++) {
-            mxSetCell(mx_values, j, make_mx_array(values[j]));
-        }
+        mxArray *mx_values = make_mx_array(values);
 
         struct_builder sb({ 1 }, {
             "name", "id", "definition", "mapping", "unit", "values"

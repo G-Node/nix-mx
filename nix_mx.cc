@@ -32,7 +32,8 @@ static void entity_updated_at(const extractor &input, infusor &output)
 {
     const handle::entity *curr = input.hdl(1).the_entity();
     time_t uat = curr->updated_at();
-    output.set(0, uat);
+    uint64_t the_time = static_cast<uint64_t>(uat);
+    output.set(0, the_time);
 }
 
 // *** ***
@@ -99,6 +100,8 @@ const std::vector<fendpoint> funcs = {
         { "Tag::openSource", nixtag::open_source },
         { "Tag::hasMetadataSection", nixtag::has_metadata_section },
         { "Tag::openMetadataSection", nixtag::open_metadata_section },
+        { "Tag::retrieveData", nixtag::retrieve_data },
+        { "Tag::featureRetrieveData", nixtag::retrieve_feature_data },
 
         // Multi Tag
         { "MultiTag::describe", nixmultitag::describe },
@@ -116,6 +119,8 @@ const std::vector<fendpoint> funcs = {
         { "MultiTag::openSource", nixmultitag::open_source },
         { "MultiTag::hasMetadataSection", nixmultitag::has_metadata_section },
         { "MultiTag::openMetadataSection", nixmultitag::open_metadata_section },
+        { "MultiTag::retrieveData", nixmultitag::retrieve_data },
+        { "MultiTag::featureRetrieveData", nixmultitag::retrieve_feature_data },
 
         // Source
         { "Source::describe", nixsource::describe },

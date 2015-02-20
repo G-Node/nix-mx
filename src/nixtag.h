@@ -29,6 +29,10 @@ namespace nixtag {
 
     void sources(const extractor &input, infusor &output);
 
+    void retrieve_data(const extractor &input, infusor &output);
+
+    void retrieve_feature_data(const extractor &input, infusor &output);
+
 } // namespace nixtag
 
 #endif

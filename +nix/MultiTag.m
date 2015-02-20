@@ -85,7 +85,19 @@ classdef MultiTag < nix.Entity
             [obj.referencesCache, da] = nix.Utils.fetchObjList(obj.updatedAt, ...
                 'MultiTag::references', obj.nix_handle, obj.referencesCache, @nix.DataArray);
         end;
-
+        
+        function data = retrieve_data(obj, pos_index, ref_index)
+            % convert Matlab-like to C-like index
+            assert(pos_index > 0, 'Indices must be positive');
+            assert(ref_index > 0, 'Indices must be positive');
+            tmp = nix_mx('MultiTag::retrieveData', obj.nix_handle, ...
+                pos_index - 1, ref_index - 1);
+            
+            % data must agree with file & dimensions
+            % see mkarray.cc(42)
+            data = permute(tmp, length(size(tmp)):-1:1);
+        end;
+        
         % ------------------
         % Features methods
         % ------------------
@@ -102,6 +114,18 @@ classdef MultiTag < nix.Entity
         function feat = get.features(obj)
             [obj.featuresCache, feat] = nix.Utils.fetchObjList(obj.updatedAt, ...
                 'MultiTag::features', obj.nix_handle, obj.featuresCache, @nix.Feature);
+        end;
+
+        function data = retrieve_feature_data(obj, pos_index, fea_index)
+            % convert Matlab-like to C-like index
+            assert(pos_index > 0, 'Indices must be positive');
+            assert(fea_index > 0, 'Indices must be positive');
+            tmp = nix_mx('MultiTag::featureRetrieveData', obj.nix_handle, ...
+                pos_index - 1, fea_index - 1);
+            
+            % data must agree with file & dimensions
+            % see mkarray.cc(42)
+            data = permute(tmp, length(size(tmp)):-1:1);
         end;
         
         % ------------------
