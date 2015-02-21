@@ -95,30 +95,14 @@ namespace nixmultitag {
     {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
         std::vector<nix::DataArray> arr = currObj.references();
-
-        const mwSize size = static_cast<mwSize>(arr.size());
-        mxArray *lst = mxCreateCellArray(1, &size);
-
-        for (size_t i = 0; i < arr.size(); i++) {
-            mxSetCell(lst, i, make_mx_array(handle(arr[i])));
-        }
-
-        output.set(0, lst);
+        output.set(0, arr);
     }
 
     void features(const extractor &input, infusor &output)
     {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
         std::vector<nix::Feature> arr = currObj.features();
-
-        const mwSize size = static_cast<mwSize>(arr.size());
-        mxArray *lst = mxCreateCellArray(1, &size);
-
-        for (size_t i = 0; i < arr.size(); i++) {
-            mxSetCell(lst, i, make_mx_array(handle(arr[i])));
-        }
-
-        output.set(0, lst);
+        output.set(0, arr);
     }
 
     void sources(const extractor &input, infusor &output)
@@ -126,14 +110,7 @@ namespace nixmultitag {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
         std::vector<nix::Source> arr = currObj.sources();
 
-        const mwSize size = static_cast<mwSize>(arr.size());
-        mxArray *lst = mxCreateCellArray(1, &size);
-
-        for (size_t i = 0; i < arr.size(); i++) {
-            mxSetCell(lst, i, make_mx_array(handle(arr[i])));
-        }
-
-        output.set(0, lst);
+        output.set(0, arr);
     }
 
     void retrieve_data(const extractor &input, infusor &output) {

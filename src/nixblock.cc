@@ -34,15 +34,7 @@ namespace nixblock {
     {
         nix::Block block = input.entity<nix::Block>(1);
         std::vector<nix::DataArray> dataArrays = block.dataArrays();
-
-        const mwSize size = static_cast<mwSize>(dataArrays.size());
-        mxArray *lst = mxCreateCellArray(1, &size);
-
-        for (size_t i = 0; i < dataArrays.size(); i++) {
-            mxSetCell(lst, i, make_mx_array(handle(dataArrays[i])));
-        }
-
-        output.set(0, lst);
+        output.set(0, dataArrays);
     }
 
     void list_data_arrays(const extractor &input, infusor &output)
@@ -67,15 +59,7 @@ namespace nixblock {
     {
         nix::Block block = input.entity<nix::Block>(1);
         std::vector<nix::Source> sources = block.sources();
-
-        const mwSize size = static_cast<mwSize>(sources.size());
-        mxArray *lst = mxCreateCellArray(1, &size);
-
-        for (size_t i = 0; i < sources.size(); i++) {
-            mxSetCell(lst, i, make_mx_array(handle(sources[i])));
-        }
-
-        output.set(0, lst);
+        output.set(0, sources);
     }
 
     void has_tag(const extractor &input, infusor &output)
@@ -117,15 +101,7 @@ namespace nixblock {
     {
         nix::Block block = input.entity<nix::Block>(1);
         std::vector<nix::Tag> tags = block.tags();
-
-        const mwSize size = static_cast<mwSize>(tags.size());
-        mxArray *lst = mxCreateCellArray(1, &size);
-
-        for (size_t i = 0; i < tags.size(); i++) {
-            mxSetCell(lst, i, make_mx_array(handle(tags[i])));
-        }
-
-        output.set(0, lst);
+        output.set(0, tags);
     }
 
     void has_multi_tag(const extractor &input, infusor &output)
@@ -165,15 +141,7 @@ namespace nixblock {
     {
         nix::Block block = input.entity<nix::Block>(1);
         std::vector<nix::MultiTag> arr = block.multiTags();
-
-        const mwSize size = static_cast<mwSize>(arr.size());
-        mxArray *lst = mxCreateCellArray(1, &size);
-
-        for (size_t i = 0; i < arr.size(); i++) {
-            mxSetCell(lst, i, make_mx_array(handle(arr[i])));
-        }
-
-        output.set(0, lst);
+        output.set(0, arr);
     }
 
     void has_metadata_section(const extractor &input, infusor &output)
