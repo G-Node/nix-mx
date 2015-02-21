@@ -20,7 +20,19 @@ struct struct_builder {
 
 	struct_builder(std::vector<size_t> dims, std::vector<const char *> f)
 		: n(0), pos(0), fields(f) {
+
+#ifdef HAVE_OCTAVE
+		std::vector<mwSize> dims_mw(dims.size());
+		int f_size = static_cast<int>(f.size());
+		mwSize dims_size = static_cast<mwSize>(dims.size());
+		std::transform(dims.cbegin(), dims.cend(), dims_mw.begin(), [](const size_t v){
+			return static_cast<mwSize>(v);
+		});
+
+		sa = mxCreateStructArray(dims_size, dims_mw.data(), f_size, f.data());
+#else
 		sa = mxCreateStructArray(dims.size(), dims.data(), fields.size(), fields.data());
+#endif
 	}
 
 	template<typename T>

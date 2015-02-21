@@ -127,11 +127,14 @@ ELSE(WIN32)
 
     # Search for a version of Matlab available, starting from the most modern one to older versions
       FOREACH(MATVER "R2013b" "R2013a" "R2012b" "R2012a" "R2011b" "R2011a" "R2010b" "R2010a" "R2009b" "R2009a" "R2008b")
+        SET(MATLAB_VERSION ${MATVER})
         IF((NOT DEFINED MATLAB_ROOT) OR ("${MATLAB_ROOT}" STREQUAL ""))
           IF(EXISTS /Applications/MATLAB_${MATVER}.app)
             SET(MATLAB_ROOT /Applications/MATLAB_${MATVER}.app)
+            break()
           ELSEIF(EXISTS /Applications/MATLAB_${MATVER}_Student.app)
-             SET(MATLAB_ROOT /Applications/MATLAB_${MATVER}_Student.app)
+            SET(MATLAB_ROOT /Applications/MATLAB_${MATVER}_Student.app)
+            break()
           ENDIF(EXISTS /Applications/MATLAB_${MATVER}.app)
         ENDIF((NOT DEFINED MATLAB_ROOT) OR ("${MATLAB_ROOT}" STREQUAL ""))
       ENDFOREACH(MATVER)
@@ -144,44 +147,30 @@ ELSE(WIN32)
   ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
   # Get path to the MEX libraries
-  EXECUTE_PROCESS(
-    #COMMAND find "${MATLAB_ROOT}/extern/lib" -name libmex${LIBRARY_EXTENSION} # Peter
-	COMMAND find "${MATLAB_ROOT}/bin" -name libmex${LIBRARY_EXTENSION} # Standard
-    COMMAND xargs echo -n
-    OUTPUT_VARIABLE MATLAB_MEX_LIBRARY
-    )
-  EXECUTE_PROCESS(
-    #COMMAND find "${MATLAB_ROOT}/extern/lib" -name libmx${LIBRARY_EXTENSION} # Peter
-	COMMAND find "${MATLAB_ROOT}/bin" -name libmx${LIBRARY_EXTENSION} # Standard
-    COMMAND xargs echo -n
-    OUTPUT_VARIABLE MATLAB_MX_LIBRARY
-    )
-  EXECUTE_PROCESS(
-    #COMMAND find "${MATLAB_ROOT}/extern/lib" -name libmat${LIBRARY_EXTENSION} # Peter
-	COMMAND find "${MATLAB_ROOT}/bin" -name libmat${LIBRARY_EXTENSION} # Standard
-    COMMAND xargs echo -n
-    OUTPUT_VARIABLE MATLAB_MAT_LIBRARY
-    )
-  EXECUTE_PROCESS(
-    #COMMAND find "${MATLAB_ROOT}/extern/lib" -name libeng${LIBRARY_EXTENSION} # Peter
-	COMMAND find "${MATLAB_ROOT}/bin" -name libeng${LIBRARY_EXTENSION} # Standard
-    COMMAND xargs echo -n
-    OUTPUT_VARIABLE MATLAB_ENG_LIBRARY
-    )
+  EXECUTE_PROCESS(COMMAND find "${MATLAB_ROOT}/bin" -name libmex${LIBRARY_EXTENSION}
+                  COMMAND xargs echo -n
+                  OUTPUT_VARIABLE MATLAB_MEX_LIBRARY)
 
-   EXECUTE_PROCESS(
-       COMMAND "${MATLAB_ROOT}/bin/mexext"
-       COMMAND xargs echo -n
-       OUTPUT_VARIABLE MATLAB_MEXEXT
-       )
+  EXECUTE_PROCESS(COMMAND find "${MATLAB_ROOT}/bin" -name libmx${LIBRARY_EXTENSION}
+                  COMMAND xargs echo -n
+                  OUTPUT_VARIABLE MATLAB_MX_LIBRARY)
 
+  EXECUTE_PROCESS(COMMAND find "${MATLAB_ROOT}/bin" -name libmat${LIBRARY_EXTENSION}
+                  COMMAND xargs echo -n
+                  OUTPUT_VARIABLE MATLAB_MAT_LIBRARY)
 
+  EXECUTE_PROCESS(COMMAND find "${MATLAB_ROOT}/bin" -name libeng${LIBRARY_EXTENSION}
+                  COMMAND xargs echo -n
+                  OUTPUT_VARIABLE MATLAB_ENG_LIBRARY)
+
+  EXECUTE_PROCESS(COMMAND "${MATLAB_ROOT}/bin/mexext"
+                  COMMAND xargs echo -n
+                  OUTPUT_VARIABLE MATLAB_MEXEXT)
 
   # Get path to the include directory
   FIND_PATH(MATLAB_INCLUDE_DIR
-    "mex.h"
-    PATHS "${MATLAB_ROOT}/extern/include"
-    )
+            "mex.h"
+            PATHS "${MATLAB_ROOT}/extern/include")
 
 ENDIF(WIN32)
 
