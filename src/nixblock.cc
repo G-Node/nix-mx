@@ -15,15 +15,11 @@ namespace nixblock {
     {
         nix::Block block = input.entity<nix::Block>(1);
 
-        struct_builder sb({ 1 }, { "id", "type", "name", "sourceCount", "dataArrayCount", "tagCount", "multiTagCount" });
+        struct_builder sb({ 1 }, { "id", "type", "name" });
 
         sb.set(block.id());
         sb.set(block.type());
         sb.set(block.name());
-        sb.set(block.sourceCount());
-        sb.set(block.dataArrayCount());
-        sb.set(block.tagCount());
-        sb.set(block.multiTagCount());
 
         output.set(0, sb.array());
     }

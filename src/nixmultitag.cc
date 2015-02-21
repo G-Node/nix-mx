@@ -15,15 +15,12 @@ namespace nixmultitag {
     {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
 
-        struct_builder sb({ 1 }, { "id", "type", "name", "definition", "units", "featureCount", "sourceCount", "referenceCount" });
+        struct_builder sb({ 1 }, { "id", "type", "name", "definition", "units" });
         sb.set(currObj.id());
         sb.set(currObj.type());
         sb.set(currObj.name());
         sb.set(currObj.definition());
         sb.set(currObj.units());
-        sb.set(currObj.featureCount());
-        sb.set(currObj.sourceCount());
-        sb.set(currObj.referenceCount());
 
         output.set(0, sb.array());
     }
