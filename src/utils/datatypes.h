@@ -12,7 +12,6 @@ inline nix::DataType dtype_mex2nix(const mxArray *array) {
 	case mxLOGICAL_CLASS: return nix::DataType::Bool;
 
 	case mxCHAR_CLASS:   return nix::DataType::String;
-	case mxOPAQUE_CLASS: return nix::DataType::Opaque;
 
 	case mxDOUBLE_CLASS: return nix::DataType::Double;
 	case mxSINGLE_CLASS: return nix::DataType::Float;
@@ -26,6 +25,9 @@ inline nix::DataType dtype_mex2nix(const mxArray *array) {
 	case mxUINT64_CLASS: return nix::DataType::UInt64;
 	case mxINT64_CLASS:  return nix::DataType::Int64;
 
+#ifndef HAVE_OCTAVE
+		case mxOPAQUE_CLASS: return nix::DataType::Opaque;
+#endif
 	default:             return nix::DataType::Nothing;
 	}
 
