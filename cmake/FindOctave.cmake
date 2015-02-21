@@ -130,37 +130,6 @@
 
  set ( OCTAVE_INCLUDE_DIRS ${OCTAVE_INCLUDE_DIR} )
 
- macro ( octave_add_oct FUNCTIONNAME )
-   set ( _CMD SOURCES )
-   set ( _SOURCES )
-   set ( _LINK_LIBRARIES )
-   set ( _EXTENSION )
-   set ( _OCT_EXTENSION oct )
-   foreach ( _ARG ${ARGN})
-     if ( ${_ARG} MATCHES SOURCES )
-       set ( _CMD SOURCES )
-     elseif ( ${_ARG} MATCHES LINK_LIBRARIES  )
-       set ( _CMD LINK_LIBRARIES  )
-     elseif ( ${_ARG} MATCHES EXTENSION )
-       set ( _CMD EXTENSION )
-     else ()
-       if ( ${_CMD} MATCHES SOURCES )
-         list ( APPEND _SOURCES "${_ARG}" )
-       elseif ( ${_CMD} MATCHES LINK_LIBRARIES  )
-         list ( APPEND _LINK_LIBRARIES "${_ARG}" )
-       elseif ( ${_CMD} MATCHES EXTENSION )
-         set ( _OCT_EXTENSION ${_ARG} )
-       endif ()
-     endif ()
-   endforeach ()
-   add_library ( ${FUNCTIONNAME} SHARED ${_SOURCES} )
-   target_link_libraries ( ${FUNCTIONNAME} ${OCTAVE_LIBRARIES} ${_LINK_LIBRARIES} )
-   set_target_properties ( ${FUNCTIONNAME} PROPERTIES
-     PREFIX ""
-     SUFFIX  ".${_OCT_EXTENSION}"
-   )
- endmacro ()
-
  # handle REQUIRED and QUIET options
  include ( FindPackageHandleStandardArgs )
  if ( CMAKE_VERSION LESS 2.8.3 )
