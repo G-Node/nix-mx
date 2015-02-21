@@ -15,7 +15,7 @@ namespace nixmultitag {
     {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
 
-        struct_builder sb({ 1 }, { "id", "type", "name", "definition", "units", "featureCount", "sourceCount", "referenceCount" });
+        struct_builder sb({ 1 }, { "id", "type", "name", "definition", "units" });
         sb.set(currObj.id());
         sb.set(currObj.type());
         sb.set(currObj.name());

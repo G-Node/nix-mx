@@ -15,7 +15,7 @@ namespace nixblock {
     {
         nix::Block block = input.entity<nix::Block>(1);
 
-        struct_builder sb({ 1 }, { "id", "type", "name", "sourceCount", "dataArrayCount", "tagCount", "multiTagCount" });
+        struct_builder sb({ 1 }, { "id", "type", "name" });
 
         sb.set(block.id());
         sb.set(block.type());

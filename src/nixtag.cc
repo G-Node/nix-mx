@@ -15,8 +15,7 @@ namespace nixtag {
     {
         nix::Tag currObj = input.entity<nix::Tag>(1);
 
-        struct_builder sb({ 1 }, { "id", "type", "name", "definition", "position", "extent",
-            "units", "featureCount", "sourceCount", "referenceCount" });
+        struct_builder sb({ 1 }, { "id", "type", "name", "definition", "position", "extent", "units" });
 
         sb.set(currObj.id());
         sb.set(currObj.type());
