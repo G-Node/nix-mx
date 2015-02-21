@@ -114,14 +114,16 @@
                NAMES octave liboctave
                HINTS ${OCTAVE_LIBRARIES_PATHS}
              )
- find_library( OCTAVE_CRUFT_LIBRARY
-               NAMES cruft libcruft
-               HINTS ${OCTAVE_LIBRARIES_PATHS}
-             )
 
  set ( OCTAVE_LIBRARIES ${OCTAVE_OCTINTERP_LIBRARY} )
  list ( APPEND OCTAVE_LIBRARIES ${OCTAVE_OCTAVE_LIBRARY} )
- list ( APPEND OCTAVE_LIBRARIES ${OCTAVE_CRUFT_LIBRARY} )
+
+ if (OCTAVE_VERSION_STRING LESS 3.8.0)
+     find_library( OCTAVE_CRUFT_LIBRARY
+                   NAMES cruft libcruft
+                  HINTS ${OCTAVE_LIBRARIES_PATHS})
+     list ( APPEND OCTAVE_LIBRARIES ${OCTAVE_CRUFT_LIBRARY} )
+ endif ()
 
  find_path ( OCTAVE_INCLUDE_DIR
              NAMES mex.h
