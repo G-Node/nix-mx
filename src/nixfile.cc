@@ -37,8 +37,8 @@ void describe(const extractor &input, infusor &output)
     sb.set(fd.format());
     sb.set(fd.version());
     sb.set(fd.location());
-    sb.set(fd.createdAt());
-    sb.set(fd.updatedAt());
+    sb.set(static_cast<uint64_t>(fd.createdAt()));
+    sb.set(static_cast<uint64_t>(fd.updatedAt()));
   
     output.set(0, sb.array());
 }
