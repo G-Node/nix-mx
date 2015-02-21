@@ -23,16 +23,28 @@ endif()
 find_package(Boost 1.49.0 REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
+# The computing environment
+
 find_package(MATLAB REQUIRED)
 IF(MATLAB_FOUND)
   MESSAGE(STATUS "Matlab found at ${MATLAB_INCLUDE_DIR}")
-ELSE(MATLAB_FOUND)
-  MESSAGE(FATAL_ERROR "Matlab not found")
+  add_definitions(-DMATLAB_MEX_FILE)
+  set(CE_PACKAGE "Matlab")
+  set(CE_VERSION "${MATLAB_VERSION}")
+  set(CE_INCDIR ${MATLAB_INCLUDE_DIR})
+  set(CE_LIBRARIES ${MATLAB_LIBRARIES})
+  set(CE_EXTENSION ${MATLAB_MEXEXT})
 ENDIF(MATLAB_FOUND)
+
+if(NOT CE_PACKAGE)
+  MESSAGE(FATAL_ERROR "
+  No computing environment found!
+  Install GNU Octave (or MathWorks MATLAB).")
+endif()
 
 find_package(NIX REQUIRED)
 
-include_directories(${MATLAB_INCLUDE_DIR} ${NIX_INCLUDE_DIR} "src" "src/utils")
+include_directories(${CE_INCDIR} ${NIX_INCLUDE_DIR} "src" "src/utils")
 
 file(GLOB_RECURSE SOURCE_FILES "." "*.cc" "*.cpp")
 file(GLOB_RECURSE INCLUDE_FILES "." "*.h" "*.hpp")
@@ -45,20 +57,20 @@ endif()
 
 add_library(nix_mx ${LIBTYPE} ${SOURCE_FILES} ${INCLUDE_FILES})
 
-target_link_libraries(nix_mx ${MATLAB_LIBRARIES} ${NIX_LIBRARIES})
+target_link_libraries(nix_mx ${CE_LIBRARIES} ${NIX_LIBRARIES})
 set_target_properties(nix_mx PROPERTIES
 		              VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
 		              SOVERSION ${VERSION_ABI})
 set_target_properties(nix_mx PROPERTIES PREFIX "")
-set_target_properties(nix_mx PROPERTIES SUFFIX .${MATLAB_MEXEXT})
+set_target_properties(nix_mx PROPERTIES SUFFIX .${CE_EXTENSION})
 
 if(WIN32)
-SET_TARGET_PROPERTIES(nix_mx PROPERTIES LINK_FLAGS "/export:mexFunction")
+  SET_TARGET_PROPERTIES(nix_mx PROPERTIES LINK_FLAGS "/export:mexFunction")
 endif()
 
-add_definitions(-DMATLAB_MEX_FILE)
-
-MESSAGE(STATUS "===============================")
-MESSAGE(STATUS "Matlab version: ${MATLAB_VERSION}")
-MESSAGE(STATUS "Matlab     ext: ${MATLAB_MEXEXT}")
-MESSAGE(STATUS "===============================")
+MESSAGE(STATUS "=====================")
+MESSAGE(STATUS "Computing environment")
+MESSAGE(STATUS "  Package: ${CE_PACKAGE}")
+MESSAGE(STATUS "  Version: ${CE_VERSION}")
+MESSAGE(STATUS "  Module : ${CE_EXTENSION}")
+MESSAGE(STATUS "=====================")
