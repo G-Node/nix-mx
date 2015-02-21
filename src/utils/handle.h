@@ -11,42 +11,42 @@ struct entity_to_id { };
 
 template<>
 struct entity_to_id<nix::File> {
-    static int value() { return 1; }
+    static const int value = 1;
 };
 
 template<>
 struct entity_to_id<nix::Block> {
-    static int value() { return 2; }
+    static const int value = 2;
 };
 
 template<>
 struct entity_to_id<nix::DataArray> {
-    static int value() { return 3; }
+    static const int value = 3;
 };
 
 template<>
 struct entity_to_id<nix::Tag> {
-    static int value() { return 4; }
+    static const int value = 4;
 };
 
 template<>
 struct entity_to_id<nix::Source> {
-    static int value() { return 5; }
+    static const int value = 5;
 };
 
 template<>
 struct entity_to_id<nix::Feature> {
-    static int value() { return 6; }
+    static const int value = 5;
 };
 
 template<>
 struct entity_to_id<nix::MultiTag> {
-    static int value() { return 7; }
+    static const int value = 6;
 };
 
 template<>
 struct entity_to_id<nix::Section> {
-    static int value() { return 8; }
+    static const int value = 7;
 };
 
 class handle {
@@ -54,7 +54,7 @@ public:
     struct entity {
 
         template<typename T>
-        entity(const T &e) : id(entity_to_id<T>::value()) { }
+        entity(const T &e) : id(entity_to_id<T>::value) { }
 
         int id;
 
@@ -88,8 +88,7 @@ public:
             throw std::runtime_error("called get on empty handle");
         }
 
-        int eid = entity_to_id<T>::value();
-        if (eid != et->id) {
+        if (et->id != entity_to_id<T>::value) {
             throw std::runtime_error("tried to get a entity of wrong type");
         }
 

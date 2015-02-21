@@ -90,15 +90,7 @@ void sections(const extractor &input, infusor &output)
 {
     nix::Section section = input.entity<nix::Section>(1);
     std::vector<nix::Section> sections = section.sections();
-
-    const mwSize size = static_cast<mwSize>(sections.size());
-    mxArray *lst = mxCreateCellArray(1, &size);
-
-    for (size_t i = 0; i < sections.size(); i++) {
-        mxSetCell(lst, i, make_mx_array(handle(sections[i])));
-    }
-
-    output.set(0, lst);
+    output.set(0, sections);
 }
 
 void has_property(const extractor &input, infusor &output)

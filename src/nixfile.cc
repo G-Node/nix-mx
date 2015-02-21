@@ -74,15 +74,7 @@ void blocks(const extractor &input, infusor &output)
 {
     nix::File nf = input.entity<nix::File>(1);
     std::vector<nix::Block> blocks = nf.blocks();
-
-    const mwSize size = static_cast<mwSize>(blocks.size());
-    mxArray *lst = mxCreateCellArray(1, &size);
-
-    for (size_t i = 0; i < blocks.size(); i++) {
-        mxSetCell(lst, i, make_mx_array(handle(blocks[i])));
-    }
-
-    output.set(0, lst);
+    output.set(0, blocks);
 }
 
 void list_sections(const extractor &input, infusor &output)
@@ -116,15 +108,7 @@ void sections(const extractor &input, infusor &output)
 {
     nix::File nf = input.entity<nix::File>(1);
     std::vector<nix::Section> sections = nf.sections();
-
-    const mwSize size = static_cast<mwSize>(sections.size());
-    mxArray *lst = mxCreateCellArray(1, &size);
-
-    for (size_t i = 0; i < sections.size(); i++) {
-        mxSetCell(lst, i, make_mx_array(handle(sections[i])));
-    }
-
-    output.set(0, lst);
+    output.set(0, sections);
 }
 
 } // namespace nixfile

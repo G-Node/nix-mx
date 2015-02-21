@@ -51,14 +51,7 @@ namespace nixsource {
         nix::Source currObj = input.entity<nix::Source>(1);
         std::vector<nix::Source> arr = currObj.sources();
 
-        const mwSize size = static_cast<mwSize>(arr.size());
-        mxArray *lst = mxCreateCellArray(1, &size);
-
-        for (size_t i = 0; i < arr.size(); i++) {
-            mxSetCell(lst, i, make_mx_array(handle(arr[i])));
-        }
-
-        output.set(0, lst);
+        output.set(0, arr);
     }
 
 } // namespace nixsource
