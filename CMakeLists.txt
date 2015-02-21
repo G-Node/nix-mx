@@ -25,7 +25,21 @@ include_directories(${Boost_INCLUDE_DIR})
 
 # The computing environment
 
-find_package(MATLAB REQUIRED)
+if($ENV{CI})
+  find_package(Octave REQUIRED)
+else()
+  find_package(MATLAB REQUIRED)
+endif()
+
+if(OCTAVE_FOUND)
+  add_definitions(-DMATLAB_MEX_FILE)
+  set(CE_PACKAGE "GNU Octave")
+  set(CE_VERSION "${OCTAVE_VERSION_STRING}")
+  set(CE_INCDIR ${OCTAVE_INCLUDE_DIRS})
+  set(CE_LIBRARIES ${OCTAVE_LIBRARIES})
+  set(CE_EXTENSION oct)
+endif()
+
 IF(MATLAB_FOUND)
   MESSAGE(STATUS "Matlab found at ${MATLAB_INCLUDE_DIR}")
   add_definitions(-DMATLAB_MEX_FILE)
