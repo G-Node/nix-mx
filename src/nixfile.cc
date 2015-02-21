@@ -33,8 +33,13 @@ void describe(const extractor &input, infusor &output)
 {
     nix::File fd = input.entity<nix::File>(1);
 
-    struct_builder sb({ 1 }, { "blockCount", "sectionCount" });
-
+    struct_builder sb({ 1 }, { "format", "version", "location", "createdAt", "updatedAt" });
+    sb.set(fd.format());
+    sb.set(fd.version());
+    sb.set(fd.location());
+    sb.set(fd.createdAt());
+    sb.set(fd.updatedAt());
+  
     output.set(0, sb.array());
 }
 
