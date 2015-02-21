@@ -25,9 +25,9 @@ mxArray* make_mx_array(const nix::NDSize &size);
 
 mxArray *make_mx_array(const nix::DataSet &da);
 
-template<typename T>
+template<typename T, nix::DataType dt = nix::to_data_type<T>::value>
 mxArray* make_mx_array(const std::vector<T> &v) {
-	DType2 dtype = dtype_nix2mex(nix::to_data_type<T>::value);
+	DType2 dtype = dtype_nix2mex(dt);
 	mxArray *data = mxCreateNumericMatrix(1, v.size(), dtype.cid, dtype.clx);
 	double *ptr = mxGetPr(data);
 	memcpy(ptr, v.data(), sizeof(T) * v.size());
@@ -49,7 +49,6 @@ inline mxArray* make_mx_array(const std::vector<std::string> &v) {
 	return data;
 }
 
-template<>
 inline mxArray* make_mx_array(const std::vector<nix::Value> &v) {
 	if (v.empty()) {
 		return nullptr;
@@ -95,6 +94,19 @@ inline mxArray* make_mx_array<bool>(bool val) {
 inline mxArray* make_mx_array(const handle &h)
 {
 	return make_mx_array(h.address());
+}
+
+template<typename T, int EntityId = entity_to_id<T>::value>
+inline mxArray *make_mx_array(const std::vector<T> &v) {
+	const mwSize size = static_cast<mwSize>(v.size());
+	mxArray *lst = mxCreateCellArray(1, &size);
+
+	for (size_t i = 0; i < v.size(); i++) {
+		handle hdl = handle(v[i]);
+		mxSetCell(lst, i, make_mx_array(hdl));
+	}
+
+	return lst;
 }
 
 #endif
