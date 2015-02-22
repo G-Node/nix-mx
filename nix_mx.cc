@@ -20,6 +20,10 @@
 #include "nixtag.h"
 #include "nixmultitag.h"
 
+#include <utils/glue.h>
+
+#include <mutex>
+
 // *** functions ***
 
 static void entity_destroy(const extractor &input, infusor &output)
@@ -57,10 +61,8 @@ const std::vector<fendpoint> funcs = {
         { "File::describe", nixfile::describe },
         { "File::listBlocks", nixfile::list_blocks },
         { "File::openBlock", nixfile::open_block },
-        { "File::blocks", nixfile::blocks },
         { "File::listSections", nixfile::list_sections },
         { "File::openSection", nixfile::open_section },
-        { "File::sections", nixfile::sections },
 
         // Block
         { "Block::describe", nixblock::describe },
@@ -147,6 +149,18 @@ const std::vector<fendpoint> funcs = {
         { "Section::listProperties", nixsection::list_properties }
 };
 
+//glue "globals"
+std::once_flag init_flag;
+static glue::registry *methods = nullptr;
+
+static void on_exit() {
+#ifdef DEBUG_GLUE
+    mexPrintf("[GLUE] deleting hanlders!\n");
+#endif
+
+    delete methods;
+}
+
 // main entry point
 void mexFunction(int            nlhs,
                  mxArray       *lhs[],
@@ -160,21 +174,51 @@ void mexFunction(int            nlhs,
 
     //mexPrintf("[F] %s\n", cmd.c_str());
 
+    std::call_once(init_flag, []() {
+        using namespace glue;
+
+        #ifdef DEBUG_GLUE
+        mexPrintf("[GLUE] Registering classdefs...\n");
+        #endif
+
+        methods = new registry{};
+
+        classdef<nix::File>("File", methods)
+            .reg<std::vector<nix::Block>>("blocks", &nix::File::blocks)
+            .reg<std::vector<nix::Section>>("sections", &nix::File::sections);
+
+        mexAtExit(on_exit);
+    });
+
     bool processed = false;
-    for (const auto &fn : funcs) {
-        if (fn.name == cmd) {
-            try {
-                fn.fn(input, output);
-            } catch (const std::invalid_argument &e) {
-                mexErrMsgIdAndTxt("nix:arg:inval", e.what());
-            } catch (const std::exception &e) {
-                mexErrMsgIdAndTxt("nix:arg:dispatch", e.what());
-            } catch (...) {
-                mexErrMsgIdAndTxt("nix:arg:dispatch", "unkown exception");
-            }
-            processed = true;
-            break;
+
+    try {
+        processed = methods->dispatch(cmd, input, output);
+
+        #ifdef DEBUG_GLUE
+        if (processed) {
+            mexPrintf("[GLUE] %s: processed by glue.\n", cmd.c_str());
         }
+        #endif
+
+        for (const auto &fn : funcs) {
+
+            if (processed) {
+                break;
+            }
+
+            if (fn.name == cmd) {
+                fn.fn(input, output);
+                processed = true;
+            }
+        }
+
+    } catch (const std::invalid_argument &e) {
+        mexErrMsgIdAndTxt("nix:arg:inval", e.what());
+    } catch (const std::exception &e) {
+        mexErrMsgIdAndTxt("nix:arg:dispatch", e.what());
+    } catch (...) {
+        mexErrMsgIdAndTxt("nix:arg:dispatch", "unkown exception");
     }
 
     if (!processed) {
