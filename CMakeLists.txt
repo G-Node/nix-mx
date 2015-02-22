@@ -82,6 +82,10 @@ if(WIN32)
   SET_TARGET_PROPERTIES(nix_mx PROPERTIES LINK_FLAGS "/export:mexFunction")
 endif()
 
+if(DEBUG_GLUE)
+   add_definitions(-DDEBUG_GLUE=1)
+endif()
+
 MESSAGE(STATUS "=====================")
 MESSAGE(STATUS "Computing environment")
 MESSAGE(STATUS "  Package: ${CE_PACKAGE}")
