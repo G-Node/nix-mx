@@ -70,13 +70,6 @@ void open_block(const extractor &input, infusor &output)
     output.set(0, bb);
 }
 
-void blocks(const extractor &input, infusor &output)
-{
-    nix::File nf = input.entity<nix::File>(1);
-    std::vector<nix::Block> blocks = nf.blocks();
-    output.set(0, blocks);
-}
-
 void list_sections(const extractor &input, infusor &output)
 {
     nix::File fd = input.entity<nix::File>(1);
@@ -102,13 +95,6 @@ void open_section(const extractor &input, infusor &output)
     nix::Section sec = nf.getSection(input.str(2));
     handle bb = handle(sec);
     output.set(0, bb);
-}
-
-void sections(const extractor &input, infusor &output)
-{
-    nix::File nf = input.entity<nix::File>(1);
-    std::vector<nix::Section> sections = nf.sections();
-    output.set(0, sections);
 }
 
 } // namespace nixfile

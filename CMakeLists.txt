@@ -60,8 +60,8 @@ find_package(NIX REQUIRED)
 
 include_directories(${CE_INCDIR} ${NIX_INCLUDE_DIR} "src" "src/utils")
 
-file(GLOB_RECURSE SOURCE_FILES "." "*.cc" "*.cpp")
-file(GLOB_RECURSE INCLUDE_FILES "." "*.h" "*.hpp")
+file(GLOB_RECURSE SOURCE_FILES src/*.cc)
+file(GLOB_RECURSE INCLUDE_FILES src/*.h)
 
 if(NOT WIN32)
   set(LIBTYPE SHARED)
@@ -69,7 +69,7 @@ else()
   set(LIBTYPE MODULE)
 endif()
 
-add_library(nix_mx ${LIBTYPE} ${SOURCE_FILES} ${INCLUDE_FILES})
+add_library(nix_mx ${LIBTYPE} nix_mx.cc ${SOURCE_FILES} ${INCLUDE_FILES})
 
 target_link_libraries(nix_mx ${CE_LIBRARIES} ${NIX_LIBRARIES})
 set_target_properties(nix_mx PROPERTIES
@@ -80,6 +80,10 @@ set_target_properties(nix_mx PROPERTIES SUFFIX .${CE_EXTENSION})
 
 if(WIN32)
   SET_TARGET_PROPERTIES(nix_mx PROPERTIES LINK_FLAGS "/export:mexFunction")
+endif()
+
+if(DEBUG_GLUE)
+   add_definitions(-DDEBUG_GLUE=1)
 endif()
 
 MESSAGE(STATUS "=====================")
