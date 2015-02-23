@@ -88,7 +88,7 @@ namespace nixmultitag {
     void open_metadata_section(const extractor &input, infusor &output)
     {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
-        output.set(0, nixgen::open_metadata_section(currObj.metadata()));
+        output.set(0, nixgen::get_handle_or_none(currObj.metadata()));
     }
 
     void references(const extractor &input, infusor &output)

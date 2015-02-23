@@ -12,7 +12,27 @@ classdef Utils
             end;
             retCell = currCache.data;
         end;
+        
+        function [currCache, retCell] = fetchPropList(currUpdatedAt, nixMxFunc, handle, currCache)
+            if currCache.lastUpdate ~= currUpdatedAt
+                currCache.data = nix_mx(nixMxFunc, handle);
+                currCache.lastUpdate = currUpdatedAt;
+            end;
+            retCell = currCache.data;
+        end;
 
+        function [currCache, retCell] = fetchObj(currUpdatedAt, nixMxFunc, handle, currCache, objConstructor)
+            if currCache.lastUpdate ~= currUpdatedAt
+                sh = nix_mx(nixMxFunc, handle);
+                if sh ~= 0
+                    currCache.data = objConstructor(sh);
+                else
+                    currCache.data = {};
+                end;
+                currCache.lastUpdate = currUpdatedAt;
+            end;
+            retCell = currCache.data;
+        end;
     end;
 end
 

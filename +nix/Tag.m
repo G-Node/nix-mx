@@ -6,6 +6,7 @@ classdef Tag < nix.Entity
         referencesCache
         featuresCache
         sourcesCache
+        metadataCache
     end;
     
     properties(Dependent)
@@ -36,6 +37,8 @@ classdef Tag < nix.Entity
             obj.featuresCache.data = {};
             obj.sourcesCache.lastUpdate = 0;
             obj.sourcesCache.data = {};
+            obj.metadataCache.lastUpdate = 0;
+            obj.metadataCache.data = {};
         end;
         
         function id = get.id(tag)
@@ -162,11 +165,8 @@ classdef Tag < nix.Entity
         end;
         
         function metadata = open_metadata(obj)
-            metadata = {};
-            metadataHandle = nix_mx('Tag::openMetadataSection', obj.nix_handle);
-            if obj.has_metadata()
-                metadata = nix.Section(metadataHandle);
-            end;
+            [obj.metadataCache, metadata] = nix.Utils.fetchObj(obj.updatedAt, ...
+                'Tag::openMetadataSection', obj.nix_handle, obj.metadataCache, @nix.Section);
         end;
 
     end;

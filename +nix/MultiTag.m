@@ -6,6 +6,7 @@ classdef MultiTag < nix.Entity
         referencesCache
         featuresCache
         sourcesCache
+        metadataCache
     end;
     
     properties(Dependent)
@@ -34,6 +35,8 @@ classdef MultiTag < nix.Entity
             obj.featuresCache.data = {};
             obj.sourcesCache.lastUpdate = 0;
             obj.sourcesCache.data = {};
+            obj.metadataCache.lastUpdate = 0;
+            obj.metadataCache.data = {};
         end;
         
         function id = get.id(tag)
@@ -183,11 +186,8 @@ classdef MultiTag < nix.Entity
         end;
         
         function metadata = open_metadata(obj)
-            metadata = {};
-            metadataHandle = nix_mx('MultiTag::openMetadataSection', obj.nix_handle);
-            if obj.has_metadata()
-                metadata = nix.Section(metadataHandle);
-            end;
+            [obj.metadataCache, metadata] = nix.Utils.fetchObj(obj.updatedAt, ...
+                'MultiTag::openMetadataSection', obj.nix_handle, obj.metadataCache, @nix.Section);
         end;
 
     end;
