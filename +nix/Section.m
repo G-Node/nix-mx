@@ -5,6 +5,7 @@ classdef Section < nix.Entity
     properties(Hidden)
         info
         sectionsCache
+        propsCache
     end;
     
     properties(Dependent)
@@ -26,6 +27,8 @@ classdef Section < nix.Entity
            
            obj.sectionsCache.lastUpdate = 0;
            obj.sectionsCache.data = {};
+           obj.propsCache.lastUpdate = 0;
+           obj.propsCache.data = {};           
         end;
         
         function name = get.name(section)
@@ -94,7 +97,8 @@ classdef Section < nix.Entity
         % ----------------
         
         function props = get.properties_cell(obj)
-            props = nix_mx('Section::listProperties', obj.nix_handle);
+            [obj.propsCache, props] = nix.Utils.fetchPropList(obj.updatedAt, ...
+                'Section::listProperties', obj.nix_handle, obj.propsCache);
         end
         
         function p_map = get.properties_map(obj)

@@ -4,6 +4,7 @@ classdef Source < nix.Entity
     properties(Hidden)
         info
         sourcesCache
+        metadataCache
     end;
     
     properties(Dependent)
@@ -23,6 +24,8 @@ classdef Source < nix.Entity
            
            obj.sourcesCache.lastUpdate = 0;
            obj.sourcesCache.data = {};
+           obj.metadataCache.lastUpdate = 0;
+           obj.metadataCache.data = {};
         end;
         
         function id = get.id(source)
@@ -73,11 +76,8 @@ classdef Source < nix.Entity
         end;
         
         function metadata = open_metadata(obj)
-            metadata = {};
-            metadataHandle = nix_mx('Source::openMetadataSection', obj.nix_handle);
-            if obj.has_metadata()
-                metadata = nix.Section(metadataHandle);
-            end;
+            [obj.metadataCache, metadata] = nix.Utils.fetchObj(obj.updatedAt, ...
+                'Source::openMetadataSection', obj.nix_handle, obj.metadataCache, @nix.Section);
         end;
 
     end;

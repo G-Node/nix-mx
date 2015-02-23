@@ -153,7 +153,16 @@ namespace nixblock {
     void open_metadata_section(const extractor &input, infusor &output)
     {
         nix::Block currObj = input.entity<nix::Block>(1);
-        output.set(0, nixgen::open_metadata_section(currObj.metadata()));
+        nix::Section sec = currObj.metadata();
+
+        if (sec) {
+            handle lh = handle(sec);
+            output.set(0, lh);
+        }
+        else
+        {
+            output.set(0, uint64_t(0));
+        }
     }
 
 } // namespace nixblock

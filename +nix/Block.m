@@ -7,6 +7,7 @@ classdef Block < nix.Entity
         sourcesCache
         tagsCache
         multiTagsCache
+        metadataCache
     end;
     
     properties(Dependent)
@@ -37,6 +38,8 @@ classdef Block < nix.Entity
             obj.tagsCache.data = {};
             obj.multiTagsCache.lastUpdate = 0;
             obj.multiTagsCache.data = {};
+            obj.metadataCache.lastUpdate = 0;
+            obj.metadataCache.data = {};
         end;
         
         function id = get.id(block)
@@ -159,11 +162,8 @@ classdef Block < nix.Entity
         end;
         
         function metadata = open_metadata(obj)
-            metadata = {};
-            metadataHandle = nix_mx('Block::openMetadataSection', obj.nix_handle);
-            if obj.has_metadata()
-                metadata = nix.Section(metadataHandle);
-            end;
+            [obj.metadataCache, metadata] = nix.Utils.fetchObj(obj.updatedAt, ...
+                'Block::openMetadataSection', obj.nix_handle, obj.metadataCache, @nix.Section);
         end;
 
     end;

@@ -4,6 +4,7 @@ classdef DataArray < nix.Entity
     properties(Hidden)
       info
       sourcesCache
+      metadataCache
     end;
     
     properties(Dependent)
@@ -26,6 +27,8 @@ classdef DataArray < nix.Entity
             
             obj.sourcesCache.lastUpdate = 0;
             obj.sourcesCache.data = {};
+            obj.metadataCache.lastUpdate = 0;
+            obj.metadataCache.data = {};
         end;
         
         function nfo = get.info(obj)
@@ -94,11 +97,8 @@ classdef DataArray < nix.Entity
         end;
         
         function metadata = open_metadata(obj)
-            metadata = {};
-            metadataHandle = nix_mx('DataArray::openMetadataSection', obj.nix_handle);
-            if obj.has_metadata()
-                metadata = nix.Section(metadataHandle);
-            end;
+            [obj.metadataCache, metadata] = nix.Utils.fetchObj(obj.updatedAt, ...
+                'DataArray::openMetadataSection', obj.nix_handle, obj.metadataCache, @nix.Section);
         end;
     end;
 end

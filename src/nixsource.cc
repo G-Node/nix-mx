@@ -43,7 +43,16 @@ namespace nixsource {
     void open_metadata_section(const extractor &input, infusor &output)
     {
         nix::Source currObj = input.entity<nix::Source>(1);
-        output.set(0, nixgen::open_metadata_section(currObj.metadata()));
+        nix::Section sec = currObj.metadata();
+
+        if (sec) {
+            handle lh = handle(sec);
+            output.set(0, lh);
+        }
+        else
+        {
+            output.set(0, uint64_t(0));
+        }
     }
 
     void sources(const extractor &input, infusor &output)
