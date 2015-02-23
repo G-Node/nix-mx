@@ -3,6 +3,7 @@ classdef DataArray < nix.Entity
     
     properties(Hidden)
       info
+      sourcesCache
     end;
     
     properties(Dependent)
@@ -15,11 +16,16 @@ classdef DataArray < nix.Entity
         unit
         dimensions
         polynom_coefficients
+        
+        sources
     end;
    
     methods
         function obj = DataArray(h)
-           obj@nix.Entity(h);
+            obj@nix.Entity(h);
+            
+            obj.sourcesCache.lastUpdate = 0;
+            obj.sourcesCache.data = {};
         end;
         
         function nfo = get.info(obj)
@@ -67,6 +73,15 @@ classdef DataArray < nix.Entity
            % data must agree with file & dimensions
            % see mkarray.cc(42)
            data = permute(tmp, length(size(tmp)):-1:1);
+        end;
+        
+        % -----------------
+        % Sources methods
+        % -----------------
+        
+        function sources = get.sources(obj)
+            [obj.sourcesCache, sources] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                'DataArray::sources', obj.nix_handle, obj.sourcesCache, @nix.Source);
         end;
         
         % -----------------

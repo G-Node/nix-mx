@@ -20,14 +20,16 @@ b = f.blocks{2};
 % --------------------------------------
 
 % get Data Arrays of a certain type
-idx = cellfun(@(x) strcmp(x.type, 'nix.spiketimes'), b.data_arrays);
-selection = b.data_arrays(idx);
+idx = cellfun(@(x) strcmp(x.type, 'nix.spiketimes'), b.dataArrays);
+selection1 = b.dataArrays(idx);
 
-
-
-
-
-
+% get DataArrays by several criteria
+cond1 = @(x) ~isempty(strfind(x.name, 'SpikeActivity'));
+cond2 = @(x) any(cellfun(@(y) strcmp(y.name, 'Unit 7'), x.sources));
+cond3 = @(x) x.open_metadata.properties_map('Target') == 2;
+cond4 = @(x) x.open_metadata.properties_map('ExperimentalCondition') == 3;
+idx = cellfun(@(x) cond1(x) & cond2(x) & cond3(x) & cond4(x), b.dataArrays);
+selection2 = b.dataArrays(idx);
 
 % --------------------------------------
 
@@ -38,7 +40,10 @@ cellfun(@(x) disp(strcat(x.type, ': ', x.name)), f.sections);
 sec = f.sections{2}.sections{1};
 
 % display all Section properties
-cellfun(@(x) disp(x), sec.props);
+cellfun(@(x) disp(x), sec.properties_cell);
 
-% get a certain Value
-value = sec.props{1}.values{1};
+% get a certain Value by index
+value = sec.properties_cell{1}.values{1};
+
+% or by name
+value = sec.properties_map('Name');
