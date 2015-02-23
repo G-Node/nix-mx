@@ -73,16 +73,7 @@ namespace nixtag {
     void open_metadata_section(const extractor &input, infusor &output)
     {
         nix::Tag currObj = input.entity<nix::Tag>(1);
-        nix::Section sec = currObj.metadata();
-
-        if (sec) {
-            handle lh = handle(sec);
-            output.set(0, lh);
-        }
-        else
-        {
-            output.set(0, uint64_t(0));
-        }
+        output.set(0, nixgen::get_handle_or_none(currObj.metadata()));
     }
 
     void references(const extractor &input, infusor &output)

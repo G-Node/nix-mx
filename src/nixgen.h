@@ -2,6 +2,7 @@
 #define NIX_MX_GENERICS
 
 #include "arguments.h"
+#include "handle.h"
 
 namespace nixgen {
 
@@ -22,6 +23,17 @@ namespace nixgen {
     mxArray* has_metadata_section(nix::Section currSection);
 
     handle open_metadata_section(nix::Section secIn);
+
+    template<typename T>
+    uint64_t get_handle_or_none(T &obj) {
+        if (obj) {
+            return handle(obj).address();
+        }
+        else
+        {
+            return uint64_t(0);
+        }
+    }
 
 } // namespace nixgen
 
