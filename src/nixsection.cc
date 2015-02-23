@@ -32,26 +32,13 @@ void describe(const extractor &input, infusor &output)
 void link(const extractor &input, infusor &output)
 {
     nix::Section section = input.entity<nix::Section>(1);
-
-    nix::Section linked = section.link();
-
-    if (linked) {
-        handle lh = handle(linked);
-        output.set(0, lh);
-    }
-    else
-    {
-        output.set(0, uint64_t(0));
-    }
+    output.set(0, nixgen::get_handle_or_none(section.link()));
 }
 
 void parent(const extractor &input, infusor &output)
 {
     nix::Section section = input.entity<nix::Section>(1);
-
-    nix::Section parent = section.parent();
-    handle lh = handle(parent);
-    output.set(0, lh);
+    output.set(0, nixgen::get_handle_or_none(section.parent()));
 }
 
 void has_section(const extractor &input, infusor &output)

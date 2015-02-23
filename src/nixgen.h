@@ -22,8 +22,6 @@ namespace nixgen {
 
     mxArray* has_metadata_section(nix::Section currSection);
 
-    handle open_metadata_section(nix::Section secIn);
-
     template<typename T>
     uint64_t get_handle_or_none(T &obj) {
         if (obj) {

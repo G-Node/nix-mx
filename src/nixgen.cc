@@ -92,11 +92,4 @@ namespace nixgen {
         return currTagFeatHandle;
     }
 
-    handle open_metadata_section(nix::Section secIn)
-    {
-        nix::Section currMDSec = secIn;
-        handle currTagMDSecHandle = handle(currMDSec);
-        return currTagMDSecHandle;
-    }
-
 } // namespace nixgen
