@@ -15,7 +15,8 @@ classdef Section < nix.Entity
         mapping
         
         sections
-        props
+        properties_cell
+        properties_map
     end;
     
     methods
@@ -92,9 +93,19 @@ classdef Section < nix.Entity
         % Property methods
         % ----------------
         
-        function props = get.props(obj)
+        function props = get.properties_cell(obj)
             props = nix_mx('Section::listProperties', obj.nix_handle);
         end
+        
+        function p_map = get.properties_map(obj)
+            p_map = containers.Map();
+            props = obj.properties_cell;
+            
+            for i=1:length(props)
+                p_map(props{i}.name) = cell2mat(props{i}.values);
+            end
+        end
+
     end
     
 end

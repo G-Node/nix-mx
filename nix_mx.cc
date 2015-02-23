@@ -88,6 +88,7 @@ const std::vector<fendpoint> funcs = {
         { "DataArray::readAll", nixdataarray::read_all },
         { "DataArray::hasMetadataSection", nixdataarray::has_metadata_section },
         { "DataArray::openMetadataSection", nixdataarray::open_metadata_section },
+        { "DataArray::sources", nixdataarray::sources },
 
         // Tag
         { "Tag::describe", nixtag::describe },
