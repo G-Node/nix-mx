@@ -2,16 +2,17 @@ function funcs = TestTag
 %TESTTag tests for Tag
 %   Detailed explanation goes here
 
-    funcs{1} = @test_list_fetch_references;
-    funcs{2} = @test_list_fetch_sources;
-    funcs{3} = @test_list_fetch_features;
-    funcs{4} = @test_open_source;
-    funcs{5} = @test_open_feature;
-    funcs{6} = @test_open_reference;
-    funcs{7} = @test_has_metadata;
-    funcs{8} = @test_open_metadata;
-    funcs{9} = @test_retrieve_data;
-    funcs{10} = @test_retrieve_feature_data;
+    funcs = {};
+    funcs{end+1} = @test_list_fetch_references;
+    funcs{end+1} = @test_list_fetch_sources;
+    funcs{end+1} = @test_list_fetch_features;
+    funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_open_feature;
+    funcs{end+1} = @test_open_reference;
+    funcs{end+1} = @test_has_metadata;
+    funcs{end+1} = @test_open_metadata;
+    funcs{end+1} = @test_retrieve_data;
+    funcs{end+1} = @test_retrieve_feature_data;
 end
 
 %% Test: List/fetch references

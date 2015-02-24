@@ -2,10 +2,11 @@ function funcs = TestDataArray
 %TESTDATAARRAY tests for DataArray
 %   Detailed explanation goes here
 
-    funcs{1} = @test_open_data;
-    funcs{2} = @test_has_metadata;
-    funcs{3} = @test_open_metadata;
-    funcs{4} = @test_list_sources;
+    funcs = {}
+    funcs{end+1} = @test_open_data;
+    funcs{end+1} = @test_has_metadata;
+    funcs{end+1} = @test_open_metadata;
+    funcs{end+1} = @test_list_sources;
 end
 
 %% Test: Read all data from DataArray

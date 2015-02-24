@@ -2,13 +2,14 @@ function funcs = testFile
 %TESTFILE tests for File
 %   Detailed explanation goes here
 
-    funcs{1} = @test_read_only;
-    funcs{2} = @test_read_write;
-    funcs{3} = @test_overwrite;
-    funcs{4} = @test_list_sections;
-    funcs{5} = @test_open_section;
-    funcs{6} = @test_list_blocks;
-    funcs{7} = @test_open_block;
+    funcs = {};
+    funcs{end+1} = @test_read_only;
+    funcs{end+1} = @test_read_write;
+    funcs{end+1} = @test_overwrite;
+    funcs{end+1} = @test_list_sections;
+    funcs{end+1} = @test_open_section;
+    funcs{end+1} = @test_list_blocks;
+    funcs{end+1} = @test_open_block;
 end
 
 function [] = test_read_only( varargin )
