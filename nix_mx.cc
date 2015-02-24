@@ -162,6 +162,8 @@ static void on_exit() {
     delete methods;
 }
 
+#define GETTER(type, class, name) static_cast<type(class::*)()const>(&class::name)
+
 // main entry point
 void mexFunction(int            nlhs,
                  mxArray       *lhs[],
@@ -185,8 +187,8 @@ void mexFunction(int            nlhs,
         methods = new registry{};
 
         classdef<nix::File>("File", methods)
-            .reg<std::vector<nix::Block>>("blocks", &nix::File::blocks)
-            .reg<std::vector<nix::Section>>("sections", &nix::File::sections);
+            .reg("blocks", GETTER(std::vector<nix::Block>, nix::File, blocks))
+            .reg("sections", GETTER(std::vector<nix::Section>, nix::File, sections));
 
         mexAtExit(on_exit);
     });
