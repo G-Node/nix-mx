@@ -47,8 +47,11 @@ classdef File < nix.Entity
         end
         
         function newBlock = createBlock(obj, name, type)
-            newBlockHandle = nix_mx('File::createBlock', obj.nix_handle, name, type);
-            newBlock = nix.Block(newBlockHandle);
+            newBlock = nix.Block(nix_mx('File::createBlock', obj.nix_handle, name, type));
+        end;
+
+        function delCheck = deleteBlock(obj, deleteBlockObj)
+            delCheck = logical(nix_mx('File::deleteBlock', obj.nix_handle, deleteBlockObj.nix_handle));
         end;
 
         % ----------------
@@ -70,10 +73,13 @@ classdef File < nix.Entity
         end;
 
         function newSec = createSection(obj, name, type)
-            newSecHandle = nix_mx('File::createSection', obj.nix_handle, name, type);
-            newSec = nix.Section(newSecHandle);
+            newSec = nix.Section(nix_mx('File::createSection', obj.nix_handle, name, type));
         end;
-        
+
+        function delCheck = deleteSection(obj, deleteSectionObj)
+            delCheck = logical(nix_mx('File::deleteSection', obj.nix_handle, deleteSectionObj.nix_handle));
+        end;
+
     end
 end
 
