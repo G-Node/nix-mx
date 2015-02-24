@@ -68,7 +68,6 @@ const std::vector<fendpoint> funcs = {
         { "Block::describe", nixblock::describe },
         { "Block::listDataArrays", nixblock::list_data_arrays },
         { "Block::openDataArray", nixblock::open_data_array },
-        { "Block::dataArrays", nixblock::data_arrays },
         { "Block::listSources", nixblock::list_sources },
         { "Block::openSource", nixblock::open_source },
         { "Block::sources", nixblock::sources },
@@ -189,6 +188,9 @@ void mexFunction(int            nlhs,
         classdef<nix::File>("File", methods)
             .reg("blocks", GETTER(std::vector<nix::Block>, nix::File, blocks))
             .reg("sections", GETTER(std::vector<nix::Section>, nix::File, sections));
+
+        classdef<nix::Block>("Block", methods)
+            .reg("dataArrays", &nix::Block::dataArrays);
 
         mexAtExit(on_exit);
     });
