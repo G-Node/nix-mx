@@ -12,6 +12,9 @@ function funcs = testFile
     funcs{end+1} = @test_open_section;
     funcs{end+1} = @test_list_blocks;
     funcs{end+1} = @test_open_block;
+    funcs{end+1} = @test_delete_block;
+    funcs{end+1} = @test_delete_section;
+
 end
 
 %% Test: Open HDF5 file in ReadOnly mode
@@ -43,6 +46,27 @@ function [] = test_create_section( varargin )
     useName = 'testSection 1';
     newSection = test_file.createSection(useName, 'testType 1');
     assert(strcmp(newSection.name(), useName));
+end
+
+%% Test: Delete Block
+function [] = test_delete_block( varargin )
+    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
+    checkDelete = test_file.deleteBlock(test_file.blocks{1});
+    assert(checkDelete);
+%-- TODO Bug: the updatedAt timestamp has a limited time resolution
+%-- if create and delete of the the same entity are too close together
+%-- in time, the updatedAt timestamp will not be changed between create and
+%-- delete and the cache on the matlab side will not be refreshed.
+%-- thats why the next statement will lead to an error if it is included 
+%-- in this test.
+%    assert(size(test_file.blocks, 1) == 0);
+end
+
+%% Test: Delete Section
+function [] = test_delete_section( varargin )
+    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
+    checkDelete = test_file.deleteSection(test_file.sections{1});
+    assert(checkDelete);
 end
 
 function [] = test_list_sections( varargin )

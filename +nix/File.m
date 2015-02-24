@@ -51,7 +51,8 @@ classdef File < nix.Entity
         end;
 
         function delCheck = deleteBlock(obj, deleteBlockObj)
-            delCheck = logical(nix_mx('File::deleteBlock', obj.nix_handle, deleteBlockObj.nix_handle));
+            retStruct = nix_mx('File::deleteBlock', obj.nix_handle, deleteBlockObj.nix_handle);
+            delCheck = logical(retStruct.deleted);
         end;
 
         % ----------------
@@ -77,7 +78,8 @@ classdef File < nix.Entity
         end;
 
         function delCheck = deleteSection(obj, deleteSectionObj)
-            delCheck = logical(nix_mx('File::deleteSection', obj.nix_handle, deleteSectionObj.nix_handle));
+            retStruct = nix_mx('File::deleteSection', obj.nix_handle, deleteSectionObj.nix_handle);
+            delCheck = logical(retStruct.deleted);
         end;
 
     end
