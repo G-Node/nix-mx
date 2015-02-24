@@ -103,9 +103,6 @@ void create_block(const extractor &input, infusor &output)
     nix::File currObj = input.entity<nix::File>(1);
     nix::Block newBlock = currObj.createBlock(input.str(2), input.str(3));
 
-    // set updatedAt, otherwise cache on matlab side is not refreshed
-    currObj.forceUpdatedAt();
-
     handle nbh = handle(newBlock);
     output.set(0, nbh);
 }
@@ -114,9 +111,6 @@ void create_section(const extractor &input, infusor &output)
 {
     nix::File currObj = input.entity<nix::File>(1);
     nix::Section newSection = currObj.createSection(input.str(2), input.str(3));
-
-    // set updatedAt, otherwise cache on matlab side is not refreshed
-    currObj.forceUpdatedAt();
 
     handle nsh = handle(newSection);
     output.set(0, nsh);
@@ -128,9 +122,6 @@ void delete_block(const extractor &input, infusor &output)
     nix::Block delObj = input.entity<nix::Block>(2);
     bool checkDeleted = currObj.deleteBlock(delObj);
 
-    // set updatedAt, otherwise cache on matlab side is not refreshed
-    currObj.forceUpdatedAt();
-
     // TODO rename has_entity or implement other means of returning boolean value to Matlab
     output.set(0, nixgen::has_entity(checkDeleted, { "deleted" }));
 }
@@ -140,9 +131,6 @@ void delete_section(const extractor &input, infusor &output)
     nix::File currObj = input.entity<nix::File>(1);
     nix::Section delObj = input.entity<nix::Section>(2);
     bool checkDeleted = currObj.deleteSection(delObj);
-
-    // set updatedAt, otherwise cache on matlab side is not refreshed
-    currObj.forceUpdatedAt();
 
     // TODO rename has_entity or implement other means of returning boolean value to Matlab
     output.set(0, nixgen::has_entity(checkDeleted, { "deleted" }));

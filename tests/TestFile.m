@@ -53,13 +53,7 @@ function [] = test_delete_block( varargin )
     test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
     checkDelete = test_file.deleteBlock(test_file.blocks{1});
     assert(checkDelete);
-%-- TODO Bug: the updatedAt timestamp has a limited time resolution
-%-- if create and delete of the the same entity are too close together
-%-- in time, the updatedAt timestamp will not be changed between create and
-%-- delete and the cache on the matlab side will not be refreshed.
-%-- thats why the next statement will lead to an error if it is included 
-%-- in this test.
-%    assert(size(test_file.blocks, 1) == 0);
+    assert(size(test_file.blocks, 1) == 0);
 end
 
 %% Test: Delete Section
@@ -67,6 +61,7 @@ function [] = test_delete_section( varargin )
     test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
     checkDelete = test_file.deleteSection(test_file.sections{1});
     assert(checkDelete);
+    assert(size(test_file.sections, 1) == 0);
 end
 
 function [] = test_list_sections( varargin )
