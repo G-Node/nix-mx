@@ -2,7 +2,7 @@ function funcs = TestDataArray
 %TESTDATAARRAY tests for DataArray
 %   Detailed explanation goes here
 
-    funcs = {}
+    funcs = {};
     funcs{end+1} = @test_open_data;
     funcs{end+1} = @test_has_metadata;
     funcs{end+1} = @test_open_metadata;
