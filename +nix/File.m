@@ -46,6 +46,11 @@ classdef File < nix.Entity
                 'File::blocks', obj.nix_handle, obj.blocksCache, @nix.Block);
         end
         
+        function newBlock = createBlock(obj, name, type)
+            newBlockHandle = nix_mx('File::createBlock', obj.nix_handle, name, type);
+            newBlock = nix.Block(newBlockHandle);
+        end;
+
         % ----------------
         % Section methods
         % ----------------
@@ -64,6 +69,11 @@ classdef File < nix.Entity
                 'File::sections', obj.nix_handle, obj.sectionsCache, @nix.Section);
         end;
 
+        function newSec = createSection(obj, name, type)
+            newSecHandle = nix_mx('File::createSection', obj.nix_handle, name, type);
+            newSec = nix.Section(newSecHandle);
+        end;
+        
     end
 end
 

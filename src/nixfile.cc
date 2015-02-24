@@ -97,4 +97,20 @@ void open_section(const extractor &input, infusor &output)
     output.set(0, bb);
 }
 
+void create_block(const extractor &input, infusor &output)
+{
+    nix::File nf = input.entity<nix::File>(1);
+    nix::Block newBlock = nf.createBlock(input.str(2), input.str(3));
+    handle nbh = handle(newBlock);
+    output.set(0, nbh);
+}
+
+void create_section(const extractor &input, infusor &output)
+{
+    nix::File nf = input.entity<nix::File>(1);
+    nix::Section newSection = nf.createSection(input.str(2), input.str(3));
+    handle nsh = handle(newSection);
+    output.set(0, nsh);
+}
+
 } // namespace nixfile
