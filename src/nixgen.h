@@ -23,9 +23,9 @@ namespace nixgen {
     mxArray* has_metadata_section(nix::Section currSection);
 
     template<typename T>
-    uint64_t get_handle_or_none(T &obj) {
+    uint64_t get_handle_or_none(T &&obj) {
         if (obj) {
-            return handle(obj).address();
+            return handle(std::forward<T>(obj)).address();
         }
         else
         {
