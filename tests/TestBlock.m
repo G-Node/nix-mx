@@ -1,4 +1,4 @@
-function funcs = testBlock
+function funcs = TestBlock
 %TESTFILE Tests for the nix.Block object
 %   Detailed explanation goes here
 
@@ -15,6 +15,7 @@ function funcs = testBlock
     funcs{end+1} = @test_has_tag;
     funcs{end+1} = @test_has_metadata;
     funcs{end+1} = @test_open_metadata;
+    funcs{end+1} = @test_attrs;
 end
 
 function [] = test_list_arrays( varargin )
@@ -141,4 +142,15 @@ function [] = test_open_metadata( varargin )
     %-- ToDo implement test for exising metadata
     %getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     %assert(~isempty(getBlock.open_metadata()))
+end
+
+function [] = test_attrs( varargin )
+%% Test: Access Attributes
+    f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    b1 = f.blocks{1};
+
+    assert(~isempty(b1.id));
+    assert(strcmp(b1.name, 'joe097'));
+    assert(strcmp(b1.type, 'nix.session'));
+    assert(isempty(b1.definition));
 end

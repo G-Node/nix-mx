@@ -15,11 +15,12 @@ namespace nixblock {
     {
         nix::Block block = input.entity<nix::Block>(1);
 
-        struct_builder sb({ 1 }, { "id", "type", "name" });
+        struct_builder sb({ 1 }, { "id", "type", "name", "definition" });
 
         sb.set(block.id());
         sb.set(block.type());
         sb.set(block.name());
+        sb.set(block.definition());
 
         output.set(0, sb.array());
     }
