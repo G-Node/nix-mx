@@ -3,6 +3,9 @@
 % using nix-mx.
 % --------------------------------------
 
+clear all;
+
+%% File operations
 path = 'C:\projects\nix-mx\tests\test.h5';
 
 % Open NIX file
@@ -17,7 +20,7 @@ cellfun(@(x) disp(x.name), f.blocks);
 % get a certain Block
 b = f.blocks{2};
 
-% --------------------------------------
+%% Data operations
 
 % get Data Arrays of a certain type
 idx = cellfun(@(x) strcmp(x.type, 'nix.spiketimes'), b.dataArrays);
@@ -31,7 +34,16 @@ cond4 = @(x) x.open_metadata.properties_map('ExperimentalCondition') == 3;
 idx = cellfun(@(x) cond1(x) & cond2(x) & cond3(x) & cond4(x), b.dataArrays);
 selection2 = b.dataArrays(idx);
 
-% --------------------------------------
+% get actual data
+d1 = b.dataArrays{1};
+dataset = d1.read_all();
+
+% understand dimensions
+dim1 = d1.dimensions{1};
+dim1.type
+dim1.unit
+
+%% Metadata operations
 
 % explore root metadata Sections (type, name)
 cellfun(@(x) disp(strcat(x.type, ': ', x.name)), f.sections);
@@ -47,3 +59,6 @@ value = sec.properties_cell{1}.values{1};
 
 % or by name
 value = sec.properties_map('Name');
+
+%% clear space
+clear all;
