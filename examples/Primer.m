@@ -6,7 +6,7 @@
 clear all;
 
 %% File operations
-path = 'C:\projects\nix-mx\tests\test.h5';
+path = 'module2.h5';
 
 % Open NIX file
 f = nix.File(path, nix.FileMode.ReadOnly);
