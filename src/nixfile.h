@@ -17,6 +17,14 @@ void list_sections(const extractor &input, infusor &output);
 
 void open_section(const extractor &input, infusor &output);
 
+void create_block(const extractor &input, infusor &output);
+
+void create_section(const extractor &input, infusor &output);
+
+void delete_block(const extractor &input, infusor &output);
+
+void delete_section(const extractor &input, infusor &output);
+
 } // namespace nixfile
 
 #endif

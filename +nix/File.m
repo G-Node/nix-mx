@@ -46,6 +46,17 @@ classdef File < nix.Entity
                 'File::blocks', obj.nix_handle, obj.blocksCache, @nix.Block);
         end
         
+        function newBlock = createBlock(obj, name, type)
+            newBlock = nix.Block(nix_mx('File::createBlock', obj.nix_handle, name, type));
+            obj.blocksCache.lastUpdate = 0;
+        end;
+
+        function delCheck = deleteBlock(obj, deleteBlockObj)
+            retStruct = nix_mx('File::deleteBlock', obj.nix_handle, deleteBlockObj.nix_handle);
+            delCheck = logical(retStruct.deleted);
+            obj.blocksCache.lastUpdate = 0;
+        end;
+
         % ----------------
         % Section methods
         % ----------------
@@ -62,6 +73,17 @@ classdef File < nix.Entity
         function sections = get.sections(obj)
             [obj.sectionsCache, sections] = nix.Utils.fetchObjList(obj.updatedAt, ...
                 'File::sections', obj.nix_handle, obj.sectionsCache, @nix.Section);
+        end;
+
+        function newSec = createSection(obj, name, type)
+            newSec = nix.Section(nix_mx('File::createSection', obj.nix_handle, name, type));
+            obj.sectionsCache.lastUpdate = 0;
+        end;
+
+        function delCheck = deleteSection(obj, deleteSectionObj)
+            retStruct = nix_mx('File::deleteSection', obj.nix_handle, deleteSectionObj.nix_handle);
+            delCheck = logical(retStruct.deleted);
+            obj.sectionsCache.lastUpdate = 0;
         end;
 
     end

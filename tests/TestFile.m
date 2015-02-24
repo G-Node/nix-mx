@@ -2,34 +2,66 @@ function funcs = testFile
 %TESTFILE tests for File
 %   Detailed explanation goes here
 
-    funcs{1} = @test_read_only;
-    funcs{2} = @test_read_write;
-    funcs{3} = @test_overwrite;
-    funcs{4} = @test_list_sections;
-    funcs{5} = @test_open_section;
-    funcs{6} = @test_list_blocks;
-    funcs{7} = @test_open_block;
+    funcs = {};
+    funcs{end+1} = @test_read_only;
+    funcs{end+1} = @test_read_write;
+    funcs{end+1} = @test_overwrite;
+    funcs{end+1} = @test_create_block;
+    funcs{end+1} = @test_create_section;
+    funcs{end+1} = @test_list_sections;
+    funcs{end+1} = @test_open_section;
+    funcs{end+1} = @test_list_blocks;
+    funcs{end+1} = @test_open_block;
+    funcs{end+1} = @test_delete_block;
+    funcs{end+1} = @test_delete_section;
+
 end
 
-function [] = test_read_only( varargin )
 %% Test: Open HDF5 file in ReadOnly mode
+function [] = test_read_only( varargin )
     f = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
 end
 
-function [] = test_read_write( varargin )
 %% Test: Open HDF5 file in ReadWrite mode
-
-    %-- TODO: throws error 'does not work' at the moment
-    %f = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadWrite);
+function [] = test_read_write( varargin )
+    f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
 end
 
-function [] = test_overwrite( varargin )
 %% Test: Open HDF5 file in Overwrite mode
-%-- ToDo: maybe there's a cleverer way for the overwrite test than having
-%-- two test files.
-% AS: I'd excluded it for the moment as as it's always causing changes to
-% GIT.
-    %f = nix.File(fullfile(pwd,'tests','testOverwrite.h5'), nix.FileMode.Overwrite);
+function [] = test_overwrite( varargin )
+    f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
+end
+
+%% Test: Create Block
+function [] = test_create_block( varargin )
+    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
+    useName = 'testBlock 1';
+    newBlock = test_file.createBlock(useName, 'testType 1');
+    assert(strcmp(newBlock.name(), useName));
+end
+
+%% Test: Create Section
+function [] = test_create_section( varargin )
+    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
+    useName = 'testSection 1';
+    newSection = test_file.createSection(useName, 'testType 1');
+    assert(strcmp(newSection.name(), useName));
+end
+
+%% Test: Delete Block
+function [] = test_delete_block( varargin )
+    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
+    checkDelete = test_file.deleteBlock(test_file.blocks{1});
+    assert(checkDelete);
+    assert(size(test_file.blocks, 1) == 0);
+end
+
+%% Test: Delete Section
+function [] = test_delete_section( varargin )
+    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
+    checkDelete = test_file.deleteSection(test_file.sections{1});
+    assert(checkDelete);
+    assert(size(test_file.sections, 1) == 0);
 end
 
 function [] = test_list_sections( varargin )

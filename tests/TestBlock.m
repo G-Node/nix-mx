@@ -2,18 +2,19 @@ function funcs = testBlock
 %TESTFILE Tests for the nix.Block object
 %   Detailed explanation goes here
 
-    funcs{1} = @test_list_arrays;
-    funcs{2} = @test_list_sources;
-    funcs{3} = @test_list_tags;
-    funcs{4} = @test_list_multitags;
-    funcs{5} = @test_open_array;
-    funcs{6} = @test_open_tag;
-    funcs{7} = @test_open_multitag;
-    funcs{8} = @test_open_source;
-    funcs{9} = @test_has_multitag;
-    funcs{10} = @test_has_tag;
-    funcs{11} = @test_has_metadata;
-    funcs{12} = @test_open_metadata;
+    funcs = {};
+    funcs{end+1} = @test_list_arrays;
+    funcs{end+1} = @test_list_sources;
+    funcs{end+1} = @test_list_tags;
+    funcs{end+1} = @test_list_multitags;
+    funcs{end+1} = @test_open_array;
+    funcs{end+1} = @test_open_tag;
+    funcs{end+1} = @test_open_multitag;
+    funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_has_multitag;
+    funcs{end+1} = @test_has_tag;
+    funcs{end+1} = @test_has_metadata;
+    funcs{end+1} = @test_open_metadata;
 end
 
 function [] = test_list_arrays( varargin )

@@ -2,10 +2,11 @@ function funcs = testSource
 %TESTSOURCE tests for Source
 %   Detailed explanation goes here
 
-    funcs{1} = @test_list_fetch_sources;
-    funcs{2} = @test_open_source;
-    funcs{3} = @test_has_metadata;
-    funcs{4} = @test_open_metadata;
+    funcs = {};
+    funcs{end+1} = @test_list_fetch_sources;
+    funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_has_metadata;
+    funcs{end+1} = @test_open_metadata;
 end
 
 %% Test: List/fetch sources

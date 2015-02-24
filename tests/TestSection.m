@@ -2,12 +2,13 @@ function funcs = testSection
 %TESTFILE % Tests for the nix.Section object
 %   Detailed explanation goes here
 
-    funcs{1} = @test_list_subsections;
-    funcs{2} = @test_open_section;
-    funcs{3} = @test_parent;
-    funcs{4} = @test_has_section;
-    funcs{5} = @test_attrs;
-    funcs{6} = @test_properties;
+    funcs = {};
+    funcs{end+1} = @test_list_subsections;
+    funcs{end+1} = @test_open_section;
+    funcs{end+1} = @test_parent;
+    funcs{end+1} = @test_has_section;
+    funcs{end+1} = @test_attrs;
+    funcs{end+1} = @test_properties;
 end
 
 function [] = test_list_subsections( varargin )

@@ -1,4 +1,5 @@
 #include "nixfile.h"
+#include "nixgen.h"
 
 #include "mex.h"
 
@@ -95,6 +96,44 @@ void open_section(const extractor &input, infusor &output)
     nix::Section sec = nf.getSection(input.str(2));
     handle bb = handle(sec);
     output.set(0, bb);
+}
+
+void create_block(const extractor &input, infusor &output)
+{
+    nix::File currObj = input.entity<nix::File>(1);
+    nix::Block newBlock = currObj.createBlock(input.str(2), input.str(3));
+
+    handle nbh = handle(newBlock);
+    output.set(0, nbh);
+}
+
+void create_section(const extractor &input, infusor &output)
+{
+    nix::File currObj = input.entity<nix::File>(1);
+    nix::Section newSection = currObj.createSection(input.str(2), input.str(3));
+
+    handle nsh = handle(newSection);
+    output.set(0, nsh);
+}
+
+void delete_block(const extractor &input, infusor &output)
+{
+    nix::File currObj = input.entity<nix::File>(1);
+    nix::Block delObj = input.entity<nix::Block>(2);
+    bool checkDeleted = currObj.deleteBlock(delObj);
+
+    // TODO rename has_entity or implement other means of returning boolean value to Matlab
+    output.set(0, nixgen::has_entity(checkDeleted, { "deleted" }));
+}
+
+void delete_section(const extractor &input, infusor &output)
+{
+    nix::File currObj = input.entity<nix::File>(1);
+    nix::Section delObj = input.entity<nix::Section>(2);
+    bool checkDeleted = currObj.deleteSection(delObj);
+
+    // TODO rename has_entity or implement other means of returning boolean value to Matlab
+    output.set(0, nixgen::has_entity(checkDeleted, { "deleted" }));
 }
 
 } // namespace nixfile
