@@ -4,9 +4,6 @@ clear all;
 stats.okCount = 0;
 stats.errorCount = 0;
 
-%-- add required paths for matlab
-addpath(fullfile(pwd, 'build'));
-
 disp([10 'starting tests']);
 
 %-- ToDo: create proper testfile, loose the 24mb one
