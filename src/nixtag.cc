@@ -104,7 +104,7 @@ namespace nixtag {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         double index = input.num<double>(2);
 
-        mxArray *data = make_mx_array(currObj.retrieveData(index));
+        mxArray *data = nixgen::dataset_read_all(currObj.retrieveData(index));
         output.set(0, data);
     }
 
@@ -112,7 +112,7 @@ namespace nixtag {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         double index = input.num<double>(2);
 
-        mxArray *data = make_mx_array(currObj.retrieveFeatureData(index));
+        mxArray *data = nixgen::dataset_read_all(currObj.retrieveFeatureData(index));
         output.set(0, data);
     }
 

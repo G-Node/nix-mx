@@ -11,6 +11,7 @@ struct entity_to_id { };
 
 template<>
 struct entity_to_id<nix::File> {
+    static const bool is_valid = true;
     static const int value = 1;
 };
 
@@ -22,31 +23,37 @@ struct entity_to_id<nix::Block> {
 
 template<>
 struct entity_to_id<nix::DataArray> {
+    static const bool is_valid = true;
     static const int value = 3;
 };
 
 template<>
 struct entity_to_id<nix::Tag> {
+    static const bool is_valid = true;
     static const int value = 4;
 };
 
 template<>
 struct entity_to_id<nix::Source> {
+    static const bool is_valid = true;
     static const int value = 5;
 };
 
 template<>
 struct entity_to_id<nix::Feature> {
+    static const bool is_valid = true;
     static const int value = 5;
 };
 
 template<>
 struct entity_to_id<nix::MultiTag> {
+    static const bool is_valid = true;
     static const int value = 6;
 };
 
 template<>
 struct entity_to_id<nix::Section> {
+    static const bool is_valid = true;
     static const int value = 7;
 };
 

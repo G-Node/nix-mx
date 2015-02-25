@@ -23,8 +23,6 @@ mxArray *make_mx_array(const nix::Value &value);
 
 mxArray* make_mx_array(const nix::NDSize &size);
 
-mxArray *make_mx_array(const nix::DataSet &da);
-
 template<typename T, nix::DataType dt = nix::to_data_type<T>::value>
 mxArray* make_mx_array(const std::vector<T> &v) {
 	DType2 dtype = dtype_nix2mex(dt);
@@ -94,6 +92,17 @@ inline mxArray* make_mx_array<bool>(bool val) {
 inline mxArray* make_mx_array(const handle &h)
 {
 	return make_mx_array(h.address());
+}
+
+template<typename T, typename std::enable_if<entity_to_id<T>::is_valid>::type* = nullptr>
+inline mxArray *make_mx_array(const T& entity) {
+
+	if(!entity) {
+		return make_mx_array(uint64_t(0));
+	}
+
+	handle hdl = handle(entity);
+	return make_mx_array(hdl.address());
 }
 
 template<typename T, int EntityId = entity_to_id<T>::value>
