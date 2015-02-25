@@ -165,6 +165,7 @@ static void on_exit() {
 }
 
 #define GETTER(type, class, name) static_cast<type(class::*)()const>(&class::name)
+#define GETBYSTR(type, class, name) static_cast<type(class::*)(const std::string &)const>(&class::name)
 #define REMOVER(type, class, name) static_cast<bool(class::*)(const type&)>(&class::name)
 
 // main entry point
@@ -192,7 +193,8 @@ void mexFunction(int            nlhs,
         classdef<nix::File>("File", methods)
             .reg("blocks", GETTER(std::vector<nix::Block>, nix::File, blocks))
             .reg("sections", GETTER(std::vector<nix::Section>, nix::File, sections))
-			.reg("deleteBlock", REMOVER(nix::Block, nix::File, deleteBlock));
+			.reg("deleteBlock", REMOVER(nix::Block, nix::File, deleteBlock))
+            .reg("openBlock", GETBYSTR(nix::Block, nix::File, getBlock));
 
         classdef<nix::Block>("Block", methods)
             .reg("dataArrays", &nix::Block::dataArrays);
