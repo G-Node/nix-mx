@@ -16,6 +16,7 @@ struct entity_to_id<nix::File> {
 
 template<>
 struct entity_to_id<nix::Block> {
+	static const bool is_valid = true;
     static const int value = 2;
 };
 
