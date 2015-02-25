@@ -9,8 +9,6 @@ namespace nixblock {
 
     void open_data_array(const extractor &input, infusor &output);
 
-    void data_arrays(const extractor &input, infusor &output);
-
     void list_data_arrays(const extractor &input, infusor &output);
 
     void list_sources(const extractor &input, infusor &output);

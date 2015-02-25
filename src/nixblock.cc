@@ -31,13 +31,6 @@ namespace nixblock {
         output.set(0, nixgen::open_data_array(block.getDataArray(input.str(2))));
     }
 
-    void data_arrays(const extractor &input, infusor &output)
-    {
-        nix::Block block = input.entity<nix::Block>(1);
-        std::vector<nix::DataArray> dataArrays = block.dataArrays();
-        output.set(0, dataArrays);
-    }
-
     void list_data_arrays(const extractor &input, infusor &output)
     {
         nix::Block block = input.entity<nix::Block>(1);
