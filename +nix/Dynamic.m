@@ -1,11 +1,16 @@
 classdef Dynamic < dynamicprops
-    %Dynamic class to dynamically assign properties 
-    % properties are dependent and fetch from 'info' attr
+    %Dynamic class that dynamically assigns properties 
+    % from these cell arrays that must be defined in the 
+    % superclasses
+    %    dynamic_base_attrs = {}
+    %    dynamic_attrs = {}
+    %    dynamic_relations = {}
     
     properties (Abstract, Access = protected)
         alias
         dynamic_base_attrs
         dynamic_attrs
+        dynamic_relations
     end
     
     properties (Access = protected)
@@ -21,6 +26,12 @@ classdef Dynamic < dynamicprops
             attrs = {obj.dynamic_attrs{:}, obj.dynamic_base_attrs{:}};
             for i=1:length(attrs)
                 obj.add_dyn_attr(attrs{i}.name, attrs{i}.mode);
+            end
+
+            % assign dynamic relations
+            rels = obj.dynamic_relations;
+            for i=1:length(rels)
+                obj.add_dyn_relation(rels{i}.name, rels{i}.constructor);
             end
         end
     end
@@ -54,6 +65,22 @@ classdef Dynamic < dynamicprops
             function val = get_method(obj)
                 val = obj.info.(prop);
             end
+        end
+        
+        function add_dyn_relation(obj, name, constructor)
+            cacheAttr = strcat(name, 'Cache');
+            cache = addprop(obj, cacheAttr);
+            cache.Hidden = true;
+            obj.(cacheAttr) = nix.CacheStruct();
+            
+            rel = addprop(obj, name);
+            rel.GetMethod = @get_method;
+            
+            function val = get_method(obj)
+                [obj.(cacheAttr), val] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                    strcat(obj.alias, '::', name), obj.nix_handle, ...
+                    obj.(cacheAttr), constructor);
+            end            
         end
     end
 end

@@ -6,43 +6,24 @@ classdef Block < nix.NamedEntity
         alias = 'Block'
         
         % dynamically assigned attrs
-        dynamic_attrs = {
-            struct('name', 'dataArrayCount', 'mode', 'r'), ...
-            struct('name', 'sourceCount', 'mode', 'r'), ...
-            struct('name', 'tagCount', 'mode', 'r'), ...
-            struct('name', 'multiTagCount', 'mode', 'r'), ...
+        dynamic_attrs = {}
+    
+        % dynamically assigned relations
+        dynamic_relations = {
+            struct('name', 'dataArrays', 'constructor', @nix.DataArray), ...
+            struct('name', 'sources', 'constructor', @nix.Source), ...
+            struct('name', 'tags', 'constructor', @nix.Tag), ...
+            struct('name', 'multiTags', 'constructor', @nix.MultiTag), ...
         }
     end
     
     properties(Hidden)
-        dataArraysCache
-        sourcesCache
-        tagsCache
-        multiTagsCache
-        metadataCache
-    end;
-    
-    properties(Dependent)
-        dataArrays
-        sources
-        tags
-        multiTags
-    end;
+        metadataCache = nix.CacheStruct()
+    end
     
     methods
         function obj = Block(h)
             obj@nix.NamedEntity(h);
-
-            obj.dataArraysCache.lastUpdate = 0;
-            obj.dataArraysCache.data = {};
-            obj.sourcesCache.lastUpdate = 0;
-            obj.sourcesCache.data = {};
-            obj.tagsCache.lastUpdate = 0;
-            obj.tagsCache.data = {};
-            obj.multiTagsCache.lastUpdate = 0;
-            obj.multiTagsCache.data = {};
-            obj.metadataCache.lastUpdate = 0;
-            obj.metadataCache.data = {};
         end;
         
         % -----------------
@@ -58,11 +39,6 @@ classdef Block < nix.NamedEntity
            da = nix.DataArray(dh);
         end;
         
-        function da = get.dataArrays(obj)
-            [obj.dataArraysCache, da] = nix.Utils.fetchObjList(obj.updatedAt, ...
-                'Block::dataArrays', obj.nix_handle, obj.dataArraysCache, @nix.DataArray);
-        end;
-        
         % -----------------
         % Sources methods
         % -----------------
@@ -76,11 +52,6 @@ classdef Block < nix.NamedEntity
            source = nix.Source(sh);
         end;
 
-        function sources = get.sources(obj)
-            [obj.sourcesCache, sources] = nix.Utils.fetchObjList(obj.updatedAt, ...
-                'Block::sources', obj.nix_handle, obj.sourcesCache, @nix.Source);
-        end;
-        
         % -----------------
         % Tags methods
         % -----------------
@@ -99,15 +70,6 @@ classdef Block < nix.NamedEntity
            tag = nix.Tag(tagHandle);
         end;
         
-        function tagList = list_multi_tags(obj)
-            tagList = nix_mx('Block::listMultiTags', obj.nix_handle);
-        end;
-        
-        function tags = get.tags(obj)
-            [obj.tagsCache, tags] = nix.Utils.fetchObjList(obj.updatedAt, ...
-                'Block::tags', obj.nix_handle, obj.tagsCache, @nix.Tag);
-        end;
-        
         % -----------------
         % MultiTag methods
         % -----------------
@@ -116,15 +78,14 @@ classdef Block < nix.NamedEntity
             getHasMTag = nix_mx('Block::hasMultiTag', obj.nix_handle, id_or_name);
             hasMTag = logical(getHasMTag.hasMultiTag);
         end;
+
+        function tagList = list_multi_tags(obj)
+            tagList = nix_mx('Block::listMultiTags', obj.nix_handle);
+        end;
         
         function tag = open_multi_tag(obj, id_or_name)
            tagHandle = nix_mx('Block::openMultiTag', obj.nix_handle, id_or_name); 
            tag = nix.MultiTag(tagHandle);
-        end;
-        
-        function mtags = get.multiTags(obj)
-            [obj.multiTagsCache, mtags] = nix.Utils.fetchObjList(obj.updatedAt, ...
-                'Block::multiTags', obj.nix_handle, obj.multiTagsCache, @nix.MultiTag);
         end;
         
         % -----------------
