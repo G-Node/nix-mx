@@ -94,6 +94,17 @@ inline mxArray* make_mx_array(const handle &h)
 	return make_mx_array(h.address());
 }
 
+template<typename T, typename std::enable_if<entity_to_id<T>::is_valid>::type* = nullptr>
+inline mxArray *make_mx_array(const T& entity) {
+
+	if(!entity) {
+		make_mx_array(uint64_t(0));
+	}
+
+	handle hdl = handle(entity);
+	return make_mx_array(hdl.address());
+}
+
 template<typename T, int EntityId = entity_to_id<T>::value>
 inline mxArray *make_mx_array(const std::vector<T> &v) {
 	const mwSize size = static_cast<mwSize>(v.size());
