@@ -33,6 +33,8 @@ namespace nixgen {
         }
     }
 
+    mxArray *dataset_read_all(const nix::DataSet &da);
+
 } // namespace nixgen
 
 #endif

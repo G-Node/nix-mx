@@ -23,8 +23,6 @@ mxArray *make_mx_array(const nix::Value &value);
 
 mxArray* make_mx_array(const nix::NDSize &size);
 
-mxArray *make_mx_array(const nix::DataSet &da);
-
 template<typename T, nix::DataType dt = nix::to_data_type<T>::value>
 mxArray* make_mx_array(const std::vector<T> &v) {
 	DType2 dtype = dtype_nix2mex(dt);
