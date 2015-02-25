@@ -52,8 +52,7 @@ classdef File < nix.Entity
         end;
 
         function delCheck = deleteBlock(obj, deleteBlockObj)
-            retStruct = nix_mx('File::deleteBlock', obj.nix_handle, deleteBlockObj.nix_handle);
-            delCheck = logical(retStruct.deleted);
+            delCheck = nix_mx('File::deleteBlock', obj.nix_handle, deleteBlockObj.nix_handle);
             obj.blocksCache.lastUpdate = 0;
         end;
 

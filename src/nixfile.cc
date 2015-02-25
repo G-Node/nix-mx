@@ -116,15 +116,6 @@ void create_section(const extractor &input, infusor &output)
     output.set(0, nsh);
 }
 
-void delete_block(const extractor &input, infusor &output)
-{
-    nix::File currObj = input.entity<nix::File>(1);
-    nix::Block delObj = input.entity<nix::Block>(2);
-    bool checkDeleted = currObj.deleteBlock(delObj);
-
-    // TODO rename has_entity or implement other means of returning boolean value to Matlab
-    output.set(0, nixgen::has_entity(checkDeleted, { "deleted" }));
-}
 
 void delete_section(const extractor &input, infusor &output)
 {
