@@ -128,7 +128,7 @@ template<int I, typename F>
 typename matryoshka_return_type<I, F>::type
 matryoshka_get(const extractor &input, F &&f) {
     typedef typename matryoshka_return_type<I, F>::type Ret;
-    return matryoshka_unwrapper<I, Ret>::value(f, input, I);
+    return matryoshka_unwrapper<I, Ret>::value(std::forward<F>(f), input, I);
 }
 
 // generate lists
@@ -145,12 +145,36 @@ struct cons<0, tail...> {
     typedef iseq<tail...> type;
 };
 
+// invoker abstraction
+
+template<typename Klazz, typename Fn, typename return_type>
+struct invoker{
+	template<typename Args, int... I>
+	static void invoke(Fn wrapped, Args &&args, const extractor &input, infusor &output, iseq<I...>) {
+		Klazz entity = input.entity<Klazz>(1);
+		return_type ret = (entity.*wrapped)(matryoshka_get<I>(input, std::forward<Args>(args))...);
+		output.set(0, ret);
+	}
+};
+
+template<typename Klazz, typename Fn>
+struct invoker<Klazz, Fn, void> {
+	template<typename Args, int...I>
+	static void invoke(Fn wrapped, Args &&args, const extractor &input, infusor &output) {
+		Klazz entity = input.entity<Klazz>(1);
+		(entity.*wrapped)(matryoshka_get<I>(input, args)...);
+	}
+};
+
+
+
 // the functor that wraps the member function pointer
 // and extracts the arguments
 template<typename Klazz, typename Fn>
 struct funcbox : box {
     typedef typename vanilla_mptr<Fn>::type vanilla_fn;
     typedef matryoshka<vanilla_fn> matryoshka_t;
+	typedef typename matryoshka_t::return_type fn_ret_t;
 
     template<typename F>
     funcbox(F &&the_function) :
@@ -158,7 +182,8 @@ struct funcbox : box {
 
     void operator()(const extractor &input, infusor &output) {
         typedef typename cons<matryoshka_t::n_args>::type idx_type;
-        invoke(input, output, idx_type());
+        //invoke(input, output, idx_type());
+		invoker<Klazz, Fn, fn_ret_t>::invoke(wrapped, args, input, output, idx_type());
     }
 
     template<int... I>
