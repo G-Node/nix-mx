@@ -60,12 +60,9 @@ const std::vector<fendpoint> funcs = {
         { "File::open", nixfile::open },
         { "File::describe", nixfile::describe },
         { "File::listBlocks", nixfile::list_blocks },
-        { "File::openBlock", nixfile::open_block },
         { "File::listSections", nixfile::list_sections },
-        { "File::openSection", nixfile::open_section },
         { "File::createBlock", nixfile::create_block },
         { "File::createSection", nixfile::create_section },
-        { "File::deleteSection", nixfile::delete_section },
 
         // Block
         { "Block::describe", nixblock::describe },
@@ -193,8 +190,10 @@ void mexFunction(int            nlhs,
         classdef<nix::File>("File", methods)
             .reg("blocks", GETTER(std::vector<nix::Block>, nix::File, blocks))
             .reg("sections", GETTER(std::vector<nix::Section>, nix::File, sections))
-			.reg("deleteBlock", REMOVER(nix::Block, nix::File, deleteBlock))
-            .reg("openBlock", GETBYSTR(nix::Block, nix::File, getBlock));
+            .reg("deleteBlock", REMOVER(nix::Block, nix::File, deleteBlock))
+            .reg("deleteSection", REMOVER(nix::Section, nix::File, deleteSection))
+            .reg("openBlock", GETBYSTR(nix::Block, nix::File, getBlock))
+            .reg("openSection", GETBYSTR(nix::Section, nix::File, getSection));
 
         classdef<nix::Block>("Block", methods)
             .reg("dataArrays", &nix::Block::dataArrays)

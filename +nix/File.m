@@ -80,8 +80,7 @@ classdef File < nix.Entity
         end;
 
         function delCheck = deleteSection(obj, deleteSectionObj)
-            retStruct = nix_mx('File::deleteSection', obj.nix_handle, deleteSectionObj.nix_handle);
-            delCheck = logical(retStruct.deleted);
+            delCheck = nix_mx('File::deleteSection', obj.nix_handle, deleteSectionObj.nix_handle);
             obj.sectionsCache.lastUpdate = 0;
         end;
 
