@@ -1,5 +1,9 @@
-classdef Block < nix.Entity
+classdef Block < nix.NamedEntity
     %Block nix Block object
+    properties (Access = protected)
+        dynamic_attrs = {'dataArrayCount', 'sourceCount', 'tagCount', ...
+            'multiTagCount'}
+    end
     
     properties(Hidden)
         info
@@ -11,14 +15,6 @@ classdef Block < nix.Entity
     end;
     
     properties(Dependent)
-        id
-        type
-        name
-        dataArrayCount
-        sourceCount
-        tagCount
-        multiTagCount
-        
         dataArrays
         sources
         tags
@@ -27,7 +23,7 @@ classdef Block < nix.Entity
     
     methods
         function obj = Block(h)
-            obj@nix.Entity(h);
+            obj@nix.NamedEntity(h);
             obj.info = nix_mx('Block::describe', obj.nix_handle);
             
             obj.dataArraysCache.lastUpdate = 0;
@@ -40,34 +36,6 @@ classdef Block < nix.Entity
             obj.multiTagsCache.data = {};
             obj.metadataCache.lastUpdate = 0;
             obj.metadataCache.data = {};
-        end;
-        
-        function id = get.id(block)
-           id = block.info.id; 
-        end;
-        
-        function type = get.type(block)
-            type = block.info.type;
-        end;
-        
-        function name = get.name(block)
-           name = block.info.name;
-        end;
-        
-        function dataArrayCount = get.dataArrayCount(block)
-            dataArrayCount = block.info.dataArrayCount;
-        end;
-        
-        function sourceCount = get.sourceCount(block)
-            sourceCount = block.info.sourceCount;
-        end;
-        
-        function tagCount = get.tagCount(block)
-            tagCount = block.info.tagCount;
-        end;
-        
-        function multiTagCount = get.multiTagCount(block)
-            multiTagCount = block.info.multiTagCount;
         end;
         
         % -----------------
