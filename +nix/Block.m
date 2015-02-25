@@ -1,12 +1,20 @@
 classdef Block < nix.NamedEntity
     %Block nix Block object
+    
     properties (Access = protected)
-        dynamic_attrs = {'dataArrayCount', 'sourceCount', 'tagCount', ...
-            'multiTagCount'}
+        % namespace reference for nix-mx functions
+        alias = 'Block'
+        
+        % dynamically assigned attrs
+        dynamic_attrs = {
+            struct('name', 'dataArrayCount', 'mode', 'r'), ...
+            struct('name', 'sourceCount', 'mode', 'r'), ...
+            struct('name', 'tagCount', 'mode', 'r'), ...
+            struct('name', 'multiTagCount', 'mode', 'r'), ...
+        }
     end
     
     properties(Hidden)
-        info
         dataArraysCache
         sourcesCache
         tagsCache
@@ -24,8 +32,7 @@ classdef Block < nix.NamedEntity
     methods
         function obj = Block(h)
             obj@nix.NamedEntity(h);
-            obj.info = nix_mx('Block::describe', obj.nix_handle);
-            
+
             obj.dataArraysCache.lastUpdate = 0;
             obj.dataArraysCache.data = {};
             obj.sourcesCache.lastUpdate = 0;
