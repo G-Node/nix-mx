@@ -98,7 +98,7 @@ template<typename T, typename std::enable_if<entity_to_id<T>::is_valid>::type* =
 inline mxArray *make_mx_array(const T& entity) {
 
 	if(!entity) {
-		make_mx_array(uint64_t(0));
+		return make_mx_array(uint64_t(0));
 	}
 
 	handle hdl = handle(entity);
