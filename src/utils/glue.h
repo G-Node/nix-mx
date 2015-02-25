@@ -41,6 +41,13 @@ struct ex_getter < std::function<bool(const Klazz&)> > {
     }
 };
 
+template<typename Klazz>
+struct ex_getter < Klazz, typename std::enable_if<entity_to_id<Klazz>::is_valid>::type > {
+	static Klazz get(const extractor &input, int pos) {
+		return input.entity<Klazz>(pos + 2);
+	}
+};
+
 
 // we nest to be extracted values within matryoshka structs:
 //    a matryoshka struct with the value for pos N extracts that
