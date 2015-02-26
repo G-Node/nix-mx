@@ -65,6 +65,13 @@ classdef Block < nix.NamedEntity
            tag = nix.Tag(tagHandle);
         end;
         
+        function tag = create_tag(obj, name, type, position)
+           th = nix_mx('Block::createTag', obj.nix_handle, ...
+               name, type, position);
+           tag = nix.Tag(th);
+           obj.tagsCache.lastUpdate = 0;
+        end;
+        
         % -----------------
         % MultiTag methods
         % -----------------

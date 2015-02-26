@@ -16,6 +16,7 @@ function funcs = TestBlock
     funcs{end+1} = @test_has_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_attrs;
+    funcs{end+1} = @test_create_tag;
 end
 
 function [] = test_list_arrays( varargin )
@@ -153,4 +154,20 @@ function [] = test_attrs( varargin )
     assert(strcmp(b1.name, 'joe097'));
     assert(strcmp(b1.type, 'nix.session'));
     assert(isempty(b1.definition));
+end
+
+function [] = test_create_tag( varargin )
+%% Test: Create Tag
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('tagtest', 'nixblock');
+    
+    assert(isempty(b.tags));
+
+    position = [1.0 1.2 1.3 15.9];
+    t1 = b.create_tag('foo', 'bar', position);
+    assert(strcmp(t1.name, 'foo'));
+    assert(strcmp(t1.type, 'bar'));
+    assert(isequal(t1.position, position));
+    
+    assert(~isempty(b.tags));
 end

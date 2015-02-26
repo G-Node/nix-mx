@@ -197,7 +197,8 @@ void mexFunction(int            nlhs,
             .reg("openBlock", GETBYSTR(nix::Block, nix::File, getBlock));
 
         classdef<nix::Block>("Block", methods)
-            .reg("dataArrays", &nix::Block::dataArrays);
+            .reg("dataArrays", &nix::Block::dataArrays)
+            .reg("createTag", &nix::Block::createTag);
 
         mexAtExit(on_exit);
     });

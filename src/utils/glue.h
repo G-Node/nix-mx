@@ -23,6 +23,13 @@ struct ex_getter<T, typename std::enable_if<std::is_arithmetic<T>::value>::type>
     }
 };
 
+template<typename T>
+struct ex_getter<std::vector<T>> {
+    static std::vector<T> get(const extractor &input, int pos) {
+        return input.vec<T>(static_cast<size_t>(pos + 2));
+    }
+};
+
 template<>
 struct ex_getter < std::string > {
     static std::string get(const extractor &input, int pos) {
