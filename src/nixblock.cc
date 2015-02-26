@@ -37,12 +37,6 @@ namespace nixblock {
         output.set(0, nixgen::list_sources(currSource.sources()));
     }
 
-    void has_tag(const extractor &input, infusor &output)
-    {
-        nix::Block block = input.entity<nix::Block>(1);
-        output.set(0, nixgen::has_entity(block.hasTag(input.str(2)), { "hasTag" }));
-    }
-
     void list_tags(const extractor &input, infusor &output)
     {
         nix::Block block = input.entity<nix::Block>(1);
@@ -62,12 +56,6 @@ namespace nixblock {
             sb.next();
         }
         output.set(0, sb.array());
-    }
-
-    void has_multi_tag(const extractor &input, infusor &output)
-    {
-        nix::Block block = input.entity<nix::Block>(1);
-        output.set(0, nixgen::has_entity(block.hasMultiTag(input.str(2)), { "hasMultiTag" }));
     }
 
     void list_multi_tags(const extractor &input, infusor &output)

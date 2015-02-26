@@ -9,8 +9,6 @@ namespace nixmultitag {
 
     void list_references_array(const extractor &input, infusor &output);
 
-    void has_positions(const extractor &input, infusor &output);
-
     void list_features(const extractor &input, infusor &output);
 
     void list_sources(const extractor &input, infusor &output);

@@ -58,8 +58,7 @@ classdef Block < nix.NamedEntity
         % -----------------
         
         function hasTag = has_tag(obj, id_or_name)
-            getHasTag = nix_mx('Block::hasTag', obj.nix_handle, id_or_name);
-            hasTag = logical(getHasTag.hasTag);
+            hasTag = nix_mx('Block::hasTag', obj.nix_handle, id_or_name);
         end;
         
         function tagList = list_tags(obj)
@@ -86,8 +85,7 @@ classdef Block < nix.NamedEntity
         % -----------------
         
         function hasMTag = has_multi_tag(obj, id_or_name)
-            getHasMTag = nix_mx('Block::hasMultiTag', obj.nix_handle, id_or_name);
-            hasMTag = logical(getHasMTag.hasMultiTag);
+            hasMTag = nix_mx('Block::hasMultiTag', obj.nix_handle, id_or_name);
         end;
 
         function tagList = list_multi_tags(obj)
@@ -107,8 +105,7 @@ classdef Block < nix.NamedEntity
         % -----------------
         
         function hasMetadata = has_metadata(obj)
-            getHasMetadata = nix_mx('Block::hasMetadataSection', obj.nix_handle);
-            hasMetadata = logical(getHasMetadata.hasMetadataSection);
+            hasMetadata = nix_mx('Block::hasMetadataSection', obj.nix_handle);
         end;
         
         function metadata = open_metadata(obj)

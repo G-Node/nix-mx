@@ -163,8 +163,7 @@ classdef MultiTag < nix.Entity
         % ------------------
 
         function hasPositions = has_positions(obj)
-            getHasPositions = nix_mx('MultiTag::hasPositions', obj.nix_handle);
-            hasPositions = logical(getHasPositions.hasPositions);
+            hasPositions = nix_mx('MultiTag::hasPositions', obj.nix_handle);
         end;
         
         function retObj = open_positions(obj)
@@ -192,8 +191,7 @@ classdef MultiTag < nix.Entity
         % ------------------
         
         function hasMetadata = has_metadata(obj)
-            getHasMetadata = nix_mx('MultiTag::hasMetadataSection', obj.nix_handle);
-            hasMetadata = logical(getHasMetadata.hasMetadataSection);
+            hasMetadata = nix_mx('MultiTag::hasMetadataSection', obj.nix_handle);
         end;
         
         function metadata = open_metadata(obj)

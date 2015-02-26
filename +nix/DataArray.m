@@ -92,8 +92,7 @@ classdef DataArray < nix.Entity
         % -----------------
         
         function hasMetadata = has_metadata(obj)
-            getHasMetadata = nix_mx('DataArray::hasMetadataSection', obj.nix_handle);
-            hasMetadata = logical(getHasMetadata.hasMetadataSection);
+            hasMetadata = nix_mx('DataArray::hasMetadataSection', obj.nix_handle);
         end;
         
         function metadata = open_metadata(obj)

@@ -33,14 +33,6 @@ namespace nixgen {
         return sb.array();
     }
 
-    mxArray* has_entity(bool boolIn, std::vector<const char *> currLabel)
-    {
-        uint8_t currHas = boolIn ? 1 : 0;
-        struct_builder sb({ 1 }, currLabel);
-        sb.set(currHas);
-        return sb.array();
-    }
-
     mxArray* has_metadata_section(nix::Section currSection)
     {
         bool hasMetadataSection = false;
@@ -50,7 +42,7 @@ namespace nixgen {
             hasMetadataSection = true;
         }
 
-        return nixgen::has_entity(hasMetadataSection, { "hasMetadataSection" });
+        return make_mx_array(hasMetadataSection);
     }
 
     mxArray* list_features(std::vector<nix::Feature> featIn)

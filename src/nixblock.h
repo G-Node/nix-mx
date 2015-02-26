@@ -11,11 +11,7 @@ namespace nixblock {
 
     void list_sources(const extractor &input, infusor &output);
 
-    void has_tag(const extractor &input, infusor &output);
-
     void list_tags(const extractor &input, infusor &output);
-
-    void has_multi_tag(const extractor &input, infusor &output);
 
     void list_multi_tags(const extractor &input, infusor &output);
 
