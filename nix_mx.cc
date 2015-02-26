@@ -163,7 +163,7 @@ static void on_exit() {
 
 #define GETTER(type, class, name) static_cast<type(class::*)()const>(&class::name)
 #define GETBYSTR(type, class, name) static_cast<type(class::*)(const std::string &)const>(&class::name)
-#define REMOVER(type, class, name) static_cast<bool(class::*)(const type&)>(&class::name)
+#define REMOVER(type, class, name) static_cast<bool(class::*)(const std::string&)>(&class::name)
 
 // main entry point
 void mexFunction(int            nlhs,
