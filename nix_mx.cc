@@ -115,12 +115,8 @@ const std::vector<fendpoint> funcs = {
 
     // Section
     { "Section::describe", nixsection::describe },
-    { "Section::link", nixsection::link },
-    { "Section::parent", nixsection::parent },
     { "Section::hasSection", nixsection::has_section },
-    { "Section::openSection", nixsection::open_section },
     { "Section::listSections", nixsection::list_sections },
-    { "Section::sections", nixsection::sections },
     { "Section::hasProperty", nixsection::has_property },
     { "Section::listProperties", nixsection::list_properties }
 };
@@ -207,6 +203,12 @@ void mexFunction(int            nlhs,
             .reg("openReferences", GETBYSTR(nix::DataArray, nix::MultiTag, getReference))
             .reg("openFeature", GETBYSTR(nix::Feature, nix::MultiTag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::MultiTag, getSource));
+
+        classdef<nix::Section>("Section", methods)
+            .reg("sections", &nix::Section::sections)
+            .reg("openSection", GETBYSTR(nix::Section, nix::Section, getSection))
+            .reg("link", GETCONTENT(nix::Section, nix::Section, link))
+            .reg("parent", GETCONTENT(nix::Section, nix::Section, parent));
 
         mexAtExit(on_exit);
     });
