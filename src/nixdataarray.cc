@@ -75,12 +75,4 @@ namespace nixdataarray {
         output.set(0, nixgen::get_handle_or_none(currObj.metadata()));
     }
 
-    void sources(const extractor &input, infusor &output)
-    {
-        nix::DataArray currObj = input.entity<nix::DataArray>(1);
-        std::vector<nix::Source> arr = currObj.sources();
-
-        output.set(0, arr);
-    }
-
 } // namespace nixdataarray
