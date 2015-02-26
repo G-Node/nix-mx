@@ -198,7 +198,7 @@ void mexFunction(int            nlhs,
 
         classdef<nix::Block>("Block", methods)
             .reg("dataArrays", &nix::Block::dataArrays)
-            .reg("createTag", static_cast<nix::Tag(nix::Block::*)(const std::string &name, const std::string &type, const std::vector<double> &position)>(&nix::Block::createTag));
+            .reg("createTag", &nix::Block::createTag);
 
         mexAtExit(on_exit);
     });
