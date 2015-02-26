@@ -51,17 +51,41 @@ end
 %% Test: Delete Block
 function [] = test_delete_block( varargin )
     test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
+
+    %-- test delete block by object
     checkDelete = test_file.deleteBlock(test_file.blocks{1});
     assert(checkDelete);
     assert(size(test_file.blocks, 1) == 0);
+    
+    %-- test delete block by id
+    newBlock = test_file.createBlock('name', 'type');
+    checkDelete = test_file.deleteBlock(newBlock.id);
+    assert(checkDelete);
+    assert(size(test_file.blocks, 1) == 0);
+
+    %-- test delete non existing block
+    checkDelete = test_file.deleteBlock('I do not exist');
+    assert(~checkDelete);
 end
 
 %% Test: Delete Section
 function [] = test_delete_section( varargin )
     test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
+    
+    %-- test delete section by object
     checkDelete = test_file.deleteSection(test_file.sections{1});
     assert(checkDelete);
     assert(size(test_file.sections, 1) == 0);
+    
+    %-- test delete section by id
+    newSection = test_file.createSection('name', 'type');
+    checkDelete = test_file.deleteSection(newSection.id);
+    assert(checkDelete);
+    assert(size(test_file.sections, 1) == 0);
+
+    %-- test delete non existing section
+    checkDelete = test_file.deleteSection('I do not exist');
+    assert(~checkDelete);
 end
 
 function [] = test_list_sections( varargin )
@@ -77,8 +101,11 @@ function [] = test_open_section( varargin )
 %% Test open section
     test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
     getSection = test_file.openSection(test_file.sections{1,1}.id);
-
     assert(strcmp(getSection.name, 'General'));
+    
+    %-- test open non existing section
+    getSection = test_file.openSection('I dont exist');
+    assert(isempty(getSection));
 end
 
 function [] = test_list_blocks( varargin )
@@ -99,4 +126,8 @@ function [] = test_open_block( varargin )
 
     getBlockByName = test_file.openBlock(test_file.blocks{1,1}.name);
     assert(strcmp(getBlockByName.name, 'joe097'));
+
+    %-- test open non existing block
+    getBlock = test_file.openBlock('I dont exist');
+    assert(isempty(getBlock));
 end

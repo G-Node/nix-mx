@@ -65,6 +65,10 @@ function [] = test_open_array( varargin )
 
     getDataArrayByName = getBlock.data_array(getBlock.dataArrays{1,1}.name);
     assert(strcmp(getDataArrayByName.id, 'e0ca39b7-632f-47c9-968c-c65e6db58719'));
+    
+    %-- test open non existing dataarray
+    getDataArray = getBlock.data_array('I dont exist');
+    assert(isempty(getDataArray));
 end
 
 function [] = test_open_tag( varargin )
@@ -77,6 +81,10 @@ function [] = test_open_tag( varargin )
 
     getTagByName = getBlock.open_tag(getBlock.tags{1,1}.name);
     assert(strcmp(getTagByName.id, 'f49f4a56-0c93-4323-8e37-4b02b8cabb55'));
+    
+    %-- test open non existing tag
+    getTag = getBlock.open_tag('I dont exist');
+    assert(isempty(getTag));
 end
 
 function [] = test_open_multitag( varargin )
@@ -89,6 +97,10 @@ function [] = test_open_multitag( varargin )
 
     getMultiTagByName = getBlock.open_multi_tag(getBlock.multiTags{1,1}.name);
     assert(strcmp(getMultiTagByName.id, '9e3fdaa5-a71c-4be0-91b3-9c35ed2d4723'));
+    
+    %-- test open non existing multitag
+    getMultiTag = getBlock.open_multi_tag('I dont exist');
+    assert(isempty(getMultiTag));
 end
 
 function [] = test_open_source( varargin )
@@ -101,6 +113,10 @@ function [] = test_open_source( varargin )
 
     getSourceByName = getBlock.open_source(getBlock.sources{1,1}.name);
     assert(strcmp(getSourceByName.id, 'edf4c8b6-8569-4952-bcee-4203dd26571e'));
+    
+    %-- test open non existing source
+    getSource = getBlock.open_source('I dont exist');
+    assert(isempty(getSource));
 end
 
 function [] = test_has_multitag( varargin )

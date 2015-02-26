@@ -89,9 +89,12 @@ classdef Tag < nix.Entity
             refList = nix_mx('Tag::listReferences', obj.nix_handle);
         end;
 
-        function dataArray = open_reference(obj, id_or_name)
-            daHandle = nix_mx('Tag::openReferenceDataArray', obj.nix_handle, id_or_name);
-            dataArray = nix.DataArray(daHandle);
+        function retObj = open_reference(obj, id_or_name)
+            handle = nix_mx('Tag::openReferenceDataArray', obj.nix_handle, id_or_name);
+            retObj = {};
+            if handle ~= 0
+                retObj = nix.DataArray(handle);
+            end;
         end;
 
         function da = get.references(obj)
@@ -117,9 +120,12 @@ classdef Tag < nix.Entity
             featureList = nix_mx('Tag::listFeatures', obj.nix_handle);
         end;
 
-        function feature = open_feature(obj, id_or_name)
-            featureHandle = nix_mx('Tag::openFeature', obj.nix_handle, id_or_name);
-            feature = nix.Feature(featureHandle);
+        function retObj = open_feature(obj, id_or_name)
+            handle = nix_mx('Tag::openFeature', obj.nix_handle, id_or_name);
+            retObj = {};
+            if handle ~= 0
+                retObj = nix.Feature(handle);
+            end;
         end;
 
         function feat = get.features(obj)
@@ -145,9 +151,12 @@ classdef Tag < nix.Entity
             sourceList = nix_mx('Tag::listSources', obj.nix_handle);
         end;
 
-        function source = open_source(obj, id_or_name)
-            sourceHandle = nix_mx('Tag::openSource', obj.nix_handle, id_or_name);
-            source = nix.Source(sourceHandle);
+        function retObj = open_source(obj, id_or_name)
+            handle = nix_mx('Tag::openSource', obj.nix_handle, id_or_name);
+            retObj = {};
+            if handle ~= 0
+                retObj = nix.Source(handle);
+            end;
         end;
 
         function sources = get.sources(obj)

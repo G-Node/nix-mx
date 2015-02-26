@@ -37,6 +37,10 @@ function [] = test_open_source( varargin )
     %getSourceByName = getSFromB.open_source(getSFromB.sources{1,1}.name);
     %assert(strcmp(getSourceByName.id, ''));
     disp('Test Source: open source by name ... TODO (proper testfile)');
+    
+    %-- test open non existing source
+    getSource = getSFromB.open_source('I dont exist');
+    assert(isempty(getSource));
 end
 
 %% Test: Has metadata
