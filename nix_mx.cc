@@ -97,15 +97,7 @@ const std::vector<fendpoint> funcs = {
     { "MultiTag::listReferences", nixmultitag::list_references_array },
     { "MultiTag::listFeatures", nixmultitag::list_features },
     { "MultiTag::listSources", nixmultitag::list_sources },
-    { "MultiTag::references", nixmultitag::references },
-    { "MultiTag::features", nixmultitag::features },
-    { "MultiTag::sources", nixmultitag::sources },
     { "MultiTag::hasPositions", nixmultitag::has_positions },
-    { "MultiTag::openPositions", nixmultitag::open_positions },
-    { "MultiTag::openExtents", nixmultitag::open_extents },
-    { "MultiTag::openReferences", nixmultitag::open_references },
-    { "MultiTag::openFeature", nixmultitag::open_features },
-    { "MultiTag::openSource", nixmultitag::open_source },
     { "MultiTag::hasMetadataSection", nixmultitag::has_metadata_section },
     { "MultiTag::openMetadataSection", nixmultitag::open_metadata_section },
     { "MultiTag::retrieveData", nixmultitag::retrieve_data },
@@ -203,6 +195,16 @@ void mexFunction(int            nlhs,
             .reg("openReferenceDataArray", GETBYSTR(nix::DataArray, nix::Tag, getReference))
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource));
+
+        classdef<nix::MultiTag>("MultiTag", methods)
+            .reg("references", GETTER(std::vector<nix::DataArray>, nix::MultiTag, references))
+            .reg("features", &nix::MultiTag::features)
+            .reg("sources", static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::IMultiTag>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::IMultiTag>::sources))
+            .reg("openPositions", GETCONTENT(nix::DataArray, nix::MultiTag, positions))
+            .reg("openExtents", GETCONTENT(nix::DataArray, nix::MultiTag, extents))
+            .reg("openReferences", GETBYSTR(nix::DataArray, nix::MultiTag, getReference))
+            .reg("openFeature", GETBYSTR(nix::Feature, nix::MultiTag, getFeature))
+            .reg("openSource", GETBYSTR(nix::Source, nix::MultiTag, getSource));
 
         mexAtExit(on_exit);
     });

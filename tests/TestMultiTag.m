@@ -9,6 +9,9 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_open_feature;
     funcs{end+1} = @test_open_reference;
+    funcs{end+1} = @test_has_positions;
+    funcs{end+1} = @test_open_positions;
+    funcs{end+1} = @test_open_extents;
     funcs{end+1} = @test_has_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data;
@@ -60,6 +63,10 @@ function [] = test_open_source( varargin )
 
     getSourceByName = getMultiTag.open_source(getMultiTag.sources{1,1}.name);
     assert(strcmp(getSourceByName.id, 'edf4c8b6-8569-4952-bcee-4203dd26571e'));
+    
+    %-- test open non existing source
+    getSource = getMultiTag.open_source('I dont exist');
+    assert(isempty(getSource));
 end
 
 %% Test: Open feature by ID or name
@@ -76,6 +83,10 @@ function [] = test_open_feature( varargin )
     %getFeatByName = getTag.open_feature(getTag.features{1,1}.name);
     %assert(strcmp(getFeatByName.id, ''));
     disp('Test MultiTag: open feature by name ... TODO (proper testfile)');
+    
+    %-- test open non existing feature
+    getFeat = getMultiTag.open_feature('I dont exist');
+    assert(isempty(getFeat));
 end
 
 %% Test: Open reference by ID or name
@@ -89,6 +100,52 @@ function [] = test_open_reference( varargin )
 
     getRefByName = getMultiTag.open_reference(getMultiTag.references{1,1}.name);
     assert(strcmp(getRefByName.id, 'd21318e2-151e-4afd-afd3-1d86c8c20a85'));
+    
+    %-- test open non existing reference
+    getRef = getMultiTag.open_reference('I dont exist');
+    assert(isempty(getRef));
+end
+
+%% Test: Has positions
+function [] = test_has_positions( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+
+    %-- ToDo implement test for non existing positions
+    %getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
+    %assert(~getMultiTag.hasPositions);
+    disp('Test MultiTag: has no existing positions ... TODO (proper testfile)');
+   
+    getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
+    assert(getMultiTag.has_positions);
+end
+
+%% Test: Open positions
+function [] = test_open_positions( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+
+    %-- ToDo implement test for non existing positions
+    %getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
+    %assert(isempty(getMultiTag.open_positions));
+    disp('Test MultiTag: open non existing positions ... TODO (proper testfile)');
+   
+    getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
+    assert(~isempty(getMultiTag.open_positions));
+end
+
+%% Test: Open extents
+function [] = test_open_extents( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+
+    getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
+    assert(isempty(getMultiTag.open_extents));
+   
+    %-- ToDo implement test for existing extents
+    %getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
+    %assert(~isempty(getMultiTag.open_positions));
+    disp('Test MultiTag: open existing extents ... TODO (proper testfile)');
 end
 
 %% Test: Has metadata

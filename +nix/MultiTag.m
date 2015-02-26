@@ -79,9 +79,12 @@ classdef MultiTag < nix.Entity
             refList = nix_mx('MultiTag::listReferences', obj.nix_handle);
         end;
 
-        function dataArray = open_reference(obj, id_or_name)
-            daHandle = nix_mx('MultiTag::openReferences', obj.nix_handle, id_or_name);
-            dataArray = nix.DataArray(daHandle);
+        function retObj = open_reference(obj, id_or_name)
+            handle = nix_mx('MultiTag::openReferences', obj.nix_handle, id_or_name);
+            retObj = {};
+            if handle ~= 0
+                retObj = nix.DataArray(handle);
+            end;
         end;
 
         function da = get.references(obj)
@@ -109,9 +112,12 @@ classdef MultiTag < nix.Entity
             featureList = nix_mx('MultiTag::listFeatures', obj.nix_handle);
         end;
 
-        function feature = open_feature(obj, id_or_name)
-            featureHandle = nix_mx('MultiTag::openFeatures', obj.nix_handle, id_or_name);
-            feature = nix.Feature(featureHandle);
+        function retObj = open_feature(obj, id_or_name)
+            handle = nix_mx('MultiTag::openFeature', obj.nix_handle, id_or_name);
+            retObj = {};
+            if handle ~= 0
+                retObj = nix.Feature(handle);
+            end;
         end;
 
         function feat = get.features(obj)
@@ -139,9 +145,12 @@ classdef MultiTag < nix.Entity
             sourceList = nix_mx('MultiTag::listSources', obj.nix_handle);
         end;
 
-        function source = open_source(obj, id_or_name)
-            sourceHandle = nix_mx('MultiTag::openSource', obj.nix_handle, id_or_name);
-            source = nix.Source(sourceHandle);
+        function retObj = open_source(obj, id_or_name)
+            handle = nix_mx('MultiTag::openSource', obj.nix_handle, id_or_name);
+            retObj = {};
+            if handle ~= 0
+                retObj = nix.Source(handle);
+            end;
         end;
 
         function sources = get.sources(obj)
@@ -155,15 +164,14 @@ classdef MultiTag < nix.Entity
 
         function hasPositions = has_positions(obj)
             getHasPositions = nix_mx('MultiTag::hasPositions', obj.nix_handle);
-            hasPositions = getHasPositions.hasPositions;
+            hasPositions = logical(getHasPositions.hasPositions);
         end;
         
-        function positions = open_positions(obj)
-            if obj.has_positions
-                positionsHandle = nix_mx('MultiTag::openPositions', obj.nix_handle);
-                positions = nix.DataArray(positionsHandle);
-            else
-                positions = 'No positions available';
+        function retObj = open_positions(obj)
+            handle = nix_mx('MultiTag::openPositions', obj.nix_handle);
+            retObj = {};
+            if handle ~= 0
+                retObj = nix.DataArray(handle);
             end;
         end;
         
@@ -171,9 +179,12 @@ classdef MultiTag < nix.Entity
         % Extents methods
         % ------------------
 
-        function extents = open_extent(obj)
-            extentsHandle = nix_mx('MultiTag::openExtents', obj.nix_handle);
-            extents = nix.DataArray(extentsHandle);
+        function retObj = open_extents(obj)
+            handle = nix_mx('MultiTag::openExtents', obj.nix_handle);
+            retObj = {};
+            if handle ~= 0
+                retObj = nix.DataArray(handle);
+            end;
         end;
         
         % ------------------
