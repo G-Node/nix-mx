@@ -5,7 +5,6 @@ function funcs = testSource
     funcs = {};
     funcs{end+1} = @test_list_fetch_sources;
     funcs{end+1} = @test_open_source;
-    funcs{end+1} = @test_has_metadata;
     funcs{end+1} = @test_open_metadata;
 end
 
@@ -41,20 +40,6 @@ function [] = test_open_source( varargin )
     %-- test open non existing source
     getSource = getSFromB.open_source('I dont exist');
     assert(isempty(getSource));
-end
-
-%% Test: Has metadata
-function [] = test_has_metadata( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    
-    getSource = getBlock.open_source(getBlock.sources{1,1}.id);
-    assert(~getSource.has_metadata());
-    
-    %-- ToDo implement test for empty metadata
-    %getSource = getBlock.open_source(getBlock.sources{1,1}.id);
-    %assert(getSource.has_metadata())
-    disp('Test Source: has existing metadata ... TODO (proper testfile)');
 end
 
 %% Test: Open metadata

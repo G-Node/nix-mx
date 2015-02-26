@@ -18,8 +18,6 @@ namespace nixgen {
 
     handle open_feature(nix::Feature featIn);
 
-    mxArray* has_metadata_section(nix::Section currSection);
-
     template<typename T>
     uint64_t get_handle_or_none(T &&obj) {
         if (obj) {

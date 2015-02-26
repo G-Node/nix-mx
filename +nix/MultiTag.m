@@ -190,10 +190,6 @@ classdef MultiTag < nix.Entity
         % Metadata methods
         % ------------------
         
-        function hasMetadata = has_metadata(obj)
-            hasMetadata = nix_mx('MultiTag::hasMetadataSection', obj.nix_handle);
-        end;
-        
         function metadata = open_metadata(obj)
             [obj.metadataCache, metadata] = nix.Utils.fetchObj(obj.updatedAt, ...
                 'MultiTag::openMetadataSection', obj.nix_handle, obj.metadataCache, @nix.Section);

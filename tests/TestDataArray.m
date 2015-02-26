@@ -4,7 +4,6 @@ function funcs = TestDataArray
 
     funcs = {};
     funcs{end+1} = @test_open_data;
-    funcs{end+1} = @test_has_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_list_sources;
 end
@@ -16,20 +15,6 @@ function [] = test_open_data( varargin )
     getDataArray = getBlock.data_array(getBlock.dataArrays{1,1}.id);
 
     assert(size(getDataArray.read_all(),2) == 36);
-end
-
-%% Test: Has metadata
-function [] = test_has_metadata( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-
-    %-- ToDo implement test for empty metadata
-    getDataArray = getBlock.data_array(getBlock.dataArrays{1,1}.id);
-    %assert(~getDataArray.has_metadata());
-    disp('Test DataArray: has empty metadata ... TODO (proper testfile)');
-    
-    getDataArray = getBlock.data_array(getBlock.dataArrays{1,1}.id);
-    assert(getDataArray.has_metadata())
 end
 
 %% Test: Open metadata

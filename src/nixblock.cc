@@ -77,12 +77,6 @@ namespace nixblock {
         output.set(0, sb.array());
     }
 
-    void has_metadata_section(const extractor &input, infusor &output)
-    {
-        nix::Block currObj = input.entity<nix::Block>(1);
-        output.set(0, nixgen::has_metadata_section(currObj.metadata()));
-    }
-
     void open_metadata_section(const extractor &input, infusor &output)
     {
         nix::Block currObj = input.entity<nix::Block>(1);

@@ -43,12 +43,6 @@ namespace nixmultitag {
         output.set(0, nixgen::list_sources(currObj.sources()));
     }
 
-    void has_metadata_section(const extractor &input, infusor &output)
-    {
-        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
-        output.set(0, nixgen::has_metadata_section(currObj.metadata()));
-    }
-
     void open_metadata_section(const extractor &input, infusor &output)
     {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);

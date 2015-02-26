@@ -70,13 +70,11 @@ const std::vector<fendpoint> funcs = {
     { "Block::listSources", nixblock::list_sources },
     { "Block::listTags", nixblock::list_tags },
     { "Block::listMultiTags", nixblock::list_multi_tags },
-    { "Block::hasMetadataSection", nixblock::has_metadata_section },
     { "Block::openMetadataSection", nixblock::open_metadata_section },
 
     // Data Array
     { "DataArray::describe", nixdataarray::describe },
     { "DataArray::readAll", nixdataarray::read_all },
-    { "DataArray::hasMetadataSection", nixdataarray::has_metadata_section },
     { "DataArray::openMetadataSection", nixdataarray::open_metadata_section },
 
     // Tag
@@ -84,7 +82,6 @@ const std::vector<fendpoint> funcs = {
     { "Tag::listReferences", nixtag::list_references_array },
     { "Tag::listFeatures", nixtag::list_features },
     { "Tag::listSources", nixtag::list_sources },
-    { "Tag::hasMetadataSection", nixtag::has_metadata_section },
     { "Tag::openMetadataSection", nixtag::open_metadata_section },
     { "Tag::retrieveData", nixtag::retrieve_data },
     { "Tag::featureRetrieveData", nixtag::retrieve_feature_data },
@@ -94,7 +91,6 @@ const std::vector<fendpoint> funcs = {
     { "MultiTag::listReferences", nixmultitag::list_references_array },
     { "MultiTag::listFeatures", nixmultitag::list_features },
     { "MultiTag::listSources", nixmultitag::list_sources },
-    { "MultiTag::hasMetadataSection", nixmultitag::has_metadata_section },
     { "MultiTag::openMetadataSection", nixmultitag::open_metadata_section },
     { "MultiTag::retrieveData", nixmultitag::retrieve_data },
     { "MultiTag::featureRetrieveData", nixmultitag::retrieve_feature_data },
@@ -102,7 +98,6 @@ const std::vector<fendpoint> funcs = {
     // Source
     { "Source::describe", nixsource::describe },
     { "Source::listSources", nixsource::list_sources },
-    { "Source::hasMetadataSection", nixsource::has_metadata_section },
     { "Source::openMetadataSection", nixsource::open_metadata_section },
 
     // Feature
