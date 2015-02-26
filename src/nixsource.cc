@@ -28,12 +28,6 @@ namespace nixsource {
         output.set(0, nixgen::list_sources(currObj.sources()));
     }
 
-    void open_source(const extractor &input, infusor &output)
-    {
-        nix::Source currObj = input.entity<nix::Source>(1);
-        output.set(0, nixgen::open_source(currObj.getSource(input.str(2))));
-    }
-
     void has_metadata_section(const extractor &input, infusor &output)
     {
         nix::Source currObj = input.entity<nix::Source>(1);
@@ -44,14 +38,6 @@ namespace nixsource {
     {
         nix::Source currObj = input.entity<nix::Source>(1);
         output.set(0, nixgen::get_handle_or_none(currObj.metadata()));
-    }
-
-    void sources(const extractor &input, infusor &output)
-    {
-        nix::Source currObj = input.entity<nix::Source>(1);
-        std::vector<nix::Source> arr = currObj.sources();
-
-        output.set(0, arr);
     }
 
 } // namespace nixsource

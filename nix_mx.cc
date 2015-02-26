@@ -120,8 +120,6 @@ const std::vector<fendpoint> funcs = {
     // Source
     { "Source::describe", nixsource::describe },
     { "Source::listSources", nixsource::list_sources },
-    { "Source::openSource", nixsource::open_source },
-    { "Source::sources", nixsource::sources },
     { "Source::hasMetadataSection", nixsource::has_metadata_section },
     { "Source::openMetadataSection", nixsource::open_metadata_section },
 
@@ -198,6 +196,10 @@ void mexFunction(int            nlhs,
             .reg("openSource", GETBYSTR(nix::Source, nix::Block, getSource))
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
             .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Block, getMultiTag));
+
+        classdef<nix::Source>("Source", methods)
+            .reg("sources", &nix::Source::sources)
+            .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource));
 
         mexAtExit(on_exit);
     });
