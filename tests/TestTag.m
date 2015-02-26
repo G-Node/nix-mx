@@ -68,6 +68,10 @@ function [] = test_open_source( varargin )
     %getSourceByName = getTag.open_source(getTag.sources{1,1}.name);
     %assert(strcmp(getSourceByName.id, ''));
     disp('Test Tag: open source by name ... TODO (proper testfile)');
+    
+    %-- test open non existing source
+    getSource = getTag.open_source('I dont exist');
+    assert(isempty(getSource));
 end
 
 
@@ -85,6 +89,10 @@ function [] = test_open_feature( varargin )
     %getFeatByName = getTag.open_feature(getTag.features{1,1}.name);
     %assert(strcmp(getFeatByName.id, ''));
     disp('Test Tag: open feature by name ... TODO (proper testfile)');
+    
+    %-- test open non existing feature
+    getFeat = getTag.open_feature('I dont exist');
+    assert(isempty(getFeat));
 end
 
 
@@ -99,6 +107,10 @@ function [] = test_open_reference( varargin )
 
     getRefByName = getTag.open_reference(getTag.references{1,1}.name);
     assert(strcmp(getRefByName.id, '75138768-edc3-482e-894d-301f1dd66f8d'));
+    
+    %-- test open non existing source
+    getRef = getTag.open_reference('I dont exist');
+    assert(isempty(getRef));
 end
 
 

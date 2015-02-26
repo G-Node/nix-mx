@@ -87,12 +87,6 @@ const std::vector<fendpoint> funcs = {
     { "Tag::listReferences", nixtag::list_references_array },
     { "Tag::listFeatures", nixtag::list_features },
     { "Tag::listSources", nixtag::list_sources },
-    { "Tag::references", nixtag::references },
-    { "Tag::features", nixtag::features },
-    { "Tag::sources", nixtag::sources },
-    { "Tag::openReferenceDataArray", nixtag::open_data_array },
-    { "Tag::openFeature", nixtag::open_feature },
-    { "Tag::openSource", nixtag::open_source },
     { "Tag::hasMetadataSection", nixtag::has_metadata_section },
     { "Tag::openMetadataSection", nixtag::open_metadata_section },
     { "Tag::retrieveData", nixtag::retrieve_data },
@@ -154,6 +148,7 @@ static void on_exit() {
 
 #define GETTER(type, class, name) static_cast<type(class::*)()const>(&class::name)
 #define GETBYSTR(type, class, name) static_cast<type(class::*)(const std::string &)const>(&class::name)
+#define GETCONTENT(type, class, name) static_cast<type(class::*)()const>(&class::name)
 #define REMOVER(type, class, name) static_cast<bool(class::*)(const std::string&)>(&class::name)
 
 // main entry point
@@ -200,6 +195,14 @@ void mexFunction(int            nlhs,
         classdef<nix::Source>("Source", methods)
             .reg("sources", &nix::Source::sources)
             .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource));
+
+        classdef<nix::Tag>("Tag", methods)
+            .reg("references", GETTER(std::vector<nix::DataArray>, nix::Tag, references))
+            .reg("features", &nix::Tag::features)
+            .reg("sources", static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::ITag>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::ITag>::sources))
+            .reg("openReferenceDataArray", GETBYSTR(nix::DataArray, nix::Tag, getReference))
+            .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
+            .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource));
 
         mexAtExit(on_exit);
     });
