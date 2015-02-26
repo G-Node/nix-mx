@@ -13,7 +13,6 @@ function funcs = TestBlock
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_has_multitag;
     funcs{end+1} = @test_has_tag;
-    funcs{end+1} = @test_has_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_create_tag;
@@ -135,18 +134,6 @@ function [] = test_has_tag( varargin )
 
     assert(getBlock.has_tag(getBlock.tags{1,1}.id));
     assert(getBlock.has_tag(getBlock.tags{1,1}.name));
-end
-
-function [] = test_has_metadata( varargin )
-%% Test: Has metadata
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-
-    assert(~getBlock.has_metadata());
-   
-    %-- ToDo implement test for exising metadata
-    %getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    %assert(getBlock.has_metadata())
 end
 
 function [] = test_open_metadata( varargin )

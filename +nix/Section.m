@@ -91,8 +91,7 @@ classdef Section < nix.Entity
         end;
         
         function hs = has_section(obj, id_or_name)
-            r = nix_mx('Section::hasSection', obj.nix_handle, id_or_name);
-            hs = logical(r.hasSection);
+            hs = nix_mx('Section::hasSection', obj.nix_handle, id_or_name);
         end;
         
         % ----------------

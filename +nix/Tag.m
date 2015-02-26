@@ -168,11 +168,6 @@ classdef Tag < nix.Entity
         % Metadata methods
         % ------------------
 
-        function hasMetadata = has_metadata(obj)
-            getHasMetadata = nix_mx('Tag::hasMetadataSection', obj.nix_handle);
-            hasMetadata = logical(getHasMetadata.hasMetadataSection);
-        end;
-        
         function metadata = open_metadata(obj)
             [obj.metadataCache, metadata] = nix.Utils.fetchObj(obj.updatedAt, ...
                 'Tag::openMetadataSection', obj.nix_handle, obj.metadataCache, @nix.Section);

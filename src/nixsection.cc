@@ -29,12 +29,6 @@ void describe(const extractor &input, infusor &output)
     output.set(0, sb.array());
 }
 
-void has_section(const extractor &input, infusor &output)
-{
-    nix::Section section = input.entity<nix::Section>(1);
-    output.set(0, nixgen::has_entity(section.hasSection(input.str(2)), { "hasSection" }));
-}
-
 void list_sections(const extractor &input, infusor &output)
 {
     nix::Section section = input.entity<nix::Section>(1);
@@ -51,12 +45,6 @@ void list_sections(const extractor &input, infusor &output)
     }
 
     output.set(0, sb.array());
-}
-
-void has_property(const extractor &input, infusor &output)
-{
-    nix::Section section = input.entity<nix::Section>(1);
-    output.set(0, nixgen::has_entity(section.hasProperty(input.str(2)), { "hasProperty" }));
 }
 
 void list_properties(const extractor &input, infusor &output)

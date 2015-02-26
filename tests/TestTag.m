@@ -9,7 +9,6 @@ function funcs = TestTag
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_open_feature;
     funcs{end+1} = @test_open_reference;
-    funcs{end+1} = @test_has_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data;
     funcs{end+1} = @test_retrieve_feature_data;
@@ -113,18 +112,6 @@ function [] = test_open_reference( varargin )
     assert(isempty(getRef));
 end
 
-
-%% Test: Has metadata
-function [] = test_has_metadata( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-
-    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
-    assert(~getTag.has_metadata());
-    
-    getTag = getBlock.open_tag(getBlock.tags{2,1}.id);
-    assert(getTag.has_metadata());
-end
 
 %% Test: Open metadata
 function [] = test_open_metadata( varargin )

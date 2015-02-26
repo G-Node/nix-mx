@@ -68,17 +68,13 @@ const std::vector<fendpoint> funcs = {
     { "Block::describe", nixblock::describe },
     { "Block::listDataArrays", nixblock::list_data_arrays },
     { "Block::listSources", nixblock::list_sources },
-    { "Block::hasTag", nixblock::has_tag },
     { "Block::listTags", nixblock::list_tags },
-    { "Block::hasMultiTag", nixblock::has_multi_tag },
     { "Block::listMultiTags", nixblock::list_multi_tags },
-    { "Block::hasMetadataSection", nixblock::has_metadata_section },
     { "Block::openMetadataSection", nixblock::open_metadata_section },
 
     // Data Array
     { "DataArray::describe", nixdataarray::describe },
     { "DataArray::readAll", nixdataarray::read_all },
-    { "DataArray::hasMetadataSection", nixdataarray::has_metadata_section },
     { "DataArray::openMetadataSection", nixdataarray::open_metadata_section },
 
     // Tag
@@ -86,7 +82,6 @@ const std::vector<fendpoint> funcs = {
     { "Tag::listReferences", nixtag::list_references_array },
     { "Tag::listFeatures", nixtag::list_features },
     { "Tag::listSources", nixtag::list_sources },
-    { "Tag::hasMetadataSection", nixtag::has_metadata_section },
     { "Tag::openMetadataSection", nixtag::open_metadata_section },
     { "Tag::retrieveData", nixtag::retrieve_data },
     { "Tag::featureRetrieveData", nixtag::retrieve_feature_data },
@@ -96,8 +91,6 @@ const std::vector<fendpoint> funcs = {
     { "MultiTag::listReferences", nixmultitag::list_references_array },
     { "MultiTag::listFeatures", nixmultitag::list_features },
     { "MultiTag::listSources", nixmultitag::list_sources },
-    { "MultiTag::hasPositions", nixmultitag::has_positions },
-    { "MultiTag::hasMetadataSection", nixmultitag::has_metadata_section },
     { "MultiTag::openMetadataSection", nixmultitag::open_metadata_section },
     { "MultiTag::retrieveData", nixmultitag::retrieve_data },
     { "MultiTag::featureRetrieveData", nixmultitag::retrieve_feature_data },
@@ -105,7 +98,6 @@ const std::vector<fendpoint> funcs = {
     // Source
     { "Source::describe", nixsource::describe },
     { "Source::listSources", nixsource::list_sources },
-    { "Source::hasMetadataSection", nixsource::has_metadata_section },
     { "Source::openMetadataSection", nixsource::open_metadata_section },
 
     // Feature
@@ -115,9 +107,7 @@ const std::vector<fendpoint> funcs = {
 
     // Section
     { "Section::describe", nixsection::describe },
-    { "Section::hasSection", nixsection::has_section },
     { "Section::listSections", nixsection::list_sections },
-    { "Section::hasProperty", nixsection::has_property },
     { "Section::listProperties", nixsection::list_properties }
 };
 
@@ -174,6 +164,8 @@ void mexFunction(int            nlhs,
             .reg("sources", &nix::Block::sources)
             .reg("tags", &nix::Block::tags)
             .reg("multiTags", &nix::Block::multiTags)
+            .reg("hasTag", GETBYSTR(bool, nix::Block, hasTag))
+            .reg("hasMultiTag", GETBYSTR(bool, nix::Block, hasMultiTag))
             .reg("openDataArray", GETBYSTR(nix::DataArray, nix::Block, getDataArray))
             .reg("openSource", GETBYSTR(nix::Source, nix::Block, getSource))
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
@@ -198,6 +190,7 @@ void mexFunction(int            nlhs,
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::MultiTag, references))
             .reg("features", &nix::MultiTag::features)
             .reg("sources", static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::IMultiTag>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::IMultiTag>::sources))
+            .reg("hasPositions", GETCONTENT(bool, nix::MultiTag, hasPositions))
             .reg("openPositions", GETCONTENT(nix::DataArray, nix::MultiTag, positions))
             .reg("openExtents", GETCONTENT(nix::DataArray, nix::MultiTag, extents))
             .reg("openReferences", GETBYSTR(nix::DataArray, nix::MultiTag, getReference))
@@ -207,6 +200,8 @@ void mexFunction(int            nlhs,
         classdef<nix::Section>("Section", methods)
             .reg("sections", &nix::Section::sections)
             .reg("openSection", GETBYSTR(nix::Section, nix::Section, getSection))
+            .reg("hasProperty", GETBYSTR(bool, nix::Section, hasProperty))
+            .reg("hasSection", GETBYSTR(bool, nix::Section, hasSection))
             .reg("link", GETCONTENT(nix::Section, nix::Section, link))
             .reg("parent", GETCONTENT(nix::Section, nix::Section, parent));
 

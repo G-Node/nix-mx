@@ -12,7 +12,6 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_has_positions;
     funcs{end+1} = @test_open_positions;
     funcs{end+1} = @test_open_extents;
-    funcs{end+1} = @test_has_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data;
     funcs{end+1} = @test_retrieve_feature_data;
@@ -146,20 +145,6 @@ function [] = test_open_extents( varargin )
     %getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
     %assert(~isempty(getMultiTag.open_positions));
     disp('Test MultiTag: open existing extents ... TODO (proper testfile)');
-end
-
-%% Test: Has metadata
-function [] = test_has_metadata( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-
-    getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
-    assert(~getMultiTag.has_metadata());
-   
-    %-- ToDo implement test for existing metadata
-    %getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{2,1}.id);
-    %assert(getMultiTag.has_metadata());
-    disp('Test MultiTag: has existing metadata ... TODO (proper testfile)');
 end
 
 %% Test: Open metadata
