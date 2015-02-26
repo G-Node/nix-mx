@@ -1,16 +1,8 @@
 classdef Dynamic < dynamicprops
     %Dynamic class that dynamically assigns properties 
-    % from these cell arrays that must be defined in the 
-    % superclasses
-    %    dynamic_base_attrs = {}
-    %    dynamic_attrs = {}
-    %    dynamic_relations = {}
-    
+
     properties (Abstract, Access = protected)
         alias
-        dynamic_base_attrs
-        dynamic_attrs
-        dynamic_relations
     end
     
     properties (Access = protected)
@@ -21,22 +13,10 @@ classdef Dynamic < dynamicprops
         function obj = Dynamic()
             % fetch all object attrs
             obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
-            
-            % assign dynamic properties
-            attrs = {obj.dynamic_attrs{:}, obj.dynamic_base_attrs{:}};
-            for i=1:length(attrs)
-                obj.add_dyn_attr(attrs{i}.name, attrs{i}.mode);
-            end
-
-            % assign dynamic relations
-            rels = obj.dynamic_relations;
-            for i=1:length(rels)
-                obj.add_dyn_relation(rels{i}.name, rels{i}.constructor);
-            end
         end
     end
 
-    methods (Access = private)
+    methods (Access = protected)
         function add_dyn_attr(obj, prop, mode)
             if nargin < 3
                 mode = 'r'; 

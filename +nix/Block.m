@@ -4,17 +4,6 @@ classdef Block < nix.NamedEntity
     properties (Access = protected)
         % namespace reference for nix-mx functions
         alias = 'Block'
-        
-        % dynamically assigned attrs
-        dynamic_attrs = {}
-    
-        % dynamically assigned relations
-        dynamic_relations = {
-            struct('name', 'dataArrays', 'constructor', @nix.DataArray), ...
-            struct('name', 'sources', 'constructor', @nix.Source), ...
-            struct('name', 'tags', 'constructor', @nix.Tag), ...
-            struct('name', 'multiTags', 'constructor', @nix.MultiTag), ...
-        }
     end
     
     properties(Hidden)
@@ -24,6 +13,12 @@ classdef Block < nix.NamedEntity
     methods
         function obj = Block(h)
             obj@nix.NamedEntity(h);
+            
+            % assign relations
+            obj.add_dyn_relation('dataArrays', @nix.DataArray);
+            obj.add_dyn_relation('sources', @nix.Source);
+            obj.add_dyn_relation('tags', @nix.Tag);
+            obj.add_dyn_relation('multiTags', @nix.MultiTag);
         end;
         
         % -----------------
