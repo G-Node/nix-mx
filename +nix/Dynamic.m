@@ -1,11 +1,8 @@
 classdef Dynamic < dynamicprops
-    %Dynamic class to dynamically assign properties 
-    % properties are dependent and fetch from 'info' attr
-    
+    %Dynamic class that dynamically assigns properties 
+
     properties (Abstract, Access = protected)
         alias
-        dynamic_base_attrs
-        dynamic_attrs
     end
     
     properties (Access = protected)
@@ -16,16 +13,10 @@ classdef Dynamic < dynamicprops
         function obj = Dynamic()
             % fetch all object attrs
             obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
-            
-            % assign dynamic properties
-            attrs = {obj.dynamic_attrs{:}, obj.dynamic_base_attrs{:}};
-            for i=1:length(attrs)
-                obj.add_dyn_attr(attrs{i}.name, attrs{i}.mode);
-            end
         end
     end
 
-    methods (Access = private)
+    methods (Access = protected)
         function add_dyn_attr(obj, prop, mode)
             if nargin < 3
                 mode = 'r'; 
@@ -54,6 +45,22 @@ classdef Dynamic < dynamicprops
             function val = get_method(obj)
                 val = obj.info.(prop);
             end
+        end
+        
+        function add_dyn_relation(obj, name, constructor)
+            cacheAttr = strcat(name, 'Cache');
+            cache = addprop(obj, cacheAttr);
+            cache.Hidden = true;
+            obj.(cacheAttr) = nix.CacheStruct();
+            
+            rel = addprop(obj, name);
+            rel.GetMethod = @get_method;
+            
+            function val = get_method(obj)
+                [obj.(cacheAttr), val] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                    strcat(obj.alias, '::', name), obj.nix_handle, ...
+                    obj.(cacheAttr), constructor);
+            end            
         end
     end
 end
