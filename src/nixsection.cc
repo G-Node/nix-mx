@@ -29,30 +29,10 @@ void describe(const extractor &input, infusor &output)
     output.set(0, sb.array());
 }
 
-void link(const extractor &input, infusor &output)
-{
-    nix::Section section = input.entity<nix::Section>(1);
-    output.set(0, nixgen::get_handle_or_none(section.link()));
-}
-
-void parent(const extractor &input, infusor &output)
-{
-    nix::Section section = input.entity<nix::Section>(1);
-    output.set(0, nixgen::get_handle_or_none(section.parent()));
-}
-
 void has_section(const extractor &input, infusor &output)
 {
     nix::Section section = input.entity<nix::Section>(1);
     output.set(0, nixgen::has_entity(section.hasSection(input.str(2)), { "hasSection" }));
-}
-
-void open_section(const extractor &input, infusor &output)
-{
-    nix::Section section = input.entity<nix::Section>(1);
-    nix::Section sec = section.getSection(input.str(2));
-    handle h = handle(sec);
-    output.set(0, h);
 }
 
 void list_sections(const extractor &input, infusor &output)
@@ -71,13 +51,6 @@ void list_sections(const extractor &input, infusor &output)
     }
 
     output.set(0, sb.array());
-}
-
-void sections(const extractor &input, infusor &output)
-{
-    nix::Section section = input.entity<nix::Section>(1);
-    std::vector<nix::Section> sections = section.sections();
-    output.set(0, sections);
 }
 
 void has_property(const extractor &input, infusor &output)

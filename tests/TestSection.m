@@ -32,6 +32,10 @@ function [] = test_open_section( varargin )
     name = s1.sections{1}.name;
     s2 = s1.open_section(name);
     assert(strcmp(s2.id, s1.sections{1}.id));
+    
+    %-- test open non existing section
+    getSection = s1.open_section('I dont exist');
+    assert(isempty(getSection));
 end
 
 function [] = test_parent( varargin )

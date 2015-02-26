@@ -80,7 +80,6 @@ const std::vector<fendpoint> funcs = {
     { "DataArray::readAll", nixdataarray::read_all },
     { "DataArray::hasMetadataSection", nixdataarray::has_metadata_section },
     { "DataArray::openMetadataSection", nixdataarray::open_metadata_section },
-    { "DataArray::sources", nixdataarray::sources },
 
     // Tag
     { "Tag::describe", nixtag::describe },
@@ -97,15 +96,7 @@ const std::vector<fendpoint> funcs = {
     { "MultiTag::listReferences", nixmultitag::list_references_array },
     { "MultiTag::listFeatures", nixmultitag::list_features },
     { "MultiTag::listSources", nixmultitag::list_sources },
-    { "MultiTag::references", nixmultitag::references },
-    { "MultiTag::features", nixmultitag::features },
-    { "MultiTag::sources", nixmultitag::sources },
     { "MultiTag::hasPositions", nixmultitag::has_positions },
-    { "MultiTag::openPositions", nixmultitag::open_positions },
-    { "MultiTag::openExtents", nixmultitag::open_extents },
-    { "MultiTag::openReferences", nixmultitag::open_references },
-    { "MultiTag::openFeature", nixmultitag::open_features },
-    { "MultiTag::openSource", nixmultitag::open_source },
     { "MultiTag::hasMetadataSection", nixmultitag::has_metadata_section },
     { "MultiTag::openMetadataSection", nixmultitag::open_metadata_section },
     { "MultiTag::retrieveData", nixmultitag::retrieve_data },
@@ -124,12 +115,8 @@ const std::vector<fendpoint> funcs = {
 
     // Section
     { "Section::describe", nixsection::describe },
-    { "Section::link", nixsection::link },
-    { "Section::parent", nixsection::parent },
     { "Section::hasSection", nixsection::has_section },
-    { "Section::openSection", nixsection::open_section },
     { "Section::listSections", nixsection::list_sections },
-    { "Section::sections", nixsection::sections },
     { "Section::hasProperty", nixsection::has_property },
     { "Section::listProperties", nixsection::list_properties }
 };
@@ -192,6 +179,9 @@ void mexFunction(int            nlhs,
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
             .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Block, getMultiTag));
 
+        classdef<nix::DataArray>("DataArray", methods)
+            .reg("sources", static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::IDataArray>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::IDataArray>::sources));
+
         classdef<nix::Source>("Source", methods)
             .reg("sources", &nix::Source::sources)
             .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource));
@@ -203,6 +193,22 @@ void mexFunction(int            nlhs,
             .reg("openReferenceDataArray", GETBYSTR(nix::DataArray, nix::Tag, getReference))
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource));
+
+        classdef<nix::MultiTag>("MultiTag", methods)
+            .reg("references", GETTER(std::vector<nix::DataArray>, nix::MultiTag, references))
+            .reg("features", &nix::MultiTag::features)
+            .reg("sources", static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::IMultiTag>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::IMultiTag>::sources))
+            .reg("openPositions", GETCONTENT(nix::DataArray, nix::MultiTag, positions))
+            .reg("openExtents", GETCONTENT(nix::DataArray, nix::MultiTag, extents))
+            .reg("openReferences", GETBYSTR(nix::DataArray, nix::MultiTag, getReference))
+            .reg("openFeature", GETBYSTR(nix::Feature, nix::MultiTag, getFeature))
+            .reg("openSource", GETBYSTR(nix::Source, nix::MultiTag, getSource));
+
+        classdef<nix::Section>("Section", methods)
+            .reg("sections", &nix::Section::sections)
+            .reg("openSection", GETBYSTR(nix::Section, nix::Section, getSection))
+            .reg("link", GETCONTENT(nix::Section, nix::Section, link))
+            .reg("parent", GETCONTENT(nix::Section, nix::Section, parent));
 
         mexAtExit(on_exit);
     });

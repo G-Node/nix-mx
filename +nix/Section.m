@@ -82,9 +82,12 @@ classdef Section < nix.Entity
                 'Section::sections', obj.nix_handle, obj.sectionsCache, @nix.Section);
         end
         
-        function section = open_section(obj, id_or_name)
-           sh = nix_mx('Section::openSection', obj.nix_handle, id_or_name); 
-           section = nix.Section(sh);
+        function retObj = open_section(obj, id_or_name)
+            handle = nix_mx('Section::openSection', obj.nix_handle, id_or_name);
+            retObj = {};
+            if handle ~= 0
+                retObj = nix.Section(handle);
+            end;
         end;
         
         function hs = has_section(obj, id_or_name)
