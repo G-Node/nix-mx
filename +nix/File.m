@@ -36,11 +36,11 @@ classdef File < nix.Entity
             block_list = nix_mx('File::listBlocks', obj.nix_handle);
         end
         
-        function b = openBlock(obj, id_or_name)
-            bh = nix_mx('File::openBlock', obj.nix_handle, id_or_name);
-            b = {};
-            if bh~=0
-                b = nix.Block(bh);
+        function retObj = openBlock(obj, id_or_name)
+            handle = nix_mx('File::openBlock', obj.nix_handle, id_or_name);
+            retObj = {};
+            if handle ~= 0
+                retObj = nix.Block(handle);
             end;
         end
         
@@ -72,11 +72,11 @@ classdef File < nix.Entity
             section_list = nix_mx('File::listSections', obj.nix_handle);
         end
         
-        function section = openSection(obj, id_or_name)
-            h = nix_mx('File::openSection', obj.nix_handle, id_or_name); 
-            section = {};
-            if h~=0
-                section = nix.Section(h);
+        function retObj = openSection(obj, id_or_name)
+            handle = nix_mx('File::openSection', obj.nix_handle, id_or_name); 
+            retObj = {};
+            if handle ~= 0
+                retObj = nix.Section(handle);
             end;
         end
         
