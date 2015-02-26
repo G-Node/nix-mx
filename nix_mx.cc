@@ -197,7 +197,8 @@ void mexFunction(int            nlhs,
             .reg("openBlock", GETBYSTR(nix::Block, nix::File, getBlock));
 
         classdef<nix::Block>("Block", methods)
-            .reg("dataArrays", &nix::Block::dataArrays);
+            .reg("dataArrays", &nix::Block::dataArrays)
+            .reg("createTag", static_cast<nix::Tag(nix::Block::*)(const std::string &name, const std::string &type, const std::vector<double> &position)>(&nix::Block::createTag));
 
         mexAtExit(on_exit);
     });

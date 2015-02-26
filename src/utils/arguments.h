@@ -85,6 +85,19 @@ public:
 		return res;
 	}
 
+    template<typename T>
+    std::vector<T> vec(size_t pos) const {
+        std::vector<T> res;
+        T *pr = mxGetPr(array[pos]);
+
+        mwSize input_size = mxGetNumberOfElements(array[pos]);
+        for (mwSize index = 0; index < input_size; index++)  {
+            res.push_back(*pr++);
+        }
+
+        return res;
+    }
+
 	bool logical(size_t pos) const {
 		check_arg_type(pos, nix::DataType::Bool);
 
