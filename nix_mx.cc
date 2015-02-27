@@ -126,6 +126,7 @@ static void on_exit() {
 #define GETTER(type, class, name) static_cast<type(class::*)()const>(&class::name)
 #define GETBYSTR(type, class, name) static_cast<type(class::*)(const std::string &)const>(&class::name)
 #define GETCONTENT(type, class, name) static_cast<type(class::*)()const>(&class::name)
+#define GETSOURCES(base__) static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::base__>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::base__>::sources)
 #define REMOVER(type, class, name) static_cast<bool(class::*)(const std::string&)>(&class::name)
 
 // main entry point
@@ -172,7 +173,7 @@ void mexFunction(int            nlhs,
             .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Block, getMultiTag));
 
         classdef<nix::DataArray>("DataArray", methods)
-            .reg("sources", static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::IDataArray>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::IDataArray>::sources));
+            .reg("sources", GETSOURCES(IDataArray));
 
         classdef<nix::Source>("Source", methods)
             .reg("sources", &nix::Source::sources)
@@ -181,7 +182,7 @@ void mexFunction(int            nlhs,
         classdef<nix::Tag>("Tag", methods)
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::Tag, references))
             .reg("features", &nix::Tag::features)
-            .reg("sources", static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::ITag>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::ITag>::sources))
+            .reg("sources", GETSOURCES(ITag))
             .reg("openReferenceDataArray", GETBYSTR(nix::DataArray, nix::Tag, getReference))
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource));
@@ -189,7 +190,7 @@ void mexFunction(int            nlhs,
         classdef<nix::MultiTag>("MultiTag", methods)
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::MultiTag, references))
             .reg("features", &nix::MultiTag::features)
-            .reg("sources", static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::IMultiTag>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::IMultiTag>::sources))
+            .reg("sources", GETSOURCES(IMultiTag))
             .reg("hasPositions", GETCONTENT(bool, nix::MultiTag, hasPositions))
             .reg("openPositions", GETCONTENT(nix::DataArray, nix::MultiTag, positions))
             .reg("openExtents", GETCONTENT(nix::DataArray, nix::MultiTag, extents))
