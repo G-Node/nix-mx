@@ -123,6 +123,8 @@ static void on_exit() {
 #define GETBYSTR(type, class, name) static_cast<type(class::*)(const std::string &)const>(&class::name)
 #define GETCONTENT(type, class, name) static_cast<type(class::*)()const>(&class::name)
 #define GETSOURCES(base__) static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::base__>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::base__>::sources)
+//required to open nix::Section from DataArray, normal GETCONTENT leads to a compiler error with Visual Studio 12
+#define GETMETADATA(base__) static_cast<nix::Section(nix::base::EntityWithMetadata<nix::base::base__>::*)()const>(&nix::base::EntityWithMetadata<nix::base::base__>::metadata)
 #define REMOVER(type, class, name) static_cast<bool(class::*)(const std::string&)>(&class::name)
 
 // main entry point
@@ -171,7 +173,6 @@ void mexFunction(int            nlhs,
 
         classdef<nix::DataArray>("DataArray", methods)
             .reg("sources", GETSOURCES(IDataArray));
-//            .reg("openMetadataSection", GETCONTENT(nix::Section, nix::DataArray, metadata));
 
         classdef<nix::Source>("Source", methods)
             .reg("sources", &nix::Source::sources)
