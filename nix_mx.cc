@@ -98,7 +98,6 @@ const std::vector<fendpoint> funcs = {
     // Feature
     { "Feature::describe", nixfeature::describe },
     { "Feature::linkType", nixfeature::link_type },
-    { "Feature::openData", nixfeature::open_data },
 
     // Section
     { "Section::describe", nixsection::describe },
@@ -207,6 +206,9 @@ void mexFunction(int            nlhs,
             .reg("hasSection", GETBYSTR(bool, nix::Section, hasSection))
             .reg("link", GETCONTENT(nix::Section, nix::Section, link))
             .reg("parent", GETCONTENT(nix::Section, nix::Section, parent));
+
+        classdef<nix::Feature>("Feature", methods)
+            .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data));
 
         mexAtExit(on_exit);
     });
