@@ -6,28 +6,11 @@
 
 namespace nixgen {
 
-    handle open_data_array(nix::DataArray inDa);
-
     mxArray* list_data_arrays(std::vector<nix::DataArray> daIn);
 
     mxArray* list_features(std::vector<nix::Feature> featIn);
 
     mxArray* list_sources(std::vector<nix::Source> sourceIn);
-
-    handle open_source(nix::Source sourceIn);
-
-    handle open_feature(nix::Feature featIn);
-
-    template<typename T>
-    uint64_t get_handle_or_none(T &&obj) {
-        if (obj) {
-            return handle(std::forward<T>(obj)).address();
-        }
-        else
-        {
-            return uint64_t(0);
-        }
-    }
 
     mxArray *dataset_read_all(const nix::DataSet &da);
 

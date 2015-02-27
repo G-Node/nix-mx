@@ -10,13 +10,6 @@
 
 namespace nixgen {
 
-    handle open_data_array(nix::DataArray inDa)
-    {
-        nix::DataArray da = inDa;
-        handle h = handle(da);
-        return h;
-    }
-
     mxArray* list_data_arrays(std::vector<nix::DataArray> daIn)
     {
         std::vector<nix::DataArray> arr = daIn;
@@ -57,21 +50,6 @@ namespace nixgen {
         }
         return sb.array();
     }
-
-    handle open_source(nix::Source sourceIn)
-    {
-        nix::Source currSource = sourceIn;
-        handle currSourceHandle = handle(currSource);
-        return currSourceHandle;
-    }
-
-    handle open_feature(nix::Feature featIn)
-    {
-        nix::Feature currFeat = featIn;
-        handle currTagFeatHandle = handle(currFeat);
-        return currTagFeatHandle;
-    }
-
 
 mxArray *dataset_read_all(const nix::DataSet &da) {
     nix::NDSize size = da.dataExtent();
