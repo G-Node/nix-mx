@@ -74,7 +74,6 @@ const std::vector<fendpoint> funcs = {
     // Data Array
     { "DataArray::describe", nixdataarray::describe },
     { "DataArray::readAll", nixdataarray::read_all },
-    { "DataArray::openMetadataSection", nixdataarray::open_metadata_section },
 
     // Tag
     { "Tag::describe", nixtag::describe },
@@ -172,7 +171,8 @@ void mexFunction(int            nlhs,
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Block, metadata));
 
         classdef<nix::DataArray>("DataArray", methods)
-            .reg("sources", GETSOURCES(IDataArray));
+            .reg("sources", GETSOURCES(IDataArray))
+            .reg("openMetadataSection", GETMETADATA(IDataArray));
 
         classdef<nix::Source>("Source", methods)
             .reg("sources", &nix::Source::sources)
