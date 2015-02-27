@@ -295,6 +295,11 @@ struct classdef {
         return *this;
     }
 
+    classdef &add(const std::string &name, funky::fntbox::fn_t fun) {
+        lib->add(prefix + "::" + name, fun);
+        return *this;
+    }
+
 
 private:
     std::string  prefix;
