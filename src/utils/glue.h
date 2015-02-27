@@ -227,6 +227,19 @@ struct getter : box {
 };
 
 
+struct fntbox : box {
+    typedef void(*fn_t)(const extractor &input, infusor &output);
+
+    fntbox(fn_t f) : fun(f) { }
+
+    void operator()(const extractor &input, infusor &output) {
+        fun(input, output);
+    }
+
+private:
+    fn_t fun;
+};
+
 };
 
 struct registry {
