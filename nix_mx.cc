@@ -70,7 +70,6 @@ const std::vector<fendpoint> funcs = {
     { "Block::listSources", nixblock::list_sources },
     { "Block::listTags", nixblock::list_tags },
     { "Block::listMultiTags", nixblock::list_multi_tags },
-    { "Block::openMetadataSection", nixblock::open_metadata_section },
 
     // Data Array
     { "DataArray::describe", nixdataarray::describe },
@@ -82,7 +81,6 @@ const std::vector<fendpoint> funcs = {
     { "Tag::listReferences", nixtag::list_references_array },
     { "Tag::listFeatures", nixtag::list_features },
     { "Tag::listSources", nixtag::list_sources },
-    { "Tag::openMetadataSection", nixtag::open_metadata_section },
     { "Tag::retrieveData", nixtag::retrieve_data },
     { "Tag::featureRetrieveData", nixtag::retrieve_feature_data },
 
@@ -91,14 +89,12 @@ const std::vector<fendpoint> funcs = {
     { "MultiTag::listReferences", nixmultitag::list_references_array },
     { "MultiTag::listFeatures", nixmultitag::list_features },
     { "MultiTag::listSources", nixmultitag::list_sources },
-    { "MultiTag::openMetadataSection", nixmultitag::open_metadata_section },
     { "MultiTag::retrieveData", nixmultitag::retrieve_data },
     { "MultiTag::featureRetrieveData", nixmultitag::retrieve_feature_data },
 
     // Source
     { "Source::describe", nixsource::describe },
     { "Source::listSources", nixsource::list_sources },
-    { "Source::openMetadataSection", nixsource::open_metadata_section },
 
     // Feature
     { "Feature::describe", nixfeature::describe },
@@ -170,14 +166,17 @@ void mexFunction(int            nlhs,
             .reg("openDataArray", GETBYSTR(nix::DataArray, nix::Block, getDataArray))
             .reg("openSource", GETBYSTR(nix::Source, nix::Block, getSource))
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
-            .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Block, getMultiTag));
+            .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Block, getMultiTag))
+            .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Block, metadata));
 
         classdef<nix::DataArray>("DataArray", methods)
             .reg("sources", GETSOURCES(IDataArray));
+//            .reg("openMetadataSection", GETCONTENT(nix::Section, nix::DataArray, metadata));
 
         classdef<nix::Source>("Source", methods)
             .reg("sources", &nix::Source::sources)
-            .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource));
+            .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource))
+            .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Source, metadata));
 
         classdef<nix::Tag>("Tag", methods)
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::Tag, references))
@@ -185,7 +184,8 @@ void mexFunction(int            nlhs,
             .reg("sources", GETSOURCES(ITag))
             .reg("openReferenceDataArray", GETBYSTR(nix::DataArray, nix::Tag, getReference))
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
-            .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource));
+            .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource))
+            .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Tag, metadata));
 
         classdef<nix::MultiTag>("MultiTag", methods)
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::MultiTag, references))
@@ -196,7 +196,8 @@ void mexFunction(int            nlhs,
             .reg("openExtents", GETCONTENT(nix::DataArray, nix::MultiTag, extents))
             .reg("openReferences", GETBYSTR(nix::DataArray, nix::MultiTag, getReference))
             .reg("openFeature", GETBYSTR(nix::Feature, nix::MultiTag, getFeature))
-            .reg("openSource", GETBYSTR(nix::Source, nix::MultiTag, getSource));
+            .reg("openSource", GETBYSTR(nix::Source, nix::MultiTag, getSource))
+            .reg("openMetadataSection", GETCONTENT(nix::Section, nix::MultiTag, metadata));
 
         classdef<nix::Section>("Section", methods)
             .reg("sections", &nix::Section::sections)
