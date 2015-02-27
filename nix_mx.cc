@@ -54,7 +54,6 @@ struct fendpoint {
 
 const std::vector<fendpoint> funcs = {
     // File
-    { "File::open", nixfile::open },
     { "File::listBlocks", nixfile::list_blocks },
     { "File::listSections", nixfile::list_sections },
     { "File::createBlock", nixfile::create_block },
@@ -151,6 +150,7 @@ void mexFunction(int            nlhs,
 
         classdef<nix::File>("File", methods)
             .desc(&nixfile::describe)
+            .add("open", nixfile::open)
             .reg("blocks", GETTER(std::vector<nix::Block>, nix::File, blocks))
             .reg("sections", GETTER(std::vector<nix::Section>, nix::File, sections))
             .reg("deleteBlock", REMOVER(nix::Block, nix::File, deleteBlock))
