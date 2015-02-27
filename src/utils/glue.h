@@ -211,6 +211,21 @@ struct funcbox : box {
     matryoshka_t args;
 };
 
+template<typename Klazz>
+struct getter : box {
+    typedef mxArray *(*get_fun)(const Klazz &k);
+
+    getter(get_fun f) : fun(f) { }
+
+    void operator()(const extractor &input, infusor &output) {
+        Klazz entity = input.entity<Klazz>(1);
+        mxArray *res = fun(entity);
+        output.set(0, res);
+    }
+
+    get_fun fun;
+};
+
 
 };
 
@@ -254,6 +269,13 @@ struct classdef {
         lib->add(prefix + "::" + name, b);
         return *this;
     }
+
+    classdef &desc(typename funky::getter<Klass>::get_fun fun) {
+        funky::box *b = new funky::getter<Klass>(fun);
+        lib->add(prefix + "::describe", b);
+        return *this;
+    }
+
 
 private:
     std::string  prefix;
