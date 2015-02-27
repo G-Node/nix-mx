@@ -256,8 +256,14 @@ struct registry {
         return false;
     }
 
-    void add(const std::string &name, funky::box *b) {
+    registry& add(const std::string &name, funky::box *b) {
         funcs[name] = b;
+        return *this;
+    }
+
+    registry &add(const std::string &name, funky::fntbox::fn_t fun) {
+        funky::box *b = new funky::fntbox(fun);
+        return add(name, b);
     }
 
     ~registry() {
