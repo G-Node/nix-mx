@@ -30,19 +30,16 @@ void open(const extractor &input, infusor &output)
     output.set(0, h);
 }
 
-void describe(const extractor &input, infusor &output)
-{
-    nix::File fd = input.entity<nix::File>(1);
-
+mxArray *describe(const nix::File &fd) {
     struct_builder sb({ 1 }, { "format", "version", "location", "createdAt", "updatedAt" });
     sb.set(fd.format());
     sb.set(fd.version());
     sb.set(fd.location());
     sb.set(static_cast<uint64_t>(fd.createdAt()));
     sb.set(static_cast<uint64_t>(fd.updatedAt()));
-  
-    output.set(0, sb.array());
+    return sb.array();
 }
+
 
 void list_blocks(const extractor &input, infusor &output)
 {
