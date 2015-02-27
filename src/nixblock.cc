@@ -25,6 +25,19 @@ namespace nixblock {
         output.set(0, sb.array());
     }
 
+    void create_data_array(const extractor &input, infusor &output)
+    {
+        nix::Block block = input.entity<nix::Block>(1);
+
+        std::string name = input.str(1);
+        std::string type = input.str(2);
+        nix::DataType dtype = nix::DataType::Double; // FIXME nix::string_to_data_type(input.str(3));
+        nix::NDSize size = input.ndsize(4);
+
+        nix::DataArray dt = block.createDataArray(name, type, dtype, size);
+        output.set(0, dt);
+    }
+
     void list_data_arrays(const extractor &input, infusor &output)
     {
         nix::Block block = input.entity<nix::Block>(1);

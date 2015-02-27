@@ -161,7 +161,10 @@ void mexFunction(int            nlhs,
 
         classdef<nix::Block>("Block", methods)
             .reg("dataArrays", &nix::Block::dataArrays)
+            .reg("createSource", &nix::Block::createSource)
+            //.reg("createDataArray", static_cast<nix::DataArray(nix::Block::*)(const std::string &, const std::string &, nix::DataType, const nix::NDSize &)>(&nix::Block::createDataArray))
             .reg("createTag", &nix::Block::createTag)
+            .reg("createMultiTag", &nix::Block::createMultiTag)
             .reg("sources", &nix::Block::sources)
             .reg("tags", &nix::Block::tags)
             .reg("multiTags", &nix::Block::multiTags)

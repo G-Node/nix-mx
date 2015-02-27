@@ -5,7 +5,7 @@
 #include "handle.h"
 #include "datatypes.h"
 #include "mkarray.h"
-
+#include "nix2mx.h"
 #include <stdexcept>
 
 // *** argument helpers ***
@@ -96,6 +96,10 @@ public:
         }
 
         return res;
+    }
+
+    nix::NDSize ndsize(size_t pos) const {
+        return mx_array_to_ndsize(array[pos]);
     }
 
 	bool logical(size_t pos) const {
