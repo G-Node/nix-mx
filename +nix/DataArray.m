@@ -82,7 +82,7 @@ classdef DataArray < nix.Entity
            data = permute(tmp, length(size(tmp)):-1:1);
         end;
         
-        function write_all(obj, data)
+        function write_all(obj, data)  % TODO add (optional) offset
            % data must agree with file & dimensions
            % see mkarray.cc(42)
            tmp = permute(data, length(size(data)):-1:1);
