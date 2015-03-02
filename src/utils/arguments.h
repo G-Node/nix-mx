@@ -101,6 +101,10 @@ public:
     nix::NDSize ndsize(size_t pos) const {
         return mx_array_to_ndsize(array[pos]);
     }
+    
+    nix::DataType dtype(size_t pos) const {
+        return dtype_mex2nix(array[pos]);
+    }
 
 	bool logical(size_t pos) const {
 		check_arg_type(pos, nix::DataType::Bool);
@@ -126,6 +130,10 @@ public:
     bool is_str(size_t pos) const {
         mxClassID category = class_id(pos);
         return category == mxCHAR_CLASS;
+    }
+
+    double* get_raw(size_t pos) const {
+        return mxGetPr(array[pos]);
     }
 
 private:

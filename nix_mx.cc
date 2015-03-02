@@ -71,10 +71,12 @@ const std::vector<fendpoint> funcs = {
     { "Block::listTags", nixblock::list_tags },
     { "Block::listMultiTags", nixblock::list_multi_tags },
     { "Block::openMetadataSection", nixblock::open_metadata_section },
+    { "Block::createDataArray", nixblock::create_data_array },
 
     // Data Array
     { "DataArray::describe", nixdataarray::describe },
     { "DataArray::readAll", nixdataarray::read_all },
+    { "DataArray::writeAll", nixdataarray::write_all },
     { "DataArray::openMetadataSection", nixdataarray::open_metadata_section },
 
     // Tag

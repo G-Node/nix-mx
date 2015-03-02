@@ -71,11 +71,22 @@ classdef DataArray < nix.Entity
            polynom_coefficients = obj.info.polynom_coefficients;
         end;
         
+        % -----------------
+        % Data access methods
+        % -----------------
+
         function data = read_all(obj)
            tmp = nix_mx('DataArray::readAll', obj.nix_handle);
            % data must agree with file & dimensions
            % see mkarray.cc(42)
            data = permute(tmp, length(size(tmp)):-1:1);
+        end;
+        
+        function write_all(obj, data)
+           % data must agree with file & dimensions
+           % see mkarray.cc(42)
+           tmp = permute(data, length(size(data)):-1:1);
+           nix_mx('DataArray::writeAll', obj.nix_handle, tmp);
         end;
         
         % -----------------
