@@ -65,12 +65,10 @@ const std::vector<fendpoint> funcs = {
     { "Block::listSources", nixblock::list_sources },
     { "Block::listTags", nixblock::list_tags },
     { "Block::listMultiTags", nixblock::list_multi_tags },
-    { "Block::createDataArray", nixblock::create_data_array },
 
     // Data Array
     { "DataArray::describe", nixdataarray::describe },
     { "DataArray::readAll", nixdataarray::read_all },
-    { "DataArray::writeAll", nixdataarray::write_all },
 
     // Tag
     { "Tag::describe", nixtag::describe },
@@ -173,10 +171,12 @@ void mexFunction(int            nlhs,
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
             .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Block, getMultiTag))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Block, metadata));
+        methods->add("Block::createDataArray", nixblock::create_data_array);
 
         classdef<nix::DataArray>("DataArray", methods)
             .reg("sources", GETSOURCES(IDataArray))
             .reg("openMetadataSection", GETMETADATA(IDataArray));
+        methods->add("DataArray::writeAll", nixdataarray::write_all);
 
         classdef<nix::Source>("Source", methods)
             .reg("sources", &nix::Source::sources)
