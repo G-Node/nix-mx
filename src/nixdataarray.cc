@@ -63,4 +63,16 @@ namespace nixdataarray {
         output.set(0, data);
     }
 
+    void write_all(const extractor &input, infusor &output)
+    {
+        nix::DataArray da = input.entity<nix::DataArray>(1);
+
+        nix::DataType dtype = input.dtype(2);
+        nix::NDSize count = input.ndsize(2);
+        nix::NDSize offset(0);
+        double *ptr = input.get_raw(2);
+
+        da.setData(dtype, ptr, count, offset);
+    }
+
 } // namespace nixdataarray

@@ -4,7 +4,7 @@
 #include "mex.h"
 #include <nix.hpp>
 
-//nix::NDSize mx_array_to_ndsize(const mxArray *arr);
+nix::NDSize mx_array_to_ndsize(const mxArray *arr);
 
 mxArray *nmCreateScalar(uint32_t val);
 

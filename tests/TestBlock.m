@@ -16,6 +16,8 @@ function funcs = TestBlock
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_create_tag;
+    funcs{end+1} = @test_create_data_array;
+    funcs{end+1} = @test_create_data_array_from_data;
 end
 
 function [] = test_list_arrays( varargin )
@@ -173,4 +175,42 @@ function [] = test_create_tag( varargin )
     assert(isequal(t1.position, position));
     
     assert(~isempty(b.tags));
+end
+
+function [] = test_create_data_array( varargin )
+%% Test: Create Data Array
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('arraytest', 'nixblock');
+    
+    assert(isempty(b.dataArrays));
+    
+    d1 = b.create_data_array('foo', 'bar', 'double', [2 3]);
+
+    assert(strcmp(d1.name, 'foo'));
+    assert(strcmp(d1.type, 'bar'));
+    tmp = d1.read_all();
+    assert(all(tmp(:) == 0));
+    
+    assert(~isempty(b.dataArrays));
+end
+
+function [] = test_create_data_array_from_data( varargin )
+%% Test: Create Data Array from data
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('arraytest', 'nixblock');
+    
+    assert(isempty(b.dataArrays));
+    
+    data = [1, 2, 3; 4, 5, 6];
+    d1 = b.create_data_array_from_data('foo', 'bar', data);
+
+    assert(strcmp(d1.name, 'foo'));
+    assert(strcmp(d1.type, 'bar'));
+    
+    tmp = d1.read_all();
+    assert(strcmp(class(tmp), class(data)));
+    assert(isequal(size(tmp), size(data)));
+    assert(isequal(tmp, data));
+    
+    assert(~isempty(b.dataArrays));
 end

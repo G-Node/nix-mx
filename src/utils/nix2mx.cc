@@ -54,7 +54,6 @@ mxArray *dim_to_struct(nix::RangeDimension dim) {
     return sb.array();
 }
 
-/*
 nix::NDSize mx_array_to_ndsize(const mxArray *arr) {
 
     size_t m = mxGetM(arr);
@@ -72,4 +71,4 @@ nix::NDSize mx_array_to_ndsize(const mxArray *arr) {
 
     return size;
 }
-*/
+

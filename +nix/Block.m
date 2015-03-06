@@ -37,6 +37,21 @@ classdef Block < nix.NamedEntity
             end;
         end;
         
+        function da = create_data_array(obj, name, nixtype, dtype, shape)
+            handle = nix_mx('Block::createDataArray', obj.nix_handle, ...
+                name, nixtype, dtype, shape);
+            da = nix.DataArray(handle);
+            obj.dataArraysCache.lastUpdate = 0;
+        end
+        
+        function da = create_data_array_from_data(obj, name, nixtype, data)
+            shape = size(data);
+            dtype = class(data);
+            
+            da = obj.create_data_array(name, nixtype, dtype, shape);
+            da.write_all(data);
+        end
+        
         % -----------------
         % Sources methods
         % -----------------

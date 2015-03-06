@@ -142,7 +142,7 @@ void mexFunction(int            nlhs,
 
         methods = new registry{};
 
-        methods->add("Entity::destory", entity_destroy);
+        methods->add("Entity::destroy", entity_destroy);
         methods->add("Entity::updatedAt", entity_updated_at);
 
         classdef<nix::File>("File", methods)
@@ -157,7 +157,10 @@ void mexFunction(int            nlhs,
 
         classdef<nix::Block>("Block", methods)
             .reg("dataArrays", &nix::Block::dataArrays)
+            .reg("createSource", &nix::Block::createSource)
+            //.reg("createDataArray", static_cast<nix::DataArray(nix::Block::*)(const std::string &, const std::string &, nix::DataType, const nix::NDSize &)>(&nix::Block::createDataArray))
             .reg("createTag", &nix::Block::createTag)
+            .reg("createMultiTag", &nix::Block::createMultiTag)
             .reg("sources", &nix::Block::sources)
             .reg("tags", &nix::Block::tags)
             .reg("multiTags", &nix::Block::multiTags)
@@ -168,10 +171,12 @@ void mexFunction(int            nlhs,
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
             .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Block, getMultiTag))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Block, metadata));
+        methods->add("Block::createDataArray", nixblock::create_data_array);
 
         classdef<nix::DataArray>("DataArray", methods)
             .reg("sources", GETSOURCES(IDataArray))
             .reg("openMetadataSection", GETMETADATA(IDataArray));
+        methods->add("DataArray::writeAll", nixdataarray::write_all);
 
         classdef<nix::Source>("Source", methods)
             .reg("sources", &nix::Source::sources)

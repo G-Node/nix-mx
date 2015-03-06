@@ -9,6 +9,8 @@ namespace nixdataarray {
     
     void read_all(const extractor &input, infusor &output);
 
+    void write_all(const extractor &input, infusor &output);
+
 } // namespace nixdataarray
 
 #endif
