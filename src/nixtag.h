@@ -13,8 +13,6 @@ namespace nixtag {
 
     void list_sources(const extractor &input, infusor &output);
 
-    void open_metadata_section(const extractor &input, infusor &output);
-
     void retrieve_data(const extractor &input, infusor &output);
 
     void retrieve_feature_data(const extractor &input, infusor &output);
