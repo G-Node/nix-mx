@@ -144,7 +144,7 @@ void mexFunction(int            nlhs,
 
         methods = new registry{};
 
-        methods->add("Entity::destory", entity_destroy);
+        methods->add("Entity::destroy", entity_destroy);
         methods->add("Entity::updatedAt", entity_updated_at);
 
         classdef<nix::File>("File", methods)
