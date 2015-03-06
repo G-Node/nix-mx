@@ -211,6 +211,34 @@ struct funcbox : box {
     matryoshka_t args;
 };
 
+template<typename Klazz>
+struct getter : box {
+    typedef mxArray *(*get_fun)(const Klazz &k);
+
+    getter(get_fun f) : fun(f) { }
+
+    void operator()(const extractor &input, infusor &output) {
+        Klazz entity = input.entity<Klazz>(1);
+        mxArray *res = fun(entity);
+        output.set(0, res);
+    }
+
+    get_fun fun;
+};
+
+
+struct fntbox : box {
+    typedef void(*fn_t)(const extractor &input, infusor &output);
+
+    fntbox(fn_t f) : fun(f) { }
+
+    void operator()(const extractor &input, infusor &output) {
+        fun(input, output);
+    }
+
+private:
+    fn_t fun;
+};
 
 };
 
@@ -228,8 +256,14 @@ struct registry {
         return false;
     }
 
-    void add(const std::string &name, funky::box *b) {
+    registry& add(const std::string &name, funky::box *b) {
         funcs[name] = b;
+        return *this;
+    }
+
+    registry &add(const std::string &name, funky::fntbox::fn_t fun) {
+        funky::box *b = new funky::fntbox(fun);
+        return add(name, b);
     }
 
     ~registry() {
@@ -254,6 +288,18 @@ struct classdef {
         lib->add(prefix + "::" + name, b);
         return *this;
     }
+
+    classdef &desc(typename funky::getter<Klass>::get_fun fun) {
+        funky::box *b = new funky::getter<Klass>(fun);
+        lib->add(prefix + "::describe", b);
+        return *this;
+    }
+
+    classdef &add(const std::string &name, funky::fntbox::fn_t fun) {
+        lib->add(prefix + "::" + name, fun);
+        return *this;
+    }
+
 
 private:
     std::string  prefix;

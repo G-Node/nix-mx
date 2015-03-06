@@ -53,12 +53,7 @@ struct fendpoint {
 };
 
 const std::vector<fendpoint> funcs = {
-    { "Entity::destroy", entity_destroy },
-    { "Entity::updatedAt", entity_updated_at },
-
     // File
-    { "File::open", nixfile::open },
-    { "File::describe", nixfile::describe },
     { "File::listBlocks", nixfile::list_blocks },
     { "File::listSections", nixfile::list_sections },
     { "File::createBlock", nixfile::create_block },
@@ -147,7 +142,12 @@ void mexFunction(int            nlhs,
 
         methods = new registry{};
 
+        methods->add("Entity::destory", entity_destroy);
+        methods->add("Entity::updatedAt", entity_updated_at);
+
         classdef<nix::File>("File", methods)
+            .desc(&nixfile::describe)
+            .add("open", nixfile::open)
             .reg("blocks", GETTER(std::vector<nix::Block>, nix::File, blocks))
             .reg("sections", GETTER(std::vector<nix::Section>, nix::File, sections))
             .reg("deleteBlock", REMOVER(nix::Block, nix::File, deleteBlock))

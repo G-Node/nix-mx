@@ -7,7 +7,7 @@ namespace nixfile {
 
 void open(const extractor &input, infusor &output);
 
-void describe(const extractor &input, infusor &output);
+mxArray *describe(const nix::File &f);
 
 void list_blocks(const extractor &input, infusor &output);
 
