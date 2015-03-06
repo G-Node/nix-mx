@@ -17,8 +17,6 @@ namespace nixblock {
 
     void list_multi_tags(const extractor &input, infusor &output);
 
-    void open_metadata_section(const extractor &input, infusor &output);
-
 } // namespace nixblock
 
 #endif

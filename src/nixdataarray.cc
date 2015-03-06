@@ -75,10 +75,4 @@ namespace nixdataarray {
         da.setData(dtype, ptr, count, offset);
     }
 
-    void open_metadata_section(const extractor &input, infusor &output)
-    {
-        nix::DataArray currObj = input.entity<nix::DataArray>(1);
-        output.set(0, nixgen::get_handle_or_none(currObj.metadata()));
-    }
-
 } // namespace nixdataarray
