@@ -59,10 +59,6 @@ const std::vector<fendpoint> funcs = {
 
     // Block
     { "Block::describe", nixblock::describe },
-    { "Block::listDataArrays", nixblock::list_data_arrays },
-    { "Block::listSources", nixblock::list_sources },
-    { "Block::listTags", nixblock::list_tags },
-    { "Block::listMultiTags", nixblock::list_multi_tags },
 
     // Data Array
     { "DataArray::describe", nixdataarray::describe },

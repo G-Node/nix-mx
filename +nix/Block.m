@@ -25,10 +25,6 @@ classdef Block < nix.NamedEntity
         % DataArray methods
         % -----------------
         
-        function das = list_data_arrays(obj)
-            das = nix_mx('Block::listDataArrays', obj.nix_handle);
-        end;
-        
         function retObj = data_array(obj, id_or_name)
             handle = nix_mx('Block::openDataArray', obj.nix_handle, id_or_name); 
             retObj = {};
@@ -56,10 +52,6 @@ classdef Block < nix.NamedEntity
         % Sources methods
         % -----------------
         
-        function sourcesList = list_sources(obj)
-            sourcesList = nix_mx('Block::listSources', obj.nix_handle);
-        end;
-
         function retObj = open_source(obj, id_or_name)
             handle = nix_mx('Block::openSource', obj.nix_handle, id_or_name);
             retObj = {};
@@ -74,10 +66,6 @@ classdef Block < nix.NamedEntity
         
         function hasTag = has_tag(obj, id_or_name)
             hasTag = nix_mx('Block::hasTag', obj.nix_handle, id_or_name);
-        end;
-        
-        function tagList = list_tags(obj)
-            tagList = nix_mx('Block::listTags', obj.nix_handle);
         end;
         
         function retObj = open_tag(obj, id_or_name)
@@ -103,10 +91,6 @@ classdef Block < nix.NamedEntity
             hasMTag = nix_mx('Block::hasMultiTag', obj.nix_handle, id_or_name);
         end;
 
-        function tagList = list_multi_tags(obj)
-            tagList = nix_mx('Block::listMultiTags', obj.nix_handle);
-        end;
-        
         function retObj = open_multi_tag(obj, id_or_name)
             handle = nix_mx('Block::openMultiTag', obj.nix_handle, id_or_name);
             retObj = {};

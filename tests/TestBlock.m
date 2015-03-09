@@ -25,7 +25,6 @@ function [] = test_list_arrays( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
 
-    assert(size(getBlock.list_data_arrays(),1) == 198);
     assert(size(getBlock.dataArrays,1) == 198);
 end
 
@@ -34,7 +33,6 @@ function [] = test_list_sources( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
 
-    assert(size(getBlock.list_sources(),1) == 1);
     assert(size(getBlock.sources(), 1) == 1);
 end
 
@@ -43,7 +41,6 @@ function [] = test_list_tags( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
 
-    assert(size(getBlock.list_tags(),1) == 198);
     assert(size(getBlock.tags(), 1) == 198);
 end
 
@@ -52,7 +49,6 @@ function [] = test_list_multitags( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     
-    assert(size(getBlock.list_multi_tags(),1) == 99);
     assert(size(getBlock.multiTags(), 1) == 99);
 end
 
