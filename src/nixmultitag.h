@@ -7,12 +7,6 @@ namespace nixmultitag {
 
     void describe(const extractor &input, infusor &output);
 
-    void list_references_array(const extractor &input, infusor &output);
-
-    void list_features(const extractor &input, infusor &output);
-
-    void list_sources(const extractor &input, infusor &output);
-
     void retrieve_data(const extractor &input, infusor &output);
 
     void retrieve_feature_data(const extractor &input, infusor &output);

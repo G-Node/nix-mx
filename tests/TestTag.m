@@ -20,7 +20,6 @@ function [] = test_list_fetch_references( varargin )
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
     
-    assert(size(getTag.list_references(), 1) == 1);
     assert(size(getTag.references(), 1) == 1);
 end
 
@@ -31,9 +30,6 @@ function [] = test_list_fetch_sources( varargin )
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
 
     %-- ToDo get testfile with tag referencing a source
-    assert(size(getTag.list_sources(),1) == 0);
-    disp('Test Tag: list sources from tag ... TODO (proper testfile)');
-
     assert(size(getTag.sources(),1) == 0);
     disp('Test Tag: fetch sources ... TODO (proper testfile)');
 end
@@ -46,9 +42,6 @@ function [] = test_list_fetch_features( varargin )
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
 
     %-- ToDo get testfile with tag referencing a source
-    assert(size(getTag.list_features(),1) == 0);
-    disp('Test Tag: list features ... TODO (proper testfile)');
-
     assert(size(getTag.features(),1) == 0);
     disp('Test Tag: fetch features ... TODO (proper testfile)');
 end

@@ -75,10 +75,6 @@ classdef MultiTag < nix.Entity
         % References methods
         % ------------------
         
-        function refList = list_references(obj)
-            refList = nix_mx('MultiTag::listReferences', obj.nix_handle);
-        end;
-
         function retObj = open_reference(obj, id_or_name)
             handle = nix_mx('MultiTag::openReferences', obj.nix_handle, id_or_name);
             retObj = {};
@@ -108,10 +104,6 @@ classdef MultiTag < nix.Entity
         % Features methods
         % ------------------
         
-        function featureList = list_features(obj)
-            featureList = nix_mx('MultiTag::listFeatures', obj.nix_handle);
-        end;
-
         function retObj = open_feature(obj, id_or_name)
             handle = nix_mx('MultiTag::openFeature', obj.nix_handle, id_or_name);
             retObj = {};
@@ -140,10 +132,6 @@ classdef MultiTag < nix.Entity
         % ------------------
         % Sources methods
         % ------------------
-
-        function sourceList = list_sources(obj)
-            sourceList = nix_mx('MultiTag::listSources', obj.nix_handle);
-        end;
 
         function retObj = open_source(obj, id_or_name)
             handle = nix_mx('MultiTag::openSource', obj.nix_handle, id_or_name);

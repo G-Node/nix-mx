@@ -54,17 +54,11 @@ struct fendpoint {
 
 const std::vector<fendpoint> funcs = {
     // File
-    { "File::listBlocks", nixfile::list_blocks },
-    { "File::listSections", nixfile::list_sections },
     { "File::createBlock", nixfile::create_block },
     { "File::createSection", nixfile::create_section },
 
     // Block
     { "Block::describe", nixblock::describe },
-    { "Block::listDataArrays", nixblock::list_data_arrays },
-    { "Block::listSources", nixblock::list_sources },
-    { "Block::listTags", nixblock::list_tags },
-    { "Block::listMultiTags", nixblock::list_multi_tags },
 
     // Data Array
     { "DataArray::describe", nixdataarray::describe },
@@ -72,23 +66,16 @@ const std::vector<fendpoint> funcs = {
 
     // Tag
     { "Tag::describe", nixtag::describe },
-    { "Tag::listReferences", nixtag::list_references_array },
-    { "Tag::listFeatures", nixtag::list_features },
-    { "Tag::listSources", nixtag::list_sources },
     { "Tag::retrieveData", nixtag::retrieve_data },
     { "Tag::featureRetrieveData", nixtag::retrieve_feature_data },
 
     // Multi Tag
     { "MultiTag::describe", nixmultitag::describe },
-    { "MultiTag::listReferences", nixmultitag::list_references_array },
-    { "MultiTag::listFeatures", nixmultitag::list_features },
-    { "MultiTag::listSources", nixmultitag::list_sources },
     { "MultiTag::retrieveData", nixmultitag::retrieve_data },
     { "MultiTag::featureRetrieveData", nixmultitag::retrieve_feature_data },
 
     // Source
     { "Source::describe", nixsource::describe },
-    { "Source::listSources", nixsource::list_sources },
 
     // Feature
     { "Feature::describe", nixfeature::describe },
@@ -96,8 +83,7 @@ const std::vector<fendpoint> funcs = {
 
     // Section
     { "Section::describe", nixsection::describe },
-    { "Section::listSections", nixsection::list_sections },
-    { "Section::listProperties", nixsection::list_properties }
+    { "Section::properties", nixsection::properties }
 };
 
 //glue "globals"

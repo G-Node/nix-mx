@@ -15,9 +15,6 @@ function [] = test_list_fetch_sources( varargin )
     getSourceFromBlock = getBlock.open_source(getBlock.sources{1,1}.id);
 
     %-- TODO: get a testfile with nested sources
-    assert(size(getSourceFromBlock.list_sources(),1) == 0);
-    disp('Test Source: list sources ... TODO (proper testfile)');
-    
     assert(size(getSourceFromBlock.sources(), 1) == 0);
     disp('Test Source: fetch sources ... TODO (proper testfile)');
 end

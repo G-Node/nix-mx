@@ -1,5 +1,4 @@
 #include "nixfile.h"
-#include "nixgen.h"
 
 #include "mex.h"
 
@@ -38,45 +37,6 @@ mxArray *describe(const nix::File &fd) {
     sb.set(static_cast<uint64_t>(fd.createdAt()));
     sb.set(static_cast<uint64_t>(fd.updatedAt()));
     return sb.array();
-}
-
-
-void list_blocks(const extractor &input, infusor &output)
-{
-    nix::File fd = input.entity<nix::File>(1);
-
-    std::vector<nix::Block> blocks = fd.blocks();
-
-    struct_builder sb({ blocks.size() }, { "name", "id", "type" });
-
-    for (const auto &b : blocks) {
-        sb.set(b.name());
-        sb.set(b.id());
-        sb.set(b.type());
-
-        sb.next();
-    }
-
-    output.set(0, sb.array());
-}
-
-void list_sections(const extractor &input, infusor &output)
-{
-    nix::File fd = input.entity<nix::File>(1);
-
-    std::vector<nix::Section> secs = fd.sections();
-
-    struct_builder sb({ secs.size() }, { "name", "id", "type" });
-
-    for (const auto &b : secs) {
-        sb.set(b.name());
-        sb.set(b.id());
-        sb.set(b.type());
-
-        sb.next();
-    }
-
-    output.set(0, sb.array());
 }
 
 void create_block(const extractor &input, infusor &output)

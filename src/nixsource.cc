@@ -1,5 +1,4 @@
 #include "nixsource.h"
-#include "nixgen.h"
 
 #include "mex.h"
 
@@ -20,12 +19,6 @@ namespace nixsource {
         sb.set(currObj.name());
         sb.set(currObj.definition());
         output.set(0, sb.array());
-    }
-
-    void list_sources(const extractor &input, infusor &output)
-    {
-        nix::Source currObj = input.entity<nix::Source>(1);
-        output.set(0, nixgen::list_sources(currObj.sources()));
     }
 
 } // namespace nixsource

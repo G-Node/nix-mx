@@ -23,7 +23,6 @@ function [] = test_list_fetch_references( varargin )
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
     
-    assert(size(getMultiTag.list_references(), 1) == 1);
     assert(size(getMultiTag.references(), 1) == 1);
 end
 
@@ -33,7 +32,6 @@ function [] = test_list_fetch_sources( varargin )
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
 
-    assert(size(getMultiTag.list_sources(),1) == 1);
     assert(size(getMultiTag.sources(),1) == 1);
 end
 
@@ -44,9 +42,6 @@ function [] = test_list_fetch_features( varargin )
     getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
 
     %-- ToDo get testfile with tag referencing a source
-    assert(size(getMultiTag.list_features(),1) == 0);
-    disp('Test MultiTag: list features ... TODO (proper testfile)');
-
     assert(size(getMultiTag.features(),1) == 0);
     disp('Test MultiTag: fetch features ... TODO (proper testfile)');
 end
