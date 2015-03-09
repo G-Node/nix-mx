@@ -93,7 +93,6 @@ function [] = test_list_sections( varargin )
 % Test that File handle can fetch sections from HDF5
     test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
 
-    assert(length(test_file.listSections()) == 3);
     assert(length(test_file.sections()) == 3);
 end
 
@@ -113,7 +112,6 @@ function [] = test_list_blocks( varargin )
 % Test that File handle can fetch blocks from HDF5
     test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
 
-    assert(length(test_file.listBlocks()) == 4);
     assert(size(test_file.blocks(),1) == 4);
 end
 

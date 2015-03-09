@@ -54,8 +54,6 @@ struct fendpoint {
 
 const std::vector<fendpoint> funcs = {
     // File
-    { "File::listBlocks", nixfile::list_blocks },
-    { "File::listSections", nixfile::list_sections },
     { "File::createBlock", nixfile::create_block },
     { "File::createSection", nixfile::create_section },
 
