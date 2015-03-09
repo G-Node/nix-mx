@@ -53,37 +53,6 @@ struct fendpoint {
 };
 
 const std::vector<fendpoint> funcs = {
-    // File
-    { "File::createBlock", nixfile::create_block },
-    { "File::createSection", nixfile::create_section },
-
-    // Block
-    { "Block::describe", nixblock::describe },
-
-    // Data Array
-    { "DataArray::describe", nixdataarray::describe },
-    { "DataArray::readAll", nixdataarray::read_all },
-
-    // Tag
-    { "Tag::describe", nixtag::describe },
-    { "Tag::retrieveData", nixtag::retrieve_data },
-    { "Tag::featureRetrieveData", nixtag::retrieve_feature_data },
-
-    // Multi Tag
-    { "MultiTag::describe", nixmultitag::describe },
-    { "MultiTag::retrieveData", nixmultitag::retrieve_data },
-    { "MultiTag::featureRetrieveData", nixmultitag::retrieve_feature_data },
-
-    // Source
-    { "Source::describe", nixsource::describe },
-
-    // Feature
-    { "Feature::describe", nixfeature::describe },
-    { "Feature::linkType", nixfeature::link_type },
-
-    // Section
-    { "Section::describe", nixsection::describe },
-    { "Section::properties", nixsection::properties }
 };
 
 //glue "globals"
@@ -140,6 +109,8 @@ void mexFunction(int            nlhs,
             .reg("deleteSection", REMOVER(nix::Section, nix::File, deleteSection))
             .reg("openBlock", GETBYSTR(nix::Block, nix::File, getBlock))
             .reg("openSection", GETBYSTR(nix::Section, nix::File, getSection));
+        methods->add("File::createBlock", nixfile::create_block);
+        methods->add("File::createSection", nixfile::create_section);
 
         classdef<nix::Block>("Block", methods)
             .reg("dataArrays", &nix::Block::dataArrays)
@@ -157,17 +128,21 @@ void mexFunction(int            nlhs,
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
             .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Block, getMultiTag))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Block, metadata));
+        methods->add("Block::describe", nixblock::describe);
         methods->add("Block::createDataArray", nixblock::create_data_array);
 
         classdef<nix::DataArray>("DataArray", methods)
             .reg("sources", GETSOURCES(IDataArray))
             .reg("openMetadataSection", GETMETADATA(IDataArray));
+        methods->add("DataArray::describe", nixdataarray::describe);
+        methods->add("DataArray::readAll", nixdataarray::read_all);
         methods->add("DataArray::writeAll", nixdataarray::write_all);
 
         classdef<nix::Source>("Source", methods)
             .reg("sources", &nix::Source::sources)
             .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Source, metadata));
+        methods->add("Source::describe", nixsource::describe);
 
         classdef<nix::Tag>("Tag", methods)
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::Tag, references))
@@ -177,6 +152,9 @@ void mexFunction(int            nlhs,
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Tag, metadata));
+        methods->add("Tag::describe", nixtag::describe);
+        methods->add("Tag::retrieveData", nixtag::retrieve_data);
+        methods->add("Tag::featureRetrieveData", nixtag::retrieve_feature_data);
 
         classdef<nix::MultiTag>("MultiTag", methods)
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::MultiTag, references))
@@ -189,6 +167,9 @@ void mexFunction(int            nlhs,
             .reg("openFeature", GETBYSTR(nix::Feature, nix::MultiTag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::MultiTag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::MultiTag, metadata));
+        methods->add("MultiTag::describe", nixmultitag::describe);
+        methods->add("MultiTag::retrieveData", nixmultitag::retrieve_data);
+        methods->add("MultiTag::featureRetrieveData", nixmultitag::retrieve_feature_data);
 
         classdef<nix::Section>("Section", methods)
             .reg("sections", &nix::Section::sections)
@@ -197,9 +178,13 @@ void mexFunction(int            nlhs,
             .reg("hasSection", GETBYSTR(bool, nix::Section, hasSection))
             .reg("link", GETCONTENT(nix::Section, nix::Section, link))
             .reg("parent", GETCONTENT(nix::Section, nix::Section, parent));
+        methods->add("Section::describe", nixsection::describe);
+        methods->add("Section::properties", nixsection::properties);
 
         classdef<nix::Feature>("Feature", methods)
             .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data));
+        methods->add("Feature::describe", nixfeature::describe);
+        methods->add("Feature::linkType", nixfeature::link_type);
 
         mexAtExit(on_exit);
     });
