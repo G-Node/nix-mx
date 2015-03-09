@@ -5,7 +5,7 @@
 
 namespace nixsource {
 
-    void describe(const extractor &input, infusor &output);
+    mxArray *describe(const nix::Source &source);
 
 } // namespace nixsource
 

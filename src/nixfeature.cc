@@ -10,12 +10,11 @@
 
 namespace nixfeature {
 
-    void describe(const extractor &input, infusor &output)
+    mxArray *describe(const nix::Feature &feat)
     {
-        nix::Feature currFeat = input.entity<nix::Feature>(1);
         struct_builder sb({ 1 }, { "id" });
-        sb.set(currFeat.id());
-        output.set(0, sb.array());
+        sb.set(feat.id());
+        return sb.array();
     }
 
     void link_type(const extractor &input, infusor &output)

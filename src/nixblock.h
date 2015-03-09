@@ -5,7 +5,7 @@
 
 namespace nixblock {
 
-    void describe(const extractor &input, infusor &output);
+    mxArray *describe(const nix::Block &block);
 
     void create_data_array(const extractor &input, infusor &output);
 

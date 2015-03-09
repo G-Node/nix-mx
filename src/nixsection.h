@@ -5,9 +5,9 @@
 
 namespace nixsection {
 
-void describe(const extractor &input, infusor &output);
+    mxArray *describe(const nix::Section &section);
 
-void properties(const extractor &input, infusor &output);
+    void properties(const extractor &input, infusor &output);
 
 } // namespace nixfile
 

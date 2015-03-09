@@ -5,7 +5,7 @@
 
 namespace nixtag {
 
-    void describe(const extractor &input, infusor &output);
+    mxArray *describe(const nix::Tag &tag);
 
     void retrieve_data(const extractor &input, infusor &output);
 

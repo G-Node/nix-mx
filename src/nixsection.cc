@@ -11,10 +11,8 @@
 
 namespace nixsection {
 
-void describe(const extractor &input, infusor &output)
+    mxArray *describe(const nix::Section &section)
 {
-    nix::Section section = input.entity<nix::Section>(1);
-
     struct_builder sb({ 1 }, { 
         "name", "id", "type", "repository", "mapping"
     });
@@ -25,7 +23,7 @@ void describe(const extractor &input, infusor &output)
     sb.set(section.repository());
     sb.set(section.mapping());
 
-    output.set(0, sb.array());
+    return sb.array();
 }
 
 void properties(const extractor &input, infusor &output)

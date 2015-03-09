@@ -11,21 +11,19 @@
 
 namespace nixtag {
 
-    void describe(const extractor &input, infusor &output)
+    mxArray *describe(const nix::Tag &tag)
     {
-        nix::Tag currObj = input.entity<nix::Tag>(1);
-
         struct_builder sb({ 1 }, { "id", "type", "name", "definition", "position", "extent", "units" });
 
-        sb.set(currObj.id());
-        sb.set(currObj.type());
-        sb.set(currObj.name());
-        sb.set(currObj.definition());
-        sb.set(currObj.position());
-        sb.set(currObj.extent());
-        sb.set(currObj.units());
+        sb.set(tag.id());
+        sb.set(tag.type());
+        sb.set(tag.name());
+        sb.set(tag.definition());
+        sb.set(tag.position());
+        sb.set(tag.extent());
+        sb.set(tag.units());
 
-        output.set(0, sb.array());
+        return sb.array();
     }
 
     void retrieve_data(const extractor &input, infusor &output) {

@@ -11,18 +11,17 @@
 
 namespace nixmultitag {
 
-    void describe(const extractor &input, infusor &output)
+    mxArray *describe(const nix::MultiTag &multitag)
     {
-        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
-
         struct_builder sb({ 1 }, { "id", "type", "name", "definition", "units" });
-        sb.set(currObj.id());
-        sb.set(currObj.type());
-        sb.set(currObj.name());
-        sb.set(currObj.definition());
-        sb.set(currObj.units());
 
-        output.set(0, sb.array());
+        sb.set(multitag.id());
+        sb.set(multitag.type());
+        sb.set(multitag.name());
+        sb.set(multitag.definition());
+        sb.set(multitag.units());
+
+        return sb.array();
     }
 
     void retrieve_data(const extractor &input, infusor &output) {
