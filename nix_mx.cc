@@ -66,9 +66,6 @@ const std::vector<fendpoint> funcs = {
 
     // Tag
     { "Tag::describe", nixtag::describe },
-    { "Tag::listReferences", nixtag::list_references_array },
-    { "Tag::listFeatures", nixtag::list_features },
-    { "Tag::listSources", nixtag::list_sources },
     { "Tag::retrieveData", nixtag::retrieve_data },
     { "Tag::featureRetrieveData", nixtag::retrieve_feature_data },
 
