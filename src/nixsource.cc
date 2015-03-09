@@ -1,5 +1,4 @@
 #include "nixsource.h"
-#include "nixgen.h"
 
 #include "mex.h"
 

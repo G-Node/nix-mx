@@ -1,5 +1,4 @@
 #include "nixfeature.h"
-#include "nixgen.h"
 
 #include "mex.h"
 

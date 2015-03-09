@@ -3,7 +3,6 @@
 #include "mex.h"
 #include <nix.hpp>
 
-#include "nixgen.h"
 #include "handle.h"
 #include "arguments.h"
 #include "struct.h"

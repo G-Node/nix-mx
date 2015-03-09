@@ -1,5 +1,4 @@
 #include "nixblock.h"
-#include "nixgen.h"
 
 #include "mex.h"
 
