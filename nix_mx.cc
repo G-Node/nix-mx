@@ -42,19 +42,6 @@ static void entity_updated_at(const extractor &input, infusor &output)
 
 // *** ***
 
-typedef void(*fn_t)(const extractor &input, infusor &output);
-
-struct fendpoint {
-
-    fendpoint(std::string name, fn_t fn) : name(name), fn(fn) {}
-
-    std::string name;
-    fn_t fn;
-};
-
-const std::vector<fendpoint> funcs = {
-};
-
 //glue "globals"
 std::once_flag init_flag;
 static glue::registry *methods = nullptr;
@@ -199,18 +186,6 @@ void mexFunction(int            nlhs,
             mexPrintf("[GLUE] %s: processed by glue.\n", cmd.c_str());
         }
 #endif
-
-        for (const auto &fn : funcs) {
-
-            if (processed) {
-                break;
-            }
-
-            if (fn.name == cmd) {
-                fn.fn(input, output);
-                processed = true;
-            }
-        }
 
     }
     catch (const std::invalid_argument &e) {
