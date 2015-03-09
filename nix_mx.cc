@@ -71,9 +71,6 @@ const std::vector<fendpoint> funcs = {
 
     // Multi Tag
     { "MultiTag::describe", nixmultitag::describe },
-    { "MultiTag::listReferences", nixmultitag::list_references_array },
-    { "MultiTag::listFeatures", nixmultitag::list_features },
-    { "MultiTag::listSources", nixmultitag::list_sources },
     { "MultiTag::retrieveData", nixmultitag::retrieve_data },
     { "MultiTag::featureRetrieveData", nixmultitag::retrieve_feature_data },
 
