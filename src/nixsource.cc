@@ -10,15 +10,14 @@
 
 namespace nixsource {
 
-    void describe(const extractor &input, infusor &output)
+    mxArray *describe(const nix::Source &source)
     {
-        nix::Source currObj = input.entity<nix::Source>(1);
         struct_builder sb({ 1 }, { "id", "type", "name", "definition" });
-        sb.set(currObj.id());
-        sb.set(currObj.type());
-        sb.set(currObj.name());
-        sb.set(currObj.definition());
-        output.set(0, sb.array());
+        sb.set(source.id());
+        sb.set(source.type());
+        sb.set(source.name());
+        sb.set(source.definition());
+        return sb.array();
     }
 
 } // namespace nixsource

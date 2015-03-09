@@ -12,10 +12,8 @@
 
 namespace nixdataarray {
 
-    void describe(const extractor &input, infusor &output)
+    mxArray *describe(const nix::DataArray &da)
     {
-        nix::DataArray da = input.entity<nix::DataArray>(1);
-
         struct_builder sb({ 1 }, { "id", "type", "name", "definition", "label",
             "shape", "unit", "dimensions", "polynom_coefficients" });
 
@@ -53,7 +51,7 @@ namespace nixdataarray {
         sb.set(dims);
         sb.set(da.polynomCoefficients());
 
-        output.set(0, sb.array());
+        return sb.array();
     }
 
     void read_all(const extractor &input, infusor &output)

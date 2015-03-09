@@ -5,7 +5,7 @@
 
 namespace nixmultitag {
 
-    void describe(const extractor &input, infusor &output);
+    mxArray *describe(const nix::MultiTag &multitag);
 
     void retrieve_data(const extractor &input, infusor &output);
 

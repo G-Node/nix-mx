@@ -100,6 +100,7 @@ void mexFunction(int            nlhs,
         methods->add("File::createSection", nixfile::create_section);
 
         classdef<nix::Block>("Block", methods)
+            .desc(&nixblock::describe)
             .reg("dataArrays", &nix::Block::dataArrays)
             .reg("createSource", &nix::Block::createSource)
             //.reg("createDataArray", static_cast<nix::DataArray(nix::Block::*)(const std::string &, const std::string &, nix::DataType, const nix::NDSize &)>(&nix::Block::createDataArray))
@@ -115,23 +116,23 @@ void mexFunction(int            nlhs,
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
             .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Block, getMultiTag))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Block, metadata));
-        methods->add("Block::describe", nixblock::describe);
         methods->add("Block::createDataArray", nixblock::create_data_array);
 
         classdef<nix::DataArray>("DataArray", methods)
+            .desc(&nixdataarray::describe)
             .reg("sources", GETSOURCES(IDataArray))
             .reg("openMetadataSection", GETMETADATA(IDataArray));
-        methods->add("DataArray::describe", nixdataarray::describe);
         methods->add("DataArray::readAll", nixdataarray::read_all);
         methods->add("DataArray::writeAll", nixdataarray::write_all);
 
         classdef<nix::Source>("Source", methods)
+            .desc(&nixsource::describe)
             .reg("sources", &nix::Source::sources)
             .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Source, metadata));
-        methods->add("Source::describe", nixsource::describe);
 
         classdef<nix::Tag>("Tag", methods)
+            .desc(&nixtag::describe)
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::Tag, references))
             .reg("features", &nix::Tag::features)
             .reg("sources", GETSOURCES(ITag))
@@ -139,11 +140,11 @@ void mexFunction(int            nlhs,
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Tag, metadata));
-        methods->add("Tag::describe", nixtag::describe);
         methods->add("Tag::retrieveData", nixtag::retrieve_data);
         methods->add("Tag::featureRetrieveData", nixtag::retrieve_feature_data);
 
         classdef<nix::MultiTag>("MultiTag", methods)
+            .desc(&nixmultitag::describe)
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::MultiTag, references))
             .reg("features", &nix::MultiTag::features)
             .reg("sources", GETSOURCES(IMultiTag))
@@ -154,23 +155,22 @@ void mexFunction(int            nlhs,
             .reg("openFeature", GETBYSTR(nix::Feature, nix::MultiTag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::MultiTag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::MultiTag, metadata));
-        methods->add("MultiTag::describe", nixmultitag::describe);
         methods->add("MultiTag::retrieveData", nixmultitag::retrieve_data);
         methods->add("MultiTag::featureRetrieveData", nixmultitag::retrieve_feature_data);
 
         classdef<nix::Section>("Section", methods)
+            .desc(&nixsection::describe)
             .reg("sections", &nix::Section::sections)
             .reg("openSection", GETBYSTR(nix::Section, nix::Section, getSection))
             .reg("hasProperty", GETBYSTR(bool, nix::Section, hasProperty))
             .reg("hasSection", GETBYSTR(bool, nix::Section, hasSection))
             .reg("link", GETCONTENT(nix::Section, nix::Section, link))
             .reg("parent", GETCONTENT(nix::Section, nix::Section, parent));
-        methods->add("Section::describe", nixsection::describe);
         methods->add("Section::properties", nixsection::properties);
 
         classdef<nix::Feature>("Feature", methods)
+            .desc(&nixfeature::describe)
             .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data));
-        methods->add("Feature::describe", nixfeature::describe);
         methods->add("Feature::linkType", nixfeature::link_type);
 
         mexAtExit(on_exit);

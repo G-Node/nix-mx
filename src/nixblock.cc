@@ -10,10 +10,8 @@
 
 namespace nixblock {
 
-    void describe(const extractor &input, infusor &output)
+    mxArray *describe(const nix::Block &block)
     {
-        nix::Block block = input.entity<nix::Block>(1);
-
         struct_builder sb({ 1 }, { "id", "type", "name", "definition" });
 
         sb.set(block.id());
@@ -21,7 +19,7 @@ namespace nixblock {
         sb.set(block.name());
         sb.set(block.definition());
 
-        output.set(0, sb.array());
+        return sb.array();
     }
 
     void create_data_array(const extractor &input, infusor &output)
