@@ -7,8 +7,6 @@ namespace nixsource {
 
     void describe(const extractor &input, infusor &output);
 
-    void list_sources(const extractor &input, infusor &output);
-
 } // namespace nixsource
 
 #endif

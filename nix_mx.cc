@@ -76,7 +76,6 @@ const std::vector<fendpoint> funcs = {
 
     // Source
     { "Source::describe", nixsource::describe },
-    { "Source::listSources", nixsource::list_sources },
 
     // Feature
     { "Feature::describe", nixfeature::describe },
