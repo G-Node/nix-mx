@@ -29,25 +29,7 @@ void describe(const extractor &input, infusor &output)
     output.set(0, sb.array());
 }
 
-void list_sections(const extractor &input, infusor &output)
-{
-    nix::Section section = input.entity<nix::Section>(1);
-    std::vector<nix::Section> sections = section.sections();
-
-    struct_builder sb({ sections.size() }, { "name", "id", "type" });
-
-    for (const auto &b : sections) {
-        sb.set(b.name());
-        sb.set(b.id());
-        sb.set(b.type());
-
-        sb.next();
-    }
-
-    output.set(0, sb.array());
-}
-
-void list_properties(const extractor &input, infusor &output)
+void properties(const extractor &input, infusor &output)
 {
     nix::Section section = input.entity<nix::Section>(1);
     std::vector<nix::Property> properties = section.properties();

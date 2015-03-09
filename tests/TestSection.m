@@ -16,7 +16,6 @@ function [] = test_list_subsections( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     s1 = f.sections{3};
 
-    assert(size(s1.list_sections(),1) == 4);
     assert(size(s1.sections, 1) == 4);
 end
 

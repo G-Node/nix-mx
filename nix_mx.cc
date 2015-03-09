@@ -83,8 +83,7 @@ const std::vector<fendpoint> funcs = {
 
     // Section
     { "Section::describe", nixsection::describe },
-    { "Section::listSections", nixsection::list_sections },
-    { "Section::listProperties", nixsection::list_properties }
+    { "Section::properties", nixsection::properties }
 };
 
 //glue "globals"

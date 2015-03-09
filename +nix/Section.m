@@ -73,10 +73,6 @@ classdef Section < nix.Entity
         % Section methods
         % ----------------
         
-        function lst = list_sections(obj)
-            lst = nix_mx('Section::listSections', obj.nix_handle);
-        end;
-        
         function sections = get.sections(obj)
             [obj.sectionsCache, sections] = nix.Utils.fetchObjList(obj.updatedAt, ...
                 'Section::sections', obj.nix_handle, obj.sectionsCache, @nix.Section);
@@ -100,7 +96,7 @@ classdef Section < nix.Entity
         
         function props = get.properties_cell(obj)
             [obj.propsCache, props] = nix.Utils.fetchPropList(obj.updatedAt, ...
-                'Section::listProperties', obj.nix_handle, obj.propsCache);
+                'Section::properties', obj.nix_handle, obj.propsCache);
         end
         
         function p_map = get.properties_map(obj)

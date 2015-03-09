@@ -7,9 +7,7 @@ namespace nixsection {
 
 void describe(const extractor &input, infusor &output);
 
-void list_sections(const extractor &input, infusor &output);
-
-void list_properties(const extractor &input, infusor &output);
+void properties(const extractor &input, infusor &output);
 
 } // namespace nixfile
 
