@@ -95,9 +95,9 @@ void mexFunction(int            nlhs,
             .reg("deleteBlock", REMOVER(nix::Block, nix::File, deleteBlock))
             .reg("deleteSection", REMOVER(nix::Section, nix::File, deleteSection))
             .reg("openBlock", GETBYSTR(nix::Block, nix::File, getBlock))
-            .reg("openSection", GETBYSTR(nix::Section, nix::File, getSection));
-        methods->add("File::createBlock", nixfile::create_block);
-        methods->add("File::createSection", nixfile::create_section);
+            .reg("openSection", GETBYSTR(nix::Section, nix::File, getSection))
+            .reg("createBlock", &nix::File::createBlock)
+            .reg("createSection", &nix::File::createSection);
 
         classdef<nix::Block>("Block", methods)
             .desc(&nixblock::describe)

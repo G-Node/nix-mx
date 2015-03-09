@@ -39,22 +39,4 @@ mxArray *describe(const nix::File &fd) {
     return sb.array();
 }
 
-void create_block(const extractor &input, infusor &output)
-{
-    nix::File currObj = input.entity<nix::File>(1);
-    nix::Block newBlock = currObj.createBlock(input.str(2), input.str(3));
-
-    handle nbh = handle(newBlock);
-    output.set(0, nbh);
-}
-
-void create_section(const extractor &input, infusor &output)
-{
-    nix::File currObj = input.entity<nix::File>(1);
-    nix::Section newSection = currObj.createSection(input.str(2), input.str(3));
-
-    handle nsh = handle(newSection);
-    output.set(0, nsh);
-}
-
 } // namespace nixfile
