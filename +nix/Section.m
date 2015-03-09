@@ -8,7 +8,7 @@ classdef Section < nix.NamedEntity
     end
     
     properties(Hidden)
-        propsCache = nix.CacheStruct()
+        propsCache
     end;
     
     properties(Dependent)
@@ -26,6 +26,8 @@ classdef Section < nix.NamedEntity
             
             % assign relations
             obj.add_dyn_relation('sections', @nix.Section);
+            
+            obj.propsCache = nix.CacheStruct();
         end;
 
         function section = parent(obj)
