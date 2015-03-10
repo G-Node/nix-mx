@@ -85,6 +85,26 @@ classdef Tag < nix.Entity
         % References methods
         % ------------------
         
+        function [] = add_reference(obj, add_this)
+            if(strcmp(class(add_this),'nix.DataArray'))
+                addID = add_this.id;
+            else
+                addID = add_this;
+            end;
+            nix_mx('Tag::addReference', obj.nix_handle, addID);
+            obj.referencesCache.lastUpdate = 0;
+        end;
+
+        function delCheck = remove_reference(obj, del)
+            if(strcmp(class(del),'nix.DataArray'))
+                delID = del.id;
+            else
+                delID = del;
+            end;
+            delCheck = nix_mx('Tag::removeReference', obj.nix_handle, delID);
+            obj.referencesCache.lastUpdate = 0;
+        end;
+
         function retObj = open_reference(obj, id_or_name)
             handle = nix_mx('Tag::openReferenceDataArray', obj.nix_handle, id_or_name);
             retObj = {};
@@ -138,7 +158,27 @@ classdef Tag < nix.Entity
         % ------------------
         % Sources methods
         % ------------------
-        
+
+        function [] = add_source(obj, add_this)
+            if(strcmp(class(add_this),'nix.Source'))
+                addID = add_this.id;
+            else
+                addID = add_this;
+            end;
+            nix_mx('Tag::addSource', obj.nix_handle, addID);
+            obj.sourcesCache.lastUpdate = 0;
+        end;
+
+        function delCheck = remove_source(obj, del)
+            if(strcmp(class(del),'nix.Source'))
+                delID = del.id;
+            else
+                delID = del;
+            end;
+            delCheck = nix_mx('Tag::removeSource', obj.nix_handle, delID);
+            obj.sourcesCache.lastUpdate = 0;
+        end;
+
         function retObj = open_source(obj, id_or_name)
             handle = nix_mx('Tag::openSource', obj.nix_handle, id_or_name);
             retObj = {};

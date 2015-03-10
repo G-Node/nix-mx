@@ -23,22 +23,23 @@ end
 
 %% Test: Open source by ID or name
 function [] = test_open_source( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.id);
-    getSFromB = getBlock.open_source(getBlock.sources{1,1}.id);
-    
-    %-- TODO: comment in, when testfile with nested sources is available
-    %getSourceByID = getSFromB.open_source(getSFromB.sources{1,1}.id);
-    %assert(strcmp(getSourceByID.id, ''));
-    disp('Test Source: open source by ID ... TODO (proper testfile)');
 
-    %getSourceByName = getSFromB.open_source(getSFromB.sources{1,1}.name);
-    %assert(strcmp(getSourceByName.id, ''));
-    disp('Test Source: open source by name ... TODO (proper testfile)');
-    
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('sourcetest', 'nixblock');
+    getSource = getBlock.create_source('sourcetest','nixsource');
+    assert(isempty(getSource.sources));
+
+    sourceName = 'nestedsource';
+    createSource = getSource.create_source(sourceName, 'nixsource');
+    getSourceByID = getSource.open_source(createSource.id);
+    assert(~isempty(getSourceByID));
+
+    getSourceByName = getSource.open_source(sourceName);
+    assert(~isempty(getSourceByName));
+
     %-- test open non existing source
-    getSource = getSFromB.open_source('I dont exist');
-    assert(isempty(getSource));
+    getNonSource = getSource.open_source('I dont exist');
+    assert(isempty(getNonSource));
 end
 
 %% Test: Open metadata

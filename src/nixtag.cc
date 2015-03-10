@@ -26,6 +26,18 @@ namespace nixtag {
         return sb.array();
     }
 
+    void add_reference(const extractor &input, infusor &output)
+    {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        currObj.addReference(input.str(2));
+    }
+
+    void add_source(const extractor &input, infusor &output)
+    {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        currObj.addSource(input.str(2));
+    }
+
     void retrieve_data(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         double index = input.num<double>(2);

@@ -3,6 +3,10 @@ function funcs = TestTag
 %   Detailed explanation goes here
 
     funcs = {};
+    funcs{end+1} = @test_add_source;
+    funcs{end+1} = @test_remove_source;
+    funcs{end+1} = @test_add_reference;
+    funcs{end+1} = @test_remove_reference;
     funcs{end+1} = @test_list_fetch_references;
     funcs{end+1} = @test_list_fetch_sources;
     funcs{end+1} = @test_list_fetch_features;
@@ -12,6 +16,80 @@ function funcs = TestTag
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data;
     funcs{end+1} = @test_retrieve_feature_data;
+end
+
+%% Test: Add sources by entity and id
+function [] = test_add_source ( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('sourcetest', 'nixblock');
+    getSource = getBlock.create_source('sourcetest','nixsource');
+    createSource1 = getSource.create_source('nestedsource1','nixsource');
+    createSource2 = getSource.create_source('nestedsource2','nixsource');
+    position = [1.0 1.2 1.3 15.9];
+    getTag = getBlock.create_tag('foo', 'bar', position);
+    
+    assert(isempty(getTag.sources));
+    getTag.add_source(getSource.sources{1}.id);
+    getTag.add_source(getSource.sources{2});
+    assert(size(getTag.sources,1) == 2);
+end
+
+%% Test: Remove sources by entity and id
+function [] = test_remove_source ( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('sourcetest', 'nixblock');
+    getSource = getBlock.create_source('sourcetest','nixsource');
+    createSource1 = getSource.create_source('nestedsource1','nixsource');
+    createSource2 = getSource.create_source('nestedsource2','nixsource');
+    position = [1.0 1.2 1.3 15.9];
+    getTag = getBlock.create_tag('foo', 'bar', position);
+    getTag.add_source(getSource.sources{1}.id);
+    getTag.add_source(getSource.sources{2});
+
+    assert(size(getTag.sources,1) == 2);
+    getTag.remove_source(getSource.sources{2});
+    assert(size(getTag.sources,1) == 1);
+    getTag.remove_source(getSource.sources{1}.id);
+    assert(isempty(getTag.sources));
+    assert(getTag.remove_source('I do not exist'));
+    assert(size(getSource.sources,1) == 2);
+end
+
+%% Test: Add references by entity and id
+function [] = test_add_reference ( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('referenceTest', 'nixblock');
+    getRefDA1 = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
+    getRefDA2 = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
+    
+    position = [1.0 1.2 1.3 15.9];
+    getTag = getBlock.create_tag('referenceTest', 'nixTag', position);
+    
+    assert(isempty(getTag.references));
+    getTag.add_reference(getBlock.dataArrays{1}.id);
+    getTag.add_reference(getBlock.dataArrays{2});
+    assert(size(getTag.references, 1) == 2);
+end
+
+%% Test: Remove references by entity and id
+function [] = test_remove_reference ( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('referenceTest', 'nixblock');
+    getRefDA1 = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
+    getRefDA2 = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
+    
+    position = [1.0 1.2 1.3 15.9];
+    getTag = getBlock.create_tag('referenceTest', 'nixTag', position);
+    getTag.add_reference(getBlock.dataArrays{1}.id);
+    getTag.add_reference(getBlock.dataArrays{2});
+    assert(size(getTag.references, 1) == 2);
+
+    getTag.remove_reference(getBlock.dataArrays{2});
+    assert(size(getTag.references, 1) == 1);
+    getTag.remove_reference(getBlock.dataArrays{1}.id);
+    assert(isempty(getTag.references));
+    assert(~getTag.remove_reference('I do not exist'));
+    assert(size(getBlock.dataArrays, 1) == 2);
 end
 
 %% Test: List/fetch references
