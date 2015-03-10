@@ -7,9 +7,9 @@ function funcs = TestTag
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_add_reference;
     funcs{end+1} = @test_remove_reference;
-    funcs{end+1} = @test_list_fetch_references;
-    funcs{end+1} = @test_list_fetch_sources;
-    funcs{end+1} = @test_list_fetch_features;
+    funcs{end+1} = @test_fetch_references;
+    funcs{end+1} = @test_fetch_sources;
+    funcs{end+1} = @test_fetch_features;
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_open_feature;
     funcs{end+1} = @test_open_reference;
@@ -21,12 +21,12 @@ end
 %% Test: Add sources by entity and id
 function [] = test_add_source ( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('sourcetest', 'nixblock');
-    getSource = getBlock.create_source('sourcetest','nixsource');
-    createSource1 = getSource.create_source('nestedsource1','nixsource');
-    createSource2 = getSource.create_source('nestedsource2','nixsource');
+    getBlock = test_file.createBlock('sourceTest', 'nixBlock');
+    getSource = getBlock.create_source('sourceTest', 'nixSource');
+    tmp = getSource.create_source('nestedSource1', 'nixSource');
+    tmp = getSource.create_source('nestedSource2', 'nixSource');
     position = [1.0 1.2 1.3 15.9];
-    getTag = getBlock.create_tag('foo', 'bar', position);
+    getTag = getBlock.create_tag('sourcetest', 'nixTag', position);
     
     assert(isempty(getTag.sources));
     getTag.add_source(getSource.sources{1}.id);
@@ -37,12 +37,12 @@ end
 %% Test: Remove sources by entity and id
 function [] = test_remove_source ( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('sourcetest', 'nixblock');
-    getSource = getBlock.create_source('sourcetest','nixsource');
-    createSource1 = getSource.create_source('nestedsource1','nixsource');
-    createSource2 = getSource.create_source('nestedsource2','nixsource');
+    getBlock = test_file.createBlock('test', 'nixBlock');
+    getSource = getBlock.create_source('test', 'nixSource');
+    tmp = getSource.create_source('nestedSource1', 'nixSource');
+    tmp = getSource.create_source('nestedSource2', 'nixSource');
     position = [1.0 1.2 1.3 15.9];
-    getTag = getBlock.create_tag('foo', 'bar', position);
+    getTag = getBlock.create_tag('sourcetest', 'nixTag', position);
     getTag.add_source(getSource.sources{1}.id);
     getTag.add_source(getSource.sources{2});
 
@@ -58,9 +58,9 @@ end
 %% Test: Add references by entity and id
 function [] = test_add_reference ( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('referenceTest', 'nixblock');
-    getRefDA1 = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
-    getRefDA2 = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
+    getBlock = test_file.createBlock('referenceTest', 'nixBlock');
+    tmp = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
+    tmp = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
     
     position = [1.0 1.2 1.3 15.9];
     getTag = getBlock.create_tag('referenceTest', 'nixTag', position);
@@ -74,7 +74,7 @@ end
 %% Test: Remove references by entity and id
 function [] = test_remove_reference ( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('referenceTest', 'nixblock');
+    getBlock = test_file.createBlock('referenceTest', 'nixBlock');
     getRefDA1 = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
     getRefDA2 = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
     
@@ -92,29 +92,42 @@ function [] = test_remove_reference ( varargin )
     assert(size(getBlock.dataArrays, 1) == 2);
 end
 
-%% Test: List/fetch references
-function [] = test_list_fetch_references( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
+%% Test: fetch references
+function [] = test_fetch_references( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('referenceTest', 'nixBlock');
+    tmp = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
+    tmp = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
+    tmp = getBlock.create_data_array('referenceTest3', 'nixDataArray', 'double', [5 6]);
+    position = [1.0 1.2 1.3 15.9];
+    getTag = getBlock.create_tag('referenceTest', 'nixTag', position);
     
-    assert(size(getTag.references(), 1) == 1);
+    getTag.add_reference(getBlock.dataArrays{1});
+    getTag.add_reference(getBlock.dataArrays{2});
+    getTag.add_reference(getBlock.dataArrays{3});
+    assert(size(getTag.references, 1) == 3);
 end
 
-%% Test: List/fetch sources
-function [] = test_list_fetch_sources( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
-
-    %-- ToDo get testfile with tag referencing a source
-    assert(size(getTag.sources(),1) == 0);
-    disp('Test Tag: fetch sources ... TODO (proper testfile)');
+%% Test: fetch sources
+function [] = test_fetch_sources( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('test', 'nixBlock');
+    getSource = getBlock.create_source('test','nixSource');
+    tmp = getSource.create_source('nestedsource1', 'nixSource');
+    tmp = getSource.create_source('nestedsource2', 'nixSource');
+    tmp = getSource.create_source('nestedsource3', 'nixSource');
+    position = [1.0 1.2 1.3 15.9];
+    getTag = getBlock.create_tag('tagtest', 'nixTag', position);
+    
+    getTag.add_source(getSource.sources{1});
+    getTag.add_source(getSource.sources{2});
+    getTag.add_source(getSource.sources{3});
+    assert(size(getTag.sources, 1) == 3);
 end
 
 
-%% Test: List/fetch features
-function [] = test_list_fetch_features( varargin )
+%% Test: fetch features
+function [] = test_fetch_features( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
@@ -126,22 +139,24 @@ end
 
 %% Test: Open source by ID or name
 function [] = test_open_source( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
-    
-    %-- TODO: implement testfile with source referenced from a tag
-    %getSourceByID = getTag.open_source(getTag.sources{1,1}.id);
-    %assert(strcmp(getSourceByID.id, ''));
-    disp('Test Tag: open source by ID ... TODO (proper testfile)');
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('test', 'nixBlock');
+    getSource = getBlock.create_source('test', 'nixSource');
+    sourceName = 'nestedsource';
+    createSource = getSource.create_source(sourceName, 'nixSource');
+    position = [1.0 1.2 1.3 15.9];
+    getTag = getBlock.create_tag('tagtest', 'nixTag', position);
+    getTag.add_source(getSource.sources{1});
 
-    %getSourceByName = getTag.open_source(getTag.sources{1,1}.name);
-    %assert(strcmp(getSourceByName.id, ''));
-    disp('Test Tag: open source by name ... TODO (proper testfile)');
+    getSourceByID = getTag.open_source(createSource.id);
+    assert(~isempty(getSourceByID));
+    
+    getSourceByName = getTag.open_source(sourceName);
+	assert(~isempty(getSourceByName));
     
     %-- test open non existing source
-    getSource = getTag.open_source('I dont exist');
-    assert(isempty(getSource));
+    getNonSource = getTag.open_source('I dont exist');
+    assert(isempty(getNonSource));
 end
 
 
@@ -168,19 +183,22 @@ end
 
 %% Test: Open reference by ID or name
 function [] = test_open_reference( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
-    
-    getRefByID = getTag.open_reference(getTag.references{1,1}.id);
-    assert(strcmp(getRefByID.id, '75138768-edc3-482e-894d-301f1dd66f8d'));
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('referenceTest', 'nixBlock');
+    tmp = getBlock.create_data_array('referenceTest', 'nixDataArray', 'double', [1 2]);
+    position = [1.0 1.2 1.3 15.9];
+    getTag = getBlock.create_tag('referenceTest', 'nixTag', position);
+    getTag.add_reference(getBlock.dataArrays{1});
 
+    getRefByID = getTag.open_reference(getTag.references{1,1}.id);
+    assert(~isempty(getRefByID));
+    
     getRefByName = getTag.open_reference(getTag.references{1,1}.name);
-    assert(strcmp(getRefByName.id, '75138768-edc3-482e-894d-301f1dd66f8d'));
+    assert(~isempty(getRefByName));
     
     %-- test open non existing source
-    getRef = getTag.open_reference('I dont exist');
-    assert(isempty(getRef));
+    getNonRef = getTag.open_reference('I dont exist');
+    assert(isempty(getNonRef));
 end
 
 
