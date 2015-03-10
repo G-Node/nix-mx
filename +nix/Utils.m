@@ -56,6 +56,14 @@ classdef Utils
             delCheck = nix_mx(mxMethod, obj.nix_handle, delID);
             currCache.lastUpdate = 0;
         end;
+        
+        function retObj = open_entity(obj, mxMethod, id_or_name, objConstructor)
+            handle = nix_mx(mxMethod, obj.nix_handle, id_or_name);
+            retObj = {};
+            if handle ~= 0
+                retObj = objConstructor(handle);
+            end;
+        end;
     end;
 end
 

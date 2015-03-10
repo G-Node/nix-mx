@@ -63,11 +63,8 @@ classdef Source < nix.Entity
         end;
 
         function retObj = open_source(obj, id_or_name)
-            handle = nix_mx('Source::openSource', obj.nix_handle, id_or_name);
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.Source(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'Source::openSource', id_or_name, @nix.Source);
         end;
 
         function sources = get.sources(obj)
