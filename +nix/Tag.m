@@ -86,23 +86,13 @@ classdef Tag < nix.Entity
         % ------------------
         
         function [] = add_reference(obj, add_this)
-            if(strcmp(class(add_this),'nix.DataArray'))
-                addID = add_this.id;
-            else
-                addID = add_this;
-            end;
-            nix_mx('Tag::addReference', obj.nix_handle, addID);
-            obj.referencesCache.lastUpdate = 0;
+            obj.referencesCache = nix.Utils.add_entity(obj, ...
+                add_this, 'nix.DataArray', 'Tag::addReference', obj.referencesCache);
         end;
 
         function delCheck = remove_reference(obj, del)
-            if(strcmp(class(del),'nix.DataArray'))
-                delID = del.id;
-            else
-                delID = del;
-            end;
-            delCheck = nix_mx('Tag::removeReference', obj.nix_handle, delID);
-            obj.referencesCache.lastUpdate = 0;
+            [delCheck, obj.referencesCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.DataArray', 'Tag::removeReference', obj.referencesCache);
         end;
 
         function retObj = open_reference(obj, id_or_name)
@@ -160,23 +150,13 @@ classdef Tag < nix.Entity
         % ------------------
 
         function [] = add_source(obj, add_this)
-            if(strcmp(class(add_this),'nix.Source'))
-                addID = add_this.id;
-            else
-                addID = add_this;
-            end;
-            nix_mx('Tag::addSource', obj.nix_handle, addID);
-            obj.sourcesCache.lastUpdate = 0;
+            obj.sourcesCache = nix.Utils.add_entity(obj, ...
+                add_this, 'nix.Source', 'Tag::addSource', obj.sourcesCache);
         end;
 
         function delCheck = remove_source(obj, del)
-            if(strcmp(class(del),'nix.Source'))
-                delID = del.id;
-            else
-                delID = del;
-            end;
-            delCheck = nix_mx('Tag::removeSource', obj.nix_handle, delID);
-            obj.sourcesCache.lastUpdate = 0;
+            [delCheck, obj.sourcesCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.Source', 'Tag::removeSource', obj.sourcesCache);
         end;
 
         function retObj = open_source(obj, id_or_name)

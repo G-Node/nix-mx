@@ -51,13 +51,8 @@ classdef File < nix.Entity
         end;
 
         function delCheck = deleteBlock(obj, del)
-            if(strcmp(class(del),'nix.Block'))
-                delID = del.id;
-            else
-                delID = del;
-            end;
-            delCheck = nix_mx('File::deleteBlock', obj.nix_handle, delID);
-            obj.blocksCache.lastUpdate = 0;
+            [delCheck, obj.blocksCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.Block', 'File::deleteBlock', obj.blocksCache);
         end;
 
         % ----------------
@@ -83,12 +78,7 @@ classdef File < nix.Entity
         end;
 
         function delCheck = deleteSection(obj, del)
-            if(strcmp(class(del),'nix.Section'))
-                delID = del.id;
-            else
-                delID = del;
-            end;
-            delCheck = nix_mx('File::deleteSection', obj.nix_handle, delID);
+            delCheck = nix.Utils.delete_entity(obj, del, 'nix.Section', 'File::deleteSection');
             obj.sectionsCache.lastUpdate = 0;
         end;
 

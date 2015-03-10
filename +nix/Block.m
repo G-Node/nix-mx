@@ -60,13 +60,8 @@ classdef Block < nix.NamedEntity
         end;
         
         function delCheck = delete_source(obj, del)
-            if(strcmp(class(del),'nix.Source'))
-                delID = del.id;
-            else
-                delID = del;
-            end;
-            delCheck = nix_mx('Block::deleteSource', obj.nix_handle, delID);
-            obj.sourcesCache.lastUpdate = 0;
+            [delCheck, obj.sourcesCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.Source', 'Block::deleteSource', obj.sourcesCache);
         end;
         
         function retObj = open_source(obj, id_or_name)
