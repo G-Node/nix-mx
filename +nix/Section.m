@@ -51,11 +51,8 @@ classdef Section < nix.NamedEntity
         % ----------------
         
         function retObj = open_section(obj, id_or_name)
-            handle = nix_mx('Section::openSection', obj.nix_handle, id_or_name);
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.Section(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'Section::openSection', id_or_name, @nix.Section);
         end;
         
         function hs = has_section(obj, id_or_name)

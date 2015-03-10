@@ -58,21 +58,13 @@ classdef Source < nix.Entity
         end;
 
         function delCheck = delete_source(obj, del)
-            if(strcmp(class(del),'nix.Source'))
-                delID = del.id;
-            else
-                delID = del;
-            end;
-            delCheck = nix_mx('Source::deleteSource', obj.nix_handle, delID);
-            obj.sourcesCache.lastUpdate = 0;
+            [delCheck, obj.sourcesCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.Source', 'Source::deleteSource', obj.sourcesCache);
         end;
 
         function retObj = open_source(obj, id_or_name)
-            handle = nix_mx('Source::openSource', obj.nix_handle, id_or_name);
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.Source(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'Source::openSource', id_or_name, @nix.Source);
         end;
 
         function sources = get.sources(obj)

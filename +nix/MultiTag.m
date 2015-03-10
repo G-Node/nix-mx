@@ -76,11 +76,8 @@ classdef MultiTag < nix.Entity
         % ------------------
         
         function retObj = open_reference(obj, id_or_name)
-            handle = nix_mx('MultiTag::openReferences', obj.nix_handle, id_or_name);
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.DataArray(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'MultiTag::openReferences', id_or_name, @nix.DataArray);
         end;
 
         function da = get.references(obj)
@@ -105,11 +102,8 @@ classdef MultiTag < nix.Entity
         % ------------------
         
         function retObj = open_feature(obj, id_or_name)
-            handle = nix_mx('MultiTag::openFeature', obj.nix_handle, id_or_name);
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.Feature(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'MultiTag::openFeature', id_or_name, @nix.Feature);
         end;
 
         function feat = get.features(obj)
@@ -134,11 +128,8 @@ classdef MultiTag < nix.Entity
         % ------------------
 
         function retObj = open_source(obj, id_or_name)
-            handle = nix_mx('MultiTag::openSource', obj.nix_handle, id_or_name);
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.Source(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'MultiTag::openSource', id_or_name, @nix.Source);
         end;
 
         function sources = get.sources(obj)

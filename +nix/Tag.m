@@ -85,12 +85,19 @@ classdef Tag < nix.Entity
         % References methods
         % ------------------
         
+        function [] = add_reference(obj, add_this)
+            obj.referencesCache = nix.Utils.add_entity(obj, ...
+                add_this, 'nix.DataArray', 'Tag::addReference', obj.referencesCache);
+        end;
+
+        function delCheck = remove_reference(obj, del)
+            [delCheck, obj.referencesCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.DataArray', 'Tag::removeReference', obj.referencesCache);
+        end;
+
         function retObj = open_reference(obj, id_or_name)
-            handle = nix_mx('Tag::openReferenceDataArray', obj.nix_handle, id_or_name);
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.DataArray(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'Tag::openReferenceDataArray', id_or_name, @nix.DataArray);
         end;
 
         function da = get.references(obj)
@@ -113,11 +120,8 @@ classdef Tag < nix.Entity
         % ------------------
         
         function retObj = open_feature(obj, id_or_name)
-            handle = nix_mx('Tag::openFeature', obj.nix_handle, id_or_name);
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.Feature(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'Tag::openFeature', id_or_name, @nix.Feature);
         end;
 
         function feat = get.features(obj)
@@ -138,13 +142,20 @@ classdef Tag < nix.Entity
         % ------------------
         % Sources methods
         % ------------------
-        
+
+        function [] = add_source(obj, add_this)
+            obj.sourcesCache = nix.Utils.add_entity(obj, ...
+                add_this, 'nix.Source', 'Tag::addSource', obj.sourcesCache);
+        end;
+
+        function delCheck = remove_source(obj, del)
+            [delCheck, obj.sourcesCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.Source', 'Tag::removeSource', obj.sourcesCache);
+        end;
+
         function retObj = open_source(obj, id_or_name)
-            handle = nix_mx('Tag::openSource', obj.nix_handle, id_or_name);
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.Source(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'Tag::openSource', id_or_name, @nix.Source);
         end;
 
         function sources = get.sources(obj)

@@ -28,11 +28,8 @@ classdef Block < nix.NamedEntity
         % -----------------
         
         function retObj = data_array(obj, id_or_name)
-            handle = nix_mx('Block::openDataArray', obj.nix_handle, id_or_name); 
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.DataArray(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'Block::openDataArray', id_or_name, @nix.DataArray);
         end;
         
         function da = create_data_array(obj, name, nixtype, dtype, shape)
@@ -60,21 +57,13 @@ classdef Block < nix.NamedEntity
         end;
         
         function delCheck = delete_source(obj, del)
-            if(strcmp(class(del),'nix.Source'))
-                delID = del.id;
-            else
-                delID = del;
-            end;
-            delCheck = nix_mx('Block::deleteSource', obj.nix_handle, delID);
-            obj.sourcesCache.lastUpdate = 0;
+            [delCheck, obj.sourcesCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.Source', 'Block::deleteSource', obj.sourcesCache);
         end;
         
         function retObj = open_source(obj, id_or_name)
-            handle = nix_mx('Block::openSource', obj.nix_handle, id_or_name);
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.Source(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'Block::openSource', id_or_name, @nix.Source);
         end;
 
         % -----------------
@@ -86,11 +75,8 @@ classdef Block < nix.NamedEntity
         end;
         
         function retObj = open_tag(obj, id_or_name)
-            handle = nix_mx('Block::openTag', obj.nix_handle, id_or_name);
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.Tag(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'Block::openTag', id_or_name, @nix.Tag);
         end;
         
         function tag = create_tag(obj, name, type, position)
@@ -109,11 +95,8 @@ classdef Block < nix.NamedEntity
         end;
 
         function retObj = open_multi_tag(obj, id_or_name)
-            handle = nix_mx('Block::openMultiTag', obj.nix_handle, id_or_name);
-            retObj = {};
-            if handle ~= 0
-                retObj = nix.MultiTag(handle);
-            end;
+            retObj = nix.Utils.open_entity(obj, ...
+                'Block::openMultiTag', id_or_name, @nix.MultiTag);
         end;
         
         % -----------------

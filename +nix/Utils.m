@@ -33,6 +33,37 @@ classdef Utils
             end;
             retCell = currCache.data;
         end;
+
+        function currCache = add_entity(obj, add_this, nixEntity, mxMethod, currCache)
+            if(strcmp(class(add_this), nixEntity))
+                addID = add_this.id;
+            else
+                addID = add_this;
+            end;
+            nix_mx(mxMethod, obj.nix_handle, addID);
+            currCache.lastUpdate = 0;
+        end;
+
+        % function can be used for both nix delete and remove methods
+        % the first actually removes the entity, the latter
+        % removes only the reference to the entity
+        function [delCheck, currCache] = delete_entity(obj, del, nixEntity, mxMethod, currCache)
+            if(strcmp(class(del), nixEntity))
+                delID = del.id;
+            else
+                delID = del;
+            end;
+            delCheck = nix_mx(mxMethod, obj.nix_handle, delID);
+            currCache.lastUpdate = 0;
+        end;
+        
+        function retObj = open_entity(obj, mxMethod, id_or_name, objConstructor)
+            handle = nix_mx(mxMethod, obj.nix_handle, id_or_name);
+            retObj = {};
+            if handle ~= 0
+                retObj = objConstructor(handle);
+            end;
+        end;
     end;
 end
 
