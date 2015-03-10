@@ -128,6 +128,8 @@ void mexFunction(int            nlhs,
 
         classdef<nix::Source>("Source", methods)
             .desc(&nixsource::describe)
+            .reg("createSource", &nix::Source::createSource)
+            .reg("deleteSource", REMOVER(nix::Source, nix::Source, deleteSource))
             .reg("sources", &nix::Source::sources)
             .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Source, metadata));
