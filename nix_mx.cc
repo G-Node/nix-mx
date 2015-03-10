@@ -103,6 +103,7 @@ void mexFunction(int            nlhs,
             .desc(&nixblock::describe)
             .reg("dataArrays", &nix::Block::dataArrays)
             .reg("createSource", &nix::Block::createSource)
+            .reg("deleteSource", REMOVER(nix::Source, nix::Block, deleteSource))
             //.reg("createDataArray", static_cast<nix::DataArray(nix::Block::*)(const std::string &, const std::string &, nix::DataType, const nix::NDSize &)>(&nix::Block::createDataArray))
             .reg("createTag", &nix::Block::createTag)
             .reg("createMultiTag", &nix::Block::createMultiTag)
@@ -127,6 +128,8 @@ void mexFunction(int            nlhs,
 
         classdef<nix::Source>("Source", methods)
             .desc(&nixsource::describe)
+            .reg("createSource", &nix::Source::createSource)
+            .reg("deleteSource", REMOVER(nix::Source, nix::Source, deleteSource))
             .reg("sources", &nix::Source::sources)
             .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Source, metadata));

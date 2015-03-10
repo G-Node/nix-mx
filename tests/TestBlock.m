@@ -18,6 +18,8 @@ function funcs = TestBlock
     funcs{end+1} = @test_create_tag;
     funcs{end+1} = @test_create_data_array;
     funcs{end+1} = @test_create_data_array_from_data;
+    funcs{end+1} = @test_create_source;
+    funcs{end+1} = @test_delete_source;
 end
 
 function [] = test_list_arrays( varargin )
@@ -209,4 +211,29 @@ function [] = test_create_data_array_from_data( varargin )
     assert(isequal(tmp, data));
     
     assert(~isempty(b.dataArrays));
+end
+
+%% Test: create source
+function [] = test_create_source ( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('sourcetest', 'nixblock');
+    assert(isempty(getBlock.sources));
+
+    createSource = getBlock.create_source('sourcetest','nixsource');
+    assert(~isempty(getBlock.sources));
+    assert(strcmp(createSource.name, 'sourcetest'));
+    assert(strcmp(createSource.type, 'nixsource'));
+end
+
+%% Test: delete source
+function [] = test_delete_source( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('sourcetest', 'nixblock');
+    createSource1 = getBlock.create_source('sourcetest1','nixsource');
+    createSource2 = getBlock.create_source('sourcetest2','nixsource');
+
+    assert(getBlock.delete_source('sourcetest1'));
+    assert(getBlock.delete_source(getBlock.sources{1}.id));
+    assert(~getBlock.delete_source('I do not exist'));
+    assert(isempty(getBlock.sources));
 end

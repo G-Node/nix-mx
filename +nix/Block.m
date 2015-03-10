@@ -54,6 +54,21 @@ classdef Block < nix.NamedEntity
         % Sources methods
         % -----------------
         
+        function s = create_source(obj, name, type)
+            s = nix.Source(nix_mx('Block::createSource', obj.nix_handle, name, type));
+            obj.sourcesCache.lastUpdate = 0;
+        end;
+        
+        function delCheck = delete_source(obj, del)
+            if(strcmp(class(del),'nix.Source'))
+                delID = del.id;
+            else
+                delID = del;
+            end;
+            delCheck = nix_mx('Block::deleteSource', obj.nix_handle, delID);
+            obj.sourcesCache.lastUpdate = 0;
+        end;
+        
         function retObj = open_source(obj, id_or_name)
             handle = nix_mx('Block::openSource', obj.nix_handle, id_or_name);
             retObj = {};
