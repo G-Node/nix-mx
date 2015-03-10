@@ -53,14 +53,28 @@ classdef Dynamic < dynamicprops
             cache.Hidden = true;
             obj.(cacheAttr) = nix.CacheStruct();
             
+            % adds a proxy property
             rel = addprop(obj, name);
             rel.GetMethod = @get_method;
+            
+            % same property but returns Map 
+            rel_map = addprop(obj, strcat(name, 'Map'));
+            rel_map.GetMethod = @get_as_map;
             
             function val = get_method(obj)
                 [obj.(cacheAttr), val] = nix.Utils.fetchObjList(obj.updatedAt, ...
                     strcat(obj.alias, '::', name), obj.nix_handle, ...
                     obj.(cacheAttr), constructor);
-            end            
+            end
+            
+            function val = get_as_map(obj)
+                val = containers.Map();
+                props = obj.(name);
+
+                for i=1:length(props)
+                    val(props{i}.name) = cell2mat(props{i}.values);
+                end
+            end
         end
     end
 end

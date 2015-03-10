@@ -7,7 +7,7 @@ classdef Block < nix.NamedEntity
     end
     
     properties(Hidden)
-        metadataCache = nix.CacheStruct()
+        metadataCache
     end
     
     methods
@@ -19,6 +19,8 @@ classdef Block < nix.NamedEntity
             obj.add_dyn_relation('sources', @nix.Source);
             obj.add_dyn_relation('tags', @nix.Tag);
             obj.add_dyn_relation('multiTags', @nix.MultiTag);
+            
+            obj.metadataCache = nix.CacheStruct();
         end;
         
         % -----------------

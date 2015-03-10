@@ -80,13 +80,15 @@ function [] = test_properties( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     trial = f.sections{2}.sections{2}.sections{1};
     
-    assert(~isempty(trial.properties_cell));
+    assert(~isempty(trial.allProperties));
     
-    p1 = trial.properties_cell{1};
+    p1 = trial.allProperties{1};
     assert(strcmp(p1.name, 'ExperimentalCondition'));
     assert(p1.values{1} == 1);
     
-    assert(trial.properties_map('ExperimentalCondition') == p1.values{1});
+    assert(trial.allPropertiesMap('ExperimentalCondition') == p1.values{1});
     
-    assert(isempty(f.sections{3}.properties_cell));
+    disp(f.sections{3}.allProperties);
+    
+    assert(isempty(f.sections{3}.allProperties));
 end
