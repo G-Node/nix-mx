@@ -3,34 +3,34 @@ function funcs = testSource
 %   Detailed explanation goes here
 
     funcs = {};
-    funcs{end+1} = @test_list_fetch_sources;
-    funcs{end+1} = @test_open_source;
-    funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_create_source;
     funcs{end+1} = @test_delete_source;
+    funcs{end+1} = @test_fetch_sources;
+    funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_open_metadata;
 end
 
-%% Test: List/fetch sources
-function [] = test_list_fetch_sources( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.id);
-    getSourceFromBlock = getBlock.open_source(getBlock.sources{1,1}.id);
-
-    %-- TODO: get a testfile with nested sources
-    assert(size(getSourceFromBlock.sources(), 1) == 0);
-    disp('Test Source: fetch sources ... TODO (proper testfile)');
+%% Test: fetch sources
+function [] = test_fetch_sources( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('sourcetest', 'nixBlock');
+    getSource = getBlock.create_source('sourcetest', 'nixSource');
+    tmp = getSource.create_source('nestedsource1', 'nixSource');
+    tmp = getSource.create_source('nestedsource2', 'nixSource');
+    
+    assert(size(getSource.sources, 1) == 2);
 end
 
 %% Test: Open source by ID or name
 function [] = test_open_source( varargin )
 
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('sourcetest', 'nixblock');
-    getSource = getBlock.create_source('sourcetest','nixsource');
+    getBlock = test_file.createBlock('sourcetest', 'nixBlock');
+    getSource = getBlock.create_source('sourcetest', 'nixSource');
     assert(isempty(getSource.sources));
 
     sourceName = 'nestedsource';
-    createSource = getSource.create_source(sourceName, 'nixsource');
+    createSource = getSource.create_source(sourceName, 'nixSource');
     getSourceByID = getSource.open_source(createSource.id);
     assert(~isempty(getSourceByID));
 
@@ -59,25 +59,25 @@ end
 %% Test: create source
 function [] = test_create_source ( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('sourcetest', 'nixblock');
-    getSource = getBlock.create_source('sourcetest','nixsource');
+    getBlock = test_file.createBlock('sourcetest', 'nixBlock');
+    getSource = getBlock.create_source('sourcetest', 'nixSource');
     assert(isempty(getSource.sources));
 
-    createSource = getSource.create_source('nestedsource','nixsource');
+    createSource = getSource.create_source('nestedsource', 'nixSource');
     assert(~isempty(getSource.sources));
     assert(strcmp(createSource.name, 'nestedsource'));
-    assert(strcmp(createSource.type, 'nixsource'));
+    assert(strcmp(createSource.type, 'nixSource'));
 end
 
 %% Test: delete source
 function [] = test_delete_source( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('sourcetest', 'nixblock');
-    getSource = getBlock.create_source('sourcetest','nixsource');
+    getBlock = test_file.createBlock('sourcetest', 'nixBlock');
+    getSource = getBlock.create_source('sourcetest', 'nixSource');
     assert(isempty(getSource.sources));
 
-    createSource1 = getSource.create_source('nestedsource1','nixsource');
-    createSource2 = getSource.create_source('nestedsource2','nixsource');
+    tmp = getSource.create_source('nestedsource1', 'nixSource');
+    tmp = getSource.create_source('nestedsource2', 'nixSource');
     assert(getSource.delete_source('nestedsource1'));
     assert(getSource.delete_source(getSource.sources{1}.id));
     assert(~getSource.delete_source('I do not exist'));
