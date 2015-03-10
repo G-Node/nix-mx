@@ -3,6 +3,10 @@ function funcs = TestMultiTag
 %   Detailed explanation goes here
 
     funcs = {};
+    funcs{end+1} = @test_add_source;
+    funcs{end+1} = @test_remove_source;
+    funcs{end+1} = @test_add_reference;
+    funcs{end+1} = @test_remove_reference;
     funcs{end+1} = @test_list_fetch_references;
     funcs{end+1} = @test_list_fetch_sources;
     funcs{end+1} = @test_list_fetch_features;
@@ -15,6 +19,85 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data;
     funcs{end+1} = @test_retrieve_feature_data;
+end
+
+%% Test: Add sources by entity and id
+function [] = test_add_source ( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('sourceTest', 'nixBlock');
+    getSource = getBlock.create_source('sourceTest', 'nixSource');
+    tmp = getSource.create_source('nestedSource1', 'nixSource');
+    tmp = getSource.create_source('nestedSource2', 'nixSource');
+
+%    getMTag = getBlock.create_multitag('sourcetest', 'nixMultiTag', position);
+    
+%	assert(isempty(getMTag.sources));
+%	getMTag.add_source(getSource.sources{1}.id);
+%	getMTag.add_source(getSource.sources{2});
+%	assert(size(getMTag.sources,1) == 2);
+    disp('Test MultiTag: add sources ... TODO (create block multitag method missing)');
+end
+
+%% Test: Remove sources by entity and id
+function [] = test_remove_source ( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('test', 'nixBlock');
+    getSource = getBlock.create_source('test', 'nixSource');
+    tmp = getSource.create_source('nestedSource1', 'nixSource');
+    tmp = getSource.create_source('nestedSource2', 'nixSource');
+
+%     getMTag = getBlock.create_multitag('sourcetest', 'nixMultiTag', position);
+%     getMTag.add_source(getSource.sources{1}.id);
+%     getMTag.add_source(getSource.sources{2});
+% 
+%     assert(size(getMTag.sources,1) == 2);
+%     getMTag.remove_source(getSource.sources{2});
+%     assert(size(getMTag.sources,1) == 1);
+%     getMTag.remove_source(getSource.sources{1}.id);
+%     assert(isempty(getMTag.sources));
+%     assert(getMTag.remove_source('I do not exist'));
+%     assert(size(getSource.sources,1) == 2);
+    
+    disp('Test MultiTag: remove sources ... TODO (create block multitag method missing)');
+end
+
+%% Test: Add references by entity and id
+function [] = test_add_reference ( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('referenceTest', 'nixBlock');
+    tmp = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
+    tmp = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
+    
+%     getMTag = getBlock.create_multitag('referenceTest', 'nixMTag', position);
+%     
+%     assert(isempty(getMTag.references));
+%     getMTag.add_reference(getBlock.dataArrays{1}.id);
+%     getMTag.add_reference(getBlock.dataArrays{2});
+%     assert(size(getMTag.references, 1) == 2);
+    
+    disp('Test MultiTag: add reference ... TODO (create block multitag method missing)');
+end
+
+%% Test: Remove references by entity and id
+function [] = test_remove_reference ( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    getBlock = test_file.createBlock('referenceTest', 'nixBlock');
+    tmp = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
+    tmp = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
+    
+%     getMTag = getBlock.create_multitag('referenceTest', 'nixMultiTag', position);
+%     getMTag.add_reference(getBlock.dataArrays{1}.id);
+%     getMTag.add_reference(getBlock.dataArrays{2});
+%     assert(size(getMTag.references, 1) == 2);
+% 
+%     getMTag.remove_reference(getBlock.dataArrays{2});
+%     assert(size(getMTag.references, 1) == 1);
+%     getMTag.remove_reference(getBlock.dataArrays{1}.id);
+%     assert(isempty(getMTag.references));
+%     assert(~getMTag.remove_reference('I do not exist'));
+%     assert(size(getBlock.dataArrays, 1) == 2);
+    
+    disp('Test MultiTag: remove reference ... TODO (create block multitag method missing)');
 end
 
 %% Test: List/fetch references

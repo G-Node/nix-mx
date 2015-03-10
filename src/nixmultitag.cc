@@ -24,6 +24,18 @@ namespace nixmultitag {
         return sb.array();
     }
 
+    void add_reference(const extractor &input, infusor &output)
+    {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        currObj.addReference(input.str(2));
+    }
+
+    void add_source(const extractor &input, infusor &output)
+    {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        currObj.addSource(input.str(2));
+    }
+
     void retrieve_data(const extractor &input, infusor &output) {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
         double p_index = input.num<double>(2);
