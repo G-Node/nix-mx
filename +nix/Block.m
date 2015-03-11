@@ -1,12 +1,9 @@
 classdef Block < nix.NamedEntity
     %Block nix Block object
-    
-    properties (Access = protected)
+
+    properties (Hidden)
         % namespace reference for nix-mx functions
         alias = 'Block'
-    end
-    
-    properties(Hidden)
         metadataCache
     end
     
@@ -15,10 +12,10 @@ classdef Block < nix.NamedEntity
             obj@nix.NamedEntity(h);
             
             % assign relations
-            obj.add_dyn_relation('dataArrays', @nix.DataArray);
-            obj.add_dyn_relation('sources', @nix.Source);
-            obj.add_dyn_relation('tags', @nix.Tag);
-            obj.add_dyn_relation('multiTags', @nix.MultiTag);
+            nix.Dynamic.add_dyn_relation(obj, 'dataArrays', @nix.DataArray);
+            nix.Dynamic.add_dyn_relation(obj, 'sources', @nix.Source);
+            nix.Dynamic.add_dyn_relation(obj, 'tags', @nix.Tag);
+            nix.Dynamic.add_dyn_relation(obj, 'multiTags', @nix.MultiTag);
             
             obj.metadataCache = nix.CacheStruct();
         end;

@@ -1,17 +1,14 @@
 classdef SourcesMixIn < handle
     %SourcesMixIn
     % mixin class for nix entities that can be related with sources
-    % depends on 
-    % - nix.Entity
-    % - nix.Dynamic
-    
-    properties (Abstract, Access = protected)
+
+    properties (Abstract, Hidden)
         alias
     end
     
     methods
         function obj = SourcesMixIn()
-            obj.add_dyn_relation('sources', @nix.Source);
+            nix.Dynamic.add_dyn_relation(obj, 'sources', @nix.Source);
         end
         
         function [] = add_source(obj, add_this)

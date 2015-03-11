@@ -1,14 +1,22 @@
-classdef Entity < handle
+classdef Entity < dynamicprops
     %Entity base class for nix entities
     %   handles object lifetime
     
-    properties(Hidden)
+    properties (Hidden)
         nix_handle
+        info
+    end
+    
+    properties (Abstract, Hidden)
+        alias
     end
     
     methods
         function obj = Entity(h)
             obj.nix_handle = h;
+            
+            % fetch all object attrs
+            obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
         end
         
         function delete(obj)
