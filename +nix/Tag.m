@@ -1,4 +1,4 @@
-classdef Tag < nix.NamedEntity
+classdef Tag < nix.NamedEntity & nix.MetadataMixIn
     %Tag nix Tag object
 
     properties (Access = protected)
@@ -6,13 +6,10 @@ classdef Tag < nix.NamedEntity
         alias = 'Tag'
     end
     
-    properties(Hidden)
-        metadataCache
-    end;
-
     methods
         function obj = Tag(h)
             obj@nix.NamedEntity(h);
+            obj@nix.MetadataMixIn();
             
             % assign dynamic properties
             obj.add_dyn_attr('position', 'rw');
@@ -23,8 +20,6 @@ classdef Tag < nix.NamedEntity
             obj.add_dyn_relation('references', @nix.DataArray);
             obj.add_dyn_relation('features', @nix.Feature);
             obj.add_dyn_relation('sources', @nix.Source);
-            
-            obj.metadataCache = nix.CacheStruct();
         end;
 
         % ------------------
@@ -92,15 +87,6 @@ classdef Tag < nix.NamedEntity
         function retObj = open_source(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'Tag::openSource', id_or_name, @nix.Source);
-        end;
-
-        % ------------------
-        % Metadata methods
-        % ------------------
-
-        function metadata = open_metadata(obj)
-            [obj.metadataCache, metadata] = nix.Utils.fetchObj(obj.updatedAt, ...
-                'Tag::openMetadataSection', obj.nix_handle, obj.metadataCache, @nix.Section);
         end;
 
     end;
