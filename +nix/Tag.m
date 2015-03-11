@@ -1,7 +1,7 @@
 classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
     %Tag nix Tag object
 
-    properties (Access = protected)
+    properties (Hidden)
         % namespace reference for nix-mx functions
         alias = 'Tag'
     end
@@ -13,13 +13,13 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             obj@nix.SourcesMixIn();
             
             % assign dynamic properties
-            obj.add_dyn_attr('position', 'rw');
-            obj.add_dyn_attr('extent', 'rw');
-            obj.add_dyn_attr('units', 'rw');
+            nix.Dynamic.add_dyn_attr(obj, 'position', 'rw');
+            nix.Dynamic.add_dyn_attr(obj, 'extent', 'rw');
+            nix.Dynamic.add_dyn_attr(obj, 'units', 'rw');
             
             % assign relations
-            obj.add_dyn_relation('references', @nix.DataArray);
-            obj.add_dyn_relation('features', @nix.Feature);
+            nix.Dynamic.add_dyn_relation(obj, 'references', @nix.DataArray);
+            nix.Dynamic.add_dyn_relation(obj, 'features', @nix.Feature);
         end;
 
         % ------------------

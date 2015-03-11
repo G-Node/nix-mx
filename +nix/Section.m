@@ -2,12 +2,9 @@ classdef Section < nix.NamedEntity
     %SECTION Metadata Section class
     %   NIX metadata section
     
-    properties (Access = protected)
+    properties(Hidden)
         % namespace reference for nix-mx functions
         alias = 'Section'
-    end
-    
-    properties(Hidden)
         propsCache
     end;
     
@@ -21,11 +18,11 @@ classdef Section < nix.NamedEntity
             obj@nix.NamedEntity(h);
             
             % assign dynamic properties
-            obj.add_dyn_attr('repository', 'rw');
-            obj.add_dyn_attr('mapping', 'rw');
+            nix.Dynamic.add_dyn_attr(obj, 'repository', 'rw');
+            nix.Dynamic.add_dyn_attr(obj, 'mapping', 'rw');
             
             % assign relations
-            obj.add_dyn_relation('sections', @nix.Section);
+            nix.Dynamic.add_dyn_relation(obj, 'sections', @nix.Section);
             
             obj.propsCache = nix.CacheStruct();
         end;

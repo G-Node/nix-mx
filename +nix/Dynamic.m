@@ -1,27 +1,13 @@
-classdef Dynamic < dynamicprops
-    %Dynamic class that dynamically assigns properties 
+classdef Dynamic
+    %Dynamic class (all methods are static hehe)
+    % implements methods to dynamically assigns properties 
 
-    properties (Abstract, Access = protected)
-        alias
-    end
-    
-    properties (Access = protected)
-        info
-    end
-    
-    methods
-        function obj = Dynamic()
-            % fetch all object attrs
-            obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
-        end
-    end
-
-    methods (Hidden = true)
+    methods (Static)
         function add_dyn_attr(obj, prop, mode)
             if nargin < 3
                 mode = 'r'; 
             end
-
+            
             % create dynamic property
             p = addprop(obj, prop);
 
@@ -60,6 +46,7 @@ classdef Dynamic < dynamicprops
             % same property but returns Map 
             rel_map = addprop(obj, strcat(name, 'Map'));
             rel_map.GetMethod = @get_as_map;
+            rel_map.Hidden = true;
             
             function val = get_method(obj)
                 [obj.(cacheAttr), val] = nix.Utils.fetchObjList(obj.updatedAt, ...

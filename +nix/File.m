@@ -2,7 +2,9 @@ classdef File < nix.Entity
     %File nix File object
     
     properties(Hidden)
-        info
+        % namespace reference for nix-mx functions
+        alias = 'File'
+
         blocksCache;
         sectionsCache;
     end;
