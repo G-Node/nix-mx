@@ -16,7 +16,7 @@ classdef Dynamic < dynamicprops
         end
     end
 
-    methods (Access = protected)
+    methods (Hidden = true)
         function add_dyn_attr(obj, prop, mode)
             if nargin < 3
                 mode = 'r'; 
