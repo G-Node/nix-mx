@@ -7,6 +7,8 @@ function funcs = TestTag
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_add_reference;
     funcs{end+1} = @test_remove_reference;
+    funcs{end+1} = @test_add_feature;
+    funcs{end+1} = @test_remove_feature;
     funcs{end+1} = @test_fetch_references;
     funcs{end+1} = @test_fetch_sources;
     funcs{end+1} = @test_fetch_features;
@@ -90,6 +92,48 @@ function [] = test_remove_reference ( varargin )
     assert(isempty(getTag.references));
     assert(~getTag.remove_reference('I do not exist'));
     assert(size(getBlock.dataArrays, 1) == 2);
+end
+
+%% Test: Add features by entity and id
+function [] = test_add_feature ( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('featureTest', 'nixBlock');
+    tmp = b.create_data_array('featureTestDataArray1', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('featureTestDataArray2', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array('featureTestDataArray3', 'nixDataArray', 'double', [5 6]);
+    tmp = b.create_data_array('featureTestDataArray4', 'nixDataArray', 'double', [7 8]);
+    tmp = b.create_data_array('featureTestDataArray5', 'nixDataArray', 'double', [9 10]);
+    tmp = b.create_data_array('featureTestDataArray6', 'nixDataArray', 'double', [11 12]);
+    position = [1.0 1.2 1.3 15.9];
+    getTag = b.create_tag('featureTest', 'nixTag', position);
+    
+    assert(isempty(getTag.features));
+    tmp = getTag.add_feature(b.dataArrays{1}.id, nix.LinkType.Tagged);
+    tmp = getTag.add_feature(b.dataArrays{2}, nix.LinkType.Tagged);
+    tmp = getTag.add_feature(b.dataArrays{3}.id, nix.LinkType.Untagged);
+    tmp = getTag.add_feature(b.dataArrays{4}, nix.LinkType.Untagged);
+    tmp = getTag.add_feature(b.dataArrays{5}.id, nix.LinkType.Indexed);
+    tmp = getTag.add_feature(b.dataArrays{6}, nix.LinkType.Indexed);
+    assert(size(getTag.features, 1) == 6)
+end
+
+%% Test: Remove features by entity and id
+function [] = test_remove_feature ( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('featureTest', 'nixBlock');
+    tmp = b.create_data_array('featureTestDataArray1', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('featureTestDataArray2', 'nixDataArray', 'double', [3 4]);
+    position = [1.0 1.2 1.3 15.9];
+    getTag = b.create_tag('featureTest', 'nixTag', position);
+    tmp = getTag.add_feature(b.dataArrays{1}.id, nix.LinkType.Tagged);
+    tmp = getTag.add_feature(b.dataArrays{2}, nix.LinkType.Tagged);
+
+    assert(getTag.remove_feature(getTag.features{2}.id));
+    assert(getTag.remove_feature(getTag.features{1}));
+    assert(isempty(getTag.features));
+
+    assert(~getTag.remove_feature('I do not exist'));
+    assert(size(b.dataArrays, 1) == 2);
 end
 
 %% Test: fetch references

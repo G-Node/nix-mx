@@ -150,11 +150,13 @@ void mexFunction(int            nlhs,
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Tag, metadata))
             .reg("removeReference", REMOVER(nix::DataArray, nix::Tag, removeReference))
-            .reg("removeSource", REMOVER(nix::Source, nix::Tag, removeSource));
+            .reg("removeSource", REMOVER(nix::Source, nix::Tag, removeSource))
+            .reg("deleteFeature", REMOVER(nix::Feature, nix::Tag, deleteFeature));
         methods->add("Tag::retrieveData", nixtag::retrieve_data);
         methods->add("Tag::featureRetrieveData", nixtag::retrieve_feature_data);
         methods->add("Tag::addReference", nixtag::add_reference);
         methods->add("Tag::addSource", nixtag::add_source);
+        methods->add("Tag::createFeature", nixtag::create_feature);
 
         classdef<nix::MultiTag>("MultiTag", methods)
             .desc(&nixmultitag::describe)
