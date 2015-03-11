@@ -31,10 +31,10 @@ function [] = test_add_source ( varargin )
     tmp = getSource.create_source('nestedSource2', 'nixSource');
     getMTag = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
 
-	assert(isempty(getMTag.sources));
-	getMTag.add_source(getSource.sources{1}.id);
-	getMTag.add_source(getSource.sources{2});
-	assert(size(getMTag.sources, 1) == 2);
+    assert(isempty(getMTag.sources));
+    getMTag.add_source(getSource.sources{1}.id);
+    getMTag.add_source(getSource.sources{2});
+    assert(size(getMTag.sources, 1) == 2);
 end
 
 %% Test: Remove sources by entity and id
@@ -47,15 +47,15 @@ function [] = test_remove_source ( varargin )
     tmp = getSource.create_source('nestedSource2', 'nixSource');
     getMTag = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
 
-	getMTag.add_source(getSource.sources{1}.id);
-	getMTag.add_source(getSource.sources{2});
+    getMTag.add_source(getSource.sources{1}.id);
+    getMTag.add_source(getSource.sources{2});
 
-	getMTag.remove_source(getSource.sources{2});
-	assert(size(getMTag.sources,1) == 1);
-	getMTag.remove_source(getSource.sources{1}.id);
-	assert(isempty(getMTag.sources));
-	assert(getMTag.remove_source('I do not exist'));
-	assert(size(getSource.sources,1) == 2);
+    getMTag.remove_source(getSource.sources{2});
+    assert(size(getMTag.sources,1) == 1);
+    getMTag.remove_source(getSource.sources{1}.id);
+    assert(isempty(getMTag.sources));
+    assert(getMTag.remove_source('I do not exist'));
+    assert(size(getSource.sources,1) == 2);
 end
 
 %% Test: Add references by entity and id
@@ -68,10 +68,10 @@ function [] = test_add_reference ( varargin )
     tmp = b.create_data_array('referenceTest1', 'nixDataArray', 'double', [3 4]);
     tmp = b.create_data_array('referenceTest2', 'nixDataArray', 'double', [5 6]);
 
-	assert(isempty(getMTag.references));
-	getMTag.add_reference(b.dataArrays{2}.id);
-	getMTag.add_reference(b.dataArrays{3});
-	assert(size(getMTag.references, 1) == 2);
+    assert(isempty(getMTag.references));
+    getMTag.add_reference(b.dataArrays{2}.id);
+    getMTag.add_reference(b.dataArrays{3});
+    assert(size(getMTag.references, 1) == 2);
 end
 
 %% Test: Remove references by entity and id
@@ -83,15 +83,15 @@ function [] = test_remove_reference ( varargin )
     
     tmp = b.create_data_array('referenceTest1', 'nixDataArray', 'double', [3 4]);
     tmp = b.create_data_array('referenceTest2', 'nixDataArray', 'double', [5 6]);
-	getMTag.add_reference(b.dataArrays{2}.id);
-	getMTag.add_reference(b.dataArrays{3});
+    getMTag.add_reference(b.dataArrays{2}.id);
+    getMTag.add_reference(b.dataArrays{3});
 
-	assert(getMTag.remove_reference(b.dataArrays{3}));
-	assert(getMTag.remove_reference(b.dataArrays{2}.id));
-	assert(isempty(getMTag.references));
+    assert(getMTag.remove_reference(b.dataArrays{3}));
+    assert(getMTag.remove_reference(b.dataArrays{2}.id));
+    assert(isempty(getMTag.references));
 
-	assert(~getMTag.remove_reference('I do not exist'));
-	assert(size(b.dataArrays, 1) == 3);
+    assert(~getMTag.remove_reference('I do not exist'));
+    assert(size(b.dataArrays, 1) == 3);
 end
 
 %% Test: fetch references
@@ -102,8 +102,8 @@ function [] = test_fetch_references( varargin )
     getMTag = b.create_multi_tag('referencetest', 'nixMultiTag', b.dataArrays{1});
     tmp = b.create_data_array('referenceTest1', 'nixDataArray', 'double', [3 4]);
     tmp = b.create_data_array('referenceTest2', 'nixDataArray', 'double', [5 6]);
-	getMTag.add_reference(b.dataArrays{2}.id);
-	getMTag.add_reference(b.dataArrays{3});
+    getMTag.add_reference(b.dataArrays{2}.id);
+    getMTag.add_reference(b.dataArrays{3});
 
     assert(size(getMTag.references, 1) == 2);
 end
@@ -117,8 +117,8 @@ function [] = test_fetch_sources( varargin )
     tmp = getSource.create_source('nestedSource1', 'nixSource');
     tmp = getSource.create_source('nestedSource2', 'nixSource');
     getMTag = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
-	getMTag.add_source(getSource.sources{1}.id);
-	getMTag.add_source(getSource.sources{2});
+    getMTag.add_source(getSource.sources{1}.id);
+    getMTag.add_source(getSource.sources{2});
 
     assert(size(getMTag.sources, 1) == 2);
 end
@@ -143,7 +143,7 @@ function [] = test_open_source( varargin )
     sName = 'nestedSource';
     tmp = getSource.create_source(sName, 'nixSource');
     getMTag = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
-	getMTag.add_source(getSource.sources{1});
+    getMTag.add_source(getSource.sources{1});
 
     getSourceByID = getMTag.open_source(getMTag.sources{1,1}.id);
     assert(~isempty(getSourceByID));
@@ -184,7 +184,7 @@ function [] = test_open_reference( varargin )
     getMTag = b.create_multi_tag('referencetest', 'nixMultiTag', b.dataArrays{1});
     refName = 'referenceTest';
     tmp = b.create_data_array(refName, 'nixDataArray', 'double', [3 4]);
-	getMTag.add_reference(b.dataArrays{2}.id);
+    getMTag.add_reference(b.dataArrays{2}.id);
 
     getRefByID = getMTag.open_reference(getMTag.references{1,1}.id);
     assert(~isempty(getRefByID));

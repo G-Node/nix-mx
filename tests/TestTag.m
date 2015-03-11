@@ -152,7 +152,7 @@ function [] = test_open_source( varargin )
     assert(~isempty(getSourceByID));
     
     getSourceByName = getTag.open_source(sourceName);
-	assert(~isempty(getSourceByName));
+    assert(~isempty(getSourceByName));
     
     %-- test open non existing source
     getNonSource = getTag.open_source('I dont exist');

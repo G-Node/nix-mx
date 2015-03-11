@@ -3,7 +3,7 @@ function funcs = TestBlock
 %   Detailed explanation goes here
 
     funcs = {};
-	funcs{end+1} = @test_attrs;
+    funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_create_data_array;
     funcs{end+1} = @test_create_data_array_from_data;
     funcs{end+1} = @test_delete_data_array;
@@ -127,7 +127,7 @@ function [] = test_create_multi_tag( varargin )
 %% Test: Create multitag by data_array entity and data_array id
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('mTagTestBlock', 'nixBlock');
-	tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', 'double', [1 2]);
     tmp = b.create_data_array('mTagTestDataArray2', 'nixDataArray', 'double', [3 4]);
     assert(isempty(b.multiTags));
 
@@ -146,7 +146,7 @@ end
 function [] = test_delete_multi_tag( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('mTagTestBlock', 'nixBlock');
-	tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', 'double', [1 2]);
     tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag1', b.dataArrays{1});
     tmp = b.create_multi_tag('mTagTest2', 'nixMultiTag2', b.dataArrays{1});
 
@@ -227,7 +227,7 @@ function [] = test_list_multitags( varargin )
 %% Test: fetch multitags
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('mTagTestBlock', 'nixBlock');
-	tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', 'double', [1 2]);
 
     assert(isempty(b.multiTags));
     tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag', b.dataArrays{1});
@@ -278,7 +278,7 @@ function [] = test_open_multitag( varargin )
 %% Test: Open multi tag by ID or name
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('mTagTestBlock', 'nixBlock');
-	tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', 'double', [1 2]);
     mTagName = 'mTagTest1';
     tmp = b.create_multi_tag(mTagName, 'nixMultiTag', b.dataArrays{1});
 
@@ -315,7 +315,7 @@ function [] = test_has_multitag( varargin )
 %% Test: Block has multi tag by ID or name
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('mTagTestBlock', 'nixBlock');
-	tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', 'double', [1 2]);
     tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag', b.dataArrays{1});
 
     assert(b.has_multi_tag(b.multiTags{1,1}.id));
