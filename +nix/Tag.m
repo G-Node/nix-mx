@@ -1,84 +1,30 @@
-classdef Tag < nix.Entity
+classdef Tag < nix.NamedEntity
     %Tag nix Tag object
 
-    properties(Hidden)
-        info
-        referencesCache
-        featuresCache
-        sourcesCache
-        metadataCache
-    end;
+    properties (Access = protected)
+        % namespace reference for nix-mx functions
+        alias = 'Tag'
+    end
     
-    properties(Dependent)
-        id
-        type
-        name
-        definition
-        position
-        extent
-        units
-        featureCount
-        sourceCount
-        referenceCount
-        
-        references
-        features
-        sources
+    properties(Hidden)
+        metadataCache
     end;
 
     methods
         function obj = Tag(h)
-            obj@nix.Entity(h);
-            obj.info = nix_mx('Tag::describe', obj.nix_handle);
-
-            obj.referencesCache.lastUpdate = 0;
-            obj.referencesCache.data = {};
-            obj.featuresCache.lastUpdate = 0;
-            obj.featuresCache.data = {};
-            obj.sourcesCache.lastUpdate = 0;
-            obj.sourcesCache.data = {};
-            obj.metadataCache.lastUpdate = 0;
-            obj.metadataCache.data = {};
-        end;
-        
-        function id = get.id(tag)
-           id = tag.info.id; 
-        end;
-        
-        function name = get.name(tag)
-           name = tag.info.name;
-        end;
-        
-        function type = get.type(tag)
-            type = tag.info.type;
-        end;
-
-        function definition = get.definition(tag)
-            definition = tag.info.definition;
-        end;
-
-        function position = get.position(tag)
-            position = tag.info.position;
-        end;
-
-        function extent = get.extent(tag)
-            extent = tag.info.extent;
-        end;
-
-        function units = get.units(tag)
-            units = tag.info.units;
-        end;
-
-        function featureCount = get.featureCount(tag)
-            featureCount = tag.info.featureCount;
-        end;
-
-        function sourceCount = get.sourceCount(tag)
-             sourceCount = tag.info.sourceCount;
-        end;
-
-        function referenceCount = get.referenceCount(tag)
-            referenceCount = tag.info.referenceCount;
+            obj@nix.NamedEntity(h);
+            
+            % assign dynamic properties
+            obj.add_dyn_attr('position', 'rw');
+            obj.add_dyn_attr('extent', 'rw');
+            obj.add_dyn_attr('units', 'rw');
+            
+            % assign relations
+            obj.add_dyn_relation('references', @nix.DataArray);
+            obj.add_dyn_relation('features', @nix.Feature);
+            obj.add_dyn_relation('sources', @nix.Source);
+            
+            obj.metadataCache = nix.CacheStruct();
         end;
 
         % ------------------
@@ -100,11 +46,6 @@ classdef Tag < nix.Entity
                 'Tag::openReferenceDataArray', id_or_name, @nix.DataArray);
         end;
 
-        function da = get.references(obj)
-            [obj.referencesCache, da] = nix.Utils.fetchObjList(obj.updatedAt, ...
-                'Tag::references', obj.nix_handle, obj.referencesCache, @nix.DataArray);
-        end;
-        
         function data = retrieve_data(obj, index)
             % convert Matlab-like to C-like index
             assert(index > 0, 'Subscript indices must be positive');
@@ -122,11 +63,6 @@ classdef Tag < nix.Entity
         function retObj = open_feature(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'Tag::openFeature', id_or_name, @nix.Feature);
-        end;
-
-        function feat = get.features(obj)
-            [obj.featuresCache, feat] = nix.Utils.fetchObjList(obj.updatedAt, ...
-                'Tag::features', obj.nix_handle, obj.featuresCache, @nix.Feature);
         end;
         
         function data = retrieve_feature_data(obj, index)
@@ -156,11 +92,6 @@ classdef Tag < nix.Entity
         function retObj = open_source(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'Tag::openSource', id_or_name, @nix.Source);
-        end;
-
-        function sources = get.sources(obj)
-            [obj.sourcesCache, sources] = nix.Utils.fetchObjList(obj.updatedAt, ...
-                'Tag::sources', obj.nix_handle, obj.sourcesCache, @nix.Source);
         end;
 
         % ------------------
