@@ -11,6 +11,8 @@ namespace nixtag {
 
     void add_source(const extractor &input, infusor &output);
 
+    void create_feature(const extractor &input, infusor &output);
+
     void retrieve_data(const extractor &input, infusor &output);
 
     void retrieve_feature_data(const extractor &input, infusor &output);

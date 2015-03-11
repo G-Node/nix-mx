@@ -38,6 +38,24 @@ namespace nixtag {
         currObj.addSource(input.str(2));
     }
 
+    void create_feature(const extractor &input, infusor &output)
+    {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+
+        uint8_t ltype = input.num<uint8_t>(3);
+        nix::LinkType link_type;
+
+        switch (ltype) {
+        case 0: link_type = nix::LinkType::Tagged; break;
+        case 1: link_type = nix::LinkType::Untagged; break;
+        case 2: link_type = nix::LinkType::Indexed; break;
+        default: throw std::invalid_argument("unkown link type");
+        }
+
+        nix::Feature newFeat = currObj.createFeature(input.str(2), link_type);
+        output.set(0, handle(newFeat));
+    }
+
     void retrieve_data(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         double index = input.num<double>(2);
