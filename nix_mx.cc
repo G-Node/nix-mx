@@ -101,12 +101,10 @@ void mexFunction(int            nlhs,
 
         classdef<nix::Block>("Block", methods)
             .desc(&nixblock::describe)
-            .reg("dataArrays", &nix::Block::dataArrays)
-            .reg("createSource", &nix::Block::createSource)
-            .reg("deleteSource", REMOVER(nix::Source, nix::Block, deleteSource))
             //.reg("createDataArray", static_cast<nix::DataArray(nix::Block::*)(const std::string &, const std::string &, nix::DataType, const nix::NDSize &)>(&nix::Block::createDataArray))
+            .reg("createSource", &nix::Block::createSource)
             .reg("createTag", &nix::Block::createTag)
-            .reg("createMultiTag", &nix::Block::createMultiTag)
+            .reg("dataArrays", &nix::Block::dataArrays)
             .reg("sources", &nix::Block::sources)
             .reg("tags", &nix::Block::tags)
             .reg("multiTags", &nix::Block::multiTags)
@@ -116,8 +114,13 @@ void mexFunction(int            nlhs,
             .reg("openSource", GETBYSTR(nix::Source, nix::Block, getSource))
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
             .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Block, getMultiTag))
-            .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Block, metadata));
+            .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Block, metadata))
+            .reg("deleteDataArray", REMOVER(nix::DataArray, nix::Block, deleteDataArray))
+            .reg("deleteSource", REMOVER(nix::Source, nix::Block, deleteSource))
+            .reg("deleteTag", REMOVER(nix::Tag, nix::Block, deleteTag))
+            .reg("deleteMultiTag", REMOVER(nix::MultiTag, nix::Block, deleteMultiTag));
         methods->add("Block::createDataArray", nixblock::create_data_array);
+        methods->add("Block::createMultiTag", nixblock::create_multi_tag);
 
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)

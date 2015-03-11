@@ -15,9 +15,13 @@ function funcs = TestBlock
     funcs{end+1} = @test_has_tag;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_attrs;
-    funcs{end+1} = @test_create_tag;
     funcs{end+1} = @test_create_data_array;
     funcs{end+1} = @test_create_data_array_from_data;
+    funcs{end+1} = @test_delete_data_array;
+    funcs{end+1} = @test_create_tag;
+    funcs{end+1} = @test_delete_tag;
+    funcs{end+1} = @test_create_multi_tag;
+    funcs{end+1} = @test_delete_multi_tag;
     funcs{end+1} = @test_create_source;
     funcs{end+1} = @test_delete_source;
 end
@@ -175,6 +179,23 @@ function [] = test_create_tag( varargin )
     assert(~isempty(b.tags));
 end
 
+%% Test: delete tag by entity and id
+function [] = test_delete_tag( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('tagtest', 'nixBlock');
+    position = [1.0 1.2 1.3 15.9];
+    tmp = b.create_tag('tagtest1', 'nixTag', position);
+    tmp = b.create_tag('tagtest2', 'nixTag', position);
+    
+    assert(size(b.tags, 1) == 2);
+    assert(b.delete_tag(b.tags{2}.id));
+    assert(size(b.tags, 1) == 1);
+    assert(b.delete_tag(b.tags{1}));
+    assert(isempty(b.tags));
+
+    assert(~b.delete_tag('I do not exist'));
+end
+
 function [] = test_create_data_array( varargin )
 %% Test: Create Data Array
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
@@ -211,6 +232,58 @@ function [] = test_create_data_array_from_data( varargin )
     assert(isequal(tmp, data));
     
     assert(~isempty(b.dataArrays));
+end
+
+%% Test: delete dataArray by entity and id
+function [] = test_delete_data_array( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('arraytest', 'nixBlock');
+    tmp = b.create_data_array('dataArrayTest1', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('dataArrayTest2', 'nixDataArray', 'double', [3 4]);
+    
+    assert(size(b.dataArrays, 1) == 2);
+    assert(b.delete_data_array(b.dataArrays{2}.id));
+    assert(size(b.dataArrays, 1) == 1);
+    assert(b.delete_data_array(b.dataArrays{1}));
+    assert(isempty(b.dataArrays));
+    assert(~b.delete_data_array('I do not exist'));
+end
+
+function [] = test_create_multi_tag( varargin )
+%% Test: Create multitag by data_array entity and data_array id
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('mTagTestBlock', 'nixBlock');
+	tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('mTagTestDataArray2', 'nixDataArray', 'double', [3 4]);
+    assert(isempty(b.multiTags));
+
+    %-- create by data_array entity
+    tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag1', b.dataArrays{1});
+    assert(~isempty(b.multiTags));
+    assert(strcmp(b.multiTags{1}.name, 'mTagTest1'));
+
+    %-- create by data_array id
+    tmp = b.create_multi_tag('mTagTest2', 'nixMultiTag2', b.dataArrays{2}.id);
+    assert(size(b.multiTags, 1) == 2);
+    assert(strcmp(b.multiTags{2}.type, 'nixMultiTag2'));
+end
+
+%% Test: delete multitag by entity and id
+function [] = test_delete_multi_tag( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('mTagTestBlock', 'nixBlock');
+	tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag1', b.dataArrays{1});
+    tmp = b.create_multi_tag('mTagTest2', 'nixMultiTag2', b.dataArrays{1});
+
+    assert(size(b.multiTags, 1) == 2);
+    assert(b.delete_multi_tag(b.multiTags{2}.id));
+    assert(size(b.multiTags, 1) == 1);
+    assert(b.delete_multi_tag(b.multiTags{1}));
+    assert(isempty(b.multiTags));
+    assert(size(b.dataArrays, 1) == 1);
+
+    assert(~b.delete_multi_tag('I do not exist'));
 end
 
 %% Test: create source
