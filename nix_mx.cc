@@ -128,6 +128,9 @@ void mexFunction(int            nlhs,
             .reg("openMetadataSection", GETMETADATA(IDataArray));
         methods->add("DataArray::readAll", nixdataarray::read_all);
         methods->add("DataArray::writeAll", nixdataarray::write_all);
+        methods->add("DataArray::addSource", nixdataarray::add_source);
+        // REMOVER for DataArray.removeSource leads to an error, therefore use method->add for now
+        methods->add("DataArray::removeSource", nixdataarray::remove_source);
 
         classdef<nix::Source>("Source", methods)
             .desc(&nixsource::describe)

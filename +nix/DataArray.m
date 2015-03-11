@@ -93,6 +93,16 @@ classdef DataArray < nix.Entity
         % Sources methods
         % -----------------
         
+        function [] = add_source(obj, add_this)
+            obj.sourcesCache = nix.Utils.add_entity(obj, ...
+                add_this, 'nix.Source', 'DataArray::addSource', obj.sourcesCache);
+        end;
+
+        function delCheck = remove_source(obj, del)
+            [delCheck, obj.sourcesCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.Source', 'DataArray::removeSource', obj.sourcesCache);
+        end;
+
         function sources = get.sources(obj)
             [obj.sourcesCache, sources] = nix.Utils.fetchObjList(obj.updatedAt, ...
                 'DataArray::sources', obj.nix_handle, obj.sourcesCache, @nix.Source);

@@ -7,6 +7,8 @@ function funcs = TestDataArray
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_list_sources;
     funcs{end+1} = @test_set_data;
+    funcs{end+1} = @test_add_source;
+    funcs{end+1} = @test_remove_source;
 end
 
 %% Test: Read all data from DataArray
@@ -56,3 +58,37 @@ function [] = test_set_data( varargin )
     assert(isequal(d1.read_all(), data));
 end
 
+%% Test: Add sources by entity and id
+function [] = test_add_source ( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('sourceTest', 'nixBlock');
+    getSource = b.create_source('sourceTest', 'nixSource');
+    tmp = getSource.create_source('nestedSource1', 'nixSource');
+    tmp = getSource.create_source('nestedSource2', 'nixSource');
+    getDataArray = b.create_data_array('sourceTestDataArray', 'nixDataArray', 'double', [1 2]);
+
+    assert(isempty(getDataArray.sources));
+    getDataArray.add_source(getSource.sources{1}.id);
+    getDataArray.add_source(getSource.sources{2});
+    assert(size(getDataArray.sources, 1) == 2);
+end
+
+%% Test: Remove sources by entity and id
+function [] = test_remove_source ( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('sourceTest', 'nixBlock');
+    getSource = b.create_source('sourceTest', 'nixSource');
+    tmp = getSource.create_source('nestedSource1', 'nixSource');
+    tmp = getSource.create_source('nestedSource2', 'nixSource');
+    getDataArray = b.create_data_array('sourceTestDataArray', 'nixDataArray', 'double', [1 2]);
+
+    getDataArray.add_source(getSource.sources{1}.id);
+    getDataArray.add_source(getSource.sources{2});
+
+    assert(getDataArray.remove_source(getSource.sources{2}));
+    assert(getDataArray.remove_source(getSource.sources{1}.id));
+    assert(isempty(getDataArray.sources));
+
+    assert(getDataArray.remove_source('I do not exist'));
+    assert(size(getSource.sources, 1) == 2);
+end
