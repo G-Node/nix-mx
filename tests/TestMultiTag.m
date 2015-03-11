@@ -7,9 +7,9 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_add_reference;
     funcs{end+1} = @test_remove_reference;
-    funcs{end+1} = @test_list_fetch_references;
-    funcs{end+1} = @test_list_fetch_sources;
-    funcs{end+1} = @test_list_fetch_features;
+    funcs{end+1} = @test_fetch_references;
+    funcs{end+1} = @test_fetch_sources;
+    funcs{end+1} = @test_fetch_features;
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_open_feature;
     funcs{end+1} = @test_open_reference;
@@ -24,125 +24,135 @@ end
 %% Test: Add sources by entity and id
 function [] = test_add_source ( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('sourceTest', 'nixBlock');
-    getSource = getBlock.create_source('sourceTest', 'nixSource');
+    b = test_file.createBlock('sourceTest', 'nixBlock');
+    tmp = b.create_data_array('sourceTestDataArray', 'nixDataArray', 'double', [1 2]);
+    getSource = b.create_source('sourceTest', 'nixSource');
     tmp = getSource.create_source('nestedSource1', 'nixSource');
     tmp = getSource.create_source('nestedSource2', 'nixSource');
+    getMTag = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
 
-%    getMTag = getBlock.create_multitag('sourcetest', 'nixMultiTag', position);
-    
-%	assert(isempty(getMTag.sources));
-%	getMTag.add_source(getSource.sources{1}.id);
-%	getMTag.add_source(getSource.sources{2});
-%	assert(size(getMTag.sources,1) == 2);
-    disp('Test MultiTag: add sources ... TODO (create block multitag method missing)');
+	assert(isempty(getMTag.sources));
+	getMTag.add_source(getSource.sources{1}.id);
+	getMTag.add_source(getSource.sources{2});
+	assert(size(getMTag.sources, 1) == 2);
 end
 
 %% Test: Remove sources by entity and id
 function [] = test_remove_source ( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('test', 'nixBlock');
-    getSource = getBlock.create_source('test', 'nixSource');
+    b = test_file.createBlock('sourceTest', 'nixBlock');
+    tmp = b.create_data_array('sourceTestDataArray', 'nixDataArray', 'double', [1 2]);
+    getSource = b.create_source('sourceTest', 'nixSource');
     tmp = getSource.create_source('nestedSource1', 'nixSource');
     tmp = getSource.create_source('nestedSource2', 'nixSource');
+    getMTag = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
 
-%     getMTag = getBlock.create_multitag('sourcetest', 'nixMultiTag', position);
-%     getMTag.add_source(getSource.sources{1}.id);
-%     getMTag.add_source(getSource.sources{2});
-% 
-%     assert(size(getMTag.sources,1) == 2);
-%     getMTag.remove_source(getSource.sources{2});
-%     assert(size(getMTag.sources,1) == 1);
-%     getMTag.remove_source(getSource.sources{1}.id);
-%     assert(isempty(getMTag.sources));
-%     assert(getMTag.remove_source('I do not exist'));
-%     assert(size(getSource.sources,1) == 2);
-    
-    disp('Test MultiTag: remove sources ... TODO (create block multitag method missing)');
+	getMTag.add_source(getSource.sources{1}.id);
+	getMTag.add_source(getSource.sources{2});
+
+	getMTag.remove_source(getSource.sources{2});
+	assert(size(getMTag.sources,1) == 1);
+	getMTag.remove_source(getSource.sources{1}.id);
+	assert(isempty(getMTag.sources));
+	assert(getMTag.remove_source('I do not exist'));
+	assert(size(getSource.sources,1) == 2);
 end
 
 %% Test: Add references by entity and id
 function [] = test_add_reference ( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('referenceTest', 'nixBlock');
-    tmp = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
-    tmp = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
+    b = test_file.createBlock('referenceTest', 'nixBlock');
+    tmp = b.create_data_array('referenceTestDataArray', 'nixDataArray', 'double', [1 2]);
+    getMTag = b.create_multi_tag('referencetest', 'nixMultiTag', b.dataArrays{1});
     
-%     getMTag = getBlock.create_multitag('referenceTest', 'nixMTag', position);
-%     
-%     assert(isempty(getMTag.references));
-%     getMTag.add_reference(getBlock.dataArrays{1}.id);
-%     getMTag.add_reference(getBlock.dataArrays{2});
-%     assert(size(getMTag.references, 1) == 2);
-    
-    disp('Test MultiTag: add reference ... TODO (create block multitag method missing)');
+    tmp = b.create_data_array('referenceTest1', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array('referenceTest2', 'nixDataArray', 'double', [5 6]);
+
+	assert(isempty(getMTag.references));
+	getMTag.add_reference(b.dataArrays{2}.id);
+	getMTag.add_reference(b.dataArrays{3});
+	assert(size(getMTag.references, 1) == 2);
 end
 
 %% Test: Remove references by entity and id
 function [] = test_remove_reference ( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('referenceTest', 'nixBlock');
-    tmp = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
-    tmp = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
+    b = test_file.createBlock('referenceTest', 'nixBlock');
+    tmp = b.create_data_array('referenceTestDataArray', 'nixDataArray', 'double', [1 2]);
+    getMTag = b.create_multi_tag('referencetest', 'nixMultiTag', b.dataArrays{1});
     
-%     getMTag = getBlock.create_multitag('referenceTest', 'nixMultiTag', position);
-%     getMTag.add_reference(getBlock.dataArrays{1}.id);
-%     getMTag.add_reference(getBlock.dataArrays{2});
-%     assert(size(getMTag.references, 1) == 2);
-% 
-%     getMTag.remove_reference(getBlock.dataArrays{2});
-%     assert(size(getMTag.references, 1) == 1);
-%     getMTag.remove_reference(getBlock.dataArrays{1}.id);
-%     assert(isempty(getMTag.references));
-%     assert(~getMTag.remove_reference('I do not exist'));
-%     assert(size(getBlock.dataArrays, 1) == 2);
-    
-    disp('Test MultiTag: remove reference ... TODO (create block multitag method missing)');
+    tmp = b.create_data_array('referenceTest1', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array('referenceTest2', 'nixDataArray', 'double', [5 6]);
+	getMTag.add_reference(b.dataArrays{2}.id);
+	getMTag.add_reference(b.dataArrays{3});
+
+	assert(getMTag.remove_reference(b.dataArrays{3}));
+	assert(getMTag.remove_reference(b.dataArrays{2}.id));
+	assert(isempty(getMTag.references));
+
+	assert(~getMTag.remove_reference('I do not exist'));
+	assert(size(b.dataArrays, 1) == 3);
 end
 
-%% Test: List/fetch references
-function [] = test_list_fetch_references( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
-    
-    assert(size(getMultiTag.references(), 1) == 1);
+%% Test: fetch references
+function [] = test_fetch_references( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = test_file.createBlock('referenceTest', 'nixBlock');
+    tmp = b.create_data_array('referenceTestDataArray', 'nixDataArray', 'double', [1 2]);
+    getMTag = b.create_multi_tag('referencetest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.create_data_array('referenceTest1', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array('referenceTest2', 'nixDataArray', 'double', [5 6]);
+	getMTag.add_reference(b.dataArrays{2}.id);
+	getMTag.add_reference(b.dataArrays{3});
+
+    assert(size(getMTag.references, 1) == 2);
 end
 
-%% Test: List/fetch sources
-function [] = test_list_fetch_sources( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
+%% Test: fetch sources
+function [] = test_fetch_sources( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = test_file.createBlock('sourceTest', 'nixBlock');
+    tmp = b.create_data_array('sourceTestDataArray', 'nixDataArray', 'double', [1 2]);
+    getSource = b.create_source('sourceTest', 'nixSource');
+    tmp = getSource.create_source('nestedSource1', 'nixSource');
+    tmp = getSource.create_source('nestedSource2', 'nixSource');
+    getMTag = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
+	getMTag.add_source(getSource.sources{1}.id);
+	getMTag.add_source(getSource.sources{2});
 
-    assert(size(getMultiTag.sources(),1) == 1);
+    assert(size(getMTag.sources, 1) == 2);
 end
 
-%% Test: List/fetch features
-function [] = test_list_fetch_features( varargin )
+%% Test: fetch features
+function [] = test_fetch_features( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
     getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
 
     %-- ToDo get testfile with tag referencing a source
-    assert(size(getMultiTag.features(),1) == 0);
+    assert(size(getMultiTag.features(), 1) == 0);
     disp('Test MultiTag: fetch features ... TODO (proper testfile)');
 end
 
 %% Test: Open source by ID or name
 function [] = test_open_source( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
-    
-    getSourceByID = getMultiTag.open_source(getMultiTag.sources{1,1}.id);
-    assert(strcmp(getSourceByID.id, 'edf4c8b6-8569-4952-bcee-4203dd26571e'));
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = test_file.createBlock('sourceTest', 'nixBlock');
+    tmp = b.create_data_array('sourceTestDataArray', 'nixDataArray', 'double', [1 2]);
+    getSource = b.create_source('sourceTest', 'nixSource');
+    sName = 'nestedSource';
+    tmp = getSource.create_source(sName, 'nixSource');
+    getMTag = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
+	getMTag.add_source(getSource.sources{1});
 
-    getSourceByName = getMultiTag.open_source(getMultiTag.sources{1,1}.name);
-    assert(strcmp(getSourceByName.id, 'edf4c8b6-8569-4952-bcee-4203dd26571e'));
+    getSourceByID = getMTag.open_source(getMTag.sources{1,1}.id);
+    assert(~isempty(getSourceByID));
+
+    getSourceByName = getMTag.open_source(sName);
+    assert(~isempty(getSourceByName));
     
     %-- test open non existing source
-    getSource = getMultiTag.open_source('I dont exist');
+    getSource = getMTag.open_source('I do not exist');
     assert(isempty(getSource));
 end
 
@@ -168,18 +178,22 @@ end
 
 %% Test: Open reference by ID or name
 function [] = test_open_reference( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
-    
-    getRefByID = getMultiTag.open_reference(getMultiTag.references{1,1}.id);
-    assert(strcmp(getRefByID.id, 'd21318e2-151e-4afd-afd3-1d86c8c20a85'));
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = test_file.createBlock('referenceTest', 'nixBlock');
+    tmp = b.create_data_array('referenceTestDataArray', 'nixDataArray', 'double', [1 2]);
+    getMTag = b.create_multi_tag('referencetest', 'nixMultiTag', b.dataArrays{1});
+    refName = 'referenceTest';
+    tmp = b.create_data_array(refName, 'nixDataArray', 'double', [3 4]);
+	getMTag.add_reference(b.dataArrays{2}.id);
 
-    getRefByName = getMultiTag.open_reference(getMultiTag.references{1,1}.name);
-    assert(strcmp(getRefByName.id, 'd21318e2-151e-4afd-afd3-1d86c8c20a85'));
-    
+    getRefByID = getMTag.open_reference(getMTag.references{1,1}.id);
+    assert(~isempty(getRefByID));
+
+    getRefByName = getMTag.open_reference(refName);
+    assert(~isempty(getRefByName));
+
     %-- test open non existing reference
-    getRef = getMultiTag.open_reference('I dont exist');
+    getRef = getMTag.open_reference('I do not exist');
     assert(isempty(getRef));
 end
 
