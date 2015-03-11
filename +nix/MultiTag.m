@@ -74,7 +74,17 @@ classdef MultiTag < nix.Entity
         % ------------------
         % References methods
         % ------------------
-        
+
+        function [] = add_reference(obj, add_this)
+            obj.referencesCache = nix.Utils.add_entity(obj, ...
+                add_this, 'nix.DataArray', 'MultiTag::addReference', obj.referencesCache);
+        end;
+
+        function delCheck = remove_reference(obj, del)
+            [delCheck, obj.referencesCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.DataArray', 'MultiTag::removeReference', obj.referencesCache);
+        end;
+
         function retObj = open_reference(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'MultiTag::openReferences', id_or_name, @nix.DataArray);
@@ -126,6 +136,16 @@ classdef MultiTag < nix.Entity
         % ------------------
         % Sources methods
         % ------------------
+
+        function [] = add_source(obj, add_this)
+            obj.sourcesCache = nix.Utils.add_entity(obj, ...
+                add_this, 'nix.Source', 'MultiTag::addSource', obj.sourcesCache);
+        end;
+
+        function delCheck = remove_source(obj, del)
+            [delCheck, obj.sourcesCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.Source', 'MultiTag::removeSource', obj.sourcesCache);
+        end;
 
         function retObj = open_source(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...

@@ -46,7 +46,12 @@ classdef Block < nix.NamedEntity
             da = obj.create_data_array(name, nixtype, dtype, shape);
             da.write_all(data);
         end
-        
+
+        function delCheck = delete_data_array(obj, del)
+            [delCheck, obj.dataArraysCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.DataArray', 'Block::deleteDataArray', obj.dataArraysCache);
+        end;
+
         % -----------------
         % Sources methods
         % -----------------
@@ -85,7 +90,12 @@ classdef Block < nix.NamedEntity
            tag = nix.Tag(th);
            obj.tagsCache.lastUpdate = 0;
         end;
-        
+
+        function delCheck = delete_tag(obj, del)
+            [delCheck, obj.tagsCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.Tag', 'Block::deleteTag', obj.tagsCache);
+        end;
+
         % -----------------
         % MultiTag methods
         % -----------------
@@ -98,7 +108,25 @@ classdef Block < nix.NamedEntity
             retObj = nix.Utils.open_entity(obj, ...
                 'Block::openMultiTag', id_or_name, @nix.MultiTag);
         end;
+
+        %-- creating a multitag requires an already existing data array
+        function multitag = create_multi_tag(obj, name, type, add_data_array)
+            if(strcmp(class(add_data_array), 'nix.DataArray'))
+                addID = add_data_array.id;
+            else
+                addID = add_data_array;
+            end;
+
+            multitag = nix.MultiTag(nix_mx('Block::createMultiTag', ...
+                obj.nix_handle, name, type, addID));
+            obj.multiTagsCache.lastUpdate = 0;
+        end;
         
+        function delCheck = delete_multi_tag(obj, del)
+            [delCheck, obj.multiTagsCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.MultiTag', 'Block::deleteMultiTag', obj.multiTagsCache);
+        end;
+
         % -----------------
         % Metadata methods
         % -----------------
