@@ -1,7 +1,9 @@
 classdef MetadataMixIn < handle
     %MetadataMixIn
     % mixin class for nix entities with metadata
-    
+    % depends on 
+    % - nix.Entity
+
     properties(Hidden)
         metadataCache
     end;

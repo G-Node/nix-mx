@@ -55,7 +55,7 @@ static void on_exit() {
 }
 
 #define GETTER(type, class, name) static_cast<type(class::*)()const>(&class::name)
-#define SETTER(type, class, name) static_cast<void(class::*)(type)>(&class::name)
+//#define SETTER(type, class, name) static_cast<void(class::*)(type)>(&class::name)
 #define GETBYSTR(type, class, name) static_cast<type(class::*)(const std::string &)const>(&class::name)
 #define GETCONTENT(type, class, name) static_cast<type(class::*)()const>(&class::name)
 #define GETSOURCES(base__) static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::base__>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::base__>::sources)
