@@ -36,6 +36,16 @@ namespace nixmultitag {
         currObj.addSource(input.str(2));
     }
 
+    void create_feature(const extractor &input, infusor &output)
+    {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+
+        nix::LinkType link_type = nixgen::get_link_type(input.num<uint8_t>(3));
+
+        nix::Feature newFeat = currObj.createFeature(input.str(2), link_type);
+        output.set(0, handle(newFeat));
+    }
+
     void retrieve_data(const extractor &input, infusor &output) {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
         double p_index = input.num<double>(2);

@@ -7,6 +7,8 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_add_reference;
     funcs{end+1} = @test_remove_reference;
+    funcs{end+1} = @test_add_feature;
+    funcs{end+1} = @test_remove_feature;
     funcs{end+1} = @test_fetch_references;
     funcs{end+1} = @test_fetch_sources;
     funcs{end+1} = @test_fetch_features;
@@ -91,6 +93,51 @@ function [] = test_remove_reference ( varargin )
     assert(isempty(getMTag.references));
 
     assert(~getMTag.remove_reference('I do not exist'));
+    assert(size(b.dataArrays, 1) == 3);
+end
+
+%% Test: Add features by entity and id
+function [] = test_add_feature ( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('featureTest', 'nixBlock');
+    tmp = b.create_data_array('featureTestDataArray', 'nixDataArray', 'double', [1 2]);
+    getMTag = b.create_multi_tag('featuretest', 'nixMultiTag', b.dataArrays{1});
+
+    tmp = b.create_data_array('featTestDA1', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('featTestDA2', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array('featTestDA3', 'nixDataArray', 'double', [5 6]);
+    tmp = b.create_data_array('featTestDA4', 'nixDataArray', 'double', [7 8]);
+    tmp = b.create_data_array('featTestDA5', 'nixDataArray', 'double', [9 10]);
+    tmp = b.create_data_array('featTestDA6', 'nixDataArray', 'double', [11 12]);
+
+    assert(isempty(getMTag.features));
+    tmp = getMTag.add_feature(b.dataArrays{2}.id, nix.LinkType.Tagged);
+    tmp = getMTag.add_feature(b.dataArrays{3}, nix.LinkType.Tagged);
+    tmp = getMTag.add_feature(b.dataArrays{4}.id, nix.LinkType.Untagged);
+    tmp = getMTag.add_feature(b.dataArrays{5}, nix.LinkType.Untagged);
+    tmp = getMTag.add_feature(b.dataArrays{6}.id, nix.LinkType.Indexed);
+    tmp = getMTag.add_feature(b.dataArrays{7}, nix.LinkType.Indexed);
+    assert(size(getMTag.features, 1) == 6);
+end
+
+%% Test: Remove features by entity and id
+function [] = test_remove_feature ( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('featureTest', 'nixBlock');
+	tmp = b.create_data_array('featureTestDataArray', 'nixDataArray', 'double', [1 2]);
+    getMTag = b.create_multi_tag('featuretest', 'nixMultiTag', b.dataArrays{1});
+
+    tmp = b.create_data_array('featTestDA1', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('featTestDA2', 'nixDataArray', 'double', [3 4]);
+
+    tmp = getMTag.add_feature(b.dataArrays{2}.id, nix.LinkType.Tagged);
+    tmp = getMTag.add_feature(b.dataArrays{3}, nix.LinkType.Tagged);
+
+    assert(getMTag.remove_feature(getMTag.features{2}.id));
+    assert(getMTag.remove_feature(getMTag.features{1}));
+    assert(isempty(getMTag.features));
+
+    assert(~getMTag.remove_feature('I do not exist'));
     assert(size(b.dataArrays, 1) == 3);
 end
 
