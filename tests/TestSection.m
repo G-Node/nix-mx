@@ -60,6 +60,28 @@ end
 
 function [] = test_attrs( varargin )
 %% Test: Access Attributes / Links
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    s1 = f.createSection('foo', 'bar');
+
+    assert(strcmp(s1.name, 'foo'));
+    assert(strcmp(s1.type, 'bar'));
+    assert(isempty(s1.repository));
+    assert(isempty(s1.mapping));
+
+    s1.repository = 'rep1';
+    s1.mapping = 'map1';
+    assert(strcmp(s1.repository, 'rep1'));
+    assert(strcmp(s1.mapping, 'map1'));
+    
+    s1.repository = '';
+    s1.mapping = '';
+    assert(isempty(s1.repository));
+    assert(isempty(s1.mapping));
+
+    assert(isempty(s1.link));
+    
+    % TODO rewrite tests for link / parent
+    
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     s1 = f.sections{3};
     
