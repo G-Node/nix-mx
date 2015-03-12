@@ -3,12 +3,49 @@ function funcs = TestDataArray
 %   Detailed explanation goes here
 
     funcs = {};
+    funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_open_data;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_list_sources;
     funcs{end+1} = @test_set_data;
     funcs{end+1} = @test_add_source;
     funcs{end+1} = @test_remove_source;
+end
+
+function [] = test_attrs( varargin )
+%% Test: Access Attributes
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('daTestBlock', 'test nixBlock');
+    da = b.create_data_array('daTest', 'test nixDataArray', 'double', [1 2]);
+
+    assert(~isempty(da.id));
+    assert(strcmp(da.name, 'daTest'));
+    assert(strcmp(da.type, 'test nixDataArray'));
+
+    %-- TODO does not work at the moment on the c++ side
+    %da.type = 'nixDataArray';
+    %assert(strcmp(da.type, 'nixDataArray'));
+
+    %assert(isempty(da.definition));
+    %b.definition = 'data array definition';
+    %assert(strcmp(da.definition, 'data array definition'));
+
+    %da.definition = '';
+    %assert(isempty(da.definition));
+
+    assert(isempty(da.unit));
+    da.unit = 'ms';
+    assert(strcmp(da.unit, 'ms'));
+
+    da.unit = '';
+    assert(isempty(da.unit));
+
+    assert(isempty(da.label));
+    da.label = 'data array label';
+    assert(strcmp(da.label, 'data array label'));
+
+    da.label = '';
+    assert(isempty(da.label));
 end
 
 %% Test: Read all data from DataArray

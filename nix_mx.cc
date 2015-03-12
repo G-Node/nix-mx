@@ -128,7 +128,15 @@ void mexFunction(int            nlhs,
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)
             .reg("sources", GETSOURCES(IDataArray))
-            .reg("openMetadataSection", GETMETADATA(IDataArray));
+            .reg("openMetadataSection", GETMETADATA(IDataArray))
+            // the following setter lead to an error
+            //.reg("set_type", SETTER(const std::string&, nix::DataArray, type))
+            //.reg("set_definition", SETTER(const std::string&, nix::DataArray, definition))
+            //.reg("set_none_definition", SETTER(const boost::none_t, nix::DataArray, definition))
+            .reg("set_label", SETTER(const std::string&, nix::DataArray, label))
+            .reg("set_none_label", SETTER(const boost::none_t, nix::DataArray, label))
+            .reg("set_unit", SETTER(const std::string&, nix::DataArray, unit))
+            .reg("set_none_unit", SETTER(const boost::none_t, nix::DataArray, unit));
         methods->add("DataArray::readAll", nixdataarray::read_all);
         methods->add("DataArray::writeAll", nixdataarray::write_all);
         methods->add("DataArray::addSource", nixdataarray::add_source);
