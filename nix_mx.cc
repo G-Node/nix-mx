@@ -55,13 +55,15 @@ static void on_exit() {
 }
 
 #define GETTER(type, class, name) static_cast<type(class::*)()const>(&class::name)
+#define FILTER(type, class, filt, name) static_cast<type(class::*)(filt)const>(&class::name)
 #define SETTER(type, class, name) static_cast<void(class::*)(type)>(&class::name)
+#define REMOVER(type, class, name) static_cast<bool(class::*)(const std::string&)>(&class::name)
 #define GETBYSTR(type, class, name) static_cast<type(class::*)(const std::string &)const>(&class::name)
 #define GETCONTENT(type, class, name) static_cast<type(class::*)()const>(&class::name)
-#define GETSOURCES(base__) static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::base__>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::base__>::sources)
-//required to open nix::Section from DataArray, normal GETCONTENT leads to a compiler error with Visual Studio 12
-#define GETMETADATA(base__) static_cast<nix::Section(nix::base::EntityWithMetadata<nix::base::base__>::*)()const>(&nix::base::EntityWithMetadata<nix::base::base__>::metadata)
-#define REMOVER(type, class, name) static_cast<bool(class::*)(const std::string&)>(&class::name)
+
+//required to operate on DataArray, Visual Studio 12 compiler does not resolve multiple inheritance properly
+#define IDATAARRAY(type, iface, attr, name, isconst) static_cast<type(nix::base::iface<nix::base::IDataArray>::*)(attr)isconst>(&nix::base::iface<nix::base::IDataArray>::name)
+
 
 // main entry point
 void mexFunction(int            nlhs,
@@ -127,12 +129,11 @@ void mexFunction(int            nlhs,
 
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)
-            .reg("sources", GETSOURCES(IDataArray))
-            .reg("openMetadataSection", GETMETADATA(IDataArray))
-            // the following setter lead to an error
-            //.reg("set_type", SETTER(const std::string&, nix::DataArray, type))
-            //.reg("set_definition", SETTER(const std::string&, nix::DataArray, definition))
-            //.reg("set_none_definition", SETTER(const boost::none_t, nix::DataArray, definition))
+            .reg("sources", IDATAARRAY(std::vector<nix::Source>, EntityWithSources, std::function<bool(const nix::Source &)>, sources, const))
+            .reg("openMetadataSection", IDATAARRAY(nix::Section, EntityWithMetadata, , metadata, const))
+            .reg("set_type", IDATAARRAY(void, NamedEntity, const std::string&, type,))
+            .reg("set_definition", IDATAARRAY(void, NamedEntity, const std::string&, definition, ))
+            .reg("set_none_definition", IDATAARRAY(void, NamedEntity, const boost::none_t, definition, ))
             .reg("set_label", SETTER(const std::string&, nix::DataArray, label))
             .reg("set_none_label", SETTER(const boost::none_t, nix::DataArray, label))
             .reg("set_unit", SETTER(const std::string&, nix::DataArray, unit))
@@ -158,7 +159,7 @@ void mexFunction(int            nlhs,
             .desc(&nixtag::describe)
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::Tag, references))
             .reg("features", &nix::Tag::features)
-            .reg("sources", GETSOURCES(ITag))
+            .reg("sources", FILTER(std::vector<nix::Source>, nix::Tag, std::function<bool(const nix::Source &)>, sources))
             .reg("openReferenceDataArray", GETBYSTR(nix::DataArray, nix::Tag, getReference))
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource))
@@ -176,7 +177,7 @@ void mexFunction(int            nlhs,
             .desc(&nixmultitag::describe)
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::MultiTag, references))
             .reg("features", &nix::MultiTag::features)
-            .reg("sources", GETSOURCES(IMultiTag))
+            .reg("sources", FILTER(std::vector<nix::Source>, nix::MultiTag, std::function<bool(const nix::Source &)>, sources))
             .reg("hasPositions", GETCONTENT(bool, nix::MultiTag, hasPositions))
             .reg("openPositions", GETCONTENT(nix::DataArray, nix::MultiTag, positions))
             .reg("openExtents", GETCONTENT(nix::DataArray, nix::MultiTag, extents))

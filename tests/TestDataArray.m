@@ -23,15 +23,15 @@ function [] = test_attrs( varargin )
     assert(strcmp(da.type, 'test nixDataArray'));
 
     %-- TODO does not work at the moment on the c++ side
-    %da.type = 'nixDataArray';
-    %assert(strcmp(da.type, 'nixDataArray'));
+    da.type = 'nixDataArray';
+    assert(strcmp(da.type, 'nixDataArray'));
 
-    %assert(isempty(da.definition));
-    %b.definition = 'data array definition';
-    %assert(strcmp(da.definition, 'data array definition'));
+    assert(isempty(da.definition));
+    da.definition = 'data array definition';
+    assert(strcmp(da.definition, 'data array definition'));
 
-    %da.definition = '';
-    %assert(isempty(da.definition));
+    da.definition = '';
+    assert(isempty(da.definition));
 
     assert(isempty(da.unit));
     da.unit = 'ms';
