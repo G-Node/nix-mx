@@ -3,7 +3,11 @@ classdef MetadataMixIn < handle
     % mixin class for nix entities with metadata
     % depends on 
     % - nix.Entity
-
+    
+    properties (Abstract, Hidden)
+        alias
+    end
+    
     properties(Hidden)
         metadataCache
     end;
@@ -14,8 +18,10 @@ classdef MetadataMixIn < handle
         end
         
         function metadata = open_metadata(obj)
-            [obj.metadataCache, metadata] = nix.Utils.fetchObj(obj.updatedAt, ...
-                'Tag::openMetadataSection', obj.nix_handle, obj.metadataCache, @nix.Section);
+            [obj.metadataCache, metadata] = nix.Utils.fetchObj(...
+                obj.updatedAt, ...
+                strcat(obj.alias, '::openMetadataSection'), ...
+                obj.nix_handle, obj.metadataCache, @nix.Section);
         end;
     end
     

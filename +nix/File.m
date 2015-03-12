@@ -2,15 +2,9 @@ classdef File < nix.Entity
     %File nix File object
     
     properties(Hidden)
-        info
-        blocksCache;
-        sectionsCache;
+        % namespace reference for nix-mx functions
+        alias = 'File'
     end;
-    
-    properties(Dependent)
-        blocks
-        sections
-    end
     
     methods
         function obj = File(path, mode)
@@ -19,11 +13,10 @@ classdef File < nix.Entity
             end
             h = nix_mx('File::open', path, mode); 
             obj@nix.Entity(h);
-
-            obj.blocksCache.lastUpdate = 0;
-            obj.blocksCache.data = {};
-            obj.sectionsCache.lastUpdate = 0;
-            obj.sectionsCache.data = {};
+            
+            % assign relations
+            nix.Dynamic.add_dyn_relation(obj, 'blocks', @nix.Block);
+            nix.Dynamic.add_dyn_relation(obj, 'sections', @nix.Section);
             
             obj.info = nix_mx('File::describe', obj.nix_handle);
         end
@@ -35,11 +28,6 @@ classdef File < nix.Entity
         function retObj = openBlock(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'File::openBlock', id_or_name, @nix.Block);
-        end
-        
-        function blocks = get.blocks(obj)
-            [obj.blocksCache, blocks] = nix.Utils.fetchObjList(obj.updatedAt, ...
-                'File::blocks', obj.nix_handle, obj.blocksCache, @nix.Block);
         end
         
         function newBlock = createBlock(obj, name, type)
@@ -60,11 +48,6 @@ classdef File < nix.Entity
             retObj = nix.Utils.open_entity(obj, ...
                 'File::openSection', id_or_name, @nix.Section);
         end
-        
-        function sections = get.sections(obj)
-            [obj.sectionsCache, sections] = nix.Utils.fetchObjList(obj.updatedAt, ...
-                'File::sections', obj.nix_handle, obj.sectionsCache, @nix.Section);
-        end;
 
         function newSec = createSection(obj, name, type)
             newSec = nix.Section(nix_mx('File::createSection', obj.nix_handle, name, type));
