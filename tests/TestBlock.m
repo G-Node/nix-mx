@@ -29,11 +29,20 @@ end
 function [] = test_attrs( varargin )
 %% Test: Access Attributes
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.createBlock('tagtest', 'nixBlock');
+    b = f.createBlock('tagtest', 'test nixBlock');
 
     assert(~isempty(b.id));
     assert(strcmp(b.name, 'tagtest'));
+    assert(strcmp(b.type, 'test nixBlock'));
+    
+    b.type = 'nixBlock';
     assert(strcmp(b.type, 'nixBlock'));
+    
+    assert(isempty(b.definition));
+    b.definition = 'block definition';
+    assert(strcmp(b.definition, 'block definition'));
+
+    b.definition = '';
     assert(isempty(b.definition));
 end
 
