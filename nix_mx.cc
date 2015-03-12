@@ -141,7 +141,10 @@ void mexFunction(int            nlhs,
             .reg("deleteSource", REMOVER(nix::Source, nix::Source, deleteSource))
             .reg("sources", &nix::Source::sources)
             .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource))
-            .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Source, metadata));
+            .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Source, metadata))
+            .reg("set_type", SETTER(const std::string&, nix::Source, type))
+            .reg("set_definition", SETTER(const std::string&, nix::Source, definition))
+            .reg("set_none_definition", SETTER(const boost::none_t, nix::Source, definition));
 
         classdef<nix::Tag>("Tag", methods)
             .desc(&nixtag::describe)

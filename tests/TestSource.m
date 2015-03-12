@@ -5,6 +5,7 @@ function funcs = testSource
     funcs = {};
     funcs{end+1} = @test_create_source;
     funcs{end+1} = @test_delete_source;
+    funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_fetch_sources;
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_open_metadata;
@@ -82,4 +83,25 @@ function [] = test_delete_source( varargin )
     assert(getSource.delete_source(getSource.sources{1}.id));
     assert(~getSource.delete_source('I do not exist'));
     assert(isempty(getSource.sources));
+end
+
+function [] = test_attrs( varargin )
+%% Test: Access Attributes
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('tagtest', 'test nixBlock');
+    s = b.create_source('sourcetest', 'test nixSource');
+
+    assert(~isempty(s.id));
+    assert(strcmp(s.name, 'sourcetest'));
+    assert(strcmp(s.type, 'test nixSource'));
+    
+    s.type = 'nixSource';
+    assert(strcmp(s.type, 'nixSource'));
+    
+    assert(isempty(s.definition));
+    s.definition = 'source definition';
+    assert(strcmp(s.definition, 'source definition'));
+
+    s.definition = '';
+    assert(isempty(s.definition));
 end
