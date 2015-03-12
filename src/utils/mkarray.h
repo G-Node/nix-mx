@@ -70,9 +70,9 @@ inline mxArray* make_mx_array(const std::vector<nix::Value> &v) {
 
 template<typename T>
 mxArray* make_mx_array(const boost::optional<T> &opt) {
-	if (opt) {
-		return make_mx_array(*opt);
-	}
+    if (opt) {
+        return make_mx_array(*opt);
+    }
     else {
         return nullptr;
     }
