@@ -195,7 +195,6 @@ void mexFunction(int            nlhs,
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)
             .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data));
-        methods->add("Feature::linkType", nixfeature::link_type);
 
         mexAtExit(on_exit);
     });
