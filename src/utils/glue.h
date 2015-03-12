@@ -37,6 +37,14 @@ struct ex_getter < std::string > {
     }
 };
 
+template<>
+struct ex_getter < boost::none_t > {
+    static boost::none_t get(const extractor &input, int pos) {
+        boost::none_t t = nullptr;
+        return t;
+    }
+};
+
 template<typename Klazz>
 struct ex_getter < std::function<bool(const Klazz&)> > {
     static std::function<bool(const Klazz &)> get(const extractor &input, int pos) {

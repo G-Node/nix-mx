@@ -23,8 +23,11 @@ classdef Dynamic
                     throwAsCaller(ME);
                 end
                 
-                % TODO set appropriate method name template
-                nix_mx(strcat(obj.alias, '::set_', prop), obj.nix_handle);
+                if (isempty(val))
+                    nix_mx(strcat(obj.alias, '::set_none_', prop), obj.nix_handle, val);
+                else
+                    nix_mx(strcat(obj.alias, '::set_', prop), obj.nix_handle, val);
+                end
                 obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
             end
             

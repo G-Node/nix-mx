@@ -55,7 +55,7 @@ static void on_exit() {
 }
 
 #define GETTER(type, class, name) static_cast<type(class::*)()const>(&class::name)
-//#define SETTER(type, class, name) static_cast<void(class::*)(type)>(&class::name)
+#define SETTER(type, class, name) static_cast<void(class::*)(type)>(&class::name)
 #define GETBYSTR(type, class, name) static_cast<type(class::*)(const std::string &)const>(&class::name)
 #define GETCONTENT(type, class, name) static_cast<type(class::*)()const>(&class::name)
 #define GETSOURCES(base__) static_cast<std::vector<nix::Source>(nix::base::EntityWithSources<nix::base::base__>::*)(std::function<bool(const nix::Source &)>)const>(&nix::base::EntityWithSources<nix::base::base__>::sources)
@@ -189,9 +189,12 @@ void mexFunction(int            nlhs,
             .reg("hasSection", GETBYSTR(bool, nix::Section, hasSection))
             .reg("link", GETCONTENT(nix::Section, nix::Section, link))
             .reg("parent", GETCONTENT(nix::Section, nix::Section, parent))
+            .reg("set_repository", SETTER(const std::string&, nix::Section, repository))
+            .reg("set_none_repository", SETTER(const boost::none_t, nix::Section, repository))
+            .reg("set_mapping", SETTER(const std::string&, nix::Section, mapping))
+            .reg("set_none_mapping", SETTER(const boost::none_t, nix::Section, mapping))
             .reg("createSection", &nix::Section::createSection)
             .reg("deleteSection", REMOVER(nix::Section, nix::Section, deleteSection));
-            //.reg("set_repository", SETTER(const std::string&, nix::Section, repository));
         methods->add("Section::properties", nixsection::properties);
 
         classdef<nix::Feature>("Feature", methods)
