@@ -178,6 +178,8 @@ void mexFunction(int            nlhs,
         methods->add("MultiTag::addReference", nixmultitag::add_reference);
         methods->add("MultiTag::addSource", nixmultitag::add_source);
         methods->add("MultiTag::createFeature", nixmultitag::create_feature);
+        methods->add("MultiTag::addPositions", nixmultitag::add_positions);
+        methods->add("MultiTag::addExtents", nixmultitag::add_extents);
 
         classdef<nix::Section>("Section", methods)
             .desc(&nixsection::describe)

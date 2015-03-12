@@ -102,7 +102,16 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 retObj = nix.DataArray(handle);
             end;
         end;
-        
+
+        function [] = add_positions(obj, add_this)
+            if(strcmp(class(add_this), 'nix.DataArray'))
+                addID = add_this.id;
+            else
+                addID = add_this;
+            end;
+            nix_mx('MultiTag::addPositions', obj.nix_handle, addID);
+        end;
+
         % ------------------
         % Extents methods
         % ------------------
@@ -113,6 +122,15 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             if handle ~= 0
                 retObj = nix.DataArray(handle);
             end;
+        end;
+
+        function [] = add_extents(obj, add_this)
+            if(strcmp(class(add_this), 'nix.DataArray'))
+                addID = add_this.id;
+            else
+                addID = add_this;
+            end;
+            nix_mx('MultiTag::addExtents', obj.nix_handle, addID);
         end;
 
     end;

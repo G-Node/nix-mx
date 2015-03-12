@@ -15,8 +15,10 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_open_feature;
     funcs{end+1} = @test_open_reference;
+    funcs{end+1} = @test_add_positions;
     funcs{end+1} = @test_has_positions;
     funcs{end+1} = @test_open_positions;
+    funcs{end+1} = @test_add_extents;
     funcs{end+1} = @test_open_extents;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data;
@@ -244,6 +246,23 @@ function [] = test_open_reference( varargin )
     assert(isempty(getRef));
 end
 
+%% Test: Add positions by entity and id
+function [] = test_add_positions ( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = test_file.createBlock('positionsTest', 'nixBlock');
+    tmp = b.create_data_array('positionsTestDataArray', 'nixDataArray', 'double', [1 2 3 4 5 6]);
+    getMTag = b.create_multi_tag('positionstest', 'nixMultiTag', b.dataArrays{1});
+
+    tmp = b.create_data_array('positionsTest1', 'nixDataArray', 'double', [0 1]);
+    tmp = b.create_data_array('positionsTest2', 'nixDataArray', 'double', [2 4]);
+
+    getMTag.add_positions(b.dataArrays{2}.id);
+    assert(strcmp(getMTag.open_positions.name, 'positionsTest1'));
+
+    getMTag.add_positions(b.dataArrays{3});
+    assert(strcmp(getMTag.open_positions.name, 'positionsTest2'));
+end
+
 %% Test: Has positions
 function [] = test_has_positions( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
@@ -270,6 +289,29 @@ function [] = test_open_positions( varargin )
    
     getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
     assert(~isempty(getMultiTag.open_positions));
+end
+
+%% Test: Add extents by entity and id
+function [] = test_add_extents ( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = test_file.createBlock('extentsTest', 'nixBlock');
+%    tmp = b.create_data_array('extentsTestDataArray', 'nixDataArray', 'double', [1 2 3 4 5 6; 1 2 3 4 5 6]);
+%    getMTag = b.create_multi_tag('extentstest', 'nixMultiTag', b.dataArrays{1});
+
+%    tmp = b.create_data_array('positionsTest1', 'nixDataArray', 'double', [1, 1]);
+%    tmp = b.create_data_array('positionsTest2', 'nixDataArray', 'double', [1, 3]);
+
+%    tmp = b.create_data_array('extentsTest1', 'nixDataArray', 'double', [1, 1]);
+%    tmp = b.create_data_array('extentsTest2', 'nixDataArray', 'double', [1, 1]);
+
+%    getMTag.add_positions(b.dataArrays{2});
+%    getMTag.add_extents(b.dataArrays{4}.id);
+%    assert(strcmp(getMTag.open_extents.name, 'extentsTest1'));
+
+%    getMTag.add_positions(b.dataArrays{3});
+%    getMTag.add_extents(b.dataArrays{5});
+%    assert(strcmp(getMTag.open_extents.name, 'extentsTest2'));
+    disp('Test MultiTag: add extents ... TODO (add dimensions required)');
 end
 
 %% Test: Open extents
