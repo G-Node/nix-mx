@@ -54,7 +54,22 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % ------------------
         % Features methods
         % ------------------
-        
+
+        function retObj = add_feature(obj, add_this, link_type)
+            if(strcmp(class(add_this), 'nix.DataArray'))
+                addID = add_this.id;
+            else
+                addID = add_this;
+            end;
+            retObj = nix.Feature(nix_mx('MultiTag::createFeature', obj.nix_handle, addID, link_type));
+            obj.featuresCache.lastUpdate = 0;
+        end;
+
+        function delCheck = remove_feature(obj, del)
+            [delCheck, obj.featuresCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.Feature', 'MultiTag::deleteFeature', obj.featuresCache);
+        end;
+
         function retObj = open_feature(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'MultiTag::openFeature', id_or_name, @nix.Feature);
@@ -87,7 +102,16 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 retObj = nix.DataArray(handle);
             end;
         end;
-        
+
+        function [] = add_positions(obj, add_this)
+            if(strcmp(class(add_this), 'nix.DataArray'))
+                addID = add_this.id;
+            else
+                addID = add_this;
+            end;
+            nix_mx('MultiTag::addPositions', obj.nix_handle, addID);
+        end;
+
         % ------------------
         % Extents methods
         % ------------------
@@ -98,6 +122,15 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             if handle ~= 0
                 retObj = nix.DataArray(handle);
             end;
+        end;
+
+        function [] = add_extents(obj, add_this)
+            if(strcmp(class(add_this), 'nix.DataArray'))
+                addID = add_this.id;
+            else
+                addID = add_this;
+            end;
+            nix_mx('MultiTag::addExtents', obj.nix_handle, addID);
         end;
 
     end;

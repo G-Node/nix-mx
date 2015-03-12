@@ -47,6 +47,16 @@ classdef Section < nix.NamedEntity
         % Section methods
         % ----------------
         
+        function newSec = createSection(obj, name, type)
+            newSec = nix.Section(nix_mx('Section::createSection', obj.nix_handle, name, type));
+            obj.sectionsCache.lastUpdate = 0;
+        end;
+
+        function delCheck = deleteSection(obj, del)
+            delCheck = nix.Utils.delete_entity(obj, del, 'nix.Section', 'Section::deleteSection');
+            obj.sectionsCache.lastUpdate = 0;
+        end;
+
         function retObj = open_section(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'Section::openSection', id_or_name, @nix.Section);

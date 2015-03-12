@@ -171,11 +171,15 @@ void mexFunction(int            nlhs,
             .reg("openSource", GETBYSTR(nix::Source, nix::MultiTag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::MultiTag, metadata))
             .reg("removeReference", REMOVER(nix::DataArray, nix::MultiTag, removeReference))
-            .reg("removeSource", REMOVER(nix::Source, nix::MultiTag, removeSource));
+            .reg("removeSource", REMOVER(nix::Source, nix::MultiTag, removeSource))
+            .reg("deleteFeature", REMOVER(nix::Feature, nix::MultiTag, deleteFeature));
         methods->add("MultiTag::retrieveData", nixmultitag::retrieve_data);
         methods->add("MultiTag::featureRetrieveData", nixmultitag::retrieve_feature_data);
         methods->add("MultiTag::addReference", nixmultitag::add_reference);
         methods->add("MultiTag::addSource", nixmultitag::add_source);
+        methods->add("MultiTag::createFeature", nixmultitag::create_feature);
+        methods->add("MultiTag::addPositions", nixmultitag::add_positions);
+        methods->add("MultiTag::addExtents", nixmultitag::add_extents);
 
         classdef<nix::Section>("Section", methods)
             .desc(&nixsection::describe)
@@ -184,14 +188,15 @@ void mexFunction(int            nlhs,
             .reg("hasProperty", GETBYSTR(bool, nix::Section, hasProperty))
             .reg("hasSection", GETBYSTR(bool, nix::Section, hasSection))
             .reg("link", GETCONTENT(nix::Section, nix::Section, link))
-            .reg("parent", GETCONTENT(nix::Section, nix::Section, parent));
+            .reg("parent", GETCONTENT(nix::Section, nix::Section, parent))
+            .reg("createSection", &nix::Section::createSection)
+            .reg("deleteSection", REMOVER(nix::Section, nix::Section, deleteSection));
             //.reg("set_repository", SETTER(const std::string&, nix::Section, repository));
         methods->add("Section::properties", nixsection::properties);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)
             .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data));
-        methods->add("Feature::linkType", nixfeature::link_type);
 
         mexAtExit(on_exit);
     });

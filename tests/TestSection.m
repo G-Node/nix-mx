@@ -3,12 +3,40 @@ function funcs = testSection
 %   Detailed explanation goes here
 
     funcs = {};
+    funcs{end+1} = @test_create_section;
+    funcs{end+1} = @test_delete_section;
     funcs{end+1} = @test_list_subsections;
     funcs{end+1} = @test_open_section;
     funcs{end+1} = @test_parent;
     funcs{end+1} = @test_has_section;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_properties;
+end
+
+%% Test: Create Section
+function [] = test_create_section( varargin )
+    f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
+    s = f.createSection('mainSection', 'nixSection');
+
+    assert(isempty(s.sections));
+    tmp = s.createSection('testSection1', 'nixSection');
+    tmp = s.createSection('testSection2', 'nixSection');
+    assert(size(s.sections, 1) == 2);
+end
+
+%% Test: Delete Section by entity or ID
+function [] = test_delete_section( varargin )
+    f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
+    s = f.createSection('mainSection', 'nixSection');
+    tmp = s.createSection('testSection1', 'nixSection');
+    tmp = s.createSection('testSection2', 'nixSection');
+
+    assert(s.deleteSection(s.sections{2}.id));
+    assert(size(s.sections, 1) == 1);
+    assert(s.deleteSection(s.sections{1}));
+    assert(isempty(s.sections));
+
+    assert(~s.deleteSection('I do not exist'));
 end
 
 function [] = test_list_subsections( varargin )

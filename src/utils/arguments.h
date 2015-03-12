@@ -106,6 +106,21 @@ public:
         return dtype_mex2nix(array[pos]);
     }
 
+    nix::LinkType ltype(size_t pos) const
+    {
+        const uint8_t link_type = num<uint8_t>(pos);
+        nix::LinkType retLinkType;
+
+        switch (link_type) {
+        case 0: retLinkType = nix::LinkType::Tagged; break;
+        case 1: retLinkType = nix::LinkType::Untagged; break;
+        case 2: retLinkType = nix::LinkType::Indexed; break;
+        default: throw std::invalid_argument("unkown link type");
+        }
+
+        return retLinkType;
+    }
+
 	bool logical(size_t pos) const {
 		check_arg_type(pos, nix::DataType::Bool);
 
