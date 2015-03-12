@@ -188,7 +188,9 @@ void mexFunction(int            nlhs,
             .reg("hasProperty", GETBYSTR(bool, nix::Section, hasProperty))
             .reg("hasSection", GETBYSTR(bool, nix::Section, hasSection))
             .reg("link", GETCONTENT(nix::Section, nix::Section, link))
-            .reg("parent", GETCONTENT(nix::Section, nix::Section, parent));
+            .reg("parent", GETCONTENT(nix::Section, nix::Section, parent))
+            .reg("createSection", &nix::Section::createSection)
+            .reg("deleteSection", REMOVER(nix::Section, nix::Section, deleteSection));
             //.reg("set_repository", SETTER(const std::string&, nix::Section, repository));
         methods->add("Section::properties", nixsection::properties);
 
