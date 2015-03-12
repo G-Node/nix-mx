@@ -8,8 +8,6 @@ namespace nixgen {
 
     mxArray *dataset_read_all(const nix::DataSet &da);
 
-    nix::LinkType get_link_type(uint8_t ltype);
-
 } // namespace nixgen
 
 #endif

@@ -40,9 +40,7 @@ namespace nixmultitag {
     {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
 
-        nix::LinkType link_type = nixgen::get_link_type(input.num<uint8_t>(3));
-
-        nix::Feature newFeat = currObj.createFeature(input.str(2), link_type);
+        nix::Feature newFeat = currObj.createFeature(input.str(2), input.ltype(3));
         output.set(0, handle(newFeat));
     }
 
