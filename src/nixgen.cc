@@ -39,4 +39,18 @@ mxArray *dataset_read_all(const nix::DataSet &da) {
     return data;
 }
 
+nix::LinkType get_link_type(uint8_t ltype)
+{
+    nix::LinkType link_type;
+
+    switch (ltype) {
+    case 0: link_type = nix::LinkType::Tagged; break;
+    case 1: link_type = nix::LinkType::Untagged; break;
+    case 2: link_type = nix::LinkType::Indexed; break;
+    default: throw std::invalid_argument("unkown link type");
+    }
+
+    return link_type;
+}
+
 } // namespace nixgen
