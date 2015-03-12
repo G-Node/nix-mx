@@ -174,7 +174,7 @@ struct invoker{
 template<typename Klazz, typename Fn>
 struct invoker<Klazz, Fn, void> {
 	template<typename Args, int...I>
-	static void invoke(Fn wrapped, Args &&args, const extractor &input, infusor &output) {
+	static void invoke(Fn wrapped, Args &&args, const extractor &input, infusor &output, iseq<I...>) {
 		Klazz entity = input.entity<Klazz>(1);
 		(entity.*wrapped)(matryoshka_get<I>(input, args)...);
 	}
