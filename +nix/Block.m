@@ -1,23 +1,21 @@
-classdef Block < nix.NamedEntity
+classdef Block < nix.NamedEntity & nix.MetadataMixIn
     %Block nix Block object
 
     properties (Hidden)
         % namespace reference for nix-mx functions
         alias = 'Block'
-        metadataCache
     end
     
     methods
         function obj = Block(h)
             obj@nix.NamedEntity(h);
+            obj@nix.MetadataMixIn();
             
             % assign relations
             nix.Dynamic.add_dyn_relation(obj, 'dataArrays', @nix.DataArray);
             nix.Dynamic.add_dyn_relation(obj, 'sources', @nix.Source);
             nix.Dynamic.add_dyn_relation(obj, 'tags', @nix.Tag);
             nix.Dynamic.add_dyn_relation(obj, 'multiTags', @nix.MultiTag);
-            
-            obj.metadataCache = nix.CacheStruct();
         end;
         
         % -----------------
@@ -123,15 +121,5 @@ classdef Block < nix.NamedEntity
             [delCheck, obj.multiTagsCache] = nix.Utils.delete_entity(obj, ...
                 del, 'nix.MultiTag', 'Block::deleteMultiTag', obj.multiTagsCache);
         end;
-
-        % -----------------
-        % Metadata methods
-        % -----------------
-        
-        function metadata = open_metadata(obj)
-            [obj.metadataCache, metadata] = nix.Utils.fetchObj(obj.updatedAt, ...
-                'Block::openMetadataSection', obj.nix_handle, obj.metadataCache, @nix.Section);
-        end;
-
     end;
 end
