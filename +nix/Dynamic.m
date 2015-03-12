@@ -1,5 +1,5 @@
 classdef Dynamic
-    %Dynamic class (all methods are static hehe)
+    %Dynamic class (with static methods hehe)
     % implements methods to dynamically assigns properties 
 
     methods (Static)

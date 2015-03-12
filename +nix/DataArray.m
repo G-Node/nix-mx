@@ -1,74 +1,31 @@
-classdef DataArray < nix.Entity
+classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
     %DataArray nix DataArray object
     
-    properties(Hidden)
-      info
-      sourcesCache
-      metadataCache
-    end;
-    
+    properties (Hidden)
+        % namespace reference for nix-mx functions
+        alias = 'DataArray'
+    end
+   
     properties(Dependent)
-        id
-        type
-        name
-        definition
-        label
-        shape
-        unit
-        dimensions
-        polynom_coefficients
-        
-        sources
+        dimensions % should not be dynamic due to complex set operation
     end;
    
     methods
         function obj = DataArray(h)
-            obj@nix.Entity(h);
+            obj@nix.NamedEntity(h);
+            obj@nix.MetadataMixIn();
+            obj@nix.SourcesMixIn();
             
-            obj.sourcesCache.lastUpdate = 0;
-            obj.sourcesCache.data = {};
-            obj.metadataCache.lastUpdate = 0;
-            obj.metadataCache.data = {};
+            % assign dynamic properties
+            nix.Dynamic.add_dyn_attr(obj, 'label', 'rw');
+            nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
+            nix.Dynamic.add_dyn_attr(obj, 'expansionOrigin', 'rw');
+            nix.Dynamic.add_dyn_attr(obj, 'polynom_coefficients', 'rw');
+            nix.Dynamic.add_dyn_attr(obj, 'shape', 'rw');
         end;
         
-        function nfo = get.info(obj)
-            nfo = nix_mx('DataArray::describe', obj.nix_handle);
-        end
-                
-        function id = get.id(obj)
-           id = obj.info.id; 
-        end;
-        
-        function type = get.type(obj)
-            type = obj.info.type;
-        end;
-        
-        function name = get.name(obj)
-           name = obj.info.name;
-        end;
-
-        function definition = get.definition(obj)
-           definition = obj.info.definition;
-        end;
-
-        function label = get.label(obj)
-           label = obj.info.label;
-        end;
-
-        function shape = get.shape(obj)
-           shape = obj.info.shape;
-        end;
-
-        function unit = get.unit(obj)
-           unit = obj.info.unit;
-        end;
-
         function dimensions = get.dimensions(obj)
            dimensions = obj.info.dimensions;
-        end;
-
-        function polynom_coefficients = get.polynom_coefficients(obj)
-           polynom_coefficients = obj.info.polynom_coefficients;
         end;
         
         % -----------------
@@ -89,32 +46,5 @@ classdef DataArray < nix.Entity
            nix_mx('DataArray::writeAll', obj.nix_handle, tmp);
         end;
         
-        % -----------------
-        % Sources methods
-        % -----------------
-        
-        function [] = add_source(obj, add_this)
-            obj.sourcesCache = nix.Utils.add_entity(obj, ...
-                add_this, 'nix.Source', 'DataArray::addSource', obj.sourcesCache);
-        end;
-
-        function delCheck = remove_source(obj, del)
-            [delCheck, obj.sourcesCache] = nix.Utils.delete_entity(obj, ...
-                del, 'nix.Source', 'DataArray::removeSource', obj.sourcesCache);
-        end;
-
-        function sources = get.sources(obj)
-            [obj.sourcesCache, sources] = nix.Utils.fetchObjList(obj.updatedAt, ...
-                'DataArray::sources', obj.nix_handle, obj.sourcesCache, @nix.Source);
-        end;
-        
-        % -----------------
-        % Metadata methods
-        % -----------------
-        
-        function metadata = open_metadata(obj)
-            [obj.metadataCache, metadata] = nix.Utils.fetchObj(obj.updatedAt, ...
-                'DataArray::openMetadataSection', obj.nix_handle, obj.metadataCache, @nix.Section);
-        end;
     end;
 end

@@ -1,9 +1,10 @@
 classdef Feature < nix.Entity
     %Feature nix Feature object
     
-    properties(Hidden)
-        info
-    end;
+    properties (Hidden)
+        % namespace reference for nix-mx functions
+        alias = 'Feature'
+    end
     
     properties(Dependent)
         id
@@ -12,7 +13,6 @@ classdef Feature < nix.Entity
     methods
         function obj = Feature(h)
            obj@nix.Entity(h);
-           obj.info = nix_mx('Feature::describe', obj.nix_handle);
         end;
         
         function id = get.id(obj)

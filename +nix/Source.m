@@ -1,51 +1,18 @@
-classdef Source < nix.Entity
+classdef Source < nix.NamedEntity & nix.MetadataMixIn
     %Source nix Source object
     
-    properties(Hidden)
-        info
-        sourcesCache
-        metadataCache
-    end;
-    
-    properties(Dependent)
-        id
-        type
-        name
-        definition
-        sourceCount
-        
-        sources
-    end;
+    properties (Hidden)
+        % namespace reference for nix-mx functions
+        alias = 'Source'
+    end
     
     methods
         function obj = Source(h)
-           obj@nix.Entity(h);
-           obj.info = nix_mx('Source::describe', obj.nix_handle);
+            obj@nix.NamedEntity(h);
+            obj@nix.MetadataMixIn();
            
-           obj.sourcesCache.lastUpdate = 0;
-           obj.sourcesCache.data = {};
-           obj.metadataCache.lastUpdate = 0;
-           obj.metadataCache.data = {};
-        end;
-        
-        function id = get.id(source)
-           id = source.info.id; 
-        end;
-        
-        function type = get.type(source)
-            type = source.info.type;
-        end;
-        
-        function name = get.name(source)
-           name = source.info.name;
-        end;
-        
-        function type = get.definition(source)
-            type = source.info.definition;
-        end;
-        
-        function sourceCount = get.sourceCount(source)
-            sourceCount = source.info.sourceCount;
+            % assign relations
+            nix.Dynamic.add_dyn_relation(obj, 'sources', @nix.Source);
         end;
         
         % ------------------
@@ -66,20 +33,6 @@ classdef Source < nix.Entity
             retObj = nix.Utils.open_entity(obj, ...
                 'Source::openSource', id_or_name, @nix.Source);
         end;
-
-        function sources = get.sources(obj)
-            [obj.sourcesCache, sources] = nix.Utils.fetchObjList(obj.updatedAt, ...
-                'Source::sources', obj.nix_handle, obj.sourcesCache, @nix.Source);
-        end;
         
-        % ------------------
-        % Metadata methods
-        % ------------------
-        
-        function metadata = open_metadata(obj)
-            [obj.metadataCache, metadata] = nix.Utils.fetchObj(obj.updatedAt, ...
-                'Source::openMetadataSection', obj.nix_handle, obj.metadataCache, @nix.Section);
-        end;
-
     end;
 end
