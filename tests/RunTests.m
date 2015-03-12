@@ -27,11 +27,11 @@ t6.name = 'MULTITAG';
 t6.tests = TestMultiTag();
 t7.name = 'SECTION';
 t7.tests = TestSection();
-
-%-- TODO: TestFeature
+t8.name = 'FEATURE';
+t8.tests = TestFeature();
 
 % concatenate all test handles
-all_tests = {t1, t2, t3, t4, t5, t6, t7};
+all_tests = {t1, t2, t3, t4, t5, t6, t7, t8};
 
 for i = 1:length(all_tests)
     fprintf([10 'Execute ' all_tests{i}.name ' tests:\n\n']);

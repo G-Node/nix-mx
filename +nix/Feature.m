@@ -8,24 +8,24 @@ classdef Feature < nix.Entity
     
     properties(Dependent)
         id
+        linkType
     end;
     
     methods
         function obj = Feature(h)
            obj@nix.Entity(h);
         end;
-        
+
         function id = get.id(obj)
            id = obj.info.id; 
         end;
-        
-        function linkType = link_type(obj)
-            linkType = nix_mx('Feature::linkType', obj.nix_handle);
+
+        function linkType = get.linkType(obj)
+            linkType = obj.info.linkType;
         end;
-        
-        function dataArray = open_data(obj, id_or_name)
-           daHandle = nix_mx('Feature::openData', obj.nix_handle, id_or_name); 
-           dataArray = nix.Feature(daHandle);
+
+        function dataArray = open_data(obj)
+           dataArray = nix.DataArray(nix_mx('Feature::openData', obj.nix_handle));
         end;
     end;
 

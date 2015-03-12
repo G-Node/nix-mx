@@ -36,6 +36,14 @@ namespace nixmultitag {
         currObj.addSource(input.str(2));
     }
 
+    void create_feature(const extractor &input, infusor &output)
+    {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+
+        nix::Feature newFeat = currObj.createFeature(input.str(2), input.ltype(3));
+        output.set(0, handle(newFeat));
+    }
+
     void retrieve_data(const extractor &input, infusor &output) {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
         double p_index = input.num<double>(2);
@@ -53,5 +61,19 @@ namespace nixmultitag {
         mxArray *data = nixgen::dataset_read_all(currObj.retrieveFeatureData(p_index, f_index));
         output.set(0, data);
     }
+
+    void add_positions(const extractor &input, infusor &output)
+    {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        currObj.positions(input.str(2));
+    }
+
+    void add_extents(const extractor &input, infusor &output)
+    {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        currObj.extents(input.str(2));
+    }
+
+    void remove_extents(const extractor &input, infusor &output);
 
 } // namespace nixmultitag

@@ -13,6 +13,22 @@ mxArray* make_mx_array(const nix::NDSize &size)
 	return res;
 }
 
+mxArray* make_mx_array(const nix::LinkType &ltype)
+{
+    uint8_t link_type;
+
+    switch (ltype) {
+        case nix::LinkType::Tagged: link_type = 0; break;
+        case nix::LinkType::Untagged: link_type = 1; break;
+        case nix::LinkType::Indexed: link_type = 2; break;
+        default: throw std::invalid_argument("unkown link type");
+    }
+    mxArray *data = mxCreateDoubleScalar(link_type);
+
+    return data;
+}
+
+
 mxArray* make_mx_array(const nix::Value &v)
 {
 	mxArray *res;
