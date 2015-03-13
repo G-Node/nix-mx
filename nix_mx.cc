@@ -117,6 +117,8 @@ void mexFunction(int            nlhs,
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
             .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Block, getMultiTag))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Block, metadata))
+            .reg("set_metadata", SETTER(const std::string&, nix::Block, metadata))
+            .reg("set_none_metadata", SETTER(const boost::none_t, nix::Block, metadata))
             .reg("deleteDataArray", REMOVER(nix::DataArray, nix::Block, deleteDataArray))
             .reg("deleteSource", REMOVER(nix::Source, nix::Block, deleteSource))
             .reg("deleteTag", REMOVER(nix::Tag, nix::Block, deleteTag))
