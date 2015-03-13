@@ -11,6 +11,7 @@ function funcs = testSection
     funcs{end+1} = @test_has_section;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_properties;
+    funcs{end+1} = @test_link;
 end
 
 %% Test: Create Section
@@ -132,4 +133,21 @@ function [] = test_properties( varargin )
     disp(f.sections{3}.allProperties);
     
     assert(isempty(f.sections{3}.allProperties));
+end
+
+%%Test: set, open and remove section link
+function [] = test_link( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    mainSec = f.createSection('mainSection', 'nixSection');
+    tmp = f.createSection('linkSection1', 'nixSection');
+    tmp = f.createSection('linkSection2', 'nixSection');
+    
+    assert(isempty(mainSec.openLink));
+    mainSec.set_link(f.sections{3}.id);
+    assert(strcmp(mainSec.openLink.name, 'linkSection2'));
+    mainSec.set_link(f.sections{2});
+    assert(strcmp(mainSec.openLink.name, 'linkSection1'));
+    
+    mainSec.set_link('');
+    assert(isempty(mainSec.openLink));
 end
