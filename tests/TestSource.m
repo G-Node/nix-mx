@@ -8,6 +8,7 @@ function funcs = testSource
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_fetch_sources;
     funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
 end
 
@@ -43,18 +44,32 @@ function [] = test_open_source( varargin )
     assert(isempty(getNonSource));
 end
 
+%% Test: Set metadata
+function [] = test_set_metadata ( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    tmp = f.createSection('testSection1', 'nixSection');
+    tmp = f.createSection('testSection2', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    s = b.create_source('testSource', 'nixSource');
+
+    assert(isempty(s.open_metadata));
+    s.set_metadata(f.sections{1});
+    assert(strcmp(s.open_metadata.name, 'testSection1'));
+    s.set_metadata(f.sections{2});
+    assert(strcmp(s.open_metadata.name, 'testSection2'));
+    s.set_metadata('');
+    assert(isempty(s.open_metadata));
+end
+
 %% Test: Open metadata
 function [] = test_open_metadata( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    
-    getSource = getBlock.open_source(getBlock.sources{1,1}.id);
-    assert(isempty(getSource.open_metadata()))
-    
-    %-- ToDo implement test for empty metadata
-    %getSource = getBlock.open_source(getBlock.sources{1,1}.id);
-    %assert(~isempty(getSource.open_metadata()))
-    disp('Test Source: open existing metadata ... TODO (proper testfile)');
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    tmp = f.createSection('testSection', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    s = b.create_source('testSource', 'nixSource');
+    s.set_metadata(f.sections{1});
+
+    assert(strcmp(s.open_metadata.name, 'testSection'));
 end
 
 %% Test: create source

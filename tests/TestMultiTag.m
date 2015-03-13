@@ -20,6 +20,7 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_open_positions;
     funcs{end+1} = @test_add_extents;
     funcs{end+1} = @test_open_extents;
+    funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data;
     funcs{end+1} = @test_retrieve_feature_data;
@@ -322,18 +323,34 @@ function [] = test_open_extents( varargin )
     disp('Test MultiTag: open existing extents ... TODO (proper testfile)');
 end
 
+%% Test: Set metadata
+function [] = test_set_metadata ( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    tmp = f.createSection('testSection1', 'nixSection');
+    tmp = f.createSection('testSection2', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    tmp = b.create_data_array('testDataArray', 'nixDataArray', 'double', [1 2 3 4 5 6]);
+    t = b.create_multi_tag('metadataTest', 'nixMultiTag', b.dataArrays{1});
+
+    assert(isempty(t.open_metadata));
+    t.set_metadata(f.sections{1});
+    assert(strcmp(t.open_metadata.name, 'testSection1'));
+    t.set_metadata(f.sections{2});
+    assert(strcmp(t.open_metadata.name, 'testSection2'));
+    t.set_metadata('');
+    assert(isempty(t.open_metadata));
+end
+
 %% Test: Open metadata
 function [] = test_open_metadata( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    
-    getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
-    assert(isempty(getMultiTag.open_metadata()))
-    
-    %-- ToDo implement test for existing metadata
-    %getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{2,1}.id);
-    %assert(~isempty(getMultiTag.open_metadata()));
-    disp('Test MultiTag: open existing metadata ... TODO (proper testfile)');
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    tmp = f.createSection('testSection', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    tmp = b.create_data_array('testDataArray', 'nixDataArray', 'double', [1 2 3 4 5 6]);
+    t = b.create_multi_tag('metadataTest', 'nixMultiTag', b.dataArrays{1});
+    t.set_metadata(f.sections{1});
+
+    assert(strcmp(t.open_metadata.name, 'testSection'));
 end
 
 %% Test: Retrieve data

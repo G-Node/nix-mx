@@ -23,6 +23,7 @@ function funcs = TestBlock
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_has_multitag;
     funcs{end+1} = @test_has_tag;
+    funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
 end
 
@@ -345,15 +346,28 @@ function [] = test_has_tag( varargin )
     assert(~b.has_tag('I do not exist'));
 end
 
+%% Test: Set metadata
+function [] = test_set_metadata ( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    tmp = f.createSection('testSection1', 'nixSection');
+    tmp = f.createSection('testSection2', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    
+    assert(isempty(b.open_metadata));
+    b.set_metadata(f.sections{1});
+    assert(strcmp(b.open_metadata.name, 'testSection1'));
+    b.set_metadata(f.sections{2});
+    assert(strcmp(b.open_metadata.name, 'testSection2'));
+    b.set_metadata('');
+    assert(isempty(b.open_metadata));
+end
+
 function [] = test_open_metadata( varargin )
 %% Test: Open metadata
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    tmp = f.createSection('testSection', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    b.set_metadata(f.sections{1});
 
-    assert(isempty(getBlock.open_metadata()))
-    
-    %-- ToDo implement test for exising metadata
-    %getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    %assert(~isempty(getBlock.open_metadata()))
-    disp('Test Block: open existing metadata ... TODO (proper testfile)');
+    assert(strcmp(b.open_metadata.name, 'testSection'));
 end

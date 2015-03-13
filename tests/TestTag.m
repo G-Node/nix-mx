@@ -15,6 +15,7 @@ function funcs = TestTag
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_open_feature;
     funcs{end+1} = @test_open_reference;
+    funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data;
     funcs{end+1} = @test_retrieve_feature_data;
@@ -245,17 +246,32 @@ function [] = test_open_reference( varargin )
     assert(isempty(getNonRef));
 end
 
+%% Test: Set metadata
+function [] = test_set_metadata ( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    tmp = f.createSection('testSection1', 'nixSection');
+    tmp = f.createSection('testSection2', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    t = b.create_tag('testTag', 'nixTag', [1, 2, 3, 4]);
+
+    assert(isempty(t.open_metadata));
+    t.set_metadata(f.sections{1});
+    assert(strcmp(t.open_metadata.name, 'testSection1'));
+    t.set_metadata(f.sections{2});
+    assert(strcmp(t.open_metadata.name, 'testSection2'));
+    t.set_metadata('');
+    assert(isempty(t.open_metadata));
+end
 
 %% Test: Open metadata
 function [] = test_open_metadata( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    
-    getTag = getBlock.open_tag(getBlock.tags{1,1}.id);
-    assert(isempty(getTag.open_metadata()))
-    
-    getTag = getBlock.open_tag(getBlock.tags{2,1}.id);
-    assert(~isempty(getTag.open_metadata()));
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    tmp = f.createSection('testSection', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    t = b.create_tag('testTag', 'nixTag', [1, 2, 3, 4]);
+
+    t.set_metadata(f.sections{1});
+    assert(strcmp(t.open_metadata.name, 'testSection'));
 end
 
 %% Test: Retrieve data
