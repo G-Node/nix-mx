@@ -89,40 +89,31 @@ end
 function [] = test_attrs( varargin )
 %% Test: Access Attributes / Links
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    s1 = f.createSection('foo', 'bar');
+    s = f.createSection('foo', 'bar');
 
-    assert(strcmp(s1.name, 'foo'));
-    assert(strcmp(s1.type, 'bar'));
-    assert(isempty(s1.repository));
-    assert(isempty(s1.mapping));
+    assert(~isempty(s.id));
 
-    s1.repository = 'rep1';
-    s1.mapping = 'map1';
-    assert(strcmp(s1.repository, 'rep1'));
-    assert(strcmp(s1.mapping, 'map1'));
-    
-    s1.repository = '';
-    s1.mapping = '';
-    assert(isempty(s1.repository));
-    assert(isempty(s1.mapping));
+    assert(strcmp(s.name, 'foo'));
+    assert(strcmp(s.type, 'bar'));
+    assert(isempty(s.repository));
+    assert(isempty(s.mapping));
+    assert(isempty(s.definition));
 
-    assert(isempty(s1.link));
-    
-    % TODO rewrite tests for link / parent
-    
-    f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    s1 = f.sections{3};
-    
-    assert(strcmp(s1.name, 'Sessions'));
-    assert(strcmp(s1.type, 'nix.metadata.section'));
-    assert(isempty(s1.repository));
-    assert(isempty(s1.mapping));
-    
-    subj = s1.sections{1}.sections{1}.link;
-    assert(strcmp(subj.name, 'Subject'));
-    
-    emp_ty = s1.sections{1}.link;
-    assert(isempty(emp_ty));
+    s.type = 'nixBlock';
+    s.definition = 'section definition';
+    s.repository = 'rep1';
+    s.mapping = 'map1';
+    assert(strcmp(s.type, 'nixBlock'));
+    assert(strcmp(s.definition, 'section definition'));
+    assert(strcmp(s.repository, 'rep1'));
+    assert(strcmp(s.mapping, 'map1'));
+
+    s.definition = '';
+    s.repository = '';
+    s.mapping = '';
+    assert(isempty(s.definition));
+    assert(isempty(s.repository));
+    assert(isempty(s.mapping));
 end
 
 function [] = test_properties( varargin )
