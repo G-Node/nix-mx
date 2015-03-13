@@ -11,6 +11,7 @@ function funcs = testSection
     funcs{end+1} = @test_has_section;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_properties;
+    funcs{end+1} = @test_open_property;
     funcs{end+1} = @test_link;
 end
 
@@ -133,6 +134,15 @@ function [] = test_properties( varargin )
     disp(f.sections{3}.allProperties);
     
     assert(isempty(f.sections{3}.allProperties));
+end
+
+%% Test: Open property by ID and name
+function [] = test_open_property( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
+    trial = f.sections{2}.sections{2}.sections{1};
+
+    assert(~isempty(trial.open_property(trial.allProperties{1}.id)));
+    assert(~isempty(trial.open_property(trial.allProperties{1}.name)));
 end
 
 %%Test: set, open and remove section link

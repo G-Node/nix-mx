@@ -29,9 +29,11 @@ t7.name = 'SECTION';
 t7.tests = TestSection();
 t8.name = 'FEATURE';
 t8.tests = TestFeature();
+t9.name = 'PROPERTY';
+t9.tests = TestProperty();
 
 % concatenate all test handles
-all_tests = {t1, t2, t3, t4, t5, t6, t7, t8};
+all_tests = {t1, t2, t3, t4, t5, t6, t7, t8, t9};
 
 for i = 1:length(all_tests)
     fprintf([10 'Execute ' all_tests{i}.name ' tests:\n\n']);

@@ -13,6 +13,7 @@
 
 #include "nixfile.h"
 #include "nixsection.h"
+#include "nixproperty.h"
 #include "nixblock.h"
 #include "nixdataarray.h"
 #include "nixsource.h"
@@ -224,12 +225,16 @@ void mexFunction(int            nlhs,
             .reg("set_mapping", SETTER(const std::string&, nix::Section, mapping))
             .reg("set_none_mapping", SETTER(const boost::none_t, nix::Section, mapping))
             .reg("createSection", &nix::Section::createSection)
-            .reg("deleteSection", REMOVER(nix::Section, nix::Section, deleteSection));
+            .reg("deleteSection", REMOVER(nix::Section, nix::Section, deleteSection))
+            .reg("openProperty", GETBYSTR(nix::Property, nix::Section, getProperty));
         methods->add("Section::properties", nixsection::properties);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)
             .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data));
+
+        classdef<nix::Property>("Property", methods)
+            .desc(&nixproperty::describe);
 
         mexAtExit(on_exit);
     });

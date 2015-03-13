@@ -86,7 +86,12 @@ classdef Section < nix.NamedEntity
         % ----------------
         % Property methods
         % ----------------
-        
+
+        function retObj = open_property(obj, id_or_name)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Section::openProperty', id_or_name, @nix.Property);
+        end;
+
         function props = get.allProperties(obj)
             [obj.propsCache, props] = nix.Utils.fetchPropList(obj.updatedAt, ...
                 'Section::properties', obj.nix_handle, obj.propsCache);
