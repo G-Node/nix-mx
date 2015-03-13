@@ -14,12 +14,13 @@ namespace nixsection {
 mxArray *describe(const nix::Section &section)
 {
     struct_builder sb({ 1 }, { 
-        "name", "id", "type", "repository", "mapping"
+        "name", "id", "type", "definition", "repository", "mapping"
     });
 
     sb.set(section.name());
     sb.set(section.id());
     sb.set(section.type());
+    sb.set(section.definition());
     sb.set(section.repository());
     sb.set(section.mapping());
 

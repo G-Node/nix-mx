@@ -34,15 +34,32 @@ classdef Section < nix.NamedEntity
                section = nix.Section(handle);
            end;
         end;
-        
-        function section = link(obj)
-           handle = nix_mx('Section::link', obj.nix_handle);
+
+        % ----------------
+        % Link methods
+        % ----------------
+
+        function [] = set_link(obj, val)
+            if (isempty(val))
+                nix_mx('Section::set_none_link', obj.nix_handle);
+            else
+                if(strcmp(class(val), 'nix.Section'))
+                    addID = val.id;
+                else
+                    addID = val;
+                end;
+                nix_mx('Section::set_link', obj.nix_handle, addID);
+            end;
+        end;
+
+        function section = openLink(obj)
+           handle = nix_mx('Section::openLink', obj.nix_handle);
            section = {};
            if handle ~= 0
                section = nix.Section(handle);
            end;
         end;
-        
+
         % ----------------
         % Section methods
         % ----------------

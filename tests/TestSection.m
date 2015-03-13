@@ -11,6 +11,7 @@ function funcs = testSection
     funcs{end+1} = @test_has_section;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_properties;
+    funcs{end+1} = @test_link;
 end
 
 %% Test: Create Section
@@ -89,40 +90,31 @@ end
 function [] = test_attrs( varargin )
 %% Test: Access Attributes / Links
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    s1 = f.createSection('foo', 'bar');
+    s = f.createSection('foo', 'bar');
 
-    assert(strcmp(s1.name, 'foo'));
-    assert(strcmp(s1.type, 'bar'));
-    assert(isempty(s1.repository));
-    assert(isempty(s1.mapping));
+    assert(~isempty(s.id));
 
-    s1.repository = 'rep1';
-    s1.mapping = 'map1';
-    assert(strcmp(s1.repository, 'rep1'));
-    assert(strcmp(s1.mapping, 'map1'));
-    
-    s1.repository = '';
-    s1.mapping = '';
-    assert(isempty(s1.repository));
-    assert(isempty(s1.mapping));
+    assert(strcmp(s.name, 'foo'));
+    assert(strcmp(s.type, 'bar'));
+    assert(isempty(s.repository));
+    assert(isempty(s.mapping));
+    assert(isempty(s.definition));
 
-    assert(isempty(s1.link));
-    
-    % TODO rewrite tests for link / parent
-    
-    f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    s1 = f.sections{3};
-    
-    assert(strcmp(s1.name, 'Sessions'));
-    assert(strcmp(s1.type, 'nix.metadata.section'));
-    assert(isempty(s1.repository));
-    assert(isempty(s1.mapping));
-    
-    subj = s1.sections{1}.sections{1}.link;
-    assert(strcmp(subj.name, 'Subject'));
-    
-    emp_ty = s1.sections{1}.link;
-    assert(isempty(emp_ty));
+    s.type = 'nixBlock';
+    s.definition = 'section definition';
+    s.repository = 'rep1';
+    s.mapping = 'map1';
+    assert(strcmp(s.type, 'nixBlock'));
+    assert(strcmp(s.definition, 'section definition'));
+    assert(strcmp(s.repository, 'rep1'));
+    assert(strcmp(s.mapping, 'map1'));
+
+    s.definition = '';
+    s.repository = '';
+    s.mapping = '';
+    assert(isempty(s.definition));
+    assert(isempty(s.repository));
+    assert(isempty(s.mapping));
 end
 
 function [] = test_properties( varargin )
@@ -141,4 +133,21 @@ function [] = test_properties( varargin )
     disp(f.sections{3}.allProperties);
     
     assert(isempty(f.sections{3}.allProperties));
+end
+
+%%Test: set, open and remove section link
+function [] = test_link( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    mainSec = f.createSection('mainSection', 'nixSection');
+    tmp = f.createSection('linkSection1', 'nixSection');
+    tmp = f.createSection('linkSection2', 'nixSection');
+    
+    assert(isempty(mainSec.openLink));
+    mainSec.set_link(f.sections{3}.id);
+    assert(strcmp(mainSec.openLink.name, 'linkSection2'));
+    mainSec.set_link(f.sections{2});
+    assert(strcmp(mainSec.openLink.name, 'linkSection1'));
+    
+    mainSec.set_link('');
+    assert(isempty(mainSec.openLink));
 end
