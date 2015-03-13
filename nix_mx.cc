@@ -133,7 +133,9 @@ void mexFunction(int            nlhs,
             .desc(&nixdataarray::describe)
             .reg("sources", IDATAARRAY(std::vector<nix::Source>, EntityWithSources, std::function<bool(const nix::Source &)>, sources, const))
             .reg("openMetadataSection", IDATAARRAY(nix::Section, EntityWithMetadata, , metadata, const))
-            .reg("set_type", IDATAARRAY(void, NamedEntity, const std::string&, type,))
+            .reg("set_metadata", IDATAARRAY(void, EntityWithMetadata, const std::string&, metadata, ))
+            .reg("set_none_metadata", IDATAARRAY(void, EntityWithMetadata, const boost::none_t, metadata, ))
+            .reg("set_type", IDATAARRAY(void, NamedEntity, const std::string&, type, ))
             .reg("set_definition", IDATAARRAY(void, NamedEntity, const std::string&, definition, ))
             .reg("set_none_definition", IDATAARRAY(void, NamedEntity, const boost::none_t, definition, ))
             .reg("set_label", SETTER(const std::string&, nix::DataArray, label))
@@ -153,6 +155,8 @@ void mexFunction(int            nlhs,
             .reg("sources", &nix::Source::sources)
             .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Source, metadata))
+            .reg("set_metadata", SETTER(const std::string&, nix::Source, metadata))
+            .reg("set_none_metadata", SETTER(const boost::none_t, nix::Source, metadata))
             .reg("set_type", SETTER(const std::string&, nix::Source, type))
             .reg("set_definition", SETTER(const std::string&, nix::Source, definition))
             .reg("set_none_definition", SETTER(const boost::none_t, nix::Source, definition));
@@ -166,6 +170,8 @@ void mexFunction(int            nlhs,
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Tag, metadata))
+            .reg("set_metadata", SETTER(const std::string&, nix::Tag, metadata))
+            .reg("set_none_metadata", SETTER(const boost::none_t, nix::Tag, metadata))
             .reg("removeReference", REMOVER(nix::DataArray, nix::Tag, removeReference))
             .reg("removeSource", REMOVER(nix::Source, nix::Tag, removeSource))
             .reg("deleteFeature", REMOVER(nix::Feature, nix::Tag, deleteFeature));
@@ -187,6 +193,8 @@ void mexFunction(int            nlhs,
             .reg("openFeature", GETBYSTR(nix::Feature, nix::MultiTag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::MultiTag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::MultiTag, metadata))
+            .reg("set_metadata", SETTER(const std::string&, nix::MultiTag, metadata))
+            .reg("set_none_metadata", SETTER(const boost::none_t, nix::MultiTag, metadata))
             .reg("removeReference", REMOVER(nix::DataArray, nix::MultiTag, removeReference))
             .reg("removeSource", REMOVER(nix::Source, nix::MultiTag, removeSource))
             .reg("deleteFeature", REMOVER(nix::Feature, nix::MultiTag, deleteFeature));

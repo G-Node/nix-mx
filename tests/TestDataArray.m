@@ -5,6 +5,7 @@ function funcs = TestDataArray
     funcs = {};
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_open_data;
+    funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_list_sources;
     funcs{end+1} = @test_set_data;
@@ -57,18 +58,32 @@ function [] = test_open_data( varargin )
     assert(size(getDataArray.read_all(),2) == 36);
 end
 
+%% Test: Set metadata
+function [] = test_set_metadata ( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    tmp = f.createSection('testSection1', 'nixSection');
+    tmp = f.createSection('testSection2', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    da = b.create_data_array('testDataArray', 'nixDataArray', 'double', [1 2]);
+
+    assert(isempty(da.open_metadata));
+    da.set_metadata(f.sections{1});
+    assert(strcmp(da.open_metadata.name, 'testSection1'));
+    da.set_metadata(f.sections{2});
+    assert(strcmp(da.open_metadata.name, 'testSection2'));
+    da.set_metadata('');
+    assert(isempty(da.open_metadata));
+end
+
 %% Test: Open metadata
 function [] = test_open_metadata( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-    
-    %-- ToDo implement test for empty metadata
-    getDataArray = getBlock.data_array(getBlock.dataArrays{1,1}.id);
-    %assert(isempty(getDataArray.open_metadata()))
-    disp('Test DataArray: open empty metadata ... TODO (proper testfile)');
-    
-    getDataArray = getBlock.data_array(getBlock.dataArrays{1,1}.id);
-    assert(~isempty(getDataArray.open_metadata()))
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    tmp = f.createSection('testSection', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    da = b.create_data_array('testDataArray', 'nixDataArray', 'double', [1 2]);
+    da.set_metadata(f.sections{1});
+
+    assert(strcmp(da.open_metadata.name, 'testSection'));
 end
 
 %% Test: List sources
