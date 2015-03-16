@@ -143,19 +143,21 @@ function [] = test_create_property_data_type( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
 
-    newProperty = s.create_property_data_type('newProperty', 'double');
-    assert(strcmp(s.allProperties{1}.name, 'newProperty'));
-    disp('Test MultiTag: create property by data type ... TODO (proper data type implementation)');
+    tmp = s.create_property_data_type('newProperty1', nix.DataType.Double);
+    tmp = s.create_property_data_type('newProperty2', nix.DataType.Boolean);
+    tmp = s.create_property_data_type('newProperty3', nix.DataType.String);
+    assert(size(s.allProperties, 1) == 3);
+    assert(strcmp(s.allProperties{1}.name, 'newProperty1'));
 end
 
 %% Test: Delete property by entity, propertyStruct, ID and name
 function [] = test_delete_property( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
-    tmp = s.create_property_data_type('newProperty1', 'double');
-    tmp = s.create_property_data_type('newProperty2', 'double');
-    tmp = s.create_property_data_type('newProperty3', 'double');
-    tmp = s.create_property_data_type('newProperty4', 'double');
+    tmp = s.create_property_data_type('newProperty1', nix.DataType.Double);
+    tmp = s.create_property_data_type('newProperty2', nix.DataType.Boolean);
+    tmp = s.create_property_data_type('newProperty3', nix.DataType.String);
+    tmp = s.create_property_data_type('newProperty4', nix.DataType.Double);
 
     assert(s.delete_property('newProperty4'));
     assert(s.delete_property(s.allProperties{3}.id));
@@ -164,8 +166,6 @@ function [] = test_delete_property( varargin )
     assert(s.delete_property(s.allProperties{1}));
     
     assert(~s.delete_property('I do not exist'));
-    
-    disp('Test MultiTag: delete property by data type ... TODO (proper data type implementation)');
 end
 
 %% Test: Open property by ID and name
