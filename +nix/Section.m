@@ -87,6 +87,23 @@ classdef Section < nix.NamedEntity
         % Property methods
         % ----------------
 
+        function p = create_property_data_type(obj, name, dtype)
+            p = nix.Property(nix_mx('Section::createPropertyDataType', obj.nix_handle, name, dtype));
+            obj.propsCache.lastUpdate = 0;
+        end;
+
+        function delCheck = delete_property(obj, del)
+            if(isstruct(del) && isfield(del, 'id'))
+                delID = del.id;
+            elseif (strcmp(class(del), 'nix.Property'))
+                delID = del.id;
+            else
+                delID = del;
+            end;
+            delCheck = nix_mx('Section::deleteProperty', obj.nix_handle, delID);
+            obj.propsCache.lastUpdate = 0;
+        end;
+
         function retObj = open_property(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'Section::openProperty', id_or_name, @nix.Property);

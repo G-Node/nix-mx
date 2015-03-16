@@ -231,8 +231,10 @@ void mexFunction(int            nlhs,
             .reg("set_none_mapping", SETTER(const boost::none_t, nix::Section, mapping))
             .reg("createSection", &nix::Section::createSection)
             .reg("deleteSection", REMOVER(nix::Section, nix::Section, deleteSection))
-            .reg("openProperty", GETBYSTR(nix::Property, nix::Section, getProperty));
+            .reg("openProperty", GETBYSTR(nix::Property, nix::Section, getProperty))
+            .reg("deleteProperty", REMOVER(nix::Property, nix::Section, deleteProperty));
         methods->add("Section::properties", nixsection::properties);
+        methods->add("Section::createPropertyDataType", nixsection::create_property_data_type);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)
