@@ -57,6 +57,12 @@ struct entity_to_id<nix::Section> {
     static const int value = 7;
 };
 
+template<>
+struct entity_to_id<nix::Property> {
+    static const bool is_valid = true;
+    static const int value = 8;
+};
+
 class handle {
 public:
     struct entity {
