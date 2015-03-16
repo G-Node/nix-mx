@@ -171,8 +171,13 @@ void mexFunction(int            nlhs,
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Tag, metadata))
+            .reg("set_units", SETTER(const std::vector<std::string>&, nix::Tag, units))
+            .reg("set_none_units", SETTER(const boost::none_t, nix::Tag, units))
             .reg("set_metadata", SETTER(const std::string&, nix::Tag, metadata))
             .reg("set_none_metadata", SETTER(const boost::none_t, nix::Tag, metadata))
+            .reg("set_type", SETTER(const std::string&, nix::Tag, type))
+            .reg("set_definition", SETTER(const std::string&, nix::Tag, definition))
+            .reg("set_none_definition", SETTER(const boost::none_t, nix::Tag, definition))
             .reg("removeReference", REMOVER(nix::DataArray, nix::Tag, removeReference))
             .reg("removeSource", REMOVER(nix::Source, nix::Tag, removeSource))
             .reg("deleteFeature", REMOVER(nix::Feature, nix::Tag, deleteFeature));
