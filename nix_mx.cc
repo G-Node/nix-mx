@@ -241,7 +241,13 @@ void mexFunction(int            nlhs,
             .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data));
 
         classdef<nix::Property>("Property", methods)
-            .desc(&nixproperty::describe);
+            .desc(&nixproperty::describe)
+            .reg("set_definition", SETTER(const std::string&, nix::Property, definition))
+            .reg("set_none_definition", SETTER(const boost::none_t, nix::Property, definition))
+            .reg("set_unit", SETTER(const std::string&, nix::Property, unit))
+            .reg("set_none_unit", SETTER(const boost::none_t, nix::Property, unit))
+            .reg("set_mapping", SETTER(const std::string&, nix::Property, mapping))
+            .reg("set_none_mapping", SETTER(const boost::none_t, nix::Property, mapping));
 
         mexAtExit(on_exit);
     });

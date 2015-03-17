@@ -14,6 +14,7 @@ classdef Property < nix.NamedEntity
             % assign dynamic properties
             nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'mapping', 'rw');
+            nix.Dynamic.add_dyn_attr(obj, 'datatype', 'r');
         end;
     end
     
