@@ -235,6 +235,7 @@ void mexFunction(int            nlhs,
             .reg("deleteProperty", REMOVER(nix::Property, nix::Section, deleteProperty));
         methods->add("Section::properties", nixsection::properties);
         methods->add("Section::createProperty", nixsection::create_property);
+        methods->add("Section::createPropertyWithValue", nixsection::create_property_with_value);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)
