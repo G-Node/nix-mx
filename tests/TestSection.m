@@ -146,7 +146,10 @@ function [] = test_create_property_data_type( varargin )
     tmp = s.create_property_data_type('newProperty1', nix.DataType.Double);
     tmp = s.create_property_data_type('newProperty2', nix.DataType.Boolean);
     tmp = s.create_property_data_type('newProperty3', nix.DataType.String);
-    assert(size(s.allProperties, 1) == 3);
+    tmp = s.create_property_data_type('newProperty4', 'double');
+    tmp = s.create_property_data_type('newProperty5', 'bool');
+    tmp = s.create_property_data_type('newProperty6', 'string');
+    assert(size(s.allProperties, 1) == 6);
     assert(strcmp(s.allProperties{1}.name, 'newProperty1'));
 end
 

@@ -90,7 +90,7 @@ function [] = test_delete_data_array( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('arraytest', 'nixBlock');
     tmp = b.create_data_array('dataArrayTest1', 'nixDataArray', 'double', [1 2]);
-    tmp = b.create_data_array('dataArrayTest2', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array('dataArrayTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
     
     assert(size(b.dataArrays, 1) == 2);
     assert(b.delete_data_array(b.dataArrays{2}.id));

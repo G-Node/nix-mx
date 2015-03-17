@@ -63,13 +63,7 @@ void create_property_data_type(const extractor &input, infusor &output)
 {
     nix::Section currObj = input.entity<nix::Section>(1);
 
-    nix::DataType dtype;
-
-    switch (input.num<uint8_t>(3)) {
-    case 0: dtype = nix::DataType::Bool;
-    case 1: dtype = nix::DataType::String;
-    case 2: dtype = nix::DataType::Double;
-    }
+    nix::DataType dtype = nix::string_to_data_type(input.str(3));
 
     nix::Property p = currObj.createProperty(input.str(2), dtype);
     output.set(0, handle(p));
