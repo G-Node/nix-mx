@@ -59,7 +59,7 @@ void properties(const extractor &input, infusor &output)
     output.set(0, lst);
 }
 
-void create_property_data_type(const extractor &input, infusor &output)
+void create_property(const extractor &input, infusor &output)
 {
     nix::Section currObj = input.entity<nix::Section>(1);
 

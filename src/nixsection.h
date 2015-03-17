@@ -9,7 +9,7 @@ namespace nixsection {
 
     void properties(const extractor &input, infusor &output);
 
-    void create_property_data_type(const extractor &input, infusor &output);
+    void create_property(const extractor &input, infusor &output);
 
 } // namespace nixfile
 

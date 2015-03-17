@@ -11,7 +11,7 @@ end
 function [] = test_attrs( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('testSectionProperty', 'nixSection');
-    p = s.create_property_data_type('testProperty1', nix.DataType.String);
+    p = s.create_property('testProperty1', nix.DataType.String);
 
     assert(~isempty(p.id));
     assert(strcmpi(p.datatype, 'string'));

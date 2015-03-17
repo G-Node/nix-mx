@@ -143,12 +143,12 @@ function [] = test_create_property_data_type( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
 
-    tmp = s.create_property_data_type('newProperty1', nix.DataType.Double);
-    tmp = s.create_property_data_type('newProperty2', nix.DataType.Boolean);
-    tmp = s.create_property_data_type('newProperty3', nix.DataType.String);
-    tmp = s.create_property_data_type('newProperty4', 'double');
-    tmp = s.create_property_data_type('newProperty5', 'bool');
-    tmp = s.create_property_data_type('newProperty6', 'string');
+    tmp = s.create_property('newProperty1', nix.DataType.Double);
+    tmp = s.create_property('newProperty2', nix.DataType.Boolean);
+    tmp = s.create_property('newProperty3', nix.DataType.String);
+    tmp = s.create_property('newProperty4', 'double');
+    tmp = s.create_property('newProperty5', 'bool');
+    tmp = s.create_property('newProperty6', 'string');
     assert(size(s.allProperties, 1) == 6);
     assert(strcmp(s.allProperties{1}.name, 'newProperty1'));
 end
@@ -157,10 +157,10 @@ end
 function [] = test_delete_property( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
-    tmp = s.create_property_data_type('newProperty1', nix.DataType.Double);
-    tmp = s.create_property_data_type('newProperty2', nix.DataType.Boolean);
-    tmp = s.create_property_data_type('newProperty3', nix.DataType.String);
-    tmp = s.create_property_data_type('newProperty4', nix.DataType.Double);
+    tmp = s.create_property('newProperty1', nix.DataType.Double);
+    tmp = s.create_property('newProperty2', nix.DataType.Boolean);
+    tmp = s.create_property('newProperty3', nix.DataType.String);
+    tmp = s.create_property('newProperty4', nix.DataType.Double);
 
     assert(s.delete_property('newProperty4'));
     assert(s.delete_property(s.allProperties{3}.id));
