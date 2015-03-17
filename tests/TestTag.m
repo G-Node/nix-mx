@@ -19,6 +19,7 @@ function funcs = TestTag
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data;
     funcs{end+1} = @test_retrieve_feature_data;
+    funcs{end+1} = @test_attrs;
 end
 
 %% Test: Add sources by entity and id
@@ -288,4 +289,32 @@ end
 function [] = test_retrieve_feature_data( varargin )
     % TODO
     disp('Test Tag: retrieve feature ... TODO (proper testfile)');
+end
+
+function [] = test_attrs( varargin )
+%% Test: Access Attributes
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    t1 = b.create_tag('testTag', 'nixTag', [1, 2, 3, 4]);
+
+    assert(~isempty(t1.id));
+    assert(strcmp(t1.name, 'testTag'));
+    assert(strcmp(t1.type, 'nixTag'));
+
+    t1.type = 'nixTagTest';
+    assert(strcmp(t1.type, 'nixTagTest'));
+
+    assert(isempty(t1.definition));
+    t1.definition = 'definition';
+    assert(strcmp(t1.definition, 'definition'));
+
+    t1.definition = '';
+    assert(isempty(t1.definition));
+
+    assert(isempty(t1.units));
+    t1.units = {'ms', 'mV'};
+    assert(isequal(t1.units, {'ms', 'mV'}));
+
+    t1.units = {};
+    assert(isempty(t1.units));
 end

@@ -88,11 +88,44 @@ public:
     template<typename T>
     std::vector<T> vec(size_t pos) const {
         std::vector<T> res;
-        T *pr = mxGetPr(array[pos]);
+
+        T *pr;
+        void *voidp = mxGetData(array[pos]);
+        assert(sizeof(pr) == sizeof(voidp));
+        memcpy(&pr, &voidp, sizeof(pr));
 
         mwSize input_size = mxGetNumberOfElements(array[pos]);
         for (mwSize index = 0; index < input_size; index++)  {
             res.push_back(*pr++);
+        }
+
+        return res;
+    }
+
+    template<>
+    std::vector<std::string> vec(size_t pos) const {
+        /*
+        To convert to a string vector we actually expect a cell 
+        array of strings. It's a logical representation since matlab 
+        arrays require that elements have equal length.
+        */
+        std::vector<std::string> res;
+        const mxArray *el_ptr;
+
+        mwSize length = mxGetNumberOfElements(array[pos]);
+        mwIndex index;
+
+        for (index = 0; index < length; index++)  {
+            el_ptr = mxGetCell(array[pos], index);
+
+            if (!mxIsChar(el_ptr)) {
+                throw std::invalid_argument("All elements of a cell array should be of a string type");
+            }
+
+            char *tmp = mxArrayToString(el_ptr);
+            std::string the_string(tmp);
+            res.push_back(the_string);
+            mxFree(tmp);
         }
 
         return res;
