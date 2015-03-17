@@ -248,6 +248,7 @@ void mexFunction(int            nlhs,
             .reg("set_none_unit", SETTER(const boost::none_t, nix::Property, unit))
             .reg("set_mapping", SETTER(const std::string&, nix::Property, mapping))
             .reg("set_none_mapping", SETTER(const boost::none_t, nix::Property, mapping));
+        methods->add("Property::values", nixproperty::values);
 
         mexAtExit(on_exit);
     });
