@@ -95,6 +95,12 @@ classdef Section < nix.NamedEntity
             obj.propsCache.lastUpdate = 0;
         end;
 
+        function p = create_property_with_value(obj, name, val)
+            p = nix.Property(nix_mx('Section::createPropertyWithValue', ...
+                obj.nix_handle, name, val));
+            obj.propsCache.lastUpdate = 0;
+        end;
+
         function delCheck = delete_property(obj, del)
             if(isstruct(del) && isfield(del, 'id'))
                 delID = del.id;
