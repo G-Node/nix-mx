@@ -28,7 +28,7 @@ namespace nixblock {
 
         std::string name = input.str(2);
         std::string type = input.str(3);
-        nix::DataType dtype = nix::DataType::Double; // FIXME nix::string_to_data_type(input.str(3));
+        nix::DataType dtype = nix::string_to_data_type(input.str(4));
         nix::NDSize size = input.ndsize(5);
 
         nix::DataArray dt = block.createDataArray(name, type, dtype, size);

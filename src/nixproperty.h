@@ -7,6 +7,8 @@ namespace nixproperty {
 
     mxArray *describe(const nix::Property &prop);
 
+    void values(const extractor &input, infusor &output);
+
 } // namespace nixproperty
 
 #endif

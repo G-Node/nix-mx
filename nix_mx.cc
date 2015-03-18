@@ -231,15 +231,24 @@ void mexFunction(int            nlhs,
             .reg("set_none_mapping", SETTER(const boost::none_t, nix::Section, mapping))
             .reg("createSection", &nix::Section::createSection)
             .reg("deleteSection", REMOVER(nix::Section, nix::Section, deleteSection))
-            .reg("openProperty", GETBYSTR(nix::Property, nix::Section, getProperty));
+            .reg("openProperty", GETBYSTR(nix::Property, nix::Section, getProperty))
+            .reg("deleteProperty", REMOVER(nix::Property, nix::Section, deleteProperty));
         methods->add("Section::properties", nixsection::properties);
+        methods->add("Section::createProperty", nixsection::create_property);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)
             .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data));
 
         classdef<nix::Property>("Property", methods)
-            .desc(&nixproperty::describe);
+            .desc(&nixproperty::describe)
+            .reg("set_definition", SETTER(const std::string&, nix::Property, definition))
+            .reg("set_none_definition", SETTER(const boost::none_t, nix::Property, definition))
+            .reg("set_unit", SETTER(const std::string&, nix::Property, unit))
+            .reg("set_none_unit", SETTER(const boost::none_t, nix::Property, unit))
+            .reg("set_mapping", SETTER(const std::string&, nix::Property, mapping))
+            .reg("set_none_mapping", SETTER(const boost::none_t, nix::Property, mapping));
+        methods->add("Property::values", nixproperty::values);
 
         mexAtExit(on_exit);
     });

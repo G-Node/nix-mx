@@ -27,9 +27,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 'Block::openDataArray', id_or_name, @nix.DataArray);
         end;
         
-        function da = create_data_array(obj, name, nixtype, dtype, shape)
+        %-- As "datatype" provide one of the nix.DataTypes. Alternatively
+        %-- a string stating one of the datatypes supported by nix can be provided.
+        function da = create_data_array(obj, name, nixtype, datatype, shape)
             handle = nix_mx('Block::createDataArray', obj.nix_handle, ...
-                name, nixtype, dtype, shape);
+                name, nixtype, datatype, shape);
             da = nix.DataArray(handle);
             obj.dataArraysCache.lastUpdate = 0;
         end

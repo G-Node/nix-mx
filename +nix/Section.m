@@ -87,6 +87,26 @@ classdef Section < nix.NamedEntity
         % Property methods
         % ----------------
 
+        %-- As "datatype" provide one of the nix.DataTypes. Alternatively
+        %-- a string stating one of the datatypes supported by nix can be provided.
+        function p = create_property(obj, name, datatype)
+            p = nix.Property(nix_mx('Section::createProperty', ...
+                obj.nix_handle, name, datatype));
+            obj.propsCache.lastUpdate = 0;
+        end;
+
+        function delCheck = delete_property(obj, del)
+            if(isstruct(del) && isfield(del, 'id'))
+                delID = del.id;
+            elseif (strcmp(class(del), 'nix.Property'))
+                delID = del.id;
+            else
+                delID = del;
+            end;
+            delCheck = nix_mx('Section::deleteProperty', obj.nix_handle, delID);
+            obj.propsCache.lastUpdate = 0;
+        end;
+
         function retObj = open_property(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'Section::openProperty', id_or_name, @nix.Property);

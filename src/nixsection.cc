@@ -59,4 +59,14 @@ void properties(const extractor &input, infusor &output)
     output.set(0, lst);
 }
 
+void create_property(const extractor &input, infusor &output)
+{
+    nix::Section currObj = input.entity<nix::Section>(1);
+
+    nix::DataType dtype = nix::string_to_data_type(input.str(3));
+
+    nix::Property p = currObj.createProperty(input.str(2), dtype);
+    output.set(0, handle(p));
+}
+
 } // namespace nixsection

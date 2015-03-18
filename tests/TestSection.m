@@ -11,6 +11,8 @@ function funcs = testSection
     funcs{end+1} = @test_has_section;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_properties;
+    funcs{end+1} = @test_create_property_data_type;
+    funcs{end+1} = @test_delete_property;
     funcs{end+1} = @test_open_property;
     funcs{end+1} = @test_link;
 end
@@ -136,6 +138,39 @@ function [] = test_properties( varargin )
     assert(isempty(f.sections{3}.allProperties));
 end
 
+%% Test: Create property by data type
+function [] = test_create_property_data_type( varargin )
+    f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
+    s = f.createSection('mainSection', 'nixSection');
+
+    tmp = s.create_property('newProperty1', nix.DataType.Double);
+    tmp = s.create_property('newProperty2', nix.DataType.Boolean);
+    tmp = s.create_property('newProperty3', nix.DataType.String);
+    tmp = s.create_property('newProperty4', 'double');
+    tmp = s.create_property('newProperty5', 'bool');
+    tmp = s.create_property('newProperty6', 'string');
+    assert(size(s.allProperties, 1) == 6);
+    assert(strcmp(s.allProperties{1}.name, 'newProperty1'));
+end
+
+%% Test: Delete property by entity, propertyStruct, ID and name
+function [] = test_delete_property( varargin )
+    f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
+    s = f.createSection('mainSection', 'nixSection');
+    tmp = s.create_property('newProperty1', nix.DataType.Double);
+    tmp = s.create_property('newProperty2', nix.DataType.Boolean);
+    tmp = s.create_property('newProperty3', nix.DataType.String);
+    tmp = s.create_property('newProperty4', nix.DataType.Double);
+
+    assert(s.delete_property('newProperty4'));
+    assert(s.delete_property(s.allProperties{3}.id));
+    delProp = s.open_property(s.allProperties{2}.id);
+    assert(s.delete_property(delProp));
+    assert(s.delete_property(s.allProperties{1}));
+    
+    assert(~s.delete_property('I do not exist'));
+end
+
 %% Test: Open property by ID and name
 function [] = test_open_property( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
@@ -145,7 +180,7 @@ function [] = test_open_property( varargin )
     assert(~isempty(trial.open_property(trial.allProperties{1}.name)));
 end
 
-%%Test: set, open and remove section link
+%% Test: set, open and remove section link
 function [] = test_link( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     mainSec = f.createSection('mainSection', 'nixSection');
