@@ -20,10 +20,4 @@ nix::Value mx_array_to_value(const mxArray *arr);
 
 mxArray *nmCreateScalar(uint32_t val);
 
-mxArray *dim_to_struct(nix::SetDimension dim);
-
-mxArray *dim_to_struct(nix::SampledDimension dim);
-
-mxArray *dim_to_struct(nix::RangeDimension dim);
-
 #endif

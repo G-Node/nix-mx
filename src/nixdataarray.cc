@@ -15,7 +15,7 @@ namespace nixdataarray {
     mxArray *describe(const nix::DataArray &da)
     {
         struct_builder sb({ 1 }, { "id", "type", "name", "definition", "label",
-            "shape", "unit", "dimensions", "polynom_coefficients" });
+            "shape", "unit", "polynom_coefficients" });
 
         sb.set(da.id());
         sb.set(da.type());
@@ -24,31 +24,6 @@ namespace nixdataarray {
         sb.set(da.label());
         sb.set(da.dataExtent());
         sb.set(da.unit());
-
-        size_t ndims = da.dimensionCount();
-
-        mxArray *dims = mxCreateCellMatrix(1, ndims);
-        std::vector<nix::Dimension> da_dims = da.dimensions();
-
-        for (size_t i = 0; i < ndims; i++) {
-            mxArray *ca;
-
-            switch (da_dims[i].dimensionType()) {
-            case nix::DimensionType::Set:
-                ca = dim_to_struct(da_dims[i].asSetDimension());
-                break;
-            case nix::DimensionType::Range:
-                ca = dim_to_struct(da_dims[i].asRangeDimension());
-                break;
-            case nix::DimensionType::Sample:
-                ca = dim_to_struct(da_dims[i].asSampledDimension());
-                break;
-            }
-
-            mxSetCell(dims, i, ca);
-        }
-
-        sb.set(dims);
         sb.set(da.polynomCoefficients());
 
         return sb.array();

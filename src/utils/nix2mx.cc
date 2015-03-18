@@ -25,42 +25,6 @@ mxArray *nmCreateScalar(uint32_t val) {
     return arr;
 }
 
-mxArray *dim_to_struct(nix::SetDimension dim) {
-
-    struct_builder sb({ 1 }, { "type", "type_id", "labels" });
-
-    sb.set("set");
-    sb.set(1);
-    sb.set(dim.labels());
-
-    return sb.array();
-}
-
-mxArray *dim_to_struct(nix::SampledDimension dim) {
-
-    struct_builder sb({ 1 }, { "type", "type_id", "interval", "label", "unit" });
-
-    sb.set("sampled");
-    sb.set(2);
-    sb.set(dim.samplingInterval());
-    sb.set(dim.label());
-    sb.set(dim.unit());
-
-    return sb.array();
-}
-
-mxArray *dim_to_struct(nix::RangeDimension dim) {
-
-    struct_builder sb({ 1 }, { "type", "type_id", "ticks", "unit" });
-
-    sb.set("range");
-    sb.set(3);
-    sb.set(dim.ticks());
-    sb.set(dim.unit());
-
-    return sb.array();
-}
-
 nix::NDSize mx_array_to_ndsize(const mxArray *arr) {
 
     size_t m = mxGetM(arr);
