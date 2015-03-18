@@ -70,13 +70,13 @@ public:
         return the_string;
     }
 
-	template<typename T>
-	T num(size_t pos) const {
-		nix::DataType dtype = nix::to_data_type<T>::value;
-		check_arg_type(pos, dtype);
+    template<typename T>
+    T num(size_t pos) const {
+        nix::DataType dtype = nix::to_data_type<T>::value;
+        check_arg_type(pos, dtype);
 
         return mx_array_to_num<T>(array[pos]);
-	}
+    }
 
     template<typename T>
     std::vector<T> vec(size_t pos) const {
