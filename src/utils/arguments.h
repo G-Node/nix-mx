@@ -62,28 +62,22 @@ public:
     extractor(const mxArray **arr, int n) : argument_helper(arr, n) { }
 
     std::string str(size_t pos) const {
-		check_arg_type(pos, nix::DataType::String);
-
-        char *tmp = mxArrayToString(array[pos]);
-        std::string the_string(tmp);
-        mxFree(tmp);
-        return the_string;
+        return mx_array_to_str(array[pos]);
     }
 
-	template<typename T>
-	T num(size_t pos) const {
-		nix::DataType dtype = nix::to_data_type<T>::value;
-		check_arg_type(pos, dtype);
-		
-		if (mxGetNumberOfElements(array[pos]) < 1) {
-			throw std::runtime_error("array empty");
-		}
+    template<typename T>
+    T num(size_t pos) const {
+        check_arg_type(pos, nix::to_data_type<T>::value);
 
-		const void *data = mxGetData(array[pos]);
-		T res;
-		memcpy(&res, data, sizeof(T));
-		return res;
-	}
+        if (mxGetNumberOfElements(array[pos]) < 1) {
+            throw std::runtime_error("array empty");
+        }
+
+        const void *data = mxGetData(array[pos]);
+        T res;
+        memcpy(&res, data, sizeof(T));
+        return res;
+    }
 
     template<typename T>
     std::vector<T> vec(size_t pos) const {
@@ -129,6 +123,21 @@ public:
         }
 
         return res;
+    }
+
+    std::vector<nix::Value> vec(size_t pos) const {
+        mwSize size = mxGetNumberOfElements(array[pos]);
+
+        mwIndex index;
+        std::vector<nix::Value> vals;
+        const mxArray *cell_element_ptr;
+
+        for (index = 0; index < size; index++)  {
+            cell_element_ptr = mxGetCell(array[pos], index);
+            vals.push_back(mx_array_to_value(cell_element_ptr));
+        }
+
+        return vals;
     }
 
     nix::NDSize ndsize(size_t pos) const {
