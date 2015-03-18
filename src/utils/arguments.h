@@ -74,15 +74,8 @@ public:
 	T num(size_t pos) const {
 		nix::DataType dtype = nix::to_data_type<T>::value;
 		check_arg_type(pos, dtype);
-		
-		if (mxGetNumberOfElements(array[pos]) < 1) {
-			throw std::runtime_error("array empty");
-		}
 
-		const void *data = mxGetData(array[pos]);
-		T res;
-		memcpy(&res, data, sizeof(T));
-		return res;
+        return mx_array_to_num<T>(array[pos]);
 	}
 
     template<typename T>
@@ -129,6 +122,21 @@ public:
         }
 
         return res;
+    }
+
+    std::vector<nix::Value> vec(size_t pos) const {
+        mwSize size = mxGetNumberOfElements(array[pos]);
+
+        mwIndex index;
+        std::vector<nix::Value> vals;
+        const mxArray *cell_element_ptr;
+
+        for (index = 0; index < size; index++)  {
+            cell_element_ptr = mxGetCell(array[pos], index);
+            vals.push_back(mx_array_to_value(cell_element_ptr));
+        }
+
+        return vals;
     }
 
     nix::NDSize ndsize(size_t pos) const {

@@ -9,6 +9,7 @@
 #include "handle.h"
 #include "arguments.h"
 #include "struct.h"
+#include "datatypes.h"
 
 
 mxArray *nmCreateScalar(uint32_t val) {
@@ -70,5 +71,49 @@ nix::NDSize mx_array_to_ndsize(const mxArray *arr) {
     }
 
     return size;
+}
+
+template<typename T>
+T mx_array_to_num(const mxArray *arr) {
+    nix::DataType dtype = nix::to_data_type<T>::value;
+    
+    if (dtype_mex2nix(arr) != dtype) {
+        throw std::invalid_argument("wrong type");
+    }
+
+    if (mxGetNumberOfElements(arr) < 1) {
+        throw std::runtime_error("array empty");
+    }
+
+    const void *data = mxGetData(arr);
+    T res;
+    memcpy(&res, data, sizeof(T));
+    return res;
+}
+
+nix::Value mx_array_to_value(const mxArray *arr) {
+    nix::Value val;
+
+    switch (mxGetClassID(arr)) {
+    case mxLOGICAL_CLASS: val.set(mx_array_to_num<bool>(arr)); break;
+
+    case mxCHAR_CLASS: val.set(mx_array_to_num<std::string>(arr)); break;
+
+    case mxDOUBLE_CLASS: val.set(mx_array_to_num<double>(arr)); break;
+    case mxSINGLE_CLASS: val.set(mx_array_to_num<float>(arr)); break;
+
+    case mxUINT8_CLASS:  val.set(mx_array_to_num<uint8_t>(arr)); break;
+    case mxINT8_CLASS:   val.set(mx_array_to_num<int8_t>(arr)); break;
+    case mxUINT16_CLASS: val.set(mx_array_to_num<uint16_t>(arr)); break;
+    case mxINT16_CLASS:  val.set(mx_array_to_num<int16_t>(arr)); break;
+    case mxUINT32_CLASS: val.set(mx_array_to_num<uint32_t>(arr)); break;
+    case mxINT32_CLASS:  val.set(mx_array_to_num<int32_t>(arr)); break;
+    case mxUINT64_CLASS: val.set(mx_array_to_num<uint64_t>(arr)); break;
+    case mxINT64_CLASS:  val.set(mx_array_to_num<int64_t>(arr)); break;
+
+    default: throw std::invalid_argument("Element type is not recognized");
+    }
+
+    return val;
 }
 
