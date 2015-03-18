@@ -30,9 +30,6 @@ classdef Property < nix.NamedEntity
         end
 
         function [] = set.values(obj, val)
-            % TODO: the properties cache in the parent nix.Section
-            % cannot be easily invalidated and will therefore show stale
-            % values at the moment.
             nix_mx('Property::updateValues', obj.nix_handle, val);
             obj.valuesCache.lastUpdate = 0;
 

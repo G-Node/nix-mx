@@ -130,9 +130,6 @@ function [] = test_properties( varargin )
     
     p1 = trial.allProperties{1};
     assert(strcmp(p1.name, 'ExperimentalCondition'));
-    assert(p1.values{1} == 1);
-    
-    assert(trial.allPropertiesMap('ExperimentalCondition') == p1.values{1});
     
     disp(f.sections{3}.allProperties);
     
@@ -161,21 +158,21 @@ function [] = test_create_property_with_value( varargin )
 
     tmp = s.create_property_with_value('doubleProperty', {5, 6, 7, 8});
     assert(strcmp(s.allProperties{1}.name, 'doubleProperty'));
-    assert(s.allProperties{1}.values{1} == 5);
-    assert(size(s.allProperties{1}.values, 2) == 4);
+    assert(s.open_property(s.allProperties{1}.id).values{1}.value == 5);
+    assert(size(s.open_property(s.allProperties{1}.id).values, 1) == 4);
     assert(strcmpi(tmp.datatype,'double'));
 
     tmp = s.create_property_with_value('stringProperty', {'this', 'has', 'strings'});
     assert(strcmp(s.allProperties{2}.name, 'stringProperty'));
-    assert(strcmp(s.allProperties{2}.values{1}, 'this'));
-    assert(size(s.allProperties{2}.values, 2) == 3);
+    assert(strcmp(s.open_property(s.allProperties{2}.id).values{1}.value, 'this'));
+    assert(size(s.open_property(s.allProperties{2}.id).values, 1) == 3);
     assert(strcmpi(tmp.datatype, 'string'));
 
     tmp = s.create_property_with_value('booleanProperty', {true, false, true});
     assert(strcmp(s.allProperties{3}.name, 'booleanProperty'));
-    assert(s.allProperties{3}.values{1});
-    assert(~s.allProperties{3}.values{2});
-    assert(size(s.allProperties{3}.values, 2) == 3);
+    assert(s.open_property(s.allProperties{3}.id).values{1}.value);
+    assert(~s.open_property(s.allProperties{3}.id).values{2}.value);
+    assert(size(s.open_property(s.allProperties{3}.id).values, 1) == 3);
     assert(strcmpi(tmp.datatype, 'bool'));
 end
 
