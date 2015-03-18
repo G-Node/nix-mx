@@ -82,9 +82,7 @@ nix::NDSize mx_array_to_ndsize(const mxArray *arr) {
 std::string mx_array_to_str(const mxArray *arr) {
     check_arg_type(arr, nix::DataType::String);
 
-    char *tmp = mxArrayToString(arr);
-    std::string the_string(tmp);
-    mxFree(tmp);
+    std::string the_string = mxArrayToString(arr);
     return the_string;
 }
 
