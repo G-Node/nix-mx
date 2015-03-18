@@ -38,12 +38,9 @@ void properties(const extractor &input, infusor &output)
     for (size_t i = 0; i < properties.size(); i++) {
 
         nix::Property pr = properties[i];
-        std::vector<nix::Value> values = pr.values();
-
-        mxArray *mx_values = make_mx_array(values);
 
         struct_builder sb({ 1 }, {
-            "name", "id", "definition", "mapping", "unit", "values"
+            "name", "id", "definition", "mapping", "unit"
         });
 
         sb.set(pr.name());
@@ -51,7 +48,6 @@ void properties(const extractor &input, infusor &output)
         sb.set(pr.definition());
         sb.set(pr.mapping());
         sb.set(pr.unit());
-        sb.set(mx_values);
 
         mxSetCell(lst, i, sb.array());
     }
@@ -66,6 +62,15 @@ void create_property(const extractor &input, infusor &output)
     nix::DataType dtype = nix::string_to_data_type(input.str(3));
 
     nix::Property p = currObj.createProperty(input.str(2), dtype);
+    output.set(0, handle(p));
+}
+
+void create_property_with_value(const extractor &input, infusor &output)
+{
+    nix::Section currObj = input.entity<nix::Section>(1);
+    std::vector<nix::Value> currVec = input.extractFromCells(3);
+
+    nix::Property p = currObj.createProperty(input.str(2), currVec);
     output.set(0, handle(p));
 }
 

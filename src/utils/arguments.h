@@ -193,6 +193,172 @@ public:
         return mxGetPr(array[pos]);
     }
 
+    std::vector<nix::Value> extractFromCells(size_t pos) const {
+
+        std::vector<nix::Value> vals;
+
+        mwSize total_num_of_cells = mxGetNumberOfElements(array[pos]);
+        for (mwIndex index = 0; index<total_num_of_cells; index++)  {
+            const mxArray *cell_element_ptr = mxGetCell(array[pos], index);
+
+            nix::Value currVal;
+
+            switch (mxGetClassID(cell_element_ptr)) {
+                case mxLOGICAL_CLASS:
+                {
+                    const mxLogical *curr = mxGetLogicals(cell_element_ptr);
+                    currVal.set(curr[0]); break; }
+                case mxDOUBLE_CLASS:
+                {
+                    double curr;
+                    const void *data = mxGetData(cell_element_ptr);
+                    memcpy(&curr, data, sizeof(double));
+                    currVal.set(curr); break; }
+                case mxUINT32_CLASS:
+                {
+                    uint32_t curr;
+                    const void *data = mxGetData(cell_element_ptr);
+                    memcpy(&curr, data, sizeof(uint32_t));
+                    currVal.set(curr); break; }
+                case mxINT32_CLASS:
+                {
+                    int32_t curr;
+                    const void *data = mxGetData(cell_element_ptr);
+                    memcpy(&curr, data, sizeof(int32_t));
+                    currVal.set(curr); break; }
+                case mxUINT64_CLASS:
+                {
+                    uint64_t curr;
+                    const void *data = mxGetData(cell_element_ptr);
+                    memcpy(&curr, data, sizeof(uint64_t));
+                    currVal.set(curr); break; }
+                case mxINT64_CLASS:
+                {
+                    int64_t curr;
+                    const void *data = mxGetData(cell_element_ptr);
+                    memcpy(&curr, data, sizeof(int64_t));
+                    currVal.set(curr); break; }
+
+                case mxCHAR_CLASS:
+                {
+                    char *tmp = mxArrayToString(cell_element_ptr);
+                    std::string curr_string = tmp;
+                    currVal.set(curr_string);
+                    mxFree(tmp);
+                    break;
+                }
+                case mxUNKNOWN_CLASS:
+                { mexWarnMsgTxt("Unknown class."); break; }
+                default:
+                { mexWarnMsgTxt("Unsupported class."); break; }
+            }
+            vals.push_back(currVal);
+        }
+        return vals;
+    }
+
+    std::vector<nix::Value> extractFromStruct(size_t pos) const {
+
+        // Note: nix::Value is not able to its attributes "uncertainty"
+        // "checksum", "filename", "encoder" or "reference" at the moment.
+        // The setters are implemented and the attribute values are
+        // correctly set to the nix::Value entity, but they will not
+        // actually be written to the nix file. Once this issue has been
+        // fixed on the nix side, the current implementation should work
+        // fine.
+
+        std::vector<nix::Value> vals;
+
+        mwSize total_num_of_cells = mxGetNumberOfElements(array[pos]);
+        for (mwIndex index = 0; index<total_num_of_cells; index++)  {
+            const mxArray *cell_element_ptr = mxGetCell(array[pos], index);
+
+            if (mxGetClassID(cell_element_ptr) == mxSTRUCT_CLASS){
+
+                nix::Value currVal;
+
+                mwSize total_num_of_elements = mxGetNumberOfElements(cell_element_ptr);
+                int number_of_fields = mxGetNumberOfFields(cell_element_ptr);
+
+                for (mwIndex struct_idx = 0; struct_idx < total_num_of_elements; struct_idx++)  {
+                    for (int field_index = 0; field_index < number_of_fields; field_index++)  {
+                        const char  *field_name = mxGetFieldNameByNumber(cell_element_ptr, field_index);
+                        const mxArray *field_array_ptr = mxGetFieldByNumber(cell_element_ptr, struct_idx, field_index);
+
+                        if (field_array_ptr != nullptr) {
+                            if (strcmp(field_name, "value") == 0){
+                                if (mxGetClassID(field_array_ptr) == mxDOUBLE_CLASS){
+                                    double curr;
+                                    const void *data = mxGetData(field_array_ptr);
+                                    memcpy(&curr, data, sizeof(double));
+                                    currVal.set(curr);
+                                }
+                                else if (mxGetClassID(field_array_ptr) == mxLOGICAL_CLASS){
+                                    const mxLogical *curr = mxGetLogicals(field_array_ptr);
+                                    currVal.set(curr[0]);
+                                }
+                                else if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
+                                    char *tmp = mxArrayToString(field_array_ptr);
+                                    std::string curr_string = tmp;
+                                    currVal.set(curr_string);
+                                    mxFree(tmp);
+                                }
+                                else { mexPrintf("Unsupported value data type\n"); }
+
+                            }
+                            else if (strcmp(field_name, "uncertainty") == 0){
+                                if (mxGetClassID(field_array_ptr) == mxDOUBLE_CLASS){
+                                    double curr;
+                                    const void *data = mxGetData(field_array_ptr);
+                                    memcpy(&curr, data, sizeof(double));
+                                    currVal.uncertainty = curr;
+                                }
+                            }
+                            else if (strcmp(field_name, "checksum") == 0){
+                                if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
+                                    char *tmp = mxArrayToString(field_array_ptr);
+                                    std::string curr_string = tmp;
+                                    currVal.checksum = curr_string;
+                                    mxFree(tmp);
+                                }
+                            }
+                            else if (strcmp(field_name, "encoder") == 0){
+                                if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
+                                    char *tmp = mxArrayToString(field_array_ptr);
+                                    std::string curr_string = tmp;
+                                    currVal.encoder = curr_string;
+                                    mxFree(tmp);
+                                }
+                            }
+                            else if (strcmp(field_name, "filename") == 0){
+                                if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
+                                    char *tmp = mxArrayToString(field_array_ptr);
+                                    std::string curr_string = tmp;
+                                    currVal.filename = curr_string;
+                                    mxFree(tmp);
+                                }
+                            }
+                            else if (strcmp(field_name, "reference") == 0){
+                                if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
+                                    char *tmp = mxArrayToString(field_array_ptr);
+                                    std::string curr_string(tmp);
+                                    currVal.reference = tmp;
+                                    mxFree(tmp);
+                                }
+                            }
+                        }
+                    }
+                }
+                vals.push_back(currVal);
+            }
+            else
+            {
+                mexWarnMsgTxt("Unsupported value wrapper data type");
+            }
+        }
+        return vals;
+    }
+
 private:
 };
 

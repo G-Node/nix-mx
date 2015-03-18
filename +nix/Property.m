@@ -28,6 +28,15 @@ classdef Property < nix.NamedEntity
             [obj.valuesCache, retVals] = nix.Utils.fetchPropList(obj.updatedAt, ...
                 'Property::values', obj.nix_handle, obj.valuesCache);
         end
+
+        function [] = set.values(obj, val)
+            nix_mx('Property::updateValues', obj.nix_handle, val);
+            obj.valuesCache.lastUpdate = 0;
+
+            dispStr = 'Note: nix only supports updating the actual value at the moment.';
+            dispStr = [dispStr, char(10), 'Attributes like uncertainty or checksum cannot be set at the moment.'];
+            disp(dispStr);
+        end
     end
     
 end

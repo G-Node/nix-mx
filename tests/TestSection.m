@@ -11,7 +11,8 @@ function funcs = testSection
     funcs{end+1} = @test_has_section;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_properties;
-    funcs{end+1} = @test_create_property_data_type;
+    funcs{end+1} = @test_create_property;
+    funcs{end+1} = @test_create_property_with_value;
     funcs{end+1} = @test_delete_property;
     funcs{end+1} = @test_open_property;
     funcs{end+1} = @test_link;
@@ -129,9 +130,6 @@ function [] = test_properties( varargin )
     
     p1 = trial.allProperties{1};
     assert(strcmp(p1.name, 'ExperimentalCondition'));
-    assert(p1.values{1} == 1);
-    
-    assert(trial.allPropertiesMap('ExperimentalCondition') == p1.values{1});
     
     disp(f.sections{3}.allProperties);
     
@@ -139,7 +137,7 @@ function [] = test_properties( varargin )
 end
 
 %% Test: Create property by data type
-function [] = test_create_property_data_type( varargin )
+function [] = test_create_property( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
 
@@ -151,6 +149,31 @@ function [] = test_create_property_data_type( varargin )
     tmp = s.create_property('newProperty6', 'string');
     assert(size(s.allProperties, 1) == 6);
     assert(strcmp(s.allProperties{1}.name, 'newProperty1'));
+end
+
+%% Test: Create property with value
+function [] = test_create_property_with_value( varargin )
+    f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
+    s = f.createSection('mainSection', 'nixSection');
+
+    tmp = s.create_property_with_value('doubleProperty', {5, 6, 7, 8});
+    assert(strcmp(s.allProperties{1}.name, 'doubleProperty'));
+    assert(s.open_property(s.allProperties{1}.id).values{1}.value == 5);
+    assert(size(s.open_property(s.allProperties{1}.id).values, 1) == 4);
+    assert(strcmpi(tmp.datatype,'double'));
+
+    tmp = s.create_property_with_value('stringProperty', {'this', 'has', 'strings'});
+    assert(strcmp(s.allProperties{2}.name, 'stringProperty'));
+    assert(strcmp(s.open_property(s.allProperties{2}.id).values{1}.value, 'this'));
+    assert(size(s.open_property(s.allProperties{2}.id).values, 1) == 3);
+    assert(strcmpi(tmp.datatype, 'string'));
+
+    tmp = s.create_property_with_value('booleanProperty', {true, false, true});
+    assert(strcmp(s.allProperties{3}.name, 'booleanProperty'));
+    assert(s.open_property(s.allProperties{3}.id).values{1}.value);
+    assert(~s.open_property(s.allProperties{3}.id).values{2}.value);
+    assert(size(s.open_property(s.allProperties{3}.id).values, 1) == 3);
+    assert(strcmpi(tmp.datatype, 'bool'));
 end
 
 %% Test: Delete property by entity, propertyStruct, ID and name
