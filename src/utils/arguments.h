@@ -193,6 +193,74 @@ public:
         return mxGetPr(array[pos]);
     }
 
+    std::vector<nix::Value> extractFromCells(size_t pos) const {
+
+        mwSize total_num_of_cells;
+        mwIndex index;
+        const mxArray *cell_element_ptr;
+
+        std::vector<nix::Value> vals;
+
+        total_num_of_cells = mxGetNumberOfElements(array[pos]);
+        for (index = 0; index<total_num_of_cells; index++)  {
+            cell_element_ptr = mxGetCell(array[pos], index);
+
+            nix::Value currVal;
+
+            switch (mxGetClassID(cell_element_ptr)) {
+                case mxLOGICAL_CLASS:
+                {
+                    const mxLogical *curr = mxGetLogicals(cell_element_ptr);
+                    currVal.set(curr[0]); break; }
+                case mxDOUBLE_CLASS:
+                {
+                    double curr;
+                    const void *data = mxGetData(cell_element_ptr);
+                    memcpy(&curr, data, sizeof(double));
+                    currVal.set(curr); break; }
+                case mxUINT32_CLASS:
+                {
+                    uint32_t curr;
+                    const void *data = mxGetData(cell_element_ptr);
+                    memcpy(&curr, data, sizeof(uint32_t));
+                    currVal.set(curr); break; }
+                case mxINT32_CLASS:
+                {
+                    int32_t curr;
+                    const void *data = mxGetData(cell_element_ptr);
+                    memcpy(&curr, data, sizeof(int32_t));
+                    currVal.set(curr); break; }
+                case mxUINT64_CLASS:
+                {
+                    uint64_t curr;
+                    const void *data = mxGetData(cell_element_ptr);
+                    memcpy(&curr, data, sizeof(uint64_t));
+                    currVal.set(curr); break; }
+                case mxINT64_CLASS:
+                {
+                    int64_t curr;
+                    const void *data = mxGetData(cell_element_ptr);
+                    memcpy(&curr, data, sizeof(int64_t));
+                    currVal.set(curr); break; }
+
+                case mxCHAR_CLASS:
+                {
+                    char *tmp = mxArrayToString(cell_element_ptr);
+                    std::string curr_string(tmp);
+                    currVal.set(curr_string);
+                    mxFree(tmp);
+                    break;
+                }
+                case mxUNKNOWN_CLASS:
+                { mexWarnMsgTxt("Unknown class."); break; }
+                default:
+                { mexWarnMsgTxt("Unsupported class."); break; }
+            }
+            vals.push_back(currVal);
+        }
+        return vals;
+    }
+
 private:
 };
 
