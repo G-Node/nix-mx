@@ -28,6 +28,11 @@ classdef Property < nix.NamedEntity
             [obj.valuesCache, retVals] = nix.Utils.fetchPropList(obj.updatedAt, ...
                 'Property::values', obj.nix_handle, obj.valuesCache);
         end
+        
+        function [] = set.values(obj, val)
+            nix_mx('Property::updateValues', obj.nix_handle, val);
+            obj.valuesCache.lastUpdate = 0;
+        end
     end
     
 end

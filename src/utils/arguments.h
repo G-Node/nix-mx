@@ -261,6 +261,154 @@ public:
         return vals;
     }
 
+    std::vector<nix::Value> extractFromStruct(size_t pos) const {
+
+        mwSize total_num_of_cells;
+        mwIndex index;
+        const mxArray *cell_element_ptr;
+
+        std::vector<nix::Value> vals;
+
+        total_num_of_cells = mxGetNumberOfElements(array[pos]);
+        for (index = 0; index<total_num_of_cells; index++)  {
+            cell_element_ptr = mxGetCell(array[pos], index);
+
+            if (mxGetClassID(cell_element_ptr) == mxSTRUCT_CLASS){
+
+                nix::Value currVal;
+
+                mwSize total_num_of_elements;
+                mwIndex struct_idx;
+                int number_of_fields;
+                int field_index;
+
+                total_num_of_elements = mxGetNumberOfElements(cell_element_ptr);
+                number_of_fields = mxGetNumberOfFields(cell_element_ptr);
+
+                mexPrintf("numEl: %d, numField: %d\n", total_num_of_elements, number_of_fields);
+
+                for (struct_idx = 0; struct_idx < total_num_of_elements; struct_idx++)  {
+                    for (field_index = 0; field_index < number_of_fields; field_index++)  {
+                        const char  *field_name;
+                        const mxArray *field_array_ptr;
+                        field_name = mxGetFieldNameByNumber(cell_element_ptr, field_index);
+                        field_array_ptr = mxGetFieldByNumber(cell_element_ptr, struct_idx, field_index);
+                        mexPrintf("\n.%s, %d, %d\n", field_name, struct_idx, field_index);
+                        if (field_array_ptr == NULL) {
+                            mexPrintf("\tEmpty Field\n");
+                        }
+                        else
+                        {
+                            if (strcmp(field_name, "value") == 0){
+                                mexPrintf("class: %d\n", mxGetClassID(field_array_ptr));
+                                mexPrintf("1 field: %s, value: ", field_name);
+                                if (mxGetClassID(field_array_ptr) == mxDOUBLE_CLASS){
+                                    mexPrintf("double\n");
+                                    double curr;
+                                    const void *data = mxGetData(field_array_ptr);
+                                    memcpy(&curr, data, sizeof(double));
+                                    currVal.set(curr);
+                                    mexPrintf("%d\n", currVal.get<double>());
+                                }
+                                else if (mxGetClassID(field_array_ptr) == mxLOGICAL_CLASS){
+                                    mexPrintf("logical\n");
+                                    const mxLogical *curr = mxGetLogicals(field_array_ptr);
+                                    currVal.set(curr[0]);
+                                }
+                                else if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
+                                    mexPrintf("string\n");
+                                    char *tmp = mxArrayToString(field_array_ptr);
+                                    if (*tmp != NULL)
+                                    {
+                                        std::string curr_string(tmp);
+                                        currVal.set(curr_string);
+                                    }
+                                    mxFree(tmp);
+                                    mexPrintf("%s\n", currVal.get<std::string>());
+                                }
+                                else{
+                                    mexPrintf("sometyhing else\n");
+                                }
+
+                            }
+                            else if (strcmp(field_name, "uncertainty") == 0){
+                                mexPrintf("2 field: %s, value: ", field_name);
+                                if (mxGetClassID(field_array_ptr) == mxDOUBLE_CLASS){
+                                    double curr;
+                                    const void *data = mxGetData(field_array_ptr);
+                                    memcpy(&curr, data, sizeof(double));
+                                    currVal.uncertainty = curr;
+                                    mexPrintf("%d, %d\n", curr, currVal.uncertainty);
+                                }
+                            }
+                            else if (strcmp(field_name, "checksum") == 0){
+                                mexPrintf("3 field: %s, value: \n", field_name);
+                                if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
+                                    char *tmp = mxArrayToString(field_array_ptr);
+                                    if (tmp != NULL)
+                                    {
+                                        mexPrintf("get %s string, ", field_name);
+                                        std::string curr_string(tmp);
+                                        mexPrintf("set value %s\n", curr_string);
+                                        currVal.checksum = curr_string;
+                                    }
+                                    mxFree(tmp);
+                                }
+                            }
+                            else if (strcmp(field_name, "encoder") == 0){
+                                mexPrintf("4 field: %s, value: \n", field_name);
+                                if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
+                                    char *tmp = mxArrayToString(field_array_ptr);
+                                    if (tmp != NULL)
+                                    {
+                                        mexPrintf("get %s string\n", field_name);
+                                        std::string curr_string(tmp);
+                                        currVal.encoder = curr_string;
+                                    }
+                                    mxFree(tmp);
+                                }
+                            }
+                            else if (strcmp(field_name, "filename") == 0){
+                                mexPrintf("5 field: %s, value: \n", field_name);
+                                if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
+                                    char *tmp = mxArrayToString(field_array_ptr);
+                                    if (tmp != NULL)
+                                    {
+                                        mexPrintf("get %s string\n", field_name);
+                                        std::string curr_string(tmp);
+                                        currVal.filename = curr_string;
+                                    }
+                                    mxFree(tmp);
+                                }
+                            }
+                            else if (strcmp(field_name, "reference") == 0){
+                                mexPrintf("6 field: %s, value: \n", field_name);
+                                if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
+                                    char *tmp = mxArrayToString(field_array_ptr);
+                                    if (tmp != NULL)
+                                    {
+                                        mexPrintf("get %s string, set value %s", field_name, tmp);
+                                        //std::string curr_string(tmp);
+                                        //mexPrintf("set value %s\n", curr_string);
+                                        currVal.reference = *tmp;
+                                        mexPrintf("get %s string, get value %s", field_name, currVal.reference);
+                                    }
+                                    mxFree(tmp);
+                                }
+                            }
+                        }
+                    }
+                }
+                vals.push_back(currVal);
+            }
+            else
+            {
+                mexWarnMsgTxt("Unsupported value wrapper type");
+            }
+        }
+        return vals;
+    }
+
 private:
 };
 
