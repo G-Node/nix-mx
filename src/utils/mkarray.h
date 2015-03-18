@@ -129,18 +129,26 @@ inline mxArray* make_mx_array(const std::vector<nix::Dimension> &dims) {
         return nullptr;
     }
 
+    const char *field_names[] = { "dtype", "dimension" };
+    mwSize dim_arr[2] = {1, dims.size()};
     nix::DimensionType dt;
 
-    mxArray *data = mxCreateCellMatrix(1, dims.size());
+    mxArray *data = mxCreateStructArray(2, dim_arr, 2, field_names);
     for (size_t i = 0; i < dims.size(); i++) {
         dt = dims[i].dimensionType();
 
         switch (dt) {
-        case nix::DimensionType::Set: mxSetCell(data, i, make_mx_array(dims[i].asSetDimension()));
+        case nix::DimensionType::Set: 
+            mxSetFieldByNumber(data, i, 0, mxCreateString("set"));
+            mxSetFieldByNumber(data, i, 1, make_mx_array(dims[i].asSetDimension()));
             break;
-        case nix::DimensionType::Range: mxSetCell(data, i, make_mx_array(dims[i].asRangeDimension()));
+        case nix::DimensionType::Range:
+            mxSetFieldByNumber(data, i, 0, mxCreateString("range"));
+            mxSetFieldByNumber(data, i, 1, make_mx_array(dims[i].asRangeDimension()));
             break;
-        case nix::DimensionType::Sample: mxSetCell(data, i, make_mx_array(dims[i].asSampledDimension()));
+        case nix::DimensionType::Sample:
+            mxSetFieldByNumber(data, i, 0, mxCreateString("sample"));
+            mxSetFieldByNumber(data, i, 1, make_mx_array(dims[i].asSampledDimension()));
             break;
         default: throw std::invalid_argument("Encountered unknown dimension type");
             break;

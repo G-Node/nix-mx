@@ -32,8 +32,17 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 currList = nix_mx('DataArray::dimensions', obj.nix_handle);
                 obj.dimsCache.data = cell(length(currList), 1);
                 for i = 1:length(currList)
-                    % TODO convert to a proper type 
-                	obj.dimsCache.data{i} = nix.SetDimension(currList{i});
+                    
+                    switch currList(i).name
+                        case 'set'
+                            obj.dimsCache.data{i} = nix.SetDimension(currList(i).dimension);
+                        case 'sample'
+                            obj.dimsCache.data{i} = nix.SetDimension(currList(i).dimension);
+                        case 'range'
+                            obj.dimsCache.data{i} = nix.SetDimension(currList(i).dimension);
+                        otherwise
+                           disp('for some dimension type is unknown! skip')
+                    end
                 end;
                 obj.dimsCache.lastUpdate = obj.updatedAt;
             end;
