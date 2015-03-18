@@ -20,6 +20,7 @@
 #include "nixfeature.h"
 #include "nixtag.h"
 #include "nixmultitag.h"
+#include "nixdimensions.h"
 
 #include <utils/glue.h>
 
@@ -142,7 +143,15 @@ void mexFunction(int            nlhs,
             .reg("set_label", SETTER(const std::string&, nix::DataArray, label))
             .reg("set_none_label", SETTER(const boost::none_t, nix::DataArray, label))
             .reg("set_unit", SETTER(const std::string&, nix::DataArray, unit))
-            .reg("set_none_unit", SETTER(const boost::none_t, nix::DataArray, unit));
+            .reg("set_none_unit", SETTER(const boost::none_t, nix::DataArray, unit))
+            .reg("dimensions", FILTER(std::vector<nix::Dimension>, nix::DataArray, , dimensions))
+            .reg("append_set_dimension", &nix::DataArray::appendSetDimension)
+            .reg("append_range_dimension", &nix::DataArray::appendRangeDimension)
+            .reg("append_sampled_dimension", &nix::DataArray::appendSampledDimension)
+            .reg("create_set_dimension", &nix::DataArray::createSetDimension)
+            .reg("create_range_dimension", &nix::DataArray::createRangeDimension)
+            .reg("create_sampled_dimension", &nix::DataArray::createSampledDimension)
+            .reg("deleteDimension", &nix::DataArray::deleteDimension);
         methods->add("DataArray::readAll", nixdataarray::read_all);
         methods->add("DataArray::writeAll", nixdataarray::write_all);
         methods->add("DataArray::addSource", nixdataarray::add_source);
@@ -251,6 +260,35 @@ void mexFunction(int            nlhs,
             .reg("set_none_mapping", SETTER(const boost::none_t, nix::Property, mapping));
         methods->add("Property::values", nixproperty::values);
         methods->add("Property::updateValues", nixproperty::update_values);
+
+        classdef<nix::SetDimension>("SetDimension", methods)
+            .desc(&nixdimensions::describe)
+            .reg("set_labels", SETTER(const std::vector<std::string>&, nix::SetDimension, labels))
+            .reg("set_none_labels", SETTER(const boost::none_t, nix::SetDimension, labels));
+
+        classdef<nix::SampledDimension>("SampledDimension", methods)
+            .desc(&nixdimensions::describe)
+            .reg("set_label", SETTER(const std::string&, nix::SampledDimension, label))
+            .reg("set_none_label", SETTER(const boost::none_t, nix::SampledDimension, label))
+            .reg("set_unit", SETTER(const std::string&, nix::SampledDimension, unit))
+            .reg("set_none_unit", SETTER(const boost::none_t, nix::SampledDimension, unit))
+            .reg("set_sampling", SETTER(double, nix::SampledDimension, samplingInterval))
+            .reg("set_offset", SETTER(double, nix::SampledDimension, offset))
+            .reg("set_none_offset", SETTER(const boost::none_t, nix::SampledDimension, offset))
+            .reg("index_of", &nix::SampledDimension::indexOf)
+            .reg("position_at", &nix::SampledDimension::positionAt)
+            .reg("axis", &nix::SampledDimension::axis);
+        
+        classdef<nix::RangeDimension>("RangeDimension", methods)
+            .desc(&nixdimensions::describe)
+            .reg("set_label", SETTER(const std::string&, nix::RangeDimension, label))
+            .reg("set_none_label", SETTER(const boost::none_t, nix::RangeDimension, label))
+            .reg("set_unit", SETTER(const std::string&, nix::RangeDimension, unit))
+            .reg("set_none_unit", SETTER(const boost::none_t, nix::RangeDimension, unit))
+            .reg("set_ticks", SETTER(const std::vector<double>&, nix::RangeDimension, ticks))
+            .reg("index_of", &nix::RangeDimension::indexOf)
+            .reg("tick_at", &nix::RangeDimension::tickAt)
+            .reg("axis", &nix::RangeDimension::axis);
 
         mexAtExit(on_exit);
     });

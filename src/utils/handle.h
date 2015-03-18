@@ -63,6 +63,30 @@ struct entity_to_id<nix::Property> {
     static const int value = 8;
 };
 
+/*
+Use value > 100 for entities that do NOT 
+inherit from nix::Entity
+*/
+
+template<>
+struct entity_to_id<nix::SetDimension> {
+    static const bool is_valid = true;
+    static const int value = 101;
+};
+
+template<>
+struct entity_to_id<nix::SampledDimension> {
+    static const bool is_valid = true;
+    static const int value = 102;
+};
+
+template<>
+struct entity_to_id<nix::RangeDimension> {
+    static const bool is_valid = true;
+    static const int value = 103;
+};
+
+
 class handle {
 public:
     struct entity {
@@ -124,7 +148,7 @@ public:
     }
 
 private:
-    template<typename T>
+    template<typename T, typename Enable = void>
     struct cell : public entity {
         cell(const T &obj) : entity(obj), obj(obj) { }
 
@@ -139,6 +163,20 @@ private:
         T obj;
     };
 
+    template<typename T>
+    struct cell<T, typename std::enable_if<entity_to_id<T>::value >= 100>::type> : public entity{
+        cell(const T &obj) : entity(obj), obj(obj) { }
+
+        virtual void destory() override {
+            obj = nix::none;
+        }
+
+        virtual time_t updated_at() const override {
+            return 0;
+        }
+
+        T obj;
+    };
 
     entity *et;
 };

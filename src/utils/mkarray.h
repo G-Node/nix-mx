@@ -25,6 +25,8 @@ mxArray* make_mx_array(const nix::NDSize &size);
 
 mxArray* make_mx_array(const nix::LinkType &ltype);
 
+mxArray* make_mx_array(const nix::DimensionType &dtype);
+
 template<typename T, nix::DataType dt = nix::to_data_type<T>::value>
 mxArray* make_mx_array(const std::vector<T> &v) {
 	DType2 dtype = dtype_nix2mex(dt);
@@ -67,6 +69,7 @@ inline mxArray* make_mx_array(const std::vector<nix::Value> &v) {
 
 	return data;
 }
+
 
 template<typename T>
 mxArray* make_mx_array(const boost::optional<T> &opt) {
@@ -120,5 +123,32 @@ inline mxArray *make_mx_array(const std::vector<T> &v) {
 
 	return lst;
 }
+
+inline mxArray* make_mx_array(const std::vector<nix::Dimension> &dims) {
+    if (dims.empty()) {
+        return nullptr;
+    }
+
+    nix::DimensionType dt;
+
+    mxArray *data = mxCreateCellMatrix(1, dims.size());
+    for (size_t i = 0; i < dims.size(); i++) {
+        dt = dims[i].dimensionType();
+
+        switch (dt) {
+        case nix::DimensionType::Set: mxSetCell(data, i, make_mx_array(dims[i].asSetDimension()));
+            break;
+        case nix::DimensionType::Range: mxSetCell(data, i, make_mx_array(dims[i].asRangeDimension()));
+            break;
+        case nix::DimensionType::Sample: mxSetCell(data, i, make_mx_array(dims[i].asSampledDimension()));
+            break;
+        default: throw std::invalid_argument("Encountered unknown dimension type");
+            break;
+        }
+    }
+
+    return data;
+}
+
 
 #endif
