@@ -126,15 +126,44 @@ public:
     }
 
     std::vector<nix::Value> vec(size_t pos) const {
-        mwSize size = mxGetNumberOfElements(array[pos]);
-
-        mwIndex index;
+        /*
+        To convert to a vector of Values we actually expect either
+        - a cell array with scalar values, or
+        - a cell array with structs each having Value attrs 
+            (uncertainty, checksum etc.) as fields, or
+        - a regular array
+        */
         std::vector<nix::Value> vals;
         const mxArray *cell_element_ptr;
 
-        for (index = 0; index < size; index++)  {
-            cell_element_ptr = mxGetCell(array[pos], index);
-            vals.push_back(mx_array_to_value(cell_element_ptr));
+        if (mxGetClassID(array[pos]) == mxCELL_CLASS) {
+
+            mwSize size = mxGetNumberOfElements(array[pos]);
+            for (mwIndex index = 0; index < size; index++)  {
+                cell_element_ptr = mxGetCell(array[pos], index);
+
+                if (mxGetClassID(cell_element_ptr) == mxSTRUCT_CLASS) {
+                    // assume values are given as matlab structs
+                    vals.push_back(mx_array_to_value_from_struct(cell_element_ptr));
+                }
+                else {
+                    // assume just a scalar value given
+                    vals.push_back(mx_array_to_value_from_scalar(cell_element_ptr));
+                }
+            }
+        }
+        else {
+            mxClassID cls = mxGetClassID(array[pos]);
+
+            switch (cls)  {
+            case mxDOUBLE_CLASS: vals = mx_array_to_value_from_array<double>(array[pos]); break;
+            case mxUINT32_CLASS: vals = mx_array_to_value_from_array<uint32_t>(array[pos]); break;
+            case mxINT32_CLASS:  vals = mx_array_to_value_from_array<int32_t>(array[pos]); break;
+            case mxUINT64_CLASS: vals = mx_array_to_value_from_array<uint64_t>(array[pos]); break;
+            case mxINT64_CLASS:  vals = mx_array_to_value_from_array<int64_t>(array[pos]); break;
+
+            default: std::invalid_argument("This type of values is not supported");
+            }
         }
 
         return vals;
@@ -191,108 +220,6 @@ public:
 
     double* get_raw(size_t pos) const {
         return mxGetPr(array[pos]);
-    }
-
-    std::vector<nix::Value> extractFromStruct(size_t pos) const {
-
-        // Note: nix::Value is not able to its attributes "uncertainty"
-        // "checksum", "filename", "encoder" or "reference" at the moment.
-        // The setters are implemented and the attribute values are
-        // correctly set to the nix::Value entity, but they will not
-        // actually be written to the nix file. Once this issue has been
-        // fixed on the nix side, the current implementation should work
-        // fine.
-
-        std::vector<nix::Value> vals;
-
-        mwSize total_num_of_cells = mxGetNumberOfElements(array[pos]);
-        for (mwIndex index = 0; index<total_num_of_cells; index++)  {
-            const mxArray *cell_element_ptr = mxGetCell(array[pos], index);
-
-            if (mxGetClassID(cell_element_ptr) == mxSTRUCT_CLASS){
-
-                nix::Value currVal;
-
-                mwSize total_num_of_elements = mxGetNumberOfElements(cell_element_ptr);
-                int number_of_fields = mxGetNumberOfFields(cell_element_ptr);
-
-                for (mwIndex struct_idx = 0; struct_idx < total_num_of_elements; struct_idx++)  {
-                    for (int field_index = 0; field_index < number_of_fields; field_index++)  {
-                        const char  *field_name = mxGetFieldNameByNumber(cell_element_ptr, field_index);
-                        const mxArray *field_array_ptr = mxGetFieldByNumber(cell_element_ptr, struct_idx, field_index);
-
-                        if (field_array_ptr != nullptr) {
-                            if (strcmp(field_name, "value") == 0){
-                                if (mxGetClassID(field_array_ptr) == mxDOUBLE_CLASS){
-                                    double curr;
-                                    const void *data = mxGetData(field_array_ptr);
-                                    memcpy(&curr, data, sizeof(double));
-                                    currVal.set(curr);
-                                }
-                                else if (mxGetClassID(field_array_ptr) == mxLOGICAL_CLASS){
-                                    const mxLogical *curr = mxGetLogicals(field_array_ptr);
-                                    currVal.set(curr[0]);
-                                }
-                                else if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
-                                    char *tmp = mxArrayToString(field_array_ptr);
-                                    std::string curr_string = tmp;
-                                    currVal.set(curr_string);
-                                    mxFree(tmp);
-                                }
-                                else { mexPrintf("Unsupported value data type\n"); }
-
-                            }
-                            else if (strcmp(field_name, "uncertainty") == 0){
-                                if (mxGetClassID(field_array_ptr) == mxDOUBLE_CLASS){
-                                    double curr;
-                                    const void *data = mxGetData(field_array_ptr);
-                                    memcpy(&curr, data, sizeof(double));
-                                    currVal.uncertainty = curr;
-                                }
-                            }
-                            else if (strcmp(field_name, "checksum") == 0){
-                                if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
-                                    char *tmp = mxArrayToString(field_array_ptr);
-                                    std::string curr_string = tmp;
-                                    currVal.checksum = curr_string;
-                                    mxFree(tmp);
-                                }
-                            }
-                            else if (strcmp(field_name, "encoder") == 0){
-                                if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
-                                    char *tmp = mxArrayToString(field_array_ptr);
-                                    std::string curr_string = tmp;
-                                    currVal.encoder = curr_string;
-                                    mxFree(tmp);
-                                }
-                            }
-                            else if (strcmp(field_name, "filename") == 0){
-                                if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
-                                    char *tmp = mxArrayToString(field_array_ptr);
-                                    std::string curr_string = tmp;
-                                    currVal.filename = curr_string;
-                                    mxFree(tmp);
-                                }
-                            }
-                            else if (strcmp(field_name, "reference") == 0){
-                                if (mxGetClassID(field_array_ptr) == mxCHAR_CLASS){
-                                    char *tmp = mxArrayToString(field_array_ptr);
-                                    std::string curr_string(tmp);
-                                    currVal.reference = tmp;
-                                    mxFree(tmp);
-                                }
-                            }
-                        }
-                    }
-                }
-                vals.push_back(currVal);
-            }
-            else
-            {
-                mexWarnMsgTxt("Unsupported value wrapper data type");
-            }
-        }
-        return vals;
     }
 
 private:

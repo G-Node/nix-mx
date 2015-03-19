@@ -2,6 +2,7 @@
 #include <math.h>
 #include <string.h>
 #include <vector>
+#include <map>
 #include "mex.h"
 
 #include <nix.hpp>
@@ -71,7 +72,11 @@ bool mx_array_to_bool(const mxArray *arr) {
     return l[0];
 }
 
-nix::Value mx_array_to_value(const mxArray *arr) {
+
+nix::Value mx_array_to_value_from_scalar(const mxArray *arr) {
+    /*
+    Assuming arr is a scalar mxArray.
+    */
     nix::Value val;
 
     switch (mxGetClassID(arr)) {
@@ -95,3 +100,38 @@ nix::Value mx_array_to_value(const mxArray *arr) {
     return val;
 }
 
+nix::Value mx_array_to_value_from_struct(const mxArray *arr) {
+    /*
+    Assuming arr is a struct mxArray.
+    */
+    static std::map<std::string, int> arg_map = {
+        { "value", 0 },
+        { "uncertainty", 1 },
+        { "checksum", 2 },
+        { "encoder", 3 },
+        { "filename", 4 },
+        { "reference", 5 }
+    };
+
+    nix::Value val;
+    bool has_value = false;
+
+    int number_of_fields = mxGetNumberOfFields(arr);
+    for (int idx = 0; idx < number_of_fields; idx++)  {
+        const char  *field_name = mxGetFieldNameByNumber(arr, idx);
+        const mxArray *field_array_ptr = mxGetFieldByNumber(arr, 0, idx);
+
+        std::string arg_name = field_name;
+        switch (arg_map[arg_name]) {
+        case 0: val = mx_array_to_value_from_scalar(field_array_ptr); break;
+        case 1: val.uncertainty = mx_array_to_num<double>(field_array_ptr); break;
+        case 2: val.checksum = mx_array_to_str(field_array_ptr); break;
+        case 3: val.encoder = mx_array_to_str(field_array_ptr); break;
+        case 4: val.filename = mx_array_to_str(field_array_ptr); break;
+        case 5: val.reference = mx_array_to_str(field_array_ptr); break;
+        default: throw std::invalid_argument(strcat("Field is not supported: ", field_name));
+        }
+    }
+
+    return val;
+}

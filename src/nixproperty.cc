@@ -55,7 +55,7 @@ namespace nixproperty {
     {
         nix::Property prop = input.entity<nix::Property>(1);
         prop.deleteValues();
-        std::vector<nix::Value> getVals = input.extractFromStruct(2);
+        std::vector<nix::Value> getVals = input.vec(2);
         prop.values(getVals);
     }
 
