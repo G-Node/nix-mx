@@ -5,7 +5,7 @@
 #include "handle.h"
 #include "datatypes.h"
 #include "mkarray.h"
-#include "nix2mx.h"
+#include "mknix.h"
 #include <stdexcept>
 
 // *** argument helpers ***
@@ -198,6 +198,13 @@ public:
 		const mxLogical *l = mxGetLogicals(array[pos]);
 		return l[0];
 	}
+
+    template<typename T>
+    T get(size_t pos) const {
+        check_size(pos);
+
+        return mx_array_to_nix(array[pos]);
+    }
 
     template<typename T>
     T entity(size_t pos) const {

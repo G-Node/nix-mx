@@ -1,6 +1,5 @@
 #include "nixdataarray.h"
-#include "nixgen.h"
-
+#include "mkarray.h"
 #include "mex.h"
 
 #include <nix.hpp>
@@ -8,7 +7,7 @@
 #include "handle.h"
 #include "arguments.h"
 #include "struct.h"
-#include "nix2mx.h"
+#include "mknix.h"
 
 namespace nixdataarray {
 
@@ -44,7 +43,7 @@ namespace nixdataarray {
     void read_all(const extractor &input, infusor &output)
     {
         nix::DataArray da = input.entity<nix::DataArray>(1);
-        mxArray *data = nixgen::dataset_read_all(da);
+        mxArray *data = make_mx_array(da);
         output.set(0, data);
     }
 

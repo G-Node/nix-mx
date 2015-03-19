@@ -6,7 +6,7 @@
 #include "handle.h"
 #include "arguments.h"
 #include "struct.h"
-#include "nix2mx.h"
+#include "mknix.h"
 
 
 namespace nixsection {
