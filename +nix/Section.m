@@ -96,6 +96,9 @@ classdef Section < nix.NamedEntity
         end;
 
         function p = create_property_with_value(obj, name, val)
+            if(~iscell(val))
+                val = num2cell(val);
+            end;
             p = nix.Property(nix_mx('Section::createPropertyWithValue', ...
                 obj.nix_handle, name, val));
             obj.propsCache.lastUpdate = 0;

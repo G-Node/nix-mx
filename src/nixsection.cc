@@ -72,28 +72,22 @@ void create_property_with_value(const extractor &input, infusor &output)
     std::vector<nix::Value> currVec;
 
     mxClassID currID = input.class_id(3);
-    if (currID == mxCELL_CLASS){
-        mexPrintf("Cell\n");
+    if (currID == mxCELL_CLASS)
+    {
         const mxArray *cell_element_ptr = input.cellElemPtr(3, 0);
 
-        if (mxGetClassID(cell_element_ptr) == mxSTRUCT_CLASS){
-            mexPrintf("Struct\n");
+        if (mxGetClassID(cell_element_ptr) == mxSTRUCT_CLASS)
+        {
             currVec = input.extractFromStruct(3);
         }
         else
         {
-            mexPrintf("Cell with normal values\n");
             currVec = input.vec(3);
         }
     }
-    else if (currID == mxCHAR_CLASS){
-        mexPrintf("Just char\n");
-    }
-    else if (currID == mxDOUBLE_CLASS){
-        mexPrintf("Just double\n");
-    }
-    else if (currID == mxLOGICAL_CLASS){
-        mexPrintf("Just logical\n");
+    else
+    {
+        mexPrintf("Unsupported data type\n");
     }
 
     nix::Property p = currObj.createProperty(input.str(2), currVec);
