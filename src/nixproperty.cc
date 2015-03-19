@@ -55,7 +55,27 @@ namespace nixproperty {
     {
         nix::Property prop = input.entity<nix::Property>(1);
         prop.deleteValues();
-        std::vector<nix::Value> getVals = input.extractFromStruct(2);
+
+        std::vector<nix::Value> getVals;
+
+        mxClassID currID = input.class_id(2);
+        if (currID == mxCELL_CLASS)
+        {
+            const mxArray *cell_element_ptr = input.cellElemPtr(2, 0);
+            if (mxGetClassID(cell_element_ptr) == mxSTRUCT_CLASS)
+            {
+                getVals = input.extractFromStruct(2);
+            }
+            else
+            {
+                getVals = input.vec(2);
+            }
+        }
+        else
+        {
+            mexPrintf("Unsupported data type\n");
+        }
+
         prop.values(getVals);
     }
 

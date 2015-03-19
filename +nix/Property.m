@@ -30,6 +30,23 @@ classdef Property < nix.NamedEntity
         end
 
         function [] = set.values(obj, val)
+
+            %-- when an update occurs, check, if the datatype of the
+            %-- data within a normal array is consistent with the
+            %-- datatype of the property
+            checkDType = obj.datatype;
+            if(~iscell(val) && ~isstruct(val) && ~isempty(val))
+                checkDType = strrep(strrep(class(val),'char','string'),'logical','bool');
+                %-- convert any values to cell array
+                val = num2cell(val);
+            elseif (iscell(val) && ~isstruct(val{1}))
+                checkDType = strrep(strrep(class(val{1}),'char','string'),'logical','bool');
+            end;
+
+            if(isempty(find(strcmpi(checkDType, obj.datatype),1)))
+                error('Values do not match property data type!');
+            end;
+
             nix_mx('Property::updateValues', obj.nix_handle, val);
             obj.valuesCache.lastUpdate = 0;
 
