@@ -150,8 +150,8 @@ void mexFunction(int            nlhs,
             .reg("append_sampled_dimension", &nix::DataArray::appendSampledDimension)
             .reg("create_set_dimension", &nix::DataArray::createSetDimension)
             .reg("create_range_dimension", &nix::DataArray::createRangeDimension)
-            .reg("create_sampled_dimension", &nix::DataArray::createSampledDimension)
-            .reg("deleteDimension", &nix::DataArray::deleteDimension);
+            .reg("create_sampled_dimension", &nix::DataArray::createSampledDimension);
+        methods->add("DataArray::delete_dimension", nixdataarray::delete_dimension);
         methods->add("DataArray::readAll", nixdataarray::read_all);
         methods->add("DataArray::writeAll", nixdataarray::write_all);
         methods->add("DataArray::addSource", nixdataarray::add_source);

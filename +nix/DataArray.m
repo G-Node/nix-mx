@@ -26,6 +26,10 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             
             obj.dimsCache = nix.CacheStruct();
         end;
+
+        % -----------------
+        % Dimensions
+        % -----------------
         
         function dimensions = get.dimensions(obj)
             if obj.dimsCache.lastUpdate ~= obj.updatedAt
@@ -33,20 +37,44 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 obj.dimsCache.data = cell(length(currList), 1);
                 for i = 1:length(currList)
                     
-                    switch currList(i).name
+                    switch currList(i).dtype
                         case 'set'
                             obj.dimsCache.data{i} = nix.SetDimension(currList(i).dimension);
                         case 'sample'
-                            obj.dimsCache.data{i} = nix.SetDimension(currList(i).dimension);
+                            obj.dimsCache.data{i} = nix.SampledDimension(currList(i).dimension);
                         case 'range'
-                            obj.dimsCache.data{i} = nix.SetDimension(currList(i).dimension);
+                            obj.dimsCache.data{i} = nix.RangeDimension(currList(i).dimension);
                         otherwise
-                           disp('for some dimension type is unknown! skip')
+                           disp('some dimension type is unknown! skip')
                     end
                 end;
                 obj.dimsCache.lastUpdate = obj.updatedAt;
             end;
             dimensions = obj.dimsCache.data;
+        end;
+        
+        function dim = append_set_dimension(obj)
+            func_name = strcat(obj.alias, '::append_set_dimension');
+            dim = nix_mx(func_name, obj.nix_handle);
+            obj.dimsCache.lastUpdate = 0;
+        end
+        
+        function dim = append_sampled_dimension(obj, interval)
+            func_name = strcat(obj.alias, '::append_sampled_dimension');
+            dim = nix_mx(func_name, obj.nix_handle, interval);
+            obj.dimsCache.lastUpdate = 0;
+        end
+
+        function dim = append_range_dimension(obj, ticks)
+            func_name = strcat(obj.alias, '::append_range_dimension');
+            dim = nix_mx(func_name, obj.nix_handle, ticks);
+            obj.dimsCache.lastUpdate = 0;
+        end
+
+        function delCheck = delete_dimension(obj, index)
+            func_name = strcat(obj.alias, '::delete_dimension');
+            delCheck = nix_mx(func_name, obj.nix_handle, index);
+            obj.dimsCache.lastUpdate = 0;
         end;
         
         % -----------------

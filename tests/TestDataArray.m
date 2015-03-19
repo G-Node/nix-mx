@@ -11,6 +11,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_set_data;
     funcs{end+1} = @test_add_source;
     funcs{end+1} = @test_remove_source;
+    funcs{end+1} = @test_dimensions;
 end
 
 function [] = test_attrs( varargin )
@@ -143,4 +144,40 @@ function [] = test_remove_source ( varargin )
 
     assert(getDataArray.remove_source('I do not exist'));
     assert(size(getSource.sources, 1) == 2);
+end
+
+%% Test: Dimensions
+function [] = test_dimensions( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('daTestBlock', 'test nixBlock');
+    da = b.create_data_array('daTest', 'test nixDataArray', 'double', [1 2]);
+    
+    assert(isempty(da.dimensions));
+    
+    da.append_set_dimension();
+    assert(length(da.dimensions) == 1);
+    assert(strcmp(da.dimensions{1}.dimensionType, 'set'));
+    
+    da.append_sampled_dimension(200);
+    assert(length(da.dimensions) == 2);
+    assert(strcmp(da.dimensions{2}.dimensionType, 'sample'));
+    assert(da.dimensions{2}.samplingInterval == 200);
+    
+    ticks = [1, 2, 3, 4];
+    da.append_range_dimension(ticks);
+    assert(length(da.dimensions) == 3);
+    assert(strcmp(da.dimensions{3}.dimensionType, 'range'));
+    assert(isequal(da.dimensions{3}.ticks, ticks));
+    
+    da.delete_dimension(2);
+    assert(length(da.dimensions) == 2);
+    assert(strcmp(da.dimensions{1}.dimensionType, 'set'));
+    assert(strcmp(da.dimensions{2}.dimensionType, 'range'));
+
+    da.delete_dimension(1);
+    assert(length(da.dimensions) == 1);
+    assert(strcmp(da.dimensions{1}.dimensionType, 'range'));
+    
+    da.delete_dimension(1);
+    assert(isempty(da.dimensions));
 end

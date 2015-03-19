@@ -13,7 +13,7 @@ namespace nixdimensions {
 
     mxArray *describe(const nix::SetDimension &dim)
     {
-        struct_builder sb({ 1 }, { "dim_type", "labels" });
+        struct_builder sb({ 1 }, { "dimensionType", "labels" });
 
         sb.set(dim.dimensionType());
         sb.set(dim.labels());
@@ -23,7 +23,7 @@ namespace nixdimensions {
 
     mxArray *describe(const nix::SampledDimension &dim)
     {
-        struct_builder sb({ 1 }, { "dim_type", "label", "unit", "sampling_interval", "offset" });
+        struct_builder sb({ 1 }, { "dimensionType", "label", "unit", "samplingInterval", "offset" });
 
         sb.set(dim.dimensionType());
         sb.set(dim.label());
@@ -36,7 +36,7 @@ namespace nixdimensions {
 
     mxArray *describe(const nix::RangeDimension &dim)
     {
-        struct_builder sb({ 1 }, { "dim_type", "label", "unit", "ticks" });
+        struct_builder sb({ 1 }, { "dimensionType", "label", "unit", "ticks" });
 
         sb.set(dim.dimensionType());
         sb.set(dim.label());

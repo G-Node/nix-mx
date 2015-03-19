@@ -125,10 +125,6 @@ inline mxArray *make_mx_array(const std::vector<T> &v) {
 }
 
 inline mxArray* make_mx_array(const std::vector<nix::Dimension> &dims) {
-    if (dims.empty()) {
-        return nullptr;
-    }
-
     const char *field_names[] = { "dtype", "dimension" };
     mwSize dim_arr[2] = {1, dims.size()};
     nix::DimensionType dt;
