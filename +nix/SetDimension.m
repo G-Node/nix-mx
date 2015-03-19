@@ -9,11 +9,11 @@ classdef SetDimension < nix.Entity
     methods
         function obj = SetDimension(h)
             obj@nix.Entity(h);
+            
+            % assign dynamic properties
+            nix.Dynamic.add_dyn_attr(obj, 'dimensionType', 'r');
+            nix.Dynamic.add_dyn_attr(obj, 'labels', 'rw');
         end
-        
-        function ua = updatedAt(obj)
-            ua = 0;
-        end;
     end
 end
    

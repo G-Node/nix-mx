@@ -30,15 +30,15 @@ mxArray* make_mx_array(const nix::LinkType &ltype)
 
 mxArray* make_mx_array(const nix::DimensionType &dtype)
 {
-    uint8_t d_type;
+    const char *d_type;
 
     switch (dtype) {
-    case nix::DimensionType::Set: d_type = 0; break;
-    case nix::DimensionType::Sample: d_type = 1; break;
-    case nix::DimensionType::Range: d_type = 2; break;
+    case nix::DimensionType::Set: d_type = "set"; break;
+    case nix::DimensionType::Sample: d_type = "sample"; break;
+    case nix::DimensionType::Range: d_type = "range"; break;
     default: throw std::invalid_argument("unkown dimension type");
     }
-    mxArray *data = mxCreateDoubleScalar(d_type);
+    mxArray *data = mxCreateString(d_type);
 
     return data;
 }

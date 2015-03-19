@@ -150,8 +150,8 @@ void mexFunction(int            nlhs,
             .reg("append_sampled_dimension", &nix::DataArray::appendSampledDimension)
             .reg("create_set_dimension", &nix::DataArray::createSetDimension)
             .reg("create_range_dimension", &nix::DataArray::createRangeDimension)
-            .reg("create_sampled_dimension", &nix::DataArray::createSampledDimension)
-            .reg("deleteDimension", &nix::DataArray::deleteDimension);
+            .reg("create_sampled_dimension", &nix::DataArray::createSampledDimension);
+        methods->add("DataArray::delete_dimension", nixdataarray::delete_dimension);
         methods->add("DataArray::readAll", nixdataarray::read_all);
         methods->add("DataArray::writeAll", nixdataarray::write_all);
         methods->add("DataArray::addSource", nixdataarray::add_source);
@@ -272,7 +272,7 @@ void mexFunction(int            nlhs,
             .reg("set_none_label", SETTER(const boost::none_t, nix::SampledDimension, label))
             .reg("set_unit", SETTER(const std::string&, nix::SampledDimension, unit))
             .reg("set_none_unit", SETTER(const boost::none_t, nix::SampledDimension, unit))
-            .reg("set_sampling", SETTER(double, nix::SampledDimension, samplingInterval))
+            .reg("set_samplingInterval", SETTER(double, nix::SampledDimension, samplingInterval))
             .reg("set_offset", SETTER(double, nix::SampledDimension, offset))
             .reg("set_none_offset", SETTER(const boost::none_t, nix::SampledDimension, offset))
             .reg("index_of", &nix::SampledDimension::indexOf)
