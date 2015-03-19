@@ -24,7 +24,7 @@ classdef Dynamic
                 end
                 
                 if (isempty(val))
-                    nix_mx(strcat(obj.alias, '::set_none_', prop), obj.nix_handle, val);
+                    nix_mx(strcat(obj.alias, '::set_none_', prop), obj.nix_handle, 0);
                 else
                     nix_mx(strcat(obj.alias, '::set_', prop), obj.nix_handle, val);
                 end

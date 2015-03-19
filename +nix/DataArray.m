@@ -55,19 +55,19 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         
         function dim = append_set_dimension(obj)
             func_name = strcat(obj.alias, '::append_set_dimension');
-            dim = nix_mx(func_name, obj.nix_handle);
+            dim = nix.SetDimension(nix_mx(func_name, obj.nix_handle));
             obj.dimsCache.lastUpdate = 0;
         end
         
         function dim = append_sampled_dimension(obj, interval)
             func_name = strcat(obj.alias, '::append_sampled_dimension');
-            dim = nix_mx(func_name, obj.nix_handle, interval);
+            dim = nix.SampledDimension(nix_mx(func_name, obj.nix_handle, interval));
             obj.dimsCache.lastUpdate = 0;
         end
 
         function dim = append_range_dimension(obj, ticks)
             func_name = strcat(obj.alias, '::append_range_dimension');
-            dim = nix_mx(func_name, obj.nix_handle, ticks);
+            dim = nix.RangeDimension(nix_mx(func_name, obj.nix_handle, ticks));
             obj.dimsCache.lastUpdate = 0;
         end
 

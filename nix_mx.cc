@@ -272,7 +272,7 @@ void mexFunction(int            nlhs,
             .reg("set_none_label", SETTER(const boost::none_t, nix::SampledDimension, label))
             .reg("set_unit", SETTER(const std::string&, nix::SampledDimension, unit))
             .reg("set_none_unit", SETTER(const boost::none_t, nix::SampledDimension, unit))
-            .reg("set_sampling", SETTER(double, nix::SampledDimension, samplingInterval))
+            .reg("set_samplingInterval", SETTER(double, nix::SampledDimension, samplingInterval))
             .reg("set_offset", SETTER(double, nix::SampledDimension, offset))
             .reg("set_none_offset", SETTER(const boost::none_t, nix::SampledDimension, offset))
             .reg("index_of", &nix::SampledDimension::indexOf)
