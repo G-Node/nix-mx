@@ -15,7 +15,7 @@ function [] = test_attrs( varargin )
     p = s.create_property('testProperty1', nix.DataType.String);
 
     assert(~isempty(p.id));
-    assert(strcmpi(p.datatype, 'string'));
+    assert(strcmpi(p.datatype, 'char'));
     assert(strcmp(p.name, 'testProperty1'));
 
     assert(isempty(p.definition));
@@ -82,7 +82,7 @@ function [] = test_update_values( varargin )
     %-- test remove values from property
     delValues = s.open_property(s.allProperties{3}.id);
     assert(size(delValues.values, 1) == 4);
-    delValues.values = '';
+    delValues.values = {};
     assert(size(delValues.values, 1) == 0);
     clear delValues;
     
@@ -90,7 +90,7 @@ function [] = test_update_values( varargin )
     newValues = s.open_property(s.allProperties{3}.id);
     newValues.values = [1,2,3,4,5];
     assert(newValues.values{5}.value == 5);
-    newValues.values = '';
+    newValues.values = {};
     newValues.values = {6,7,8};
     assert(newValues.values{3}.value == 8);
     

@@ -1,13 +1,11 @@
 #include "nixsection.h"
-#include "nixgen.h"
-
 #include "mex.h"
 #include <nix.hpp>
 
 #include "handle.h"
 #include "arguments.h"
 #include "struct.h"
-#include "nix2mx.h"
+#include "mknix.h"
 
 
 namespace nixsection {
@@ -70,7 +68,8 @@ void create_property_with_value(const extractor &input, infusor &output)
 {
     nix::Section currObj = input.entity<nix::Section>(1);
 
-    nix::Property p = currObj.createProperty(input.str(2), nixgen::extract_property_values(input, 3));
+    std::vector<nix::Value> vals = input.vec(3);
+    nix::Property p = currObj.createProperty(input.str(2), vals);
     output.set(0, handle(p));
 }
 

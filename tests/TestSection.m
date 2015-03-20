@@ -172,27 +172,27 @@ function [] = test_create_property_with_value( varargin )
     assert(strcmp(s.allProperties{end}.name, 'stringProperty1'));
     assert(strcmp(s.open_property(s.allProperties{end}.id).values{1}.value, 'a'));
     assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 7);
-    assert(strcmpi(tmp.datatype, 'string'));
+    assert(strcmpi(tmp.datatype, 'char'));
     
     tmp = s.create_property_with_value('stringProperty2', {'this', 'has', 'strings'});
     assert(strcmp(s.allProperties{end}.name, 'stringProperty2'));
     assert(strcmp(s.open_property(s.allProperties{end}.id).values{1}.value, 'this'));
     assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 3);
-    assert(strcmpi(tmp.datatype, 'string'));
+    assert(strcmpi(tmp.datatype, 'char'));
 
     tmp = s.create_property_with_value('booleanProperty1', [true, false, true]);
     assert(strcmp(s.allProperties{end}.name, 'booleanProperty1'));
     assert(s.open_property(s.allProperties{end}.id).values{1}.value);
     assert(~s.open_property(s.allProperties{end}.id).values{2}.value);
     assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 3);
-    assert(strcmpi(tmp.datatype, 'bool'));
+    assert(strcmpi(tmp.datatype, 'logical'));
 
     tmp = s.create_property_with_value('booleanProperty2', {true, false, true});
     assert(strcmp(s.allProperties{end}.name, 'booleanProperty2'));
     assert(s.open_property(s.allProperties{end}.id).values{1}.value);
     assert(~s.open_property(s.allProperties{end}.id).values{2}.value);
     assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 3);
-    assert(strcmpi(tmp.datatype, 'bool'));
+    assert(strcmpi(tmp.datatype, 'logical'));
     
     val1 = s.open_property(s.allProperties{1}.id).values{1};
     val2 = s.open_property(s.allProperties{1}.id).values{2};

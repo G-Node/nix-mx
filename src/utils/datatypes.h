@@ -69,4 +69,20 @@ inline DType2 dtype_nix2mex (nix::DataType dtype) {
 	return dt;
 }
 
+inline std::string string_nix2mex(nix::DataType dtype) {
+    std::string dt;
+
+    switch (dtype) {
+    case nix::DataType::Bool: dt = "logical"; break;
+    case nix::DataType::String: dt = "char"; break;
+    case nix::DataType::Float: dt = "single"; break;
+
+    default: dt = nix::data_type_to_string(dtype);
+    }
+
+    std::transform(dt.begin(), dt.end(), dt.begin(), ::tolower);
+
+    return dt;
+}
+
 #endif

@@ -1,5 +1,5 @@
 #include "nixmultitag.h"
-#include "nixgen.h"
+#include "mkarray.h"
 
 #include "mex.h"
 
@@ -49,7 +49,7 @@ namespace nixmultitag {
         double p_index = input.num<double>(2);
         double f_index = input.num<double>(3);
 
-        mxArray *data = nixgen::dataset_read_all(currObj.retrieveData(p_index, f_index));
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveData(p_index, f_index));
         output.set(0, data);
     }
 
@@ -58,7 +58,7 @@ namespace nixmultitag {
         double p_index = input.num<double>(2);
         double f_index = input.num<double>(3);
 
-        mxArray *data = nixgen::dataset_read_all(currObj.retrieveFeatureData(p_index, f_index));
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveFeatureData(p_index, f_index));
         output.set(0, data);
     }
 
