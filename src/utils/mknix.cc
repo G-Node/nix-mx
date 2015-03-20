@@ -12,6 +12,7 @@
 #include "struct.h"
 #include "datatypes.h"
 
+// helpers
 
 void check_arg_type(const mxArray *arr, nix::DataType dtype) {
     if (dtype_mex2nix(arr) != dtype) {
@@ -19,6 +20,9 @@ void check_arg_type(const mxArray *arr, nix::DataType dtype) {
     }
 }
 
+
+
+// TODO move this to mkarray
 mxArray *nmCreateScalar(uint32_t val) {
     mxArray *arr = mxCreateNumericMatrix(1, 1, mxUINT32_CLASS, mxREAL);
     void *data = mxGetData(arr);
@@ -26,7 +30,9 @@ mxArray *nmCreateScalar(uint32_t val) {
     return arr;
 }
 
-nix::NDSize mx_array_to_ndsize(const mxArray *arr) {
+// extractors 
+
+nix::NDSize mx_to_ndsize(const mxArray *arr) {
 
     size_t m = mxGetM(arr);
     size_t n = mxGetN(arr);
@@ -44,49 +50,76 @@ nix::NDSize mx_array_to_ndsize(const mxArray *arr) {
     return size;
 }
 
-std::string mx_array_to_str(const mxArray *arr) {
+std::vector<std::string> mx_to_strings(const mxArray *arr) {
+    /*
+    To convert to a string vector we actually expect a cell
+    array of strings. It's a logical representation since matlab
+    arrays require that elements have equal length.
+    */
+    std::vector<std::string> res;
+    const mxArray *el_ptr;
+
+    mwSize length = mxGetNumberOfElements(arr);
+    mwIndex index;
+
+    for (index = 0; index < length; index++)  {
+        el_ptr = mxGetCell(arr, index);
+
+        if (!mxIsChar(el_ptr)) {
+            throw std::invalid_argument("All elements of a cell array should be of a string type");
+        }
+
+        char *tmp = mxArrayToString(el_ptr);
+        std::string the_string(tmp);
+        res.push_back(the_string);
+        mxFree(tmp);
+    }
+
+    return res;
+}
+
+nix::LinkType mx_to_linktype(const mxArray *arr) {
+    const uint8_t link_type = mx_to_num<uint8_t>(arr);
+    nix::LinkType retLinkType;
+
+    switch (link_type) {
+    case 0: retLinkType = nix::LinkType::Tagged; break;
+    case 1: retLinkType = nix::LinkType::Untagged; break;
+    case 2: retLinkType = nix::LinkType::Indexed; break;
+    default: throw std::invalid_argument("unkown link type");
+    }
+
+    return retLinkType;
+}
+
+std::string mx_to_str(const mxArray *arr) {
     check_arg_type(arr, nix::DataType::String);
 
     std::string the_string = mxArrayToString(arr);
     return the_string;
 }
 
-template<typename T>
-T mx_array_to_num(const mxArray *arr) {
-    check_arg_type(arr, nix::to_data_type<T>::value);
-
-    if (mxGetNumberOfElements(arr) < 1) {
-        throw std::runtime_error("array empty");
-    }
-
-    const void *data = mxGetData(arr);
-    T res;
-    memcpy(&res, data, sizeof(T));
-    return res;
-}
-
-bool mx_array_to_bool(const mxArray *arr) {
+bool mx_to_bool(const mxArray *arr) {
     check_arg_type(arr, nix::DataType::Bool);
 
     const mxLogical *l = mxGetLogicals(arr);
     return l[0];
 }
 
-
-nix::Value mx_array_to_value_from_scalar(const mxArray *arr) {
+nix::Value mx_to_value_from_scalar(const mxArray *arr) {
     /*
     Assuming arr is a scalar mxArray.
     */
     nix::Value val;
 
     switch (mxGetClassID(arr)) {
-    case mxLOGICAL_CLASS: val.set(mx_array_to_bool(arr)); break;
-    case mxCHAR_CLASS: val.set(mx_array_to_str(arr)); break;
-    case mxDOUBLE_CLASS: val.set(mx_array_to_num<double>(arr)); break;
-    case mxUINT32_CLASS: val.set(mx_array_to_num<uint32_t>(arr)); break;
-    case mxINT32_CLASS:  val.set(mx_array_to_num<int32_t>(arr)); break;
-    case mxUINT64_CLASS: val.set(mx_array_to_num<uint64_t>(arr)); break;
-    case mxINT64_CLASS:  val.set(mx_array_to_num<int64_t>(arr)); break;
+    case mxLOGICAL_CLASS: val.set(mx_to_bool(arr)); break;
+    case mxCHAR_CLASS: val.set(mx_to_str(arr)); break;
+    case mxDOUBLE_CLASS: val.set(mx_to_num<double>(arr)); break;
+    case mxUINT32_CLASS: val.set(mx_to_num<uint32_t>(arr)); break;
+    case mxINT32_CLASS:  val.set(mx_to_num<int32_t>(arr)); break;
+    case mxUINT64_CLASS: val.set(mx_to_num<uint64_t>(arr)); break;
+    case mxINT64_CLASS:  val.set(mx_to_num<int64_t>(arr)); break;
 
     case mxSINGLE_CLASS: throw std::invalid_argument("Element type is not supported");
     case mxUINT8_CLASS:  throw std::invalid_argument("Element type is not supported");
@@ -100,7 +133,7 @@ nix::Value mx_array_to_value_from_scalar(const mxArray *arr) {
     return val;
 }
 
-nix::Value mx_array_to_value_from_struct(const mxArray *arr) {
+nix::Value mx_to_value_from_struct(const mxArray *arr) {
     /*
     Assuming arr is a struct mxArray.
     */
@@ -123,15 +156,49 @@ nix::Value mx_array_to_value_from_struct(const mxArray *arr) {
 
         std::string arg_name = field_name;
         switch (arg_map[arg_name]) {
-        case 0: val = mx_array_to_value_from_scalar(field_array_ptr); break;
-        case 1: val.uncertainty = mx_array_to_num<double>(field_array_ptr); break;
-        case 2: val.checksum = mx_array_to_str(field_array_ptr); break;
-        case 3: val.encoder = mx_array_to_str(field_array_ptr); break;
-        case 4: val.filename = mx_array_to_str(field_array_ptr); break;
-        case 5: val.reference = mx_array_to_str(field_array_ptr); break;
+        case 0: val = mx_to_value_from_scalar(field_array_ptr); break;
+        case 1: val.uncertainty = mx_to_num<double>(field_array_ptr); break;
+        case 2: val.checksum = mx_to_str(field_array_ptr); break;
+        case 3: val.encoder = mx_to_str(field_array_ptr); break;
+        case 4: val.filename = mx_to_str(field_array_ptr); break;
+        case 5: val.reference = mx_to_str(field_array_ptr); break;
         default: throw std::invalid_argument(strcat("Field is not supported: ", field_name));
         }
     }
 
     return val;
+}
+
+std::vector<nix::Value> mx_to_values(const mxArray *arr) {
+    /*
+    To convert to a vector of Values we actually expect either
+    - a cell array with scalar values, or
+    - a cell array with structs each having Value attrs
+    (uncertainty, checksum etc.) as fields, or
+    - a regular array
+    */
+    std::vector<nix::Value> vals;
+    const mxArray *cell_element_ptr;
+
+    if (mxGetClassID(arr) == mxCELL_CLASS) {
+
+        mwSize size = mxGetNumberOfElements(arr);
+        for (mwIndex index = 0; index < size; index++)  {
+            cell_element_ptr = mxGetCell(arr, index);
+
+            if (mxGetClassID(cell_element_ptr) == mxSTRUCT_CLASS) {
+                // assume values are given as matlab structs
+                vals.push_back(mx_to_value_from_struct(cell_element_ptr));
+            }
+            else {
+                // assume just a scalar value given
+                vals.push_back(mx_to_value_from_scalar(cell_element_ptr));
+            }
+        }
+    }
+    else {
+        throw std::invalid_argument("Values must be given as cell array");
+    }
+
+    return vals;
 }

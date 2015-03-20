@@ -7,39 +7,62 @@
 
 void check_arg_type(const mxArray *arr, nix::DataType dtype);
 
-nix::NDSize mx_array_to_ndsize(const mxArray *arr);
+mxArray *nmCreateScalar(uint32_t val);
 
-std::string mx_array_to_str(const mxArray *arr);
+nix::NDSize mx_to_ndsize(const mxArray *arr);
+
+std::vector<std::string> mx_to_strings(const mxArray *arr);
+
+nix::LinkType mx_to_linktype(const mxArray *arr);
+
+std::string mx_to_str(const mxArray *arr);
 
 template<typename T>
-T mx_array_to_num(const mxArray *arr);
+T mx_to_num(const mxArray *arr) {
+    check_arg_type(arr, nix::to_data_type<T>::value);
 
-bool mx_array_to_bool(const mxArray *arr);
+    if (mxGetNumberOfElements(arr) < 1) {
+        throw std::runtime_error("array empty");
+    }
+
+    const void *data = mxGetData(arr);
+    T res;
+    memcpy(&res, data, sizeof(T));
+    return res;
+}
 
 template<typename T>
-inline std::vector<nix::Value> mx_array_to_value_from_array(const mxArray *arr) {
-    /*
-    Assuming arr is a regular mxArray.
-    */
-    std::vector<nix::Value> res;
+std::vector<T> mx_to_vector(const mxArray *arr) {
+    std::vector<T> res;
 
+    void *vp = mxGetData(arr);
+    mwSize input_size = mxGetNumberOfElements(arr);
+
+    //TODO: check for size > 0
+    res.resize(static_cast<size_t>(input_size));
+    memcpy(res.data(), vp, sizeof(T)*res.size());
+
+    /* alternative implementation using loop
     T *pr;
-    pr = (T *)mxGetData(arr);
+    void *voidp = mxGetData(arr);
+    assert(sizeof(pr) == sizeof(voidp));
+    memcpy(&pr, &voidp, sizeof(pr));
 
     mwSize input_size = mxGetNumberOfElements(arr);
     for (mwSize index = 0; index < input_size; index++)  {
-        nix::Value val;
-        val.set(*pr++);
-        res.push_back(val);
+    res.push_back(*pr++);
     }
+    */
 
     return res;
 }
 
-nix::Value mx_array_to_value_from_scalar(const mxArray *arr);
+bool mx_to_bool(const mxArray *arr);
 
-nix::Value mx_array_to_value_from_struct(const mxArray *arr);
+nix::Value mx_to_value_from_scalar(const mxArray *arr);
 
-mxArray *nmCreateScalar(uint32_t val);
+nix::Value mx_to_value_from_struct(const mxArray *arr);
+
+std::vector<nix::Value> mx_to_values(const mxArray *arr);
 
 #endif
