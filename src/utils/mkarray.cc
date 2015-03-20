@@ -2,7 +2,7 @@
 #include "mex.h"
 #include <nix.hpp>
 
-mxArray* make_mx_array(const nix::DataSet &da) {
+mxArray* make_mx_array_from_ds(const nix::DataSet &da) {
     nix::NDSize size = da.dataExtent();
     const size_t len = size.size();
     std::vector<mwSize> dims(len);

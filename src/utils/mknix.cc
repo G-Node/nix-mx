@@ -164,8 +164,7 @@ std::vector<nix::Value> mx_to_values(const mxArray *arr) {
     To convert to a vector of Values we actually expect either
     - a cell array with scalar values, or
     - a cell array with structs each having Value attrs
-    (uncertainty, checksum etc.) as fields, or
-    - a regular array
+    (uncertainty, checksum etc.) as fields
     */
     std::vector<nix::Value> vals;
     const mxArray *cell_element_ptr;

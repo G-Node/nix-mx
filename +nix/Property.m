@@ -30,7 +30,24 @@ classdef Property < nix.NamedEntity
         end
 
         function [] = set.values(obj, val)
-            nix_mx('Property::updateValues', obj.nix_handle, val);
+            values = val;
+            if (~iscell(values))
+                values = num2cell(val);
+            end
+            
+            for i = 1:length(values)
+                if (isstruct(values{i}))
+                    curr = values{i}.value;
+                else
+                    curr = values{i};
+                end
+                
+                if (~strcmpi(class(curr), obj.datatype))
+                    error('Values do not match property data type!');
+                end
+            end
+            
+            nix_mx('Property::updateValues', obj.nix_handle, values);
             obj.valuesCache.lastUpdate = 0;
 
             dispStr = 'Note: nix only supports updating the actual value at the moment.';

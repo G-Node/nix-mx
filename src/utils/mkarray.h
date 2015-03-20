@@ -19,7 +19,7 @@ inline mxArray* make_mx_array(const std::string &s)
 	return mxCreateString(s.c_str());
 }
 
-mxArray* make_mx_array(const nix::DataSet &da);
+mxArray* make_mx_array_from_ds(const nix::DataSet &da);
 
 mxArray* make_mx_array(const nix::Value &value);
 

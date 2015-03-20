@@ -50,7 +50,7 @@ namespace nixtag {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         double index = input.num<double>(2);
 
-        mxArray *data = make_mx_array(currObj.retrieveData(index));
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveData(index));
         output.set(0, data);
     }
 
@@ -58,7 +58,7 @@ namespace nixtag {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         double index = input.num<double>(2);
 
-        mxArray *data = make_mx_array(currObj.retrieveFeatureData(index));
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveFeatureData(index));
         output.set(0, data);
     }
 

@@ -42,8 +42,10 @@ namespace nixdataarray {
 
     void read_all(const extractor &input, infusor &output)
     {
+        //nix::DataArray da = input.entity<nix::DataArray>(1);
+
         nix::DataArray da = input.entity<nix::DataArray>(1);
-        mxArray *data = make_mx_array(da);
+        mxArray *data = make_mx_array_from_ds(da);
         output.set(0, data);
     }
 

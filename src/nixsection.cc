@@ -1,5 +1,4 @@
 #include "nixsection.h"
-
 #include "mex.h"
 #include <nix.hpp>
 
@@ -68,9 +67,9 @@ void create_property(const extractor &input, infusor &output)
 void create_property_with_value(const extractor &input, infusor &output)
 {
     nix::Section currObj = input.entity<nix::Section>(1);
-    std::vector<nix::Value> currVec = input.vec(3);
 
-    nix::Property p = currObj.createProperty(input.str(2), currVec);
+    std::vector<nix::Value> vals = input.vec(3);
+    nix::Property p = currObj.createProperty(input.str(2), vals);
     output.set(0, handle(p));
 }
 

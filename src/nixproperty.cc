@@ -1,7 +1,6 @@
 #include "nixproperty.h"
-
 #include "mex.h"
-
+#include "datatypes.h"
 #include <nix.hpp>
 
 #include "handle.h"
@@ -19,7 +18,7 @@ namespace nixproperty {
         sb.set(prop.definition());
         sb.set(prop.unit());
         sb.set(prop.mapping());
-        sb.set(nix::data_type_to_string(prop.dataType()));
+        sb.set(string_nix2mex(prop.dataType()));
 
         return sb.array();
     }
@@ -55,6 +54,7 @@ namespace nixproperty {
     {
         nix::Property prop = input.entity<nix::Property>(1);
         prop.deleteValues();
+
         std::vector<nix::Value> getVals = input.vec(2);
         prop.values(getVals);
     }
