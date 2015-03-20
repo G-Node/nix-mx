@@ -1,5 +1,5 @@
-#ifndef NIX_MX_NIX2MX_H
-#define NIX_MX_NIX2MX_H
+#ifndef NIX_MX_MKNIX_H
+#define NIX_MX_MKNIX_H
 
 #include "mex.h"
 #include <nix.hpp>
