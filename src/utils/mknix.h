@@ -7,8 +7,6 @@
 
 void check_arg_type(const mxArray *arr, nix::DataType dtype);
 
-mxArray *nmCreateScalar(uint32_t val);
-
 nix::NDSize mx_to_ndsize(const mxArray *arr);
 
 std::vector<std::string> mx_to_strings(const mxArray *arr);

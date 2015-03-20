@@ -20,16 +20,6 @@ void check_arg_type(const mxArray *arr, nix::DataType dtype) {
     }
 }
 
-
-
-// TODO move this to mkarray
-mxArray *nmCreateScalar(uint32_t val) {
-    mxArray *arr = mxCreateNumericMatrix(1, 1, mxUINT32_CLASS, mxREAL);
-    void *data = mxGetData(arr);
-    memcpy(data, &val, sizeof(uint32_t));
-    return arr;
-}
-
 // extractors 
 
 nix::NDSize mx_to_ndsize(const mxArray *arr) {
@@ -189,14 +179,12 @@ std::vector<nix::Value> mx_to_values(const mxArray *arr) {
             if (mxGetClassID(cell_element_ptr) == mxSTRUCT_CLASS) {
                 // assume values are given as matlab structs
                 vals.push_back(mx_to_value_from_struct(cell_element_ptr));
-            }
-            else {
+            } else {
                 // assume just a scalar value given
                 vals.push_back(mx_to_value_from_scalar(cell_element_ptr));
             }
         }
-    }
-    else {
+    } else {
         throw std::invalid_argument("Values must be given as cell array");
     }
 
