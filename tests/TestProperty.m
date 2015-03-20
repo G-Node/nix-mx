@@ -78,4 +78,26 @@ function [] = test_update_values( varargin )
     assert(updateDouble.values{1}.value == 2);
     updateDouble.values{1}.value = 2.2;
     assert(updateDouble.values{1}.value == 2.2);
+    
+    %-- test remove values from property
+    delValues = s.open_property(s.allProperties{3}.id);
+    assert(size(delValues.values, 1) == 4);
+    delValues.values = '';
+    assert(size(delValues.values, 1) == 0);
+    clear delValues;
+    
+    %-- test add new values to empty value property
+    newValues = s.open_property(s.allProperties{3}.id);
+    newValues.values = [1,2,3,4,5];
+    assert(newValues.values{5}.value == 5);
+    newValues.values = '';
+    newValues.values = {6,7,8};
+    assert(newValues.values{3}.value == 8);
+    
+    %-- test add new values by value structure
+    val1 = newValues.values{1};
+    val2 = newValues.values{2};
+    updateNewDouble = s.create_property('doubleProperty2', nix.DataType.Double);
+    updateNewDouble.values = {val1, val2};
+    assert(s.open_property(s.allProperties{end}.id).values{2}.value == val2.value);
 end

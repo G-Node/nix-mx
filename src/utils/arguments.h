@@ -65,6 +65,11 @@ public:
         return mx_array_to_str(array[pos]);
     }
 
+    const mxArray * cellElemPtr(size_t pos, int index) const {
+        const mxArray *cell_element_ptr = mxGetCell(array[pos], index);
+        return cell_element_ptr;
+    }
+
     template<typename T>
     T num(size_t pos) const {
         check_arg_type(pos, nix::to_data_type<T>::value);

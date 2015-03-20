@@ -1,4 +1,5 @@
 #include "nixproperty.h"
+#include "nixgen.h"
 
 #include "mex.h"
 
@@ -55,8 +56,8 @@ namespace nixproperty {
     {
         nix::Property prop = input.entity<nix::Property>(1);
         prop.deleteValues();
-        std::vector<nix::Value> getVals = input.extractFromStruct(2);
-        prop.values(getVals);
+
+        prop.values(nixgen::extract_property_values(input, 2));
     }
 
 } // namespace nixproperty
