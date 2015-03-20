@@ -1,4 +1,5 @@
 #include "nixsection.h"
+#include "nixgen.h"
 
 #include "mex.h"
 #include <nix.hpp>
@@ -69,28 +70,7 @@ void create_property_with_value(const extractor &input, infusor &output)
 {
     nix::Section currObj = input.entity<nix::Section>(1);
 
-    std::vector<nix::Value> currVec;
-
-    mxClassID currID = input.class_id(3);
-    if (currID == mxCELL_CLASS)
-    {
-        const mxArray *cell_element_ptr = input.cellElemPtr(3, 0);
-
-        if (mxGetClassID(cell_element_ptr) == mxSTRUCT_CLASS)
-        {
-            currVec = input.extractFromStruct(3);
-        }
-        else
-        {
-            currVec = input.vec(3);
-        }
-    }
-    else
-    {
-        mexPrintf("Unsupported data type\n");
-    }
-
-    nix::Property p = currObj.createProperty(input.str(2), currVec);
+    nix::Property p = currObj.createProperty(input.str(2), nixgen::extract_property_values(input, 3));
     output.set(0, handle(p));
 }
 

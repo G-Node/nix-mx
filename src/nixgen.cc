@@ -39,4 +39,23 @@ mxArray *dataset_read_all(const nix::DataSet &da) {
     return data;
 }
 
+std::vector<nix::Value> extract_property_values(const extractor &input, int idx) {
+    std::vector<nix::Value> currVec;
+
+    mxClassID currID = input.class_id(idx);
+    if (currID == mxCELL_CLASS) {
+        const mxArray *cell_element_ptr = input.cellElemPtr(idx, 0);
+
+        if (mxGetClassID(cell_element_ptr) == mxSTRUCT_CLASS) {
+            currVec = input.extractFromStruct(idx);
+        } else {
+            currVec = input.vec(idx);
+        }
+    } else {
+        mexPrintf("Unsupported data type\n");
+    }
+
+    return currVec;
+}
+
 } // namespace nixgen

@@ -53,6 +53,9 @@ classdef Property < nix.NamedEntity
             dispStr = 'Note: nix only supports updating the actual value at the moment.';
             dispStr = [dispStr, char(10), 'Attributes like uncertainty or checksum cannot be set at the moment.'];
             disp(dispStr);
+            
+            %-- TODO: clearing existing values using obj.values = '' works,
+            %-- but is a hack. Refactor in good time.
         end
     end
     
