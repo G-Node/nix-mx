@@ -17,4 +17,4 @@ As of now there is no Windows installer for NIX-MX.
 
 **Build NIX-MX under Windows**
 
-To build NIX-MX under windows please follow the guide provided at [WinBuild.md](https://github.com/G-Node/nix-mx/WinBuild.md)
+To build NIX-MX under windows please follow the guide provided at [WinBuild.md](https://github.com/G-Node/nix-mx/blob/master/WinBuild.md)
