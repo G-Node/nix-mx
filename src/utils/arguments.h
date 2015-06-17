@@ -69,11 +69,6 @@ public:
         return mx_to_vector<T>(array[pos]);
     }
 
-    template<>
-    std::vector<std::string> vec(size_t pos) const {
-        return mx_to_strings(array[pos]);
-    }
-
     std::vector<nix::Value> vec(size_t pos) const {
         return mx_to_values(array[pos]);
     }
@@ -121,6 +116,11 @@ public:
 
 private:
 };
+
+template<>
+inline std::vector<std::string> extractor::vec(size_t pos) const {
+	return mx_to_strings(array[pos]);
+}
 
 
 class infusor : public argument_helper<mxArray> {
