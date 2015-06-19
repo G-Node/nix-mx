@@ -152,7 +152,7 @@ nix::Value mx_to_value_from_struct(const mxArray *arr) {
         case 3: val.encoder = mx_to_str(field_array_ptr); break;
         case 4: val.filename = mx_to_str(field_array_ptr); break;
         case 5: val.reference = mx_to_str(field_array_ptr); break;
-        default: throw std::invalid_argument(strcat("Field is not supported: ", field_name));
+        default: throw std::invalid_argument(std::string("Field is not supported: ") + std::string(field_name));
         }
     }
 

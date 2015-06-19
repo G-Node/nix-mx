@@ -40,8 +40,7 @@ struct ex_getter < std::string > {
 template<>
 struct ex_getter < boost::none_t > {
     static boost::none_t get(const extractor &input, int pos) {
-        boost::none_t t = nullptr;
-        return t;
+        return boost::none;
     }
 };
 

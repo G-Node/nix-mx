@@ -72,17 +72,6 @@ inline mxArray* make_mx_array(const std::vector<nix::Value> &v) {
 	return data;
 }
 
-
-template<typename T>
-mxArray* make_mx_array(const boost::optional<T> &opt) {
-    if (opt) {
-        return make_mx_array(*opt);
-    }
-    else {
-        return nullptr;
-    }
-}
-
 template<typename T>
 typename std::enable_if<std::is_arithmetic<T>::value, mxArray>::type* make_mx_array(T val) {
 	DType2 dtype = dtype_nix2mex(nix::to_data_type<T>::value);
@@ -154,6 +143,16 @@ inline mxArray* make_mx_array(const std::vector<nix::Dimension> &dims) {
     }
 
     return data;
+}
+
+template<typename T>
+mxArray* make_mx_array(const boost::optional<T> &opt) {
+    if (opt) {
+        return make_mx_array(*opt);
+    }
+    else {
+        return nullptr;
+    }
 }
 
 
