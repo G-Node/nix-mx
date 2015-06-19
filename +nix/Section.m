@@ -10,7 +10,7 @@ classdef Section < nix.NamedEntity
     
     properties(Dependent)
         allProperties
-        %allPropertiesMap
+        allPropertiesMap
     end;
     
     methods
@@ -122,25 +122,26 @@ classdef Section < nix.NamedEntity
         end;
 
         function props = get.allProperties(obj)
+            %-- if a value in a property is updated, this will not
+            %-- update the lastUpdate of the propertyCache of
+            %-- a loaded section. Therefore caching of the properties
+            %-- of a section is disabled by always resetting the lastUpdate
+            obj.propsCache.lastUpdate = 0;
+
             [obj.propsCache, props] = nix.Utils.fetchPropList(obj.updatedAt, ...
                 'Section::properties', obj.nix_handle, obj.propsCache);
         end
         
-        %-- values has been removed from section.properties due to
-        %-- stale entries in the section.properties cache when the acutal
-        %-- properties values are updated. therefore the current mapping 
-        %-- function cannot be used at the moment.
-        %-- could be refactored at a later moment in time
-        %function p_map = get.allPropertiesMap(obj)
-        %    p_map = containers.Map();
-        %    props = obj.allProperties;
-            
-        %    for i=1:length(props)
-        %        p_map(props{i}.name) = cell2mat(props{i}.values);
-        %    end
-        %end
+        function p_map = get.allPropertiesMap(obj)
+            p_map = containers.Map();
+            props = obj.allProperties;
+
+            for i=1:length(props)
+                p_map(props{i}.name) = cell2mat(props{i}.values);
+            end
+        end
 
     end
-    
+
 end
 

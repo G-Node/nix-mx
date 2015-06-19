@@ -158,6 +158,8 @@ function [] = test_create_property_with_value( varargin )
 
     tmp = s.create_property_with_value('doubleProperty1', [5, 6, 7, 8]);
     assert(strcmp(s.allProperties{end}.name, 'doubleProperty1'));
+    assert(s.allProperties{end}.values{1} == 5);
+    assert(size(s.allProperties{end}.values, 2) == 4);
     assert(s.open_property(s.allProperties{end}.id).values{1}.value == 5);
     assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 4);
     assert(strcmpi(tmp.datatype,'double'));
@@ -176,12 +178,17 @@ function [] = test_create_property_with_value( varargin )
     
     tmp = s.create_property_with_value('stringProperty2', {'this', 'has', 'strings'});
     assert(strcmp(s.allProperties{end}.name, 'stringProperty2'));
+    assert(strcmp(s.allProperties{end}.values{1}, 'this'));
+    assert(size(s.allProperties{end}.values, 2) == 3);
     assert(strcmp(s.open_property(s.allProperties{end}.id).values{1}.value, 'this'));
     assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 3);
     assert(strcmpi(tmp.datatype, 'char'));
 
     tmp = s.create_property_with_value('booleanProperty1', [true, false, true]);
     assert(strcmp(s.allProperties{end}.name, 'booleanProperty1'));
+    assert(s.allProperties{end}.values{1});
+    assert(~s.allProperties{end}.values{2});
+    assert(size(s.allProperties{end}.values, 2) == 3);
     assert(s.open_property(s.allProperties{end}.id).values{1}.value);
     assert(~s.open_property(s.allProperties{end}.id).values{2}.value);
     assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 3);
