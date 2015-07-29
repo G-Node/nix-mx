@@ -66,4 +66,20 @@ addpath('<path_to_the_mex_file>')
 addpath('<path_to_the_nix+_package>')
 ```
 
+_Note!_
+
+MATLAB is usually shipped with built-in `boost` and `HDF5` libraries, which may be of different versions from the ones that were used when compiling NIX. This results in errors and program crash. The workaround is to remove some built-in MATLAB libraries (usually they are older versions than the system ones) and symlink the ones that were used to build NIX. For example, for MATLAB R2011a 64-bit:
+
+```
+cd $MATLAB_HOME/bin/glnxa64
+
+mv libhdf5.so.6 /tmp
+mv libhdf5_hl.so.6 /tmp
+mv libboost_regex.so.1.40.0 /tmp
+
+ln -s /usr/lib/x86_64-linux-gnu/libhdf5.so libhdf5.so.6
+ln -s /usr/lib/x86_64-linux-gnu/libhdf5_hl.so libhdf5_hl.so.6
+ln -s /usr/lib/x86_64-linux-gnu/libboost_regex.so libboost_regex.so.1.40.0
+```
+
 After that the library can be normally used.
