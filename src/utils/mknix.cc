@@ -3,7 +3,10 @@
 #include <string.h>
 #include <vector>
 #include <map>
+
+#define char16_t LIBRARY_char16_t
 #include "mex.h"
+#undef char16_t
 
 #include <nix.hpp>
 
@@ -137,7 +140,6 @@ nix::Value mx_to_value_from_struct(const mxArray *arr) {
     };
 
     nix::Value val;
-    bool has_value = false;
 
     int number_of_fields = mxGetNumberOfFields(arr);
     for (int idx = 0; idx < number_of_fields; idx++)  {

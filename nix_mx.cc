@@ -2,7 +2,10 @@
 #include <math.h>
 #include <string.h>
 #include <vector>
+
+#define char16_t LIBRARY_char16_t
 #include "mex.h"
+#undef char16_t
 
 #include <nix.hpp>
 

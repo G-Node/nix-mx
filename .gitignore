@@ -5,3 +5,6 @@ build/
 
 # test sample files
 tests/*.h5
+
+# temp files
+*~

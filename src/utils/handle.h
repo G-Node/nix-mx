@@ -1,7 +1,10 @@
 #ifndef NIX_MX_HANDLE_H
 #define NIX_MX_HANDLE_H
 
+#define char16_t LIBRARY_char16_t
 #include "mex.h"
+#undef char16_t
+
 #include <nix.hpp>
 
 // *** nix entities holder ***

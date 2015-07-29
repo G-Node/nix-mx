@@ -9,7 +9,9 @@
 #include <vector>
 #include <cstdint>
 
-#include <mex.h>
+#define char16_t LIBRARY_char16_t
+#include "mex.h"
+#undef char16_t
 
 #include "handle.h"
 #include "datatypes.h"
