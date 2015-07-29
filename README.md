@@ -32,3 +32,38 @@ The Windows 64 package contains:
 **Build NIX-MX under Windows**
 
 To build NIX-MX under Windows please follow the guide provided at [WinBuild.md](https://github.com/G-Node/nix-mx/blob/master/WinBuild.md)
+
+
+Getting Started (Ubuntu 14.04)
+------------------------------
+
+_Dependencies_
+
+In order to build the NIX-MX library a recent C++11 compatible compiler is needed (g++ >= 4.8, clang >= 3.4)
+as well as the build tool CMake (>= 2.8.9). Further nix-mx depends on the following third party libraries:
+
+- [NIX](https://github.com/G-Node/nix) (version 1.8.13 or higher)
+- MATLAB (version R2011a) or OCTAVE (version 3.8.0)
+
+_Instructions_
+
+```bash
+# clone NIX-MX
+git clone https://github.com/G-Node/nix-mx
+cd nix-mx
+
+# make a build dir and build nix-mx
+mkdir build
+cd build
+cmake ..
+make all
+```
+
+This will generate the `nix_mx.mexa64` (or 32 on the 32-bit arch.) file. This file, together with the `nix+` package (located in the root of the repository) have to be added to the MATLAB path:
+
+```
+addpath('<path_to_the_mex_file>')
+addpath('<path_to_the_nix+_package>')
+```
+
+After that the library can be normally used.
