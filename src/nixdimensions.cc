@@ -2,9 +2,7 @@
 #include "arguments.h"
 #include "struct.h"
 
-#define char16_t LIBRARY_char16_t
 #include "mex.h"
-#undef char16_t
 
 namespace nixdimensions {
 

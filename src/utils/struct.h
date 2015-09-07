@@ -2,16 +2,13 @@
 #define NIX_MX_STRUCT_H
 
 #include "mkarray.h"
-#include "mex.h"
 
 #include <iostream>
 #include <math.h>
 #include <string.h>
 #include <vector>
 
-#include <nix.hpp>
-
-#include "handle.h"
+#include "handle.h" // will include nix.h, mex.h
 #include "arguments.h"
 
 // *** datatype converter

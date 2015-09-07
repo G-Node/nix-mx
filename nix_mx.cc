@@ -3,13 +3,7 @@
 #include <string.h>
 #include <vector>
 
-#define char16_t LIBRARY_char16_t
-#include "mex.h"
-#undef char16_t
-
-#include <nix.hpp>
-
-#include "handle.h"
+#include "handle.h" // will include nix.h, mex.h
 #include "arguments.h"
 #include "struct.h"
 #include "mknix.h"

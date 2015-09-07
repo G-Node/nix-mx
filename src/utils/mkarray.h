@@ -9,11 +9,7 @@
 #include <vector>
 #include <cstdint>
 
-#define char16_t LIBRARY_char16_t
-#include "mex.h"
-#undef char16_t
-
-#include "handle.h"
+#include "handle.h" // will include nix.h, mex.h
 #include "datatypes.h"
 
 inline mxArray* make_mx_array(const std::string &s)

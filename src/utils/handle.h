@@ -1,10 +1,13 @@
 #ifndef NIX_MX_HANDLE_H
 #define NIX_MX_HANDLE_H
 
-#define char16_t LIBRARY_char16_t
-#include "mex.h"
-#undef char16_t
+#if defined __GNUC__
+// define CHAR16_T so char16_t does not get redeclared in
+// matrix.h 
+#define CHAR16_T char16_t
+#endif
 
+#include <mex.h>
 #include <nix.hpp>
 
 // *** nix entities holder ***
