@@ -2,11 +2,8 @@
 #include <math.h>
 #include <string.h>
 #include <vector>
-#include "mex.h"
 
-#include <nix.hpp>
-
-#include "handle.h"
+#include "handle.h" // will include nix.h, mex.h
 #include "arguments.h"
 #include "struct.h"
 #include "mknix.h"

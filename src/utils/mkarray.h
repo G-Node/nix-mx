@@ -9,9 +9,7 @@
 #include <vector>
 #include <cstdint>
 
-#include <mex.h>
-
-#include "handle.h"
+#include "handle.h" // will include nix.h, mex.h
 #include "datatypes.h"
 
 inline mxArray* make_mx_array(const std::string &s)

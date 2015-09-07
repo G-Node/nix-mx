@@ -32,3 +32,54 @@ The Windows 64 package contains:
 **Build NIX-MX under Windows**
 
 To build NIX-MX under Windows please follow the guide provided at [WinBuild.md](https://github.com/G-Node/nix-mx/blob/master/WinBuild.md)
+
+
+Getting Started (Ubuntu 14.04)
+------------------------------
+
+_Dependencies_
+
+In order to build the NIX-MX library a recent C++11 compatible compiler is needed (g++ >= 4.8, clang >= 3.4)
+as well as the build tool CMake (>= 2.8.9). Further nix-mx depends on the following third party libraries:
+
+- [NIX](https://github.com/G-Node/nix) (version 1.8.13 or higher)
+- MATLAB (version R2011a) or OCTAVE (version 3.8.0)
+
+_Instructions_
+
+```bash
+# clone NIX-MX
+git clone https://github.com/G-Node/nix-mx
+cd nix-mx
+
+# make a build dir and build nix-mx
+mkdir build
+cd build
+cmake ..
+make all
+```
+
+This will generate the `nix_mx.mexa64` (or 32 on the 32-bit arch.) file. This file, together with the `nix+` package (located in the root of the repository) have to be added to the MATLAB path:
+
+```
+addpath('<path_to_the_mex_file>')
+addpath('<path_to_the_nix+_package>')
+```
+
+_Note!_
+
+MATLAB is usually shipped with built-in `boost` and `HDF5` libraries, which may be of different versions from the ones that were used when compiling NIX. This results in errors and program crash. The workaround is to remove some built-in MATLAB libraries (usually they are older versions than the system ones) and symlink the ones that were used to build NIX. For example, for MATLAB R2011a 64-bit:
+
+```
+cd $MATLAB_HOME/bin/glnxa64
+
+mv libhdf5.so.6 /tmp
+mv libhdf5_hl.so.6 /tmp
+mv libboost_regex.so.1.40.0 /tmp
+
+ln -s /usr/lib/x86_64-linux-gnu/libhdf5.so libhdf5.so.6
+ln -s /usr/lib/x86_64-linux-gnu/libhdf5_hl.so libhdf5_hl.so.6
+ln -s /usr/lib/x86_64-linux-gnu/libboost_regex.so libboost_regex.so.1.40.0
+```
+
+After that the library can be normally used.

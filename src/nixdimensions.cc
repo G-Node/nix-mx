@@ -1,7 +1,8 @@
 #include <nix.hpp>
-#include "mex.h"
 #include "arguments.h"
 #include "struct.h"
+
+#include "mex.h"
 
 namespace nixdimensions {
 
