@@ -3,5 +3,8 @@ build/
 ._*
 *.asv
 
+# temporary files
+*~
+
 # test sample files
 tests/*.h5
