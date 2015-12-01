@@ -63,6 +63,12 @@ struct entity_to_id<nix::Property> {
     static const int value = 8;
 };
 
+template<>
+struct entity_to_id<nix::Group> {
+    static const bool is_valid = true;
+    static const int value = 9;
+};
+
 /*
 Use value > 100 for entities that do NOT 
 inherit from nix::Entity

@@ -15,6 +15,7 @@
 #include "nixsection.h"
 #include "nixproperty.h"
 #include "nixblock.h"
+#include "nixgroup.h"
 #include "nixdataarray.h"
 #include "nixsource.h"
 #include "nixfeature.h"
@@ -130,6 +131,39 @@ void mexFunction(int            nlhs,
             .reg("set_none_definition", SETTER(const boost::none_t, nix::Block, definition));
         methods->add("Block::createDataArray", nixblock::create_data_array);
         methods->add("Block::createMultiTag", nixblock::create_multi_tag);
+
+        classdef<nix::Group>("Group", methods)
+            .desc(&nixgroup::describe)
+            // does not work
+            //.reg("dataArrays", &nix::Group::dataArrays)
+            // does not work
+            //.reg("tags", &nix::Group::tags)
+            // does not work
+            //.reg("multiTags", &nix::Group::multiTags)
+            // compiles, should work
+            .reg("hasDataArray", GETBYSTR(bool, nix::Group, hasDataArray))
+            // compiles, should work
+            .reg("hasTag", GETBYSTR(bool, nix::Group, hasTag))
+            // compiles, should work
+            .reg("hasMultiTag", GETBYSTR(bool, nix::Group, hasMultiTag))
+            // compiles, should work
+            .reg("openDataArray", GETBYSTR(nix::DataArray, nix::Group, getDataArray))
+            // compiles, should work
+            .reg("openTag", GETBYSTR(nix::Tag, nix::Group, getTag))
+            // compiles, should work
+            .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Group, getMultiTag))
+            // compiles, should work
+            .reg("deleteDataArray", REMOVER(nix::DataArray, nix::Group, removeDataArray))
+            // compiles, should work, deleteTag in Block
+            .reg("deleteTag", REMOVER(nix::Tag, nix::Group, removeTag))
+            // should work, deleteMultiTag in Block
+            .reg("deleteMultiTag", REMOVER(nix::MultiTag, nix::Group, removeMultiTag))
+            .reg("set_type", SETTER(const std::string&, nix::Group, type))
+            .reg("set_definition", SETTER(const std::string&, nix::Group, definition))
+            .reg("set_none_definition", SETTER(const boost::none_t, nix::Group, definition));
+        methods->add("Group::addDataArray", nixgroup::add_data_array);
+        methods->add("Group::addTag", nixgroup::add_tag);
+        methods->add("Group::addMultiTag", nixgroup::add_multi_tag);
 
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)
