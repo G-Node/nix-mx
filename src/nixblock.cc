@@ -46,4 +46,14 @@ namespace nixblock {
         output.set(0, mTag);
     }
 
+    void create_group(const extractor &input, infusor &output)
+    {
+        nix::Block block = input.entity<nix::Block>(1);
+        std::string name = input.str(2);
+        std::string type = input.str(3);
+
+        nix::Group group = block.createGroup(name, type);
+        output.set(0, group);
+    }
+
 } // namespace nixblock

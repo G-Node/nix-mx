@@ -113,8 +113,11 @@ void mexFunction(int            nlhs,
             .reg("sources", &nix::Block::sources)
             .reg("tags", &nix::Block::tags)
             .reg("multiTags", &nix::Block::multiTags)
+            .reg("groups", &nix::Block::groups)
             .reg("hasTag", GETBYSTR(bool, nix::Block, hasTag))
             .reg("hasMultiTag", GETBYSTR(bool, nix::Block, hasMultiTag))
+            // method is only available as get by entity, not as get by id or name on the c++ side
+            //.reg("hasGroup", GETBYSTR(bool, nix::Block, hasGroup))
             .reg("openDataArray", GETBYSTR(nix::DataArray, nix::Block, getDataArray))
             .reg("openSource", GETBYSTR(nix::Source, nix::Block, getSource))
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
@@ -126,11 +129,13 @@ void mexFunction(int            nlhs,
             .reg("deleteSource", REMOVER(nix::Source, nix::Block, deleteSource))
             .reg("deleteTag", REMOVER(nix::Tag, nix::Block, deleteTag))
             .reg("deleteMultiTag", REMOVER(nix::MultiTag, nix::Block, deleteMultiTag))
+            .reg("deleteGroup", REMOVER(nix::Group, nix::Block, deleteGroup))
             .reg("set_type", SETTER(const std::string&, nix::Block, type))
             .reg("set_definition", SETTER(const std::string&, nix::Block, definition))
             .reg("set_none_definition", SETTER(const boost::none_t, nix::Block, definition));
         methods->add("Block::createDataArray", nixblock::create_data_array);
         methods->add("Block::createMultiTag", nixblock::create_multi_tag);
+        methods->add("Block::createGroup", nixblock::create_group);
 
         classdef<nix::Group>("Group", methods)
             .desc(&nixgroup::describe)
