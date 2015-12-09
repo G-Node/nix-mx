@@ -420,17 +420,18 @@ function [] = test_delete_group( varargin )
     assert(isempty(f.blocks{1}.groups));
 end
 
-%% Test: Block has Group by entity
+%% Test: Block has Group by name or id
 function [] = test_has_group( varargin )
-%{
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5', nix.FileMode.Overwrite));
+    groupName = 'testGroup';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('grouptest', 'nixBlock');
 
-    g = b.create_group('testGroup', 'nixGroup');
-    assert(b.has_group(b.groups{1}));
+    assert(~b.has_group('I do not exist'));
+    
+    g = b.create_group(groupName, 'nixGroup');
+    assert(b.has_group(b.groups{1}.id));
+    assert(b.has_group(groupName));
 
     b.delete_group(b.groups{1});
-    assert(~b.has_group(g));
-%}
-    disp('Test Block.has_group ... TODO (function not working at the moment)');
+    assert(~b.has_group(g.id));
 end

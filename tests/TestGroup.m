@@ -62,15 +62,14 @@ function [] = test_add_data_array( varargin )
     da = b.create_data_array(daName, daType, 'double', [2 3]);
     g = b.create_group('testGroup', 'nixGroup');
 
-    disp('Test Group.add_data_array ... TODO dataArrays check is not working');
-    %assert(isempty(g.dataArrays));
+    assert(isempty(g.dataArrays));
     g.add_data_array(da);
-    %assert(size(g.dataArrays,1) == 1);
-    %assert(strcmp(b.groups{1}.dataArrays{1}.name, daName));
+    assert(size(g.dataArrays, 1) == 1);
+    assert(strcmp(b.groups{1}.dataArrays{1}.name, daName));
 
     clear g da b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
-    %assert(strcmp(f.blocks{1}.groups{1}.dataArrays{1}.name, daName));
+    assert(strcmp(f.blocks{1}.groups{1}.dataArrays{1}.name, daName));
 end
 
 %% Test: Get nix.DataArray by id or name
@@ -184,17 +183,16 @@ function [] = test_add_tag( varargin )
     t2 = b.create_tag(tagName2, 'nixTag', [1.0 1.2 1.3 15.9]);
     tID = t2.id;
     g = b.create_group('testGroup', 'nixGroup');
-    disp('test_add_tag: TODO comment in check once method is implemented in c++');
-    %assert(isempty(g.tags));
+    assert(isempty(g.tags));
     g.add_tag(t1);
-    %assert(strcmp(g.tags{1}.name, tagName1));
+    assert(strcmp(g.tags{1}.name, tagName1));
     g.add_tag(tID);
-    %assert(strcmp(g.tags{2}.name, tagName2));
+    assert(strcmp(g.tags{2}.name, tagName2));
 
     clear t1 t2 g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
-    %assert(strcmp(f.blocks{1}.groups{1}.tags{1}.name, tagName1));
-    %assert(strcmp(f.blocks{1}.groups{1}.tags{2}.name, tagName2));
+    assert(strcmp(f.blocks{1}.groups{1}.tags{1}.name, tagName1));
+    assert(strcmp(f.blocks{1}.groups{1}.tags{2}.name, tagName2));
 end
 
 %% Test: has nix.Tag by id or name
@@ -253,17 +251,21 @@ function [] = test_remove_tag( varargin )
 
     assert(~g.remove_tag('I do not exist'));
 
-    disp('TODO: comment asserts in when tags function works');
+    disp('Fix caching issue before commenting in inactive asserts.');
     assert(size(f.blocks{1}.tags, 1) == 3);
-    %assert(size(f.blocks{1}.groups{1}.tags, 1) == 3);
+    assert(size(g.tags, 1) == 3);
+    assert(size(f.blocks{1}.groups{1}.tags, 1) == 3);
     assert(g.remove_tag(t1.id));
     assert(size(f.blocks{1}.tags, 1) == 3);
+    assert(size(g.tags, 1) == 2);
     %assert(size(f.blocks{1}.groups{1}.tags, 1) == 2);
     assert(g.remove_tag(t2));
     assert(size(f.blocks{1}.tags, 1) == 3);
+    assert(size(g.tags, 1) == 1);
     %assert(size(f.blocks{1}.groups{1}.tags, 1) == 1);
     assert(~g.remove_tag(t2));
     assert(size(f.blocks{1}.tags, 1) == 3);
+    assert(size(g.tags, 1) == 1);
     %assert(size(f.blocks{1}.groups{1}.tags, 1) == 1);
 
     clear t1 t2 t3 g b f;
@@ -286,18 +288,17 @@ function [] = test_add_multi_tag( varargin )
     tmp = b.create_multi_tag(tagName2, tagType, b.dataArrays{2});
     g = b.create_group('testGroup', 'nixGroup');
 
-    disp('test_add_multi_tag: comment in once c++ method works');
-    %assert(isempty(g.multiTags));
+    assert(isempty(g.multiTags));
     g.add_multi_tag(b.multiTags{1});
-    %assert(size(g.multiTags, 1) == 1);
+    assert(size(g.multiTags, 1) == 1);
 
     g.add_multi_tag(b.multiTags{2}.id);
-    %assert(size(g.multiTags, 1) == 2);
+    assert(size(g.multiTags, 1) == 2);
 
     clear tmp g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
-    %assert(strcmp(f.blocks{1}.groups{1}.tags{1}.name, tagName1));
-    %assert(strcmp(f.blocks{1}.groups{1}.tags{2}.name, tagName2));
+    assert(strcmp(f.blocks{1}.groups{1}.multiTags{1}.name, tagName1));
+    assert(strcmp(f.blocks{1}.groups{1}.multiTags{2}.name, tagName2));
 end
 
 %% Test: has nix.MultiTag by id or name
@@ -368,21 +369,24 @@ function [] = test_remove_multi_tag( varargin )
 
     assert(~g.remove_multi_tag('I do not exist'));
 
-    disp('TODO: comment asserts in when multitags function works');
+    disp('Fix caching issue before commenting in inactive asserts.');
     assert(size(f.blocks{1}.multiTags, 1) == 3);
-    %assert(size(f.blocks{1}.groups{1}.multiTags, 1) == 3);
+    assert(size(f.blocks{1}.groups{1}.multiTags, 1) == 3);
     assert(g.remove_multi_tag(t1.id));
     assert(size(f.blocks{1}.multiTags, 1) == 3);
+    assert(size(g.multiTags, 1) == 2);
     %assert(size(f.blocks{1}.groups{1}.multiTags, 1) == 2);
     assert(~g.has_multi_tag(tagName1));
 
     assert(g.remove_multi_tag(t2));
     assert(size(f.blocks{1}.multiTags, 1) == 3);
+    assert(size(g.multiTags, 1) == 1);
     %assert(size(f.blocks{1}.groups{1}.multiTags, 1) == 1);
     assert(~g.has_multi_tag(tagName2));
 
     assert(~g.remove_multi_tag(t2));
     assert(size(f.blocks{1}.multiTags, 1) == 3);
+    assert(size(g.multiTags, 1) == 1);
     %assert(size(f.blocks{1}.groups{1}.multiTags, 1) == 1);
 
     clear t1 t2 t3 da g b f;

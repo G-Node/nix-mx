@@ -23,7 +23,6 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % Group methods
         % -----------------
         
-        % TODO -- seems to work remove me later
         function g = create_group(obj, name, nixtype)
             handle = nix_mx('Block::createGroup', obj.nix_handle, ...
                 name, nixtype);
@@ -31,20 +30,10 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             obj.groupsCache.lastUpdate = 0;
         end;
         
-        % TODO - check if this actually works...
-        % TODO - find better solution to deal with non-entity entries.
-        function hasGroup = has_group(obj, group)
-            % TODO not available from the c++ side at the moment
-            %{
-            if(strcmp(class(group), 'nix.Group'))
-                hasGroup = nix_mx('Block::hasGroup', group);
-            else
-                error('Please provide a proper group.');
-            end;
-            %}
+        function hasGroup = has_group(obj, id_or_name)
+            hasGroup = nix_mx('Block::hasGroup', obj.nix_handle, id_or_name);
         end;
         
-        % TODO -- seems to work remove me later
         function delCheck = delete_group(obj, del)
             [delCheck, obj.groupsCache] = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Group', 'Block::deleteGroup');

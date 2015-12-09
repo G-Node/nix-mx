@@ -116,8 +116,7 @@ void mexFunction(int            nlhs,
             .reg("groups", &nix::Block::groups)
             .reg("hasTag", GETBYSTR(bool, nix::Block, hasTag))
             .reg("hasMultiTag", GETBYSTR(bool, nix::Block, hasMultiTag))
-            // method is only available as get by entity, not as get by id or name on the c++ side
-            //.reg("hasGroup", GETBYSTR(bool, nix::Block, hasGroup))
+            .reg("hasGroup", GETBYSTR(bool, nix::Block, hasGroup))
             .reg("openDataArray", GETBYSTR(nix::DataArray, nix::Block, getDataArray))
             .reg("openSource", GETBYSTR(nix::Source, nix::Block, getSource))
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
@@ -139,29 +138,17 @@ void mexFunction(int            nlhs,
 
         classdef<nix::Group>("Group", methods)
             .desc(&nixgroup::describe)
-            // does not work
-            //.reg("dataArrays", &nix::Group::dataArrays)
-            // does not work
-            //.reg("tags", &nix::Group::tags)
-            // does not work
-            //.reg("multiTags", &nix::Group::multiTags)
-            // compiles, should work
+            .reg("dataArrays", FILTER(std::vector<nix::DataArray>, nix::Group, , dataArrays))
+            .reg("tags", FILTER(std::vector<nix::Tag>, nix::Group, , tags))
+            .reg("multiTags", FILTER(std::vector<nix::MultiTag>, nix::Group, , multiTags))
             .reg("hasDataArray", GETBYSTR(bool, nix::Group, hasDataArray))
-            // compiles, should work
             .reg("hasTag", GETBYSTR(bool, nix::Group, hasTag))
-            // compiles, should work
             .reg("hasMultiTag", GETBYSTR(bool, nix::Group, hasMultiTag))
-            // compiles, should work
             .reg("getDataArray", GETBYSTR(nix::DataArray, nix::Group, getDataArray))
-            // compiles, should work
             .reg("getTag", GETBYSTR(nix::Tag, nix::Group, getTag))
-            // compiles, should work
             .reg("getMultiTag", GETBYSTR(nix::MultiTag, nix::Group, getMultiTag))
-            // compiles, should work
             .reg("removeDataArray", REMOVER(nix::DataArray, nix::Group, removeDataArray))
-            // compiles, should work, deleteTag in Block
             .reg("removeTag", REMOVER(nix::Tag, nix::Group, removeTag))
-            // should work, deleteMultiTag in Block
             .reg("removeMultiTag", REMOVER(nix::MultiTag, nix::Group, removeMultiTag))
             .reg("set_type", SETTER(const std::string&, nix::Group, type))
             .reg("set_definition", SETTER(const std::string&, nix::Group, definition))
