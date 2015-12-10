@@ -12,10 +12,36 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             obj@nix.MetadataMixIn();
             
             % assign relations
+            nix.Dynamic.add_dyn_relation(obj, 'groups', @nix.Group);
             nix.Dynamic.add_dyn_relation(obj, 'dataArrays', @nix.DataArray);
             nix.Dynamic.add_dyn_relation(obj, 'sources', @nix.Source);
             nix.Dynamic.add_dyn_relation(obj, 'tags', @nix.Tag);
             nix.Dynamic.add_dyn_relation(obj, 'multiTags', @nix.MultiTag);
+        end;
+        
+        % -----------------
+        % Group methods
+        % -----------------
+        
+        function g = create_group(obj, name, nixtype)
+            handle = nix_mx('Block::createGroup', obj.nix_handle, ...
+                name, nixtype);
+            g = nix.Group(handle);
+            obj.groupsCache.lastUpdate = 0;
+        end;
+        
+        function hasGroup = has_group(obj, id_or_name)
+            hasGroup = nix_mx('Block::hasGroup', obj.nix_handle, id_or_name);
+        end;
+
+        function retObj = get_group(obj, id_or_name)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Block::getGroup', id_or_name, @nix.Group);
+        end;
+
+        function delCheck = delete_group(obj, del)
+            [delCheck, obj.groupsCache] = nix.Utils.delete_entity(obj, ...
+                del, 'nix.Group', 'Block::deleteGroup');
         end;
         
         % -----------------
