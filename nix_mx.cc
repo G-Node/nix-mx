@@ -15,6 +15,7 @@
 #include "nixsection.h"
 #include "nixproperty.h"
 #include "nixblock.h"
+#include "nixgroup.h"
 #include "nixdataarray.h"
 #include "nixsource.h"
 #include "nixfeature.h"
@@ -112,8 +113,11 @@ void mexFunction(int            nlhs,
             .reg("sources", &nix::Block::sources)
             .reg("tags", &nix::Block::tags)
             .reg("multiTags", &nix::Block::multiTags)
+            .reg("groups", &nix::Block::groups)
             .reg("hasTag", GETBYSTR(bool, nix::Block, hasTag))
             .reg("hasMultiTag", GETBYSTR(bool, nix::Block, hasMultiTag))
+            .reg("hasGroup", GETBYSTR(bool, nix::Block, hasGroup))
+            .reg("getGroup", GETBYSTR(nix::Group, nix::Block, getGroup))
             .reg("openDataArray", GETBYSTR(nix::DataArray, nix::Block, getDataArray))
             .reg("openSource", GETBYSTR(nix::Source, nix::Block, getSource))
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
@@ -125,11 +129,34 @@ void mexFunction(int            nlhs,
             .reg("deleteSource", REMOVER(nix::Source, nix::Block, deleteSource))
             .reg("deleteTag", REMOVER(nix::Tag, nix::Block, deleteTag))
             .reg("deleteMultiTag", REMOVER(nix::MultiTag, nix::Block, deleteMultiTag))
+            .reg("deleteGroup", REMOVER(nix::Group, nix::Block, deleteGroup))
             .reg("set_type", SETTER(const std::string&, nix::Block, type))
             .reg("set_definition", SETTER(const std::string&, nix::Block, definition))
             .reg("set_none_definition", SETTER(const boost::none_t, nix::Block, definition));
         methods->add("Block::createDataArray", nixblock::create_data_array);
         methods->add("Block::createMultiTag", nixblock::create_multi_tag);
+        methods->add("Block::createGroup", nixblock::create_group);
+
+        classdef<nix::Group>("Group", methods)
+            .desc(&nixgroup::describe)
+            .reg("dataArrays", FILTER(std::vector<nix::DataArray>, nix::Group, , dataArrays))
+            .reg("tags", FILTER(std::vector<nix::Tag>, nix::Group, , tags))
+            .reg("multiTags", FILTER(std::vector<nix::MultiTag>, nix::Group, , multiTags))
+            .reg("hasDataArray", GETBYSTR(bool, nix::Group, hasDataArray))
+            .reg("hasTag", GETBYSTR(bool, nix::Group, hasTag))
+            .reg("hasMultiTag", GETBYSTR(bool, nix::Group, hasMultiTag))
+            .reg("getDataArray", GETBYSTR(nix::DataArray, nix::Group, getDataArray))
+            .reg("getTag", GETBYSTR(nix::Tag, nix::Group, getTag))
+            .reg("getMultiTag", GETBYSTR(nix::MultiTag, nix::Group, getMultiTag))
+            .reg("removeDataArray", REMOVER(nix::DataArray, nix::Group, removeDataArray))
+            .reg("removeTag", REMOVER(nix::Tag, nix::Group, removeTag))
+            .reg("removeMultiTag", REMOVER(nix::MultiTag, nix::Group, removeMultiTag))
+            .reg("set_type", SETTER(const std::string&, nix::Group, type))
+            .reg("set_definition", SETTER(const std::string&, nix::Group, definition))
+            .reg("set_none_definition", SETTER(const boost::none_t, nix::Group, definition));
+        methods->add("Group::addDataArray", nixgroup::add_data_array);
+        methods->add("Group::addTag", nixgroup::add_tag);
+        methods->add("Group::addMultiTag", nixgroup::add_multi_tag);
 
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)
