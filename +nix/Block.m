@@ -33,7 +33,12 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         function hasGroup = has_group(obj, id_or_name)
             hasGroup = nix_mx('Block::hasGroup', obj.nix_handle, id_or_name);
         end;
-        
+
+        function retObj = get_group(obj, id_or_name)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Block::getGroup', id_or_name, @nix.Group);
+        end;
+
         function delCheck = delete_group(obj, del)
             [delCheck, obj.groupsCache] = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Group', 'Block::deleteGroup');

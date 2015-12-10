@@ -117,6 +117,7 @@ void mexFunction(int            nlhs,
             .reg("hasTag", GETBYSTR(bool, nix::Block, hasTag))
             .reg("hasMultiTag", GETBYSTR(bool, nix::Block, hasMultiTag))
             .reg("hasGroup", GETBYSTR(bool, nix::Block, hasGroup))
+            .reg("getGroup", GETBYSTR(nix::Group, nix::Block, getGroup))
             .reg("openDataArray", GETBYSTR(nix::DataArray, nix::Block, getDataArray))
             .reg("openSource", GETBYSTR(nix::Source, nix::Block, getSource))
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))

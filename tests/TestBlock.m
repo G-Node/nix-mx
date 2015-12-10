@@ -26,8 +26,9 @@ function funcs = TestBlock
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_create_group;
-    funcs{end+1} = @test_delete_group;
     funcs{end+1} = @test_has_group;
+    funcs{end+1} = @test_get_group;
+    funcs{end+1} = @test_delete_group;
 end
 
 function [] = test_attrs( varargin )
@@ -375,7 +376,7 @@ function [] = test_open_metadata( varargin )
     assert(strcmp(b.open_metadata.name, 'testSection'));
 end
 
-%% Test: Create Group
+%% Test: Create nix.Group
 function [] = test_create_group( varargin )
     fileName = 'testRW.h5';
     groupName = 'testGroup';
@@ -397,7 +398,37 @@ function [] = test_create_group( varargin )
     assert(strcmp(f.blocks{1}.groups{1}.name, groupName));
 end
 
-%% Test: delete group by entity and id
+%% Test: nix.Block has nix.Group by name or id
+function [] = test_has_group( varargin )
+    groupName = 'testGroup';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('grouptest', 'nixBlock');
+
+    assert(~b.has_group('I do not exist'));
+    
+    g = b.create_group(groupName, 'nixGroup');
+    assert(b.has_group(b.groups{1}.id));
+    assert(b.has_group(groupName));
+
+    b.delete_group(b.groups{1});
+    assert(~b.has_group(g.id));
+end
+
+%% Test: Get nix.Group by name or id
+function [] = test_get_group( varargin )
+    groupName = 'testGroup';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('grouptest', 'nixBlock');
+    g = b.create_group(groupName, 'nixGroup');
+    gID = g.id;
+
+    clear g b f;
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.ReadOnly);
+    assert(strcmp(f.blocks{1}.get_group(gID).name, groupName));
+    assert(strcmp(f.blocks{1}.get_group(groupName).name, groupName));
+end
+
+%% Test: Delete nix.Group by entity and id
 function [] = test_delete_group( varargin )
     fileName = 'testRW.h5';
     groupType = 'nixGroup';
@@ -418,20 +449,4 @@ function [] = test_delete_group( varargin )
     clear g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(isempty(f.blocks{1}.groups));
-end
-
-%% Test: Block has Group by name or id
-function [] = test_has_group( varargin )
-    groupName = 'testGroup';
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.createBlock('grouptest', 'nixBlock');
-
-    assert(~b.has_group('I do not exist'));
-    
-    g = b.create_group(groupName, 'nixGroup');
-    assert(b.has_group(b.groups{1}.id));
-    assert(b.has_group(groupName));
-
-    b.delete_group(b.groups{1});
-    assert(~b.has_group(g.id));
 end
