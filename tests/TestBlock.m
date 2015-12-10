@@ -21,6 +21,8 @@ function funcs = TestBlock
     funcs{end+1} = @test_open_tag;
     funcs{end+1} = @test_open_multitag;
     funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_has_data_array;
+    funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_has_multitag;
     funcs{end+1} = @test_has_tag;
     funcs{end+1} = @test_set_metadata;
@@ -370,4 +372,38 @@ function [] = test_open_metadata( varargin )
     b.set_metadata(f.sections{1});
 
     assert(strcmp(b.open_metadata.name, 'testSection'));
+end
+
+%% Test: nix.Block has nix.DataArray by ID or name
+function [] = test_has_data_array( varargin )
+    fileName = 'testRW.h5';
+    daName = 'hasDataArrayTest';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('testblock', 'nixBlock');
+    da = b.create_data_array(daName, 'nixDataArray', 'double', [1 2]);
+    daID = da.id;
+    
+    assert(~b.has_data_array('I do not exist'));
+    assert(b.has_data_array(daName));
+
+    clear da b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.has_data_array(daID));
+end
+
+%% Test: nix.Block has nix.Source by ID or name
+function [] = test_has_source( varargin )
+    fileName = 'testRW.h5';
+    sName = 'sourcetest1';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('testblock', 'nixBlock');
+    s = b.create_source(sName, 'nixSource');
+    sID = s.id;
+
+    assert(~b.has_source('I do not exist'));
+    assert(b.has_source(sName));
+
+    clear s b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.has_source(sID));
 end
