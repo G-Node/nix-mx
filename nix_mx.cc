@@ -181,6 +181,8 @@ void mexFunction(int            nlhs,
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::Tag, references))
             .reg("features", &nix::Tag::features)
             .reg("sources", FILTER(std::vector<nix::Source>, nix::Tag, std::function<bool(const nix::Source &)>, sources))
+            .reg("hasReference", GETBYSTR(bool, nix::Tag, hasReference))
+            .reg("hasFeature", GETBYSTR(bool, nix::Tag, hasFeature))
             .reg("openReferenceDataArray", GETBYSTR(nix::DataArray, nix::Tag, getReference))
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource))
@@ -192,6 +194,9 @@ void mexFunction(int            nlhs,
             .reg("set_type", SETTER(const std::string&, nix::Tag, type))
             .reg("set_definition", SETTER(const std::string&, nix::Tag, definition))
             .reg("set_none_definition", SETTER(const boost::none_t, nix::Tag, definition))
+            .reg("set_position", SETTER(const std::vector<double>&, nix::Tag, position))
+            .reg("set_extent", SETTER(const std::vector<double>&, nix::Tag, extent))
+            .reg("set_none_extent", SETTER(const boost::none_t, nix::Tag, extent))
             .reg("removeReference", REMOVER(nix::DataArray, nix::Tag, removeReference))
             .reg("removeSource", REMOVER(nix::Source, nix::Tag, removeSource))
             .reg("deleteFeature", REMOVER(nix::Feature, nix::Tag, deleteFeature));
