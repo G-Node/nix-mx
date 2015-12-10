@@ -14,6 +14,8 @@ function funcs = testFile
     funcs{end+1} = @test_open_block;
     funcs{end+1} = @test_delete_block;
     funcs{end+1} = @test_delete_section;
+    funcs{end+1} = @test_has_block;
+    funcs{end+1} = @test_has_section;
 
 end
 
@@ -128,4 +130,36 @@ function [] = test_open_block( varargin )
     %-- test open non existing block
     getBlock = test_file.openBlock('I dont exist');
     assert(isempty(getBlock));
+end
+
+%% Test: nix.File has nix.Block by ID or name
+function [] = test_has_block( varargin )
+    fileName = 'testRW.h5';
+    blockName = 'hasBlockTest';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock(blockName, 'nixBlock');
+    bID = b.id;
+
+    assert(~f.hasBlock('I do not exist'));
+    assert(f.hasBlock(blockName));
+
+    clear b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.hasBlock(bID));
+end
+
+%% Test: nix.File has nix.Section by ID or name
+function [] = test_has_section( varargin )
+    fileName = 'testRW.h5';
+    secName = 'hasSectionTest';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    s = f.createSection(secName, 'nixSection');
+    sID = s.id;
+
+    assert(~f.hasSection('I do not exist'));
+    assert(f.hasSection(secName));
+
+    clear s f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.hasSection(sID));
 end

@@ -97,6 +97,8 @@ void mexFunction(int            nlhs,
             .add("open", nixfile::open)
             .reg("blocks", GETTER(std::vector<nix::Block>, nix::File, blocks))
             .reg("sections", GETTER(std::vector<nix::Section>, nix::File, sections))
+            .reg("hasBlock", GETBYSTR(bool, nix::File, hasBlock))
+            .reg("hasSection", GETBYSTR(bool, nix::File, hasSection))
             .reg("deleteBlock", REMOVER(nix::Block, nix::File, deleteBlock))
             .reg("deleteSection", REMOVER(nix::Section, nix::File, deleteSection))
             .reg("openBlock", GETBYSTR(nix::Block, nix::File, getBlock))
