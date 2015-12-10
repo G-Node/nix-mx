@@ -410,6 +410,7 @@ function [] = test_has_source( varargin )
     clear s b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(f.blocks{1}.has_source(sID));
+end
 
 %% Test: Create nix.Group
 function [] = test_create_group( varargin )
