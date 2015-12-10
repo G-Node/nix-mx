@@ -212,12 +212,18 @@ void mexFunction(int            nlhs,
             .reg("features", &nix::MultiTag::features)
             .reg("sources", FILTER(std::vector<nix::Source>, nix::MultiTag, std::function<bool(const nix::Source &)>, sources))
             .reg("hasPositions", GETCONTENT(bool, nix::MultiTag, hasPositions))
+            .reg("hasReference", GETBYSTR(bool, nix::MultiTag, hasReference))
+            .reg("hasFeature", GETBYSTR(bool, nix::MultiTag, hasFeature))
             .reg("openPositions", GETCONTENT(nix::DataArray, nix::MultiTag, positions))
             .reg("openExtents", GETCONTENT(nix::DataArray, nix::MultiTag, extents))
             .reg("openReferences", GETBYSTR(nix::DataArray, nix::MultiTag, getReference))
             .reg("openFeature", GETBYSTR(nix::Feature, nix::MultiTag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::MultiTag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::MultiTag, metadata))
+            .reg("set_units", SETTER(const std::vector<std::string>&, nix::MultiTag, units))
+            .reg("set_none_units", SETTER(const boost::none_t, nix::MultiTag, units))
+            .reg("set_extents", SETTER(const std::string&, nix::MultiTag, extents))
+            .reg("set_none_extents", SETTER(const boost::none_t, nix::MultiTag, extents))
             .reg("set_metadata", SETTER(const std::string&, nix::MultiTag, metadata))
             .reg("set_none_metadata", SETTER(const boost::none_t, nix::MultiTag, metadata))
             .reg("removeReference", REMOVER(nix::DataArray, nix::MultiTag, removeReference))
@@ -229,7 +235,6 @@ void mexFunction(int            nlhs,
         methods->add("MultiTag::addSource", nixmultitag::add_source);
         methods->add("MultiTag::createFeature", nixmultitag::create_feature);
         methods->add("MultiTag::addPositions", nixmultitag::add_positions);
-        methods->add("MultiTag::addExtents", nixmultitag::add_extents);
 
         classdef<nix::Section>("Section", methods)
             .desc(&nixsection::describe)
