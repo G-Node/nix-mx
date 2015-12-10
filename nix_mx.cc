@@ -167,6 +167,7 @@ void mexFunction(int            nlhs,
             .reg("createSource", &nix::Source::createSource)
             .reg("deleteSource", REMOVER(nix::Source, nix::Source, deleteSource))
             .reg("sources", &nix::Source::sources)
+            .reg("hasSource", GETBYSTR(bool, nix::Source, hasSource))
             .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Source, metadata))
             .reg("set_metadata", SETTER(const std::string&, nix::Source, metadata))

@@ -24,6 +24,10 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
             obj.sourcesCache.lastUpdate = 0;
         end;
 
+        function hasSource = has_source(obj, id_or_name)
+            hasSource = nix_mx('Source::hasSource', obj.nix_handle, id_or_name);
+        end;
+        
         function delCheck = delete_source(obj, del)
             [delCheck, obj.sourcesCache] = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Source', 'Source::deleteSource', obj.sourcesCache);
