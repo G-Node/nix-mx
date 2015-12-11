@@ -290,7 +290,10 @@ void mexFunction(int            nlhs,
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)
-            .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data));
+            .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data))
+            .reg("setData", SETTER(const std::string&, nix::Feature, data))
+            .reg("getLinkType", GETCONTENT(nix::LinkType, nix::Feature, linkType));
+        methods->add("Feature::setLinkType", nixfeature::set_link_type);
 
         classdef<nix::Property>("Property", methods)
             .desc(&nixproperty::describe)
@@ -361,4 +364,3 @@ void mexFunction(int            nlhs,
         mexErrMsgIdAndTxt("nix:arg:dispatch", "Unkown command");
     }
 }
-
