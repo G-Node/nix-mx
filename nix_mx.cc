@@ -98,6 +98,8 @@ void mexFunction(int            nlhs,
             .add("open", nixfile::open)
             .reg("blocks", GETTER(std::vector<nix::Block>, nix::File, blocks))
             .reg("sections", GETTER(std::vector<nix::Section>, nix::File, sections))
+            .reg("hasBlock", GETBYSTR(bool, nix::File, hasBlock))
+            .reg("hasSection", GETBYSTR(bool, nix::File, hasSection))
             .reg("deleteBlock", REMOVER(nix::Block, nix::File, deleteBlock))
             .reg("deleteSection", REMOVER(nix::Section, nix::File, deleteSection))
             .reg("openBlock", GETBYSTR(nix::Block, nix::File, getBlock))
@@ -113,6 +115,8 @@ void mexFunction(int            nlhs,
             .reg("sources", &nix::Block::sources)
             .reg("tags", &nix::Block::tags)
             .reg("multiTags", &nix::Block::multiTags)
+            .reg("hasDataArray", GETBYSTR(bool, nix::Block, hasDataArray))
+            .reg("hasSource", GETBYSTR(bool, nix::Block, hasSource))
             .reg("groups", &nix::Block::groups)
             .reg("hasTag", GETBYSTR(bool, nix::Block, hasTag))
             .reg("hasMultiTag", GETBYSTR(bool, nix::Block, hasMultiTag))
@@ -190,6 +194,7 @@ void mexFunction(int            nlhs,
             .reg("createSource", &nix::Source::createSource)
             .reg("deleteSource", REMOVER(nix::Source, nix::Source, deleteSource))
             .reg("sources", &nix::Source::sources)
+            .reg("hasSource", GETBYSTR(bool, nix::Source, hasSource))
             .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Source, metadata))
             .reg("set_metadata", SETTER(const std::string&, nix::Source, metadata))
@@ -203,6 +208,8 @@ void mexFunction(int            nlhs,
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::Tag, references))
             .reg("features", &nix::Tag::features)
             .reg("sources", FILTER(std::vector<nix::Source>, nix::Tag, std::function<bool(const nix::Source &)>, sources))
+            .reg("hasReference", GETBYSTR(bool, nix::Tag, hasReference))
+            .reg("hasFeature", GETBYSTR(bool, nix::Tag, hasFeature))
             .reg("openReferenceDataArray", GETBYSTR(nix::DataArray, nix::Tag, getReference))
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource))
@@ -214,6 +221,9 @@ void mexFunction(int            nlhs,
             .reg("set_type", SETTER(const std::string&, nix::Tag, type))
             .reg("set_definition", SETTER(const std::string&, nix::Tag, definition))
             .reg("set_none_definition", SETTER(const boost::none_t, nix::Tag, definition))
+            .reg("set_position", SETTER(const std::vector<double>&, nix::Tag, position))
+            .reg("set_extent", SETTER(const std::vector<double>&, nix::Tag, extent))
+            .reg("set_none_extent", SETTER(const boost::none_t, nix::Tag, extent))
             .reg("removeReference", REMOVER(nix::DataArray, nix::Tag, removeReference))
             .reg("removeSource", REMOVER(nix::Source, nix::Tag, removeSource))
             .reg("deleteFeature", REMOVER(nix::Feature, nix::Tag, deleteFeature));
@@ -229,12 +239,18 @@ void mexFunction(int            nlhs,
             .reg("features", &nix::MultiTag::features)
             .reg("sources", FILTER(std::vector<nix::Source>, nix::MultiTag, std::function<bool(const nix::Source &)>, sources))
             .reg("hasPositions", GETCONTENT(bool, nix::MultiTag, hasPositions))
+            .reg("hasReference", GETBYSTR(bool, nix::MultiTag, hasReference))
+            .reg("hasFeature", GETBYSTR(bool, nix::MultiTag, hasFeature))
             .reg("openPositions", GETCONTENT(nix::DataArray, nix::MultiTag, positions))
             .reg("openExtents", GETCONTENT(nix::DataArray, nix::MultiTag, extents))
             .reg("openReferences", GETBYSTR(nix::DataArray, nix::MultiTag, getReference))
             .reg("openFeature", GETBYSTR(nix::Feature, nix::MultiTag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::MultiTag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::MultiTag, metadata))
+            .reg("set_units", SETTER(const std::vector<std::string>&, nix::MultiTag, units))
+            .reg("set_none_units", SETTER(const boost::none_t, nix::MultiTag, units))
+            .reg("set_extents", SETTER(const std::string&, nix::MultiTag, extents))
+            .reg("set_none_extents", SETTER(const boost::none_t, nix::MultiTag, extents))
             .reg("set_metadata", SETTER(const std::string&, nix::MultiTag, metadata))
             .reg("set_none_metadata", SETTER(const boost::none_t, nix::MultiTag, metadata))
             .reg("removeReference", REMOVER(nix::DataArray, nix::MultiTag, removeReference))
@@ -246,7 +262,6 @@ void mexFunction(int            nlhs,
         methods->add("MultiTag::addSource", nixmultitag::add_source);
         methods->add("MultiTag::createFeature", nixmultitag::create_feature);
         methods->add("MultiTag::addPositions", nixmultitag::add_positions);
-        methods->add("MultiTag::addExtents", nixmultitag::add_extents);
 
         classdef<nix::Section>("Section", methods)
             .desc(&nixsection::describe)
@@ -275,7 +290,10 @@ void mexFunction(int            nlhs,
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)
-            .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data));
+            .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data))
+            .reg("setData", SETTER(const std::string&, nix::Feature, data))
+            .reg("getLinkType", GETCONTENT(nix::LinkType, nix::Feature, linkType));
+        methods->add("Feature::setLinkType", nixfeature::set_link_type);
 
         classdef<nix::Property>("Property", methods)
             .desc(&nixproperty::describe)
@@ -346,4 +364,3 @@ void mexFunction(int            nlhs,
         mexErrMsgIdAndTxt("nix:arg:dispatch", "Unkown command");
     }
 }
-

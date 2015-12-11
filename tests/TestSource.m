@@ -7,6 +7,7 @@ function funcs = testSource
     funcs{end+1} = @test_delete_source;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_fetch_sources;
+    funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
@@ -119,4 +120,22 @@ function [] = test_attrs( varargin )
 
     s.definition = '';
     assert(isempty(s.definition));
+end
+
+%% Test: nix.Source has nix.Source by ID or name
+function [] = test_has_source( varargin )
+    fileName = 'testRW.h5';
+    sName = 'nestedsource';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('testblock', 'nixBlock');
+    s = b.create_source('sourcetest', 'nixSource');
+    nested = s.create_source(sName, 'nixSource');
+    nestedID = nested.id;
+
+    assert(~s.has_source('I do not exist'));
+    assert(s.has_source(sName));
+
+    clear nested s b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.sources{1}.has_source(nestedID));
 end

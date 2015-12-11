@@ -68,12 +68,4 @@ namespace nixmultitag {
         currObj.positions(input.str(2));
     }
 
-    void add_extents(const extractor &input, infusor &output)
-    {
-        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
-        currObj.extents(input.str(2));
-    }
-
-    void remove_extents(const extractor &input, infusor &output);
-
 } // namespace nixmultitag

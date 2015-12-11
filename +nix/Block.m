@@ -70,6 +70,10 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             da.write_all(data);
         end
 
+        function hasDA = has_data_array(obj, id_or_name)
+            hasDA = nix_mx('Block::hasDataArray', obj.nix_handle, id_or_name);
+        end;
+        
         function delCheck = delete_data_array(obj, del)
             [delCheck, obj.dataArraysCache] = nix.Utils.delete_entity(obj, ...
                 del, 'nix.DataArray', 'Block::deleteDataArray', obj.dataArraysCache);
@@ -82,6 +86,10 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         function s = create_source(obj, name, type)
             s = nix.Source(nix_mx('Block::createSource', obj.nix_handle, name, type));
             obj.sourcesCache.lastUpdate = 0;
+        end;
+        
+        function hasSource = has_source(obj, id_or_name)
+            hasSource = nix_mx('Block::hasSource', obj.nix_handle, id_or_name);
         end;
         
         function delCheck = delete_source(obj, del)

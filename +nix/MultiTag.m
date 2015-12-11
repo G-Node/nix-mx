@@ -29,6 +29,10 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 add_this, 'nix.DataArray', 'MultiTag::addReference', obj.referencesCache);
         end;
 
+        function hasRef = has_reference(obj, id_or_name)
+            hasRef = nix_mx('MultiTag::hasReference', obj.nix_handle, id_or_name);
+        end;
+        
         function delCheck = remove_reference(obj, del)
             [delCheck, obj.referencesCache] = nix.Utils.delete_entity(obj, ...
                 del, 'nix.DataArray', 'MultiTag::removeReference', obj.referencesCache);
@@ -65,6 +69,10 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             obj.featuresCache.lastUpdate = 0;
         end;
 
+        function hasFeature = has_feature(obj, id_or_name)
+            hasFeature = nix_mx('MultiTag::hasFeature', obj.nix_handle, id_or_name);
+        end;
+        
         function delCheck = remove_feature(obj, del)
             [delCheck, obj.featuresCache] = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Feature', 'MultiTag::deleteFeature', obj.featuresCache);
@@ -124,13 +132,17 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             end;
         end;
 
-        function [] = add_extents(obj, add_this)
-            if(strcmp(class(add_this), 'nix.DataArray'))
-                addID = add_this.id;
+        function [] = set_extents(obj, add_this)
+            if(isempty(add_this))
+                nix_mx('MultiTag::set_none_extents', obj.nix_handle, 0);
             else
-                addID = add_this;
+                if(strcmp(class(add_this), 'nix.DataArray'))
+                    addID = add_this.id;
+                else
+                    addID = add_this;
+                end;
+                nix_mx('MultiTag::set_extents', obj.nix_handle, addID);
             end;
-            nix_mx('MultiTag::addExtents', obj.nix_handle, addID);
         end;
 
     end;

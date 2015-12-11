@@ -20,6 +20,8 @@ function funcs = TestTag
     funcs{end+1} = @test_retrieve_data;
     funcs{end+1} = @test_retrieve_feature_data;
     funcs{end+1} = @test_attrs;
+    funcs{end+1} = @test_has_feature;
+    funcs{end+1} = @test_has_reference;
 end
 
 %% Test: Add sources by entity and id
@@ -291,11 +293,13 @@ function [] = test_retrieve_feature_data( varargin )
     disp('Test Tag: retrieve feature ... TODO (proper testfile)');
 end
 
+%% Test: Read and write nix.Tag attributes
 function [] = test_attrs( varargin )
-%% Test: Access Attributes
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    fileName = 'testRW.h5';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    t1 = b.create_tag('testTag', 'nixTag', [1, 2, 3, 4]);
+    pos = [1, 2, 3, 4];
+    t1 = b.create_tag('testTag', 'nixTag', pos);
 
     assert(~isempty(t1.id));
     assert(strcmp(t1.name, 'testTag'));
@@ -317,4 +321,64 @@ function [] = test_attrs( varargin )
 
     t1.units = {};
     assert(isempty(t1.units));
+
+    assert(isequal(t1.position, pos));
+    newPos = [1, 2.2, 3];
+    t1.position = newPos;
+    assert(~isequal(t1.position, pos));
+    assert(isequal(t1.position, newPos));
+
+    assert(isempty(t1.extent));
+    ext = [1 2];
+    newExt = [3 4.5];
+    lastExt = [6 7.8 9];
+    t1.extent = ext;
+    assert(isequal(t1.extent, ext));
+    t1.extent = newExt;
+    assert(~isequal(t1.extent, ext));
+    assert(isequal(t1.extent, newExt));
+    t1.extent = [];
+    assert(isempty(t1.extent));
+    t1.extent = lastExt;
+
+    clear t1 b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(isequal(f.blocks{1}.tags{1}.position, newPos));
+    assert(isequal(f.blocks{1}.tags{1}.extent, lastExt));
+end
+
+%% Test: nix.Tag has feature by ID
+function [] = test_has_feature( varargin )
+    fileName = 'testRW.h5';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('featureTest', 'nixBlock');
+    da = b.create_data_array('featureTestDataArray', 'nixDataArray', 'double', [1 2]);
+    t = b.create_tag('featureTest', 'nixTag', [1.0 1.2 1.3 15.9]);
+    feature = t.add_feature(b.dataArrays{1}, nix.LinkType.Tagged);
+    featureID = feature.id;
+
+    assert(~t.has_feature('I do not exist'));
+    assert(t.has_feature(featureID));
+
+    clear tmp t da b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.tags{1}.has_feature(featureID));
+end
+
+%% Test: nix.Tag has reference by ID or name
+function [] = test_has_reference( varargin )
+    fileName = 'testRW.h5';
+    daName = 'referenceTest';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('referenceTest', 'nixBlock');
+    da = b.create_data_array(daName, 'nixDataArray', 'double', [1 2]);
+    t = b.create_tag('referenceTest', 'nixTag', [1.0 1.2 1.3 15.9]);
+    t.add_reference(b.dataArrays{1});
+
+    assert(~t.has_reference('I do not exist'));
+    assert(t.has_reference(da.id));
+    
+    clear t da b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.tags{1}.has_reference(daName));
 end

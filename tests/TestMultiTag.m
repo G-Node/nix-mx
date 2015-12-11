@@ -6,8 +6,10 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_add_source;
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_add_reference;
+    funcs{end+1} = @test_has_reference;
     funcs{end+1} = @test_remove_reference;
     funcs{end+1} = @test_add_feature;
+    funcs{end+1} = @test_has_feature;
     funcs{end+1} = @test_remove_feature;
     funcs{end+1} = @test_fetch_references;
     funcs{end+1} = @test_fetch_sources;
@@ -18,12 +20,12 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_add_positions;
     funcs{end+1} = @test_has_positions;
     funcs{end+1} = @test_open_positions;
-    funcs{end+1} = @test_add_extents;
-    funcs{end+1} = @test_open_extents;
+    funcs{end+1} = @test_set_open_extents;
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data;
     funcs{end+1} = @test_retrieve_feature_data;
+    funcs{end+1} = @test_set_units;
 end
 
 %% Test: Add sources by entity and id
@@ -286,41 +288,37 @@ function [] = test_open_positions( varargin )
     assert(~isempty(getMTag.open_positions));
 end
 
-%% Test: Add extents by entity and id
-function [] = test_add_extents ( varargin )
-%    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-%    b = test_file.createBlock('extentsTest', 'nixBlock');
-%    tmp = b.create_data_array('extentsTestDataArray', 'nixDataArray', 'double', [1 2 3 4 5 6; 1 2 3 4 5 6]);
-%    getMTag = b.create_multi_tag('extentstest', 'nixMultiTag', b.dataArrays{1});
+%% Test: Set extents by entity and ID, open and reset extents
+function [] = test_set_open_extents ( varargin )
+    fileName = 'testRW.h5';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('extentsTest', 'nixBlock');
+    da = b.create_data_array('extentsTestDataArray', 'nixDataArray', 'double', [1 2 3 4 5 6; 1 2 3 4 5 6]);
+    getMTag = b.create_multi_tag('extentstest', 'nixMultiTag', da);
 
-%    tmp = b.create_data_array('positionsTest1', 'nixDataArray', 'double', [1, 1]);
-%    tmp = b.create_data_array('positionsTest2', 'nixDataArray', 'double', [1, 3]);
+    tmp = b.create_data_array('positionsTest1', 'nixDataArray', 'double', [1, 1]);
+    tmp = b.create_data_array('positionsTest2', 'nixDataArray', 'double', [1, 3]);
 
-%    tmp = b.create_data_array('extentsTest1', 'nixDataArray', 'double', [1, 1]);
-%    tmp = b.create_data_array('extentsTest2', 'nixDataArray', 'double', [1, 1]);
+    extName1 = 'extentsTest1';
+    extName2 = 'extentsTest2';
+    tmp = b.create_data_array(extName1, 'nixDataArray', 'double', [1, 1]);
+    tmp = b.create_data_array(extName2, 'nixDataArray', 'double', [1, 3]);
 
-%    getMTag.add_positions(b.dataArrays{2});
-%    getMTag.add_extents(b.dataArrays{4}.id);
-%    assert(strcmp(getMTag.open_extents.name, 'extentsTest1'));
+    assert(isempty(getMTag.open_extents));
+    
+    getMTag.add_positions(b.dataArrays{2});
+    getMTag.set_extents(b.dataArrays{4}.id);
+    assert(strcmp(getMTag.open_extents.name, extName1));
 
-%    getMTag.add_positions(b.dataArrays{3});
-%    getMTag.add_extents(b.dataArrays{5});
-%    assert(strcmp(getMTag.open_extents.name, 'extentsTest2'));
-    disp('Test MultiTag: add extents ... TODO (add dimensions required)');
-end
-
-%% Test: Open extents
-function [] = test_open_extents( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    getBlock = test_file.openBlock(test_file.blocks{1,1}.name);
-
-    getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
-    assert(isempty(getMultiTag.open_extents));
-   
-    %-- ToDo implement test for existing extents
-    %getMultiTag = getBlock.open_multi_tag(getBlock.multiTags{1,1}.id);
-    %assert(~isempty(getMultiTag.open_positions));
-    disp('Test MultiTag: open existing extents ... TODO (proper testfile)');
+    getMTag.set_extents('');
+    assert(isempty(getMTag.open_extents));
+    
+    getMTag.add_positions(b.dataArrays{3});
+    getMTag.set_extents(b.dataArrays{5});
+    
+    clear tmp getMTag da b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_extents.name, extName2));
 end
 
 %% Test: Set metadata
@@ -367,4 +365,66 @@ end
 function [] = test_retrieve_feature_data( varargin )
     % TODO
     disp('Test MultiTag: retrieve feature ... TODO (proper testfile)');
+end
+
+%% Test: nix.MultiTag has feature by ID
+function [] = test_has_feature( varargin )
+    fileName = 'testRW.h5';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('featureTest', 'nixBlock');
+    da = b.create_data_array('featureTestDataArray', 'nixDataArray', 'double', [1 2]);
+    t = b.create_multi_tag('featureTest', 'nixMultiTag', da);
+    daf = b.create_data_array('featTestDA', 'nixDataArray', 'double', [1 2]);
+    feature = t.add_feature(daf, nix.LinkType.Tagged);
+    featureID = feature.id;
+
+    assert(~t.has_feature('I do not exist'));
+    assert(t.has_feature(featureID));
+
+    clear feature daf t da b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.multiTags{1}.has_feature(featureID));
+end
+
+%% Test: nix.MultiTag has reference by ID or name
+function [] = test_has_reference( varargin )
+    fileName = 'testRW.h5';
+    daName = 'refTestDataArray';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('referenceTestBlock', 'nixBlock');
+    da = b.create_data_array(daName, 'nixDataArray', 'double', [1 2]);
+    t = b.create_multi_tag('referenceTest', 'nixMultiTag', da);
+    refName = 'referenceTest';
+    daRef = b.create_data_array(refName, 'nixDataArray', 'double', [3 4]);
+    t.add_reference(daRef.id);
+
+    assert(~t.has_reference('I do not exist'));
+    assert(t.has_reference(daRef.id));
+
+    clear t daRef da b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.multiTags{1}.has_reference(refName));
+end
+
+%% Test: Set units
+function [] = test_set_units( varargin )
+    fileName = 'testRW.h5';
+    daName = 'testDataArray';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    da = b.create_data_array(daName, 'nixDataArray', 'double', [1 2]);
+    t = b.create_multi_tag('unitsTest', 'nixMultiTag', da);
+
+    assert(isempty(t.units));
+    units = {'mV'};
+    t.units = {'mV'};
+    assert(isequal(t.units,units));
+    t.units = {};
+    assert(isempty(t.units));
+    newUnits = {'mV', 'uA'};
+    t.units = newUnits;
+    
+    clear t da b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(isequal(f.blocks{1}.multiTags{1}.units, newUnits));
 end

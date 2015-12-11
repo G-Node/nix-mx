@@ -19,8 +19,6 @@ namespace nixmultitag {
 
     void add_positions(const extractor &input, infusor &output);
 
-    void add_extents(const extractor &input, infusor &output);
-
 } // namespace nixmultitag
 
 #endif

@@ -31,6 +31,10 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 add_this, 'nix.DataArray', 'Tag::addReference', obj.referencesCache);
         end;
 
+        function hasRef = has_reference(obj, id_or_name)
+            hasRef = nix_mx('Tag::hasReference', obj.nix_handle, id_or_name);
+        end;
+        
         function delCheck = remove_reference(obj, del)
             [delCheck, obj.referencesCache] = nix.Utils.delete_entity(obj, ...
                 del, 'nix.DataArray', 'Tag::removeReference', obj.referencesCache);
@@ -65,6 +69,10 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             obj.featuresCache.lastUpdate = 0;
         end;
 
+        function hasFeature = has_feature(obj, id_or_name)
+            hasFeature = nix_mx('Tag::hasFeature', obj.nix_handle, id_or_name);
+        end;
+        
         function delCheck = remove_feature(obj, del)
             [delCheck, obj.featuresCache] = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Feature', 'Tag::deleteFeature', obj.featuresCache);
