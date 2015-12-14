@@ -26,18 +26,25 @@ end
 
 %% Test: Add sources by entity and id
 function [] = test_add_source ( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('sourceTest', 'nixBlock');
-    getSource = getBlock.create_source('sourceTest', 'nixSource');
-    tmp = getSource.create_source('nestedSource1', 'nixSource');
-    tmp = getSource.create_source('nestedSource2', 'nixSource');
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.createBlock('sourceTest', 'nixBlock');
+    s = b.create_source('sourceTest', 'nixSource');
+    tmp = s.create_source('nestedSource1', 'nixSource');
+    tmp = s.create_source('nestedSource2', 'nixSource');
     position = [1.0 1.2 1.3 15.9];
-    getTag = getBlock.create_tag('sourcetest', 'nixTag', position);
+    t = b.create_tag('sourcetest', 'nixTag', position);
     
-    assert(isempty(getTag.sources));
-    getTag.add_source(getSource.sources{1}.id);
-    getTag.add_source(getSource.sources{2});
-    assert(size(getTag.sources,1) == 2);
+    assert(isempty(t.sources));
+    assert(isempty(f.blocks{1}.tags{1}.sources));
+    t.add_source(s.sources{1}.id);
+    t.add_source(s.sources{2});
+    assert(size(t.sources, 1) == 2);
+    assert(size(f.blocks{1}.tags{1}.sources, 1) == 2);
+    
+    clear tmp t s b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.tags{1}.sources, 1) == 2);
 end
 
 %% Test: Remove sources by entity and id
@@ -63,18 +70,26 @@ end
 
 %% Test: Add references by entity and id
 function [] = test_add_reference ( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('referenceTest', 'nixBlock');
-    tmp = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
-    tmp = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.createBlock('referenceTest', 'nixBlock');
+    tmp = b.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
     
     position = [1.0 1.2 1.3 15.9];
-    getTag = getBlock.create_tag('referenceTest', 'nixTag', position);
+    t = b.create_tag('referenceTest', 'nixTag', position);
     
-    assert(isempty(getTag.references));
-    getTag.add_reference(getBlock.dataArrays{1}.id);
-    getTag.add_reference(getBlock.dataArrays{2});
-    assert(size(getTag.references, 1) == 2);
+    assert(isempty(t.references));
+    assert(isempty(f.blocks{1}.tags{1}.references));
+
+    t.add_reference(b.dataArrays{1}.id);
+    t.add_reference(b.dataArrays{2});
+    assert(size(t.references, 1) == 2);
+    assert(size(f.blocks{1}.tags{1}.references, 1) == 2);
+
+    clear tmp t b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.tags{1}.references, 1) == 2);
 end
 
 %% Test: Remove references by entity and id
@@ -100,7 +115,8 @@ end
 
 %% Test: Add features by entity and id
 function [] = test_add_feature ( varargin )
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
     tmp = b.create_data_array('featureTestDataArray1', 'nixDataArray', 'double', [1 2]);
     tmp = b.create_data_array('featureTestDataArray2', 'nixDataArray', 'double', [3 4]);
@@ -109,16 +125,22 @@ function [] = test_add_feature ( varargin )
     tmp = b.create_data_array('featureTestDataArray5', 'nixDataArray', 'double', [9 10]);
     tmp = b.create_data_array('featureTestDataArray6', 'nixDataArray', 'double', [11 12]);
     position = [1.0 1.2 1.3 15.9];
-    getTag = b.create_tag('featureTest', 'nixTag', position);
+    t = b.create_tag('featureTest', 'nixTag', position);
     
-    assert(isempty(getTag.features));
-    tmp = getTag.add_feature(b.dataArrays{1}.id, nix.LinkType.Tagged);
-    tmp = getTag.add_feature(b.dataArrays{2}, nix.LinkType.Tagged);
-    tmp = getTag.add_feature(b.dataArrays{3}.id, nix.LinkType.Untagged);
-    tmp = getTag.add_feature(b.dataArrays{4}, nix.LinkType.Untagged);
-    tmp = getTag.add_feature(b.dataArrays{5}.id, nix.LinkType.Indexed);
-    tmp = getTag.add_feature(b.dataArrays{6}, nix.LinkType.Indexed);
-    assert(size(getTag.features, 1) == 6)
+    assert(isempty(t.features));
+    assert(isempty(f.blocks{1}.tags{1}.features));
+    tmp = t.add_feature(b.dataArrays{1}.id, nix.LinkType.Tagged);
+    tmp = t.add_feature(b.dataArrays{2}, nix.LinkType.Tagged);
+    tmp = t.add_feature(b.dataArrays{3}.id, nix.LinkType.Untagged);
+    tmp = t.add_feature(b.dataArrays{4}, nix.LinkType.Untagged);
+    tmp = t.add_feature(b.dataArrays{5}.id, nix.LinkType.Indexed);
+    tmp = t.add_feature(b.dataArrays{6}, nix.LinkType.Indexed);
+    assert(size(t.features, 1) == 6);
+    assert(size(f.blocks{1}.tags{1}.features, 1) == 6);
+
+    clear tmp t b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.tags{1}.features, 1) == 6);
 end
 
 %% Test: Remove features by entity and id
