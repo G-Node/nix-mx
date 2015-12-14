@@ -25,7 +25,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % ------------------
 
         function [] = add_reference(obj, add_this)
-            nix.Utils.add_entity_(obj, add_this, ...
+            nix.Utils.add_entity(obj, add_this, ...
                 'nix.DataArray', 'MultiTag::addReference');
         end;
 
@@ -35,7 +35,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end;
         
         function delCheck = remove_reference(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, del, ...
+            delCheck = nix.Utils.delete_entity(obj, del, ...
                 'nix.DataArray', 'MultiTag::removeReference');
         end;
 
@@ -75,7 +75,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end;
         
         function delCheck = remove_feature(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, del, ...
+            delCheck = nix.Utils.delete_entity(obj, del, ...
                 'nix.Feature', 'MultiTag::deleteFeature');
         end;
 

@@ -39,7 +39,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end;
 
         function delCheck = delete_group(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, ...
+            delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Group', 'Block::deleteGroup');
         end;
         
@@ -73,7 +73,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end;
         
         function delCheck = delete_data_array(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, ...
+            delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.DataArray', 'Block::deleteDataArray');
         end;
 
@@ -91,7 +91,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end;
         
         function delCheck = delete_source(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, ...
+            delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Source', 'Block::deleteSource');
         end;
         
@@ -120,7 +120,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end;
 
         function delCheck = delete_tag(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, ...
+            delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Tag', 'Block::deleteTag');
         end;
 
@@ -150,9 +150,9 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end;
         
         function delCheck = delete_multi_tag(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, ...
+            delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.MultiTag', 'Block::deleteMultiTag');
         end;
-
     end;
+
 end

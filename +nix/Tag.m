@@ -36,7 +36,7 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end;
         
         function delCheck = remove_reference(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, del, ...
+            delCheck = nix.Utils.delete_entity(obj, del, ...
                 'nix.DataArray', 'Tag::removeReference');
         end;
 
@@ -74,7 +74,7 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end;
         
         function delCheck = remove_feature(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, del, ...
+            delCheck = nix.Utils.delete_entity(obj, del, ...
                 'nix.Feature', 'Tag::deleteFeature');
         end;
 

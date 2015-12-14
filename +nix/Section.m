@@ -67,7 +67,7 @@ classdef Section < nix.NamedEntity
         end;
 
         function delCheck = deleteSection(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, del, ...
+            delCheck = nix.Utils.delete_entity(obj, del, ...
                 'nix.Section', 'Section::deleteSection');
         end;
 

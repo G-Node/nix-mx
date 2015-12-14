@@ -28,7 +28,7 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
         end;
         
         function delCheck = delete_source(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, del, ...
+            delCheck = nix.Utils.delete_entity(obj, del, ...
                 'nix.Source', 'Source::deleteSource');
         end;
 

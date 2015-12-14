@@ -39,7 +39,7 @@ classdef File < nix.Entity
         end
 
         function delCheck = deleteBlock(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, ...
+            delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Block', 'File::deleteBlock');
         end;
 
@@ -61,8 +61,8 @@ classdef File < nix.Entity
         end
 
         function delCheck = deleteSection(obj, del)
-            delCheck = nix.Utils.delete_entity_(obj, del, 'nix.Section', 'File::deleteSection');
+            delCheck = nix.Utils.delete_entity(obj, del, 'nix.Section', 'File::deleteSection');
         end;
-
     end
+
 end

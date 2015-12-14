@@ -43,12 +43,6 @@ classdef Dynamic
         end
         
         function add_dyn_relation(obj, name, constructor)
-            cacheAttr = strcat(name, 'Cache');
-            cache = addprop(obj, cacheAttr);
-            cache.Hidden = true;
-            obj.(cacheAttr) = nix.CacheStruct();
-
-            %-- refactor Cache, remove code above once it works everywhere.
             dataAttr = strcat(name, 'Data');
             data = addprop(obj, dataAttr);
             data.Hidden = true;
@@ -80,4 +74,5 @@ classdef Dynamic
             end
         end
     end
+
 end
