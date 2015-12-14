@@ -57,19 +57,34 @@ end
 
 %% Test: Set metadata
 function [] = test_set_metadata ( varargin )
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    secName1 = 'testSection1';
+    secName2 = 'testSection2';
+    f = nix.File(fileName, nix.FileMode.Overwrite);
     tmp = f.createSection('testSection1', 'nixSection');
     tmp = f.createSection('testSection2', 'nixSection');
     b = f.createBlock('testBlock', 'nixBlock');
     s = b.create_source('testSource', 'nixSource');
 
     assert(isempty(s.open_metadata));
+    assert(isempty(f.blocks{1}.sources{1}.open_metadata));
+
     s.set_metadata(f.sections{1});
-    assert(strcmp(s.open_metadata.name, 'testSection1'));
+    assert(strcmp(s.open_metadata.name, secName1));
+    assert(strcmp(f.blocks{1}.sources{1}.open_metadata.name, secName1));
+
     s.set_metadata(f.sections{2});
-    assert(strcmp(s.open_metadata.name, 'testSection2'));
+    assert(strcmp(s.open_metadata.name, secName2));
+    assert(strcmp(f.blocks{1}.sources{1}.open_metadata.name, secName2));
+
     s.set_metadata('');
     assert(isempty(s.open_metadata));
+    assert(isempty(f.blocks{1}.sources{1}.open_metadata));
+
+	s.set_metadata(f.sections{2});
+    clear tmp b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(strcmp(f.blocks{1}.sources{1}.open_metadata.name, secName2));
 end
 
 %% Test: Open metadata
