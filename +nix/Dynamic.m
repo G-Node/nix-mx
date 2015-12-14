@@ -47,7 +47,13 @@ classdef Dynamic
             cache = addprop(obj, cacheAttr);
             cache.Hidden = true;
             obj.(cacheAttr) = nix.CacheStruct();
-            
+
+            %-- refactor Cache, remove code above once it works everywhere.
+            dataAttr = strcat(name, 'Data');
+            data = addprop(obj, dataAttr);
+            data.Hidden = true;
+            obj.(dataAttr) = {};
+
             % adds a proxy property
             rel = addprop(obj, name);
             rel.GetMethod = @get_method;
@@ -58,9 +64,10 @@ classdef Dynamic
             rel_map.Hidden = true;
             
             function val = get_method(obj)
-                [obj.(cacheAttr), val] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                obj.(dataAttr) = nix.Utils.fetchObjList(...
                     strcat(obj.alias, '::', name), obj.nix_handle, ...
-                    obj.(cacheAttr), constructor);
+                    constructor);
+                val = obj.(dataAttr);
             end
             
             function val = get_as_map(obj)
