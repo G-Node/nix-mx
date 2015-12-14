@@ -15,13 +15,23 @@ end
 
 %% Test: fetch sources
 function [] = test_fetch_sources( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('sourcetest', 'nixBlock');
-    getSource = getBlock.create_source('sourcetest', 'nixSource');
-    tmp = getSource.create_source('nestedsource1', 'nixSource');
-    tmp = getSource.create_source('nestedsource2', 'nixSource');
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.createBlock('sourcetest', 'nixBlock');
+    s = b.create_source('sourcetest', 'nixSource');
+
+    assert(isempty(s.sources));
+    assert(isempty(f.blocks{1}.sources{1}.sources));
+    tmp = s.create_source('nestedsource1', 'nixSource');
+    assert(size(s.sources, 1) == 1);
+    assert(size(f.blocks{1}.sources{1}.sources, 1) == 1);
+    tmp = s.create_source('nestedsource2', 'nixSource');
+    assert(size(s.sources, 1) == 2);
+    assert(size(f.blocks{1}.sources{1}.sources, 1) == 2);
     
-    assert(size(getSource.sources, 1) == 2);
+    clear tmp s b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.sources{1}.sources, 1) == 2);
 end
 
 %% Test: Open source by ID or name
