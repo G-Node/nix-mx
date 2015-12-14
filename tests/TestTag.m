@@ -316,6 +316,17 @@ function [] = test_attrs( varargin )
     assert(isempty(t1.definition));
 
     assert(isempty(t1.units));
+    try
+        t1.units = 'mV';
+    catch ME
+        assert(strcmp(ME.identifier, 'MATLAB:class:SetProhibited'));
+    end;
+    try
+        t1.units = ['mV', 'uA'];
+    catch ME
+        assert(strcmp(ME.identifier, 'MATLAB:class:SetProhibited'));
+    end;
+
     t1.units = {'ms', 'mV'};
     assert(isequal(t1.units, {'ms', 'mV'}));
 

@@ -416,6 +416,17 @@ function [] = test_set_units( varargin )
     t = b.create_multi_tag('unitsTest', 'nixMultiTag', da);
 
     assert(isempty(t.units));
+    try
+        t.units = 'mV';
+    catch ME
+        assert(strcmp(ME.identifier, 'MATLAB:class:SetProhibited'));
+    end;
+    try
+        t.units = ['mV', 'uA'];
+    catch ME
+        assert(strcmp(ME.identifier, 'MATLAB:class:SetProhibited'));
+    end;
+
     units = {'mV'};
     t.units = {'mV'};
     assert(isequal(t.units,units));
