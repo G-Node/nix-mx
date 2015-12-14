@@ -24,7 +24,6 @@ function [] = test_attrs( varargin )
     assert(strcmp(da.name, 'daTest'));
     assert(strcmp(da.type, 'test nixDataArray'));
 
-    %-- TODO does not work at the moment on the c++ side
     da.type = 'nixDataArray';
     assert(strcmp(da.type, 'nixDataArray'));
 
@@ -153,21 +152,25 @@ function [] = test_dimensions( varargin )
     da = b.create_data_array('daTest', 'test nixDataArray', 'double', [1 2]);
     
     assert(isempty(da.dimensions));
+    assert(isempty(f.blocks{1}.dataArrays{1}.dimensions));
     
     da.append_set_dimension();
     assert(length(da.dimensions) == 1);
     assert(strcmp(da.dimensions{1}.dimensionType, 'set'));
+    assert(strcmp(f.blocks{1}.dataArrays{1}.dimensions{1}.dimensionType, 'set'));
     
     da.append_sampled_dimension(200);
     assert(length(da.dimensions) == 2);
     assert(strcmp(da.dimensions{2}.dimensionType, 'sample'));
     assert(da.dimensions{2}.samplingInterval == 200);
+    assert(f.blocks{1}.dataArrays{1}.dimensions{2}.samplingInterval == 200);
     
     ticks = [1, 2, 3, 4];
     da.append_range_dimension(ticks);
     assert(length(da.dimensions) == 3);
     assert(strcmp(da.dimensions{3}.dimensionType, 'range'));
     assert(isequal(da.dimensions{3}.ticks, ticks));
+    assert(isequal(f.blocks{1}.dataArrays{1}.dimensions{3}.ticks, ticks));
     
     da.delete_dimension(2);
     assert(length(da.dimensions) == 2);
