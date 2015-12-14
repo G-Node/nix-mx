@@ -27,7 +27,6 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             handle = nix_mx('Block::createGroup', obj.nix_handle, ...
                 name, nixtype);
             g = nix.Group(handle);
-            obj.groupsCache.lastUpdate = 0;
         end;
         
         function hasGroup = has_group(obj, id_or_name)
@@ -40,7 +39,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end;
 
         function delCheck = delete_group(obj, del)
-            [delCheck, obj.groupsCache] = nix.Utils.delete_entity(obj, ...
+            delCheck = nix.Utils.delete_entity_(obj, ...
                 del, 'nix.Group', 'Block::deleteGroup');
         end;
         
@@ -59,7 +58,6 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             handle = nix_mx('Block::createDataArray', obj.nix_handle, ...
                 name, nixtype, datatype, shape);
             da = nix.DataArray(handle);
-            obj.dataArraysCache.lastUpdate = 0;
         end
         
         function da = create_data_array_from_data(obj, name, nixtype, data)
@@ -75,8 +73,8 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end;
         
         function delCheck = delete_data_array(obj, del)
-            [delCheck, obj.dataArraysCache] = nix.Utils.delete_entity(obj, ...
-                del, 'nix.DataArray', 'Block::deleteDataArray', obj.dataArraysCache);
+            delCheck = nix.Utils.delete_entity_(obj, ...
+                del, 'nix.DataArray', 'Block::deleteDataArray');
         end;
 
         % -----------------
@@ -84,8 +82,8 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % -----------------
         
         function s = create_source(obj, name, type)
-            s = nix.Source(nix_mx('Block::createSource', obj.nix_handle, name, type));
-            obj.sourcesCache.lastUpdate = 0;
+            s = nix.Source(nix_mx('Block::createSource', ...
+                obj.nix_handle, name, type));
         end;
         
         function hasSource = has_source(obj, id_or_name)
@@ -93,8 +91,8 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end;
         
         function delCheck = delete_source(obj, del)
-            [delCheck, obj.sourcesCache] = nix.Utils.delete_entity(obj, ...
-                del, 'nix.Source', 'Block::deleteSource', obj.sourcesCache);
+            delCheck = nix.Utils.delete_entity_(obj, ...
+                del, 'nix.Source', 'Block::deleteSource');
         end;
         
         function retObj = open_source(obj, id_or_name)
@@ -119,12 +117,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
            th = nix_mx('Block::createTag', obj.nix_handle, ...
                name, type, position);
            tag = nix.Tag(th);
-           obj.tagsCache.lastUpdate = 0;
         end;
 
         function delCheck = delete_tag(obj, del)
-            [delCheck, obj.tagsCache] = nix.Utils.delete_entity(obj, ...
-                del, 'nix.Tag', 'Block::deleteTag', obj.tagsCache);
+            delCheck = nix.Utils.delete_entity_(obj, ...
+                del, 'nix.Tag', 'Block::deleteTag');
         end;
 
         % -----------------
@@ -150,12 +147,12 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
 
             multitag = nix.MultiTag(nix_mx('Block::createMultiTag', ...
                 obj.nix_handle, name, type, addID));
-            obj.multiTagsCache.lastUpdate = 0;
         end;
         
         function delCheck = delete_multi_tag(obj, del)
-            [delCheck, obj.multiTagsCache] = nix.Utils.delete_entity(obj, ...
-                del, 'nix.MultiTag', 'Block::deleteMultiTag', obj.multiTagsCache);
+            delCheck = nix.Utils.delete_entity_(obj, ...
+                del, 'nix.MultiTag', 'Block::deleteMultiTag');
         end;
+
     end;
 end

@@ -204,51 +204,82 @@ function [] = test_delete_source( varargin )
     assert(~getBlock.delete_source('I do not exist'));
 end
 
+%% Test: Fetch nix.DataArrays
 function [] = test_list_arrays( varargin )
-%% Test: fetch data arrays
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('arraytest', 'nixBlock');
 
     assert(isempty(b.dataArrays));
     tmp = b.create_data_array('arrayTest1', 'nixDataArray', 'double', [1 2]);
+    assert(size(b.dataArrays, 1) == 1);
+    assert(size(f.blocks{1}.dataArrays, 1) == 1);
     tmp = b.create_data_array('arrayTest2', 'nixDataArray', 'double', [3 4]);
     assert(size(b.dataArrays, 1) == 2);
+    assert(size(f.blocks{1}.dataArrays, 1) == 2);
 
+    clear tmp b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.dataArrays, 1) == 2);
 end
 
+%% Test: Fetch nix.Sources
 function [] = test_list_sources( varargin )
-%% Test: fetch sources
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('sourcetest', 'nixBlock');
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.createBlock('sourcetest', 'nixBlock');
 
-    assert(isempty(getBlock.sources));
-    tmp = getBlock.create_source('sourcetest1','nixSource');
-    tmp = getBlock.create_source('sourcetest2','nixSource');
-    assert(size(getBlock.sources, 1) == 2);
+    assert(isempty(b.sources));
+    tmp = b.create_source('sourcetest1','nixSource');
+    assert(size(b.sources, 1) == 1);
+    assert(size(f.blocks{1}.sources, 1) == 1);
+    tmp = b.create_source('sourcetest2','nixSource');
+    assert(size(b.sources, 1) == 2);
+    assert(size(f.blocks{1}.sources, 1) == 2);
+
+    clear tmp b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.sources, 1) == 2);
 end
 
+%% Test: Fetch nix.Tags
 function [] = test_list_tags( varargin )
-%% Test: fetch tags
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('tagtest', 'nixBlock');
     position = [1.0 1.2 1.3 15.9];
 
     assert(isempty(b.tags));
     tmp = b.create_tag('tagtest1', 'nixTag', position);
+    assert(size(b.tags, 1) == 1);
+    assert(size(f.blocks{1}.tags, 1) == 1);
     tmp = b.create_tag('tagtest2', 'nixTag', position);
     assert(size(b.tags, 1) == 2);
+    assert(size(f.blocks{1}.tags, 1) == 2);
+
+    clear tmp b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.tags, 1) == 2);
 end
 
-function [] = test_list_multitags( varargin )
 %% Test: fetch multitags
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+function [] = test_list_multitags( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('mTagTestBlock', 'nixBlock');
     tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', 'double', [1 2]);
 
     assert(isempty(b.multiTags));
     tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag', b.dataArrays{1});
+    assert(size(b.multiTags, 1) == 1);
+    assert(size(f.blocks{1}.multiTags, 1) == 1);
     tmp = b.create_multi_tag('mTagTest2', 'nixMultiTag', b.dataArrays{1});
     assert(size(b.multiTags, 1) == 2);
+    assert(size(f.blocks{1}.multiTags, 1) == 2);
+
+    clear tmp b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.multiTags, 1) == 2);
 end
 
 function [] = test_open_array( varargin )
