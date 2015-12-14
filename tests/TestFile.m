@@ -8,9 +8,9 @@ function funcs = testFile
     funcs{end+1} = @test_overwrite;
     funcs{end+1} = @test_create_block;
     funcs{end+1} = @test_create_section;
-    funcs{end+1} = @test_list_sections;
+    funcs{end+1} = @test_fetch_block;
+    funcs{end+1} = @test_fetch_section;
     funcs{end+1} = @test_open_section;
-    funcs{end+1} = @test_list_blocks;
     funcs{end+1} = @test_open_block;
     funcs{end+1} = @test_delete_block;
     funcs{end+1} = @test_delete_section;
@@ -36,7 +36,7 @@ end
 
 %% Test: Create Block
 function [] = test_create_block( varargin )
-    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
+    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     useName = 'testBlock 1';
     newBlock = test_file.createBlock(useName, 'testType 1');
     assert(strcmp(newBlock.name(), useName));
@@ -44,16 +44,61 @@ end
 
 %% Test: Create Section
 function [] = test_create_section( varargin )
-    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
+    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     useName = 'testSection 1';
     newSection = test_file.createSection(useName, 'testType 1');
     assert(strcmp(newSection.name(), useName));
 end
 
+%% Test: Fetch Block
+function [] = test_fetch_block( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    blockName = 'blockName';
+    blockType = 'testBlock';
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    assert(isempty(f.blocks));
+
+    b1 = f.createBlock(strcat(blockName, '1'), blockType);
+    assert(size(f.blocks, 1) == 1);
+
+    check_file = f;
+    b2 = f.createBlock(strcat(blockName, '2'), blockType);
+    assert(size(f.blocks, 1) == 2);
+    assert(size(check_file.blocks, 1) == 2);
+
+    clear b2 b1 check_file f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(size(f.blocks, 1) == 2);
+end
+
+%% Test: Fetch Block
+function [] = test_fetch_section( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    sectionName = 'sectionName';
+    sectionType = 'testSection';
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    assert(isempty(f.sections));
+
+    s1 = f.createSection(strcat(sectionName, '1'), sectionType);
+    assert(size(f.sections, 1) == 1);
+
+    check_file = f;
+    s2 = f.createSection(strcat(sectionName, '2'), sectionType);
+    assert(size(f.sections, 1) == 2);
+    assert(size(check_file.sections, 1) == 2);
+
+    clear s2 s1 check_file f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(size(f.sections, 1) == 2);
+end
+
 %% Test: Delete Block
 function [] = test_delete_block( varargin )
-    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
-
+    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
+    useName = 'testBlock 1';
+    newBlock = test_file.createBlock(useName, 'testType 1');
+    assert(strcmp(newBlock.name(), useName));
+    
     %-- test delete block by object
     checkDelete = test_file.deleteBlock(test_file.blocks{1});
     assert(checkDelete);
@@ -72,7 +117,10 @@ end
 
 %% Test: Delete Section
 function [] = test_delete_section( varargin )
-    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
+    test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
+    useName = 'testSection 1';
+    newSection = test_file.createSection(useName, 'testType 1');
+    assert(strcmp(newSection.name(), useName));
     
     %-- test delete section by object
     checkDelete = test_file.deleteSection(test_file.sections{1});
@@ -90,14 +138,6 @@ function [] = test_delete_section( varargin )
     assert(~checkDelete);
 end
 
-function [] = test_list_sections( varargin )
-%% Test: Section listing
-% Test that File handle can fetch sections from HDF5
-    test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
-
-    assert(length(test_file.sections()) == 3);
-end
-
 function [] = test_open_section( varargin )
 %% Test open section
     test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
@@ -107,14 +147,6 @@ function [] = test_open_section( varargin )
     %-- test open non existing section
     getSection = test_file.openSection('I dont exist');
     assert(isempty(getSection));
-end
-
-function [] = test_list_blocks( varargin )
-%% Test list and fetch blocks
-% Test that File handle can fetch blocks from HDF5
-    test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
-
-    assert(size(test_file.blocks(),1) == 4);
 end
 
 function [] = test_open_block( varargin )
