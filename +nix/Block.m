@@ -64,6 +64,14 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         
         function da = create_data_array_from_data(obj, name, nixtype, data)
             shape = size(data);
+            %-- Quick fix to enable alias range dimension with
+            %-- 1D data arrays created with this function.
+            %-- e.g. size([1 2 3]) returns shape [1 3], which would not
+            %-- be accepted when trying to add an alias range dimension.
+            %-- TODO Remove this when a cleverer solution presents itself.
+            if(size(data, 1) == 1)
+                shape = size(data, 2);
+            end;
             dtype = class(data);
             
             da = obj.create_data_array(name, nixtype, dtype, shape);

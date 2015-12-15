@@ -202,6 +202,20 @@ function [] = test_dimensions( varargin )
     assert(f.blocks{1}.dataArrays{2}.dimensions{1}.isAlias);
     
     clear daAlias da b f;
-    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    f = nix.File(fileName, nix.FileMode.ReadWrite);
     assert(f.blocks{1}.dataArrays{2}.dimensions{1}.isAlias);
+    
+    %-- Test for the alias dimension shape work around
+    daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWTest1', ...
+        'nix.DataArray', [1 2 3]);
+    daAliasWa.append_alias_range_dimension();
+    assert(daAliasWa.dimensions{1}.isAlias);
+    
+    daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest2', ...
+        'nix.DataArray', [1; 2; 3]);
+    assert(isequal(daAliasWa.shape, [3 1]));
+    
+    daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest3', ...
+        'nix.DataArray', [1 2 3; 2 4 5; 3 6 7]);
+    assert(isequal(daAliasWa.shape, [3 3]));
 end
