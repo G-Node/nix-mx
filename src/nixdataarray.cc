@@ -43,22 +43,29 @@ namespace nixdataarray {
     void read_all(const extractor &input, infusor &output)
     {
         //nix::DataArray da = input.entity<nix::DataArray>(1);
-
+        mexPrintf("[PURGE_ME] DA.cc read_all 01\n");
         nix::DataArray da = input.entity<nix::DataArray>(1);
+        mexPrintf("[PURGE_ME] DA.cc read_all 02\n");
         mxArray *data = make_mx_array_from_ds(da);
+        mexPrintf("[PURGE_ME] DA.cc read_all 03\n");
         output.set(0, data);
     }
 
     void write_all(const extractor &input, infusor &output)
     {
+        mexPrintf("[PURGE_ME] DA.cc write_all 01\n");
         nix::DataArray da = input.entity<nix::DataArray>(1);
-
+        mexPrintf("[PURGE_ME] DA.cc write_all 02\n");
         nix::DataType dtype = input.dtype(2);
+        mexPrintf("[PURGE_ME] DA.cc write_all 03\n");
         nix::NDSize count = input.ndsize(2);
+        mexPrintf("[PURGE_ME] DA.cc write_all 04\n");
         nix::NDSize offset(0);
+        mexPrintf("[PURGE_ME] DA.cc write_all 05\n");
         double *ptr = input.get_raw(2);
-
+        mexPrintf("[PURGE_ME] DA.cc write_all 06\n");
         da.setData(dtype, ptr, count, offset);
+        mexPrintf("[PURGE_ME] DA.cc write_all 07\n");
     }
 
     void delete_dimension(const extractor &input, infusor &output) {
