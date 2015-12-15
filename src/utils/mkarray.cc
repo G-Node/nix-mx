@@ -3,13 +3,9 @@
 #include <nix.hpp>
 
 mxArray* make_mx_array_from_ds(const nix::DataSet &da) {
-    mexPrintf("[PURGE_ME] mkArray.cc 01\n");
     nix::NDSize size = da.dataExtent();
-    mexPrintf("[PURGE_ME] mkArray.cc 02\n");
     const size_t len = size.size();
-    mexPrintf("[PURGE_ME] mkArray.cc 03\n");
     std::vector<mwSize> dims(len);
-    mexPrintf("[PURGE_ME] mkArray.cc 03\n");
 
     //NB: matlab is column-major, while HDF5 is row-major
     //    data is correct with this, but dimensions don't
@@ -18,26 +14,27 @@ mxArray* make_mx_array_from_ds(const nix::DataSet &da) {
     for (size_t i = 0; i < len; i++) {
         dims[len - (i + 1)] = static_cast<mwSize>(size[i]);
     }
-    mexPrintf("[PURGE_ME] mkArray.cc 04\n");
     nix::DataType da_type = da.dataType();
-    mexPrintf("[PURGE_ME] mkArray.cc 05\n");
     DType2 dtype = dtype_nix2mex(da_type);
-    mexPrintf("[PURGE_ME] mkArray.cc 06\n");
 
     if (!dtype.is_valid) {
-        mexPrintf("[PURGE_ME] mkArray.cc 07\n");
         throw std::domain_error("Unsupported data type");
     }
 
-    mexPrintf("[PURGE_ME] mkArray.cc 08\n");
-    mxArray *data = mxCreateNumericArray(dims.size(), dims.data(), dtype.cid, dtype.clx);
-    mexPrintf("[PURGE_ME] mkArray.cc 09\n");
-    double *ptr = mxGetPr(data);
-    mexPrintf("[PURGE_ME] mkArray.cc 10\n");
-    nix::NDSize offset(size.size(), 0);
-    mexPrintf("[PURGE_ME] mkArray.cc 11\n");
-    da.getData(da_type, ptr, size, offset);
-    mexPrintf("[PURGE_ME] mkArray.cc 12\n");
+    mxArray *data;
+    if (dtype.cid == mxCHAR_CLASS)
+    {
+        data = mxCreateCharArray(dims.size(), dims.data());
+//        double *ptr = mxGetPr(data);
+//        da.getData(ptr);
+    }
+    else
+    {
+        data = mxCreateNumericArray(dims.size(), dims.data(), dtype.cid, dtype.clx);
+        double *ptr = mxGetPr(data);
+        nix::NDSize offset(size.size(), 0);
+        da.getData(da_type, ptr, size, offset);
+    }
 
     return data;
 }
@@ -105,4 +102,3 @@ mxArray* make_mx_array(const nix::Value &v)
 	return res;
 
 }
-

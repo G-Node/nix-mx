@@ -94,6 +94,6 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
            tmp = permute(data, length(size(data)):-1:1);
            nix_mx('DataArray::writeAll', obj.nix_handle, tmp);
         end;
-        
+
     end;
 end
