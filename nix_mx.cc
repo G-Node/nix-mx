@@ -335,8 +335,7 @@ void mexFunction(int            nlhs,
             .reg("set_ticks", SETTER(const std::vector<double>&, nix::RangeDimension, ticks))
             .reg("index_of", &nix::RangeDimension::indexOf)
             .reg("tick_at", &nix::RangeDimension::tickAt)
-            .reg("axis", &nix::RangeDimension::axis)
-            .reg("alias", &nix::RangeDimension::alias);
+            .reg("axis", &nix::RangeDimension::axis);
 
         mexAtExit(on_exit);
     });
