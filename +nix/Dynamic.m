@@ -22,15 +22,21 @@ classdef Dynamic
                       prop, class(obj)));
                     throwAsCaller(ME);
                 end
-                
+
                 if (isempty(val))
                     nix_mx(strcat(obj.alias, '::set_none_', prop), obj.nix_handle, 0);
+                elseif(strcmp(prop, 'units') && (~iscell(val)))
+                %-- BUGFIX: Matlab crashes, if units in Tags and MultiTags 
+                %-- are set using anything else than a cell.
+                    ME = MException('MATLAB:class:SetProhibited', sprintf(...
+                      'Units can be only set by using cells.'));
+                    throwAsCaller(ME);
                 else
                     nix_mx(strcat(obj.alias, '::set_', prop), obj.nix_handle, val);
                 end
                 obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
             end
-            
+
             function val = get_method(obj)
                 val = obj.info.(prop);
             end
