@@ -178,9 +178,11 @@ void mexFunction(int            nlhs,
             .reg("dimensions", FILTER(std::vector<nix::Dimension>, nix::DataArray, , dimensions))
             .reg("append_set_dimension", &nix::DataArray::appendSetDimension)
             .reg("append_range_dimension", &nix::DataArray::appendRangeDimension)
+            .reg("append_alias_range_dimension", &nix::DataArray::appendAliasRangeDimension)
             .reg("append_sampled_dimension", &nix::DataArray::appendSampledDimension)
             .reg("create_set_dimension", &nix::DataArray::createSetDimension)
             .reg("create_range_dimension", &nix::DataArray::createRangeDimension)
+            .reg("create_alias_range_dimension", &nix::DataArray::createAliasRangeDimension)
             .reg("create_sampled_dimension", &nix::DataArray::createSampledDimension);
         methods->add("DataArray::delete_dimension", nixdataarray::delete_dimension);
         methods->add("DataArray::readAll", nixdataarray::read_all);
@@ -333,7 +335,8 @@ void mexFunction(int            nlhs,
             .reg("set_ticks", SETTER(const std::vector<double>&, nix::RangeDimension, ticks))
             .reg("index_of", &nix::RangeDimension::indexOf)
             .reg("tick_at", &nix::RangeDimension::tickAt)
-            .reg("axis", &nix::RangeDimension::axis);
+            .reg("axis", &nix::RangeDimension::axis)
+            .reg("alias", &nix::RangeDimension::alias);
 
         mexAtExit(on_exit);
     });

@@ -71,6 +71,13 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             obj.dimsCache.lastUpdate = 0;
         end
 
+        function dim = append_alias_range_dimension(obj)
+            func_name = strcat(obj.alias, '::append_alias_range_dimension');
+            dim = nix.RangeDimension(nix_mx(func_name, obj.nix_handle));
+            %-- TODO purge once merged into removeCache branch.
+            obj.dimsCache.lastUpdate = 0;
+        end
+        
         function delCheck = delete_dimension(obj, index)
             func_name = strcat(obj.alias, '::delete_dimension');
             delCheck = nix_mx(func_name, obj.nix_handle, index);

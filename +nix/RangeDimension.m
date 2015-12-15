@@ -12,6 +12,7 @@ classdef RangeDimension < nix.Entity
             
             % assign dynamic properties
             nix.Dynamic.add_dyn_attr(obj, 'dimensionType', 'r');
+            nix.Dynamic.add_dyn_attr(obj, 'isAlias', 'r');
             nix.Dynamic.add_dyn_attr(obj, 'label', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'ticks', 'rw');
@@ -35,6 +36,6 @@ classdef RangeDimension < nix.Entity
             func_name = strcat(obj.alias, '::axis');
             axis = nix_mx(func_name, obj.nix_handle, count, startIndex);
         end
+
     end
 end
-   

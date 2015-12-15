@@ -30,13 +30,14 @@ namespace nixdimensions {
 
     mxArray *describe(const nix::RangeDimension &dim)
     {
-        struct_builder sb({ 1 }, { "dimensionType", "label", "unit", "ticks" });
+        struct_builder sb({ 1 }, { "dimensionType", "isAlias", "label", "unit", "ticks" });
 
         sb.set(dim.dimensionType());
+        sb.set(dim.alias());
         sb.set(dim.label());
         sb.set(dim.unit());
         sb.set(dim.ticks());
 
         return sb.array();
     }
-} // namespace nixtag
+} // namespace nixdimensions
