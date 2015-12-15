@@ -148,7 +148,8 @@ end
 
 %% Test: Dimensions
 function [] = test_dimensions( varargin )
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.create_data_array('daTest', 'test nixDataArray', 'double', [1 2]);
     
@@ -168,6 +169,7 @@ function [] = test_dimensions( varargin )
     assert(length(da.dimensions) == 3);
     assert(strcmp(da.dimensions{3}.dimensionType, 'range'));
     assert(isequal(da.dimensions{3}.ticks, ticks));
+    assert(~da.dimensions{3}.isAlias);
     
     da.delete_dimension(2);
     assert(length(da.dimensions) == 2);
@@ -180,4 +182,26 @@ function [] = test_dimensions( varargin )
     
     da.delete_dimension(1);
     assert(isempty(da.dimensions));
+    
+    try
+        da.append_alias_range_dimension;
+    catch ME
+        assert(strcmp(ME.identifier, 'nix:arg:inval'));
+    end;
+    
+    da.append_set_dimension();
+    try
+        da.append_alias_range_dimension();
+    catch ME
+        assert(strcmp(ME.identifier, 'nix:arg:inval'));
+    end;
+    
+    daAlias = b.create_data_array('aliasDimTest', 'nix.DataArray', ...
+        nix.DataType.Double, 25);
+    daAlias.append_alias_range_dimension();
+    assert(f.blocks{1}.dataArrays{2}.dimensions{1}.isAlias);
+    
+    clear daAlias da b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.dataArrays{2}.dimensions{1}.isAlias);
 end
