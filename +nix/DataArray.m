@@ -88,11 +88,24 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
            data = permute(tmp, length(size(tmp)):-1:1);
         end;
         
-        function write_all(obj, data)  % TODO add (optional) offset
-           % data must agree with file & dimensions
-           % see mkarray.cc(42)
-           tmp = permute(data, length(size(data)):-1:1);
-           nix_mx('DataArray::writeAll', obj.nix_handle, tmp);
+        %-- TODO add (optional) offset
+        function write_all(obj, data)
+            %-- Bugifx: if a data array has been created as
+            %-- boolean or char, provide check that only logical or char
+            %-- values can be written, otherwise the
+            %-- error message from nix is too cryptic.
+            if(islogical(obj.read_all) && ~islogical(data))
+                error(strcat('Trying to write', 32, class(data), ...
+                	' to a logical DataArray. Provide data as logical.'));
+            elseif(ischar(obj.read_all) && ~ischar(data))
+                error(strcat('Trying to write', 32, class(data), ...
+                	' to a char DataArray. Provide data as char.'));
+            else
+                % data must agree with file & dimensions
+                % see mkarray.cc(42)
+                tmp = permute(data, length(size(data)):-1:1);
+                nix_mx('DataArray::writeAll', obj.nix_handle, tmp);
+            end;
         end;
 
     end;
