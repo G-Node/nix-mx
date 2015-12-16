@@ -53,18 +53,28 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 'Block::openDataArray', id_or_name, @nix.DataArray);
         end;
         
-        %-- As "datatype" provide one of the nix.DataTypes. Alternatively
-        %-- a string stating one of the datatypes supported by nix can be provided.
         function da = create_data_array(obj, name, nixtype, datatype, shape)
-            handle = nix_mx('Block::createDataArray', obj.nix_handle, ...
-                name, nixtype, datatype, shape);
-            da = nix.DataArray(handle);
-            obj.dataArraysCache.lastUpdate = 0;
+            if(~isa(datatype, 'nix.DataType'))
+                error('Please provide a valid nix.DataType');
+            else
+                handle = nix_mx('Block::createDataArray', obj.nix_handle, ...
+                    name, nixtype, lower(datatype.char), shape);
+                da = nix.DataArray(handle);
+                obj.dataArraysCache.lastUpdate = 0;
+            end;
         end
         
         function da = create_data_array_from_data(obj, name, nixtype, data)
             shape = size(data);
-            dtype = class(data);
+            if(ischar(data))
+                dtype = nix.DataType.String;
+            elseif(islogical(data))
+                dtype = nix.DataType.Bool;
+            elseif(isnumeric(data))
+                dtype = nix.DataType.Double;
+            else
+                error('Could not determine DataType of data');
+            end;
             
             da = obj.create_data_array(name, nixtype, dtype, shape);
             da.write_all(data);
