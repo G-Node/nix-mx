@@ -69,26 +69,35 @@ function [] = test_create_data_array( varargin )
     tmp = da.read_all();
     assert(all(tmp(:) == 0));
 
-    %-- TODO: add tests for all provided data types
     try
-        stringName = 'stringDataArray';
-        b.create_data_array(stringName, dtype, nix.DataType.String, [1 5]);
+        b.create_data_array('stringDataArray', dtype, nix.DataType.String, [1 5]);
     catch ME
         assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
     end;
     
     try
-        unsupportedName = 'I will crash and burn';
-        b.create_data_array(unsupportedName, dtype, 'Thou shalt not work!', [1 5]);
+        b.create_data_array('I will crash and burn', dtype, 'Thou shalt not work!', [1 5]);
     catch ME
         assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
     end;
 
-    assert(~isempty(b.dataArrays));
+    da = b.create_data_array('floatDataArray', dtype, nix.DataType.Float, [3 3]);
+    da = b.create_data_array('Int8DataArray', dtype, nix.DataType.Int8, [3 3]);
+    da = b.create_data_array('Int16DataArray', dtype, nix.DataType.Int16, [3 3]);
+    da = b.create_data_array('Int32DataArray', dtype, nix.DataType.Int32, [3 3]);
+    da = b.create_data_array('Int64DataArray', dtype, nix.DataType.Int64, [3 3]);
+    da = b.create_data_array('UInt8DataArray', dtype, nix.DataType.UInt8, [3 3]);
+    da = b.create_data_array('UInt16DataArray', dtype, nix.DataType.UInt16, [3 3]);
+    da = b.create_data_array('UInt32DataArray', dtype, nix.DataType.UInt32, [3 3]);
+    da = b.create_data_array('UInt64DataArray', dtype, nix.DataType.UInt64, [3 3]);
+    da = b.create_data_array('logicalArray', dtype, nix.DataType.Bool, [3 3]);
+    
+    clear da b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.dataArrays, 1) == 11);
 end
 
 %% Test: Create Data Array from data
-%-- TODO add tests for all supported datatypes
 function [] = test_create_data_array_from_data( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     daType = 'nix.DataArray';
