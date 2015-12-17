@@ -22,14 +22,9 @@ mxArray* make_mx_array_from_ds(const nix::DataSet &da) {
     }
 
     mxArray *data;
-    if (dtype.cid == mxCHAR_CLASS)
-    {
-        data = mxCreateCharArray(dims.size(), dims.data());
-//        double *ptr = mxGetPr(data);
-//        da.getData(ptr);
-    }
-    else
-    {
+    if (dtype.cid == mxCHAR_CLASS) {
+        throw std::domain_error("String DataArrays are not supported as of yet.");
+    } else {
         data = mxCreateNumericArray(dims.size(), dims.data(), dtype.cid, dtype.clx);
         double *ptr = mxGetPr(data);
         nix::NDSize offset(size.size(), 0);

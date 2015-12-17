@@ -89,17 +89,26 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end;
         
         %-- TODO add (optional) offset
+        %-- If a DataArray has been created as boolean or numeric,
+        %-- provide that only values of the proper DataType can be written.
         function write_all(obj, data)
-            %-- Bugifx: if a data array has been created as
-            %-- boolean or char, provide check that only logical or char
-            %-- values can be written, otherwise the
-            %-- error message from nix is too cryptic.
+            errorStruct.identifier = 'DataArray:improperDataType';
             if(islogical(obj.read_all) && ~islogical(data))
-                error(strcat('Trying to write', 32, class(data), ...
-                	' to a logical DataArray. Provide data as logical.'));
-            elseif(ischar(obj.read_all) && ~ischar(data))
-                error(strcat('Trying to write', 32, class(data), ...
-                	' to a char DataArray. Provide data as char.'));
+                errorStruct.message = strcat('Trying to write', ...
+                    32, class(data), ' to a logical DataArray.');
+                error(errorStruct);
+            elseif(isnumeric(obj.read_all) && ~isnumeric(data))
+                errorStruct.message = strcat('Trying to write', ...
+                    32, class(data), ' to a ', 32, class(obj.read_all), ...
+                    ' DataArray.');
+                error(errorStruct);
+            elseif(ischar(data))
+                %-- Should actually not be reachable at the moment, 
+                %-- since writing Strings to DataArrays is not supported,
+                %-- but safety first.
+                errorStruct.identifier = 'DataArray:unsupportedDataType';
+                errorStruct.message = ('Writing char/string DataArrays is not supported as of yet.');
+                error(errorStruct);
             else
                 % data must agree with file & dimensions
                 % see mkarray.cc(42)

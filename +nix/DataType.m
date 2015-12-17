@@ -5,6 +5,7 @@ classdef DataType
         Bool;
         String;
         Double;
+        %-- remove
         Char;
         Float;
         Int8;

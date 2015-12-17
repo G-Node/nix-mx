@@ -8,7 +8,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_list_sources;
-    funcs{end+1} = @test_set_data;
+    funcs{end+1} = @test_write_data;
     funcs{end+1} = @test_add_source;
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_dimensions;
@@ -97,18 +97,60 @@ function [] = test_list_sources( varargin )
     assert(strcmp(d1.sources{1}.name, 'Unit 5'));
 end
 
-%% Test: Set Data
-function [] = test_set_data( varargin )
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+%% Test: Write Data
+%-- TODO: add tests for all provided data types
+function [] = test_write_data( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    typeDA = 'nix.DataArray';
+    f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('tagtest', 'nixblock');
 
-    d1 = b.create_data_array('foo', 'bar', nix.DataType.Double, [2 3]);
-    tmp = d1.read_all();
-    assert(all(tmp(:) == 0));
+    numData = [1 2 3 4 5];
+    logData = logical([1 0 1 0 1]);
+    charData = ['a' 'b' 'c' 'd' 'e'];
+    cellData = {1 2 3 4 5};
     
-    data = [1, 2, 3; 4, 5, 6];
-    d1.write_all(data);
-    assert(isequal(d1.read_all(), data));
+    da = b.create_data_array('numericArray', typeDA, nix.DataType.Double, [1 5]);
+    tmp = da.read_all();
+    assert(all(tmp(:) == 0));
+
+    da.write_all(numData);
+    assert(isequal(da.read_all(), numData));
+
+    try
+        da.write_all(logData);
+    catch ME
+        assert(strcmp(ME.identifier, 'DataArray:improperDataType'));
+    end;
+    try
+        da.write_all(charData);
+    catch ME
+        assert(strcmp(ME.identifier, 'DataArray:improperDataType'));
+    end;
+    try
+        da.write_all(cellData);
+    catch ME
+        assert(strcmp(ME.identifier, 'DataArray:improperDataType'));
+    end;
+
+    da = b.create_data_array('logicalArray', typeDA, nix.DataType.Bool, [1 5]);
+    da.write_all(logData);
+    assert(isequal(da.read_all, logData));
+    try
+        da.write_all(numData);
+    catch ME
+        assert(strcmp(ME.identifier, 'DataArray:improperDataType'));
+    end;
+    try
+        da.write_all(charData);
+    catch ME
+        assert(strcmp(ME.identifier, 'DataArray:improperDataType'));
+    end;
+
+    clear da b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(isequal(f.blocks{1}.dataArrays{1}.read_all, numData));
+    assert(isequal(f.blocks{1}.dataArrays{2}.read_all, logData));
 end
 
 %% Test: Add sources by entity and id

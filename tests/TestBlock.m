@@ -53,40 +53,79 @@ function [] = test_attrs( varargin )
     assert(isempty(b.definition));
 end
 
-function [] = test_create_data_array( varargin )
 %% Test: Create Data Array
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+function [] = test_create_data_array( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('arraytest', 'nixblock');
     
     assert(isempty(b.dataArrays));
     
-    d1 = b.create_data_array('foo', 'bar', nix.DataType.Double, [2 3]);
-
-    assert(strcmp(d1.name, 'foo'));
-    assert(strcmp(d1.type, 'bar'));
-    tmp = d1.read_all();
+    dtype = 'nix.DataArray';
+    doubleName = 'doubleDataArray';
+    da = b.create_data_array(doubleName, dtype, nix.DataType.Double, [2 3]);
+    assert(strcmp(da.name, doubleName));
+    assert(strcmp(da.type, dtype));
+    tmp = da.read_all();
     assert(all(tmp(:) == 0));
+
+    %-- TODO: add tests for all provided data types
+    try
+        stringName = 'stringDataArray';
+        b.create_data_array(stringName, dtype, nix.DataType.String, [1 5]);
+    catch ME
+        assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
+    end;
     
+    try
+        unsupportedName = 'I will crash and burn';
+        b.create_data_array(unsupportedName, dtype, 'Thou shalt not work!', [1 5]);
+    catch ME
+        assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
+    end;
+
     assert(~isempty(b.dataArrays));
 end
 
-function [] = test_create_data_array_from_data( varargin )
 %% Test: Create Data Array from data
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+%-- TODO add tests for all supported datatypes
+function [] = test_create_data_array_from_data( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    daType = 'nix.DataArray';
+    f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('arraytest', 'nixblock');
     
     assert(isempty(b.dataArrays));
     
-    data = [1, 2, 3; 4, 5, 6];
-    d1 = b.create_data_array_from_data('foo', 'bar', data);
-
-    assert(strcmp(d1.name, 'foo'));
-    assert(strcmp(d1.type, 'bar'));
+    numName = 'numDataArray';
+    numData = [1, 2, 3; 4, 5, 6];
+    da = b.create_data_array_from_data(numName, daType, numData);
+    assert(strcmp(da.name, numName));
+    assert(strcmp(da.type, daType));
     
-    tmp = d1.read_all();
-    assert(strcmp(class(tmp), class(data)));
-    assert(isequal(size(tmp), size(data)));
-    assert(isequal(tmp, data));
+    tmp = da.read_all();
+    assert(strcmp(class(tmp), class(numData)));
+    assert(isequal(size(tmp), size(numData)));
+    assert(isequal(tmp, numData));
+    
+    logName = 'logicalDataArray';
+    logData = logical([1 0 1; 0 1 0; 1 0 1]);
+    da = b.create_data_array_from_data(logName, daType, logData);
+    assert(islogical(da.read_all));
+    assert(isequal(size(da.read_all), size(logData)));
+    assert(isequal(da.read_all, logData));
+    
+    try
+        b.create_data_array_from_data('stringDataArray', daType, ['a' 'b']);
+    catch ME
+        assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
+    end;
+    
+    try
+        b.create_data_array_from_data('I will crash and burn', daType, {1 2 3});
+    catch ME
+        assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
+    end;
     
     assert(~isempty(b.dataArrays));
 end

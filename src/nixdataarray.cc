@@ -56,13 +56,9 @@ namespace nixdataarray {
         nix::NDSize offset(0);
         double *ptr = input.get_raw(2);
         
-        if (dtype == nix::DataType::String)
-        {
-            //da.setData(ptr);
-            throw std::domain_error("Writing strings is not supported as of yet.");
-        }
-        else
-        {
+        if (dtype == nix::DataType::String) {
+            throw std::domain_error("Writing Strings to DataArrays is not supported as of yet.");
+        } else {
             da.setData(dtype, ptr, count, offset);
         }
     }

@@ -54,8 +54,13 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end;
         
         function da = create_data_array(obj, name, nixtype, datatype, shape)
+            errorStruct.identifier = 'Block:unsupportedDataType';
             if(~isa(datatype, 'nix.DataType'))
-                error('Please provide a valid nix.DataType');
+                errorStruct.message = 'Please provide a valid nix.DataType';
+                error(errorStruct);
+            elseif(isequal(datatype, nix.DataType.String))
+                errorStruct.message = 'Writing Strings to DataArrays is not supported as of yet.';
+                error(errorStruct);
             else
                 handle = nix_mx('Block::createDataArray', obj.nix_handle, ...
                     name, nixtype, lower(datatype.char), shape);
@@ -65,17 +70,20 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
         
         function da = create_data_array_from_data(obj, name, nixtype, data)
-            shape = size(data);
+            errorStruct.identifier = 'Block:unsupportedDataType';
             if(ischar(data))
-                dtype = nix.DataType.String;
+                errorStruct.message = 'Writing Strings to DataArrays is not supported as of yet.';
+                error(errorStruct);
             elseif(islogical(data))
                 dtype = nix.DataType.Bool;
             elseif(isnumeric(data))
                 dtype = nix.DataType.Double;
             else
-                error('Could not determine DataType of data');
+                errorStruct.message = 'DataType of provided data is not supported.';
+                error(errorStruct);
             end;
-            
+
+            shape = size(data);            
             da = obj.create_data_array(name, nixtype, dtype, shape);
             da.write_all(data);
         end
