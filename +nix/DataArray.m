@@ -92,6 +92,10 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         %-- If a DataArray has been created as boolean or numeric,
         %-- provide that only values of the proper DataType can be written.
         function write_all(obj, data)
+            if(isinteger(obj.read_all) && isfloat(data))
+                disp('Warning: Writing Float data to an Integer DataArray');
+            end;
+            
             errorStruct.identifier = 'DataArray:improperDataType';
             if(islogical(obj.read_all) && ~islogical(data))
                 errorStruct.message = strcat('Trying to write', ...
