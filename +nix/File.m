@@ -27,7 +27,6 @@ classdef File < nix.Entity
 
         function newBlock = createBlock(obj, name, type)
             newBlock = nix.Block(nix_mx('File::createBlock', obj.nix_handle, name, type));
-            obj.blocksCache.lastUpdate = 0;
         end;
 
         function hasBlock = hasBlock(obj, id_or_name)
@@ -40,8 +39,8 @@ classdef File < nix.Entity
         end
 
         function delCheck = deleteBlock(obj, del)
-            [delCheck, obj.blocksCache] = nix.Utils.delete_entity(obj, ...
-                del, 'nix.Block', 'File::deleteBlock', obj.blocksCache);
+            delCheck = nix.Utils.delete_entity(obj, ...
+                del, 'nix.Block', 'File::deleteBlock');
         end;
 
         % ----------------
@@ -50,7 +49,6 @@ classdef File < nix.Entity
 
         function newSec = createSection(obj, name, type)
             newSec = nix.Section(nix_mx('File::createSection', obj.nix_handle, name, type));
-            obj.sectionsCache.lastUpdate = 0;
         end;
 
         function hasSec = hasSection(obj, id_or_name)
@@ -64,9 +62,7 @@ classdef File < nix.Entity
 
         function delCheck = deleteSection(obj, del)
             delCheck = nix.Utils.delete_entity(obj, del, 'nix.Section', 'File::deleteSection');
-            obj.sectionsCache.lastUpdate = 0;
         end;
-
     end
-end
 
+end

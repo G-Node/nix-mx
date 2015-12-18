@@ -27,8 +27,8 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % ------------------
         
         function [] = add_reference(obj, add_this)
-            obj.referencesCache = nix.Utils.add_entity(obj, ...
-                add_this, 'nix.DataArray', 'Tag::addReference', obj.referencesCache);
+            nix.Utils.add_entity(obj, add_this, ...
+                'nix.DataArray', 'Tag::addReference');
         end;
 
         function hasRef = has_reference(obj, id_or_name)
@@ -36,8 +36,8 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end;
         
         function delCheck = remove_reference(obj, del)
-            [delCheck, obj.referencesCache] = nix.Utils.delete_entity(obj, ...
-                del, 'nix.DataArray', 'Tag::removeReference', obj.referencesCache);
+            delCheck = nix.Utils.delete_entity(obj, del, ...
+                'nix.DataArray', 'Tag::removeReference');
         end;
 
         function retObj = open_reference(obj, id_or_name)
@@ -65,8 +65,8 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             else
                 addID = add_this;
             end;
-            retObj = nix.Feature(nix_mx('Tag::createFeature', obj.nix_handle, addID, link_type));
-            obj.featuresCache.lastUpdate = 0;
+            retObj = nix.Feature(nix_mx('Tag::createFeature', ...
+                obj.nix_handle, addID, link_type));
         end;
 
         function hasFeature = has_feature(obj, id_or_name)
@@ -74,8 +74,8 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end;
         
         function delCheck = remove_feature(obj, del)
-            [delCheck, obj.featuresCache] = nix.Utils.delete_entity(obj, ...
-                del, 'nix.Feature', 'Tag::deleteFeature', obj.featuresCache);
+            delCheck = nix.Utils.delete_entity(obj, del, ...
+                'nix.Feature', 'Tag::deleteFeature');
         end;
 
         function retObj = open_feature(obj, id_or_name)

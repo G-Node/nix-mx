@@ -5,7 +5,6 @@ classdef Property < nix.NamedEntity
     properties(Hidden)
         % namespace reference for nix-mx functions
         alias = 'Property'
-        valuesCache
     end;
     
     properties(Dependent)
@@ -20,13 +19,10 @@ classdef Property < nix.NamedEntity
             nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'mapping', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'datatype', 'r');
-            
-            obj.valuesCache = nix.CacheStruct();
         end;
 
         function retVals = get.values(obj)
-            [obj.valuesCache, retVals] = nix.Utils.fetchPropList(obj.updatedAt, ...
-                'Property::values', obj.nix_handle, obj.valuesCache);
+            retVals = nix_mx('Property::values', obj.nix_handle);
         end
 
         function [] = set.values(obj, val)
@@ -48,13 +44,11 @@ classdef Property < nix.NamedEntity
             end
             
             nix_mx('Property::updateValues', obj.nix_handle, values);
-            obj.valuesCache.lastUpdate = 0;
 
             dispStr = 'Note: nix only supports updating the actual value at the moment.';
             dispStr = [dispStr, char(10), 'Attributes like uncertainty or checksum cannot be set at the moment.'];
             disp(dispStr);
         end
     end
-    
-end
 
+end
