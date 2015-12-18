@@ -155,7 +155,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 'Block::openMultiTag', id_or_name, @nix.MultiTag);
         end;
 
-        %-- creating a multitag requires an already existing data array
+        %-- Creating a multitag requires an already existing data array
         function multitag = create_multi_tag(obj, name, type, add_data_array)
             if(strcmp(class(add_data_array), 'nix.DataArray'))
                 addID = add_data_array.id;

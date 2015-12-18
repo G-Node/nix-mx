@@ -130,5 +130,5 @@ classdef Section < nix.NamedEntity
             end
         end;
 
-    end
+    end;
 end
