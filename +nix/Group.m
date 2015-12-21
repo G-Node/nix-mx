@@ -31,15 +31,13 @@ classdef Group < nix.NamedEntity
         end;
 
         function [] = add_data_array(obj, add_this)
-            obj.dataArraysCache = nix.Utils.add_entity(obj, ...
-                add_this, 'nix.DataArray', 'Group::addDataArray', ...
-                obj.dataArraysCache);
+            nix.Utils.add_entity(obj, add_this, ...
+                'nix.DataArray', 'Group::addDataArray');
         end;
 
         function delCheck = remove_data_array(obj, del)
-            [delCheck, obj.dataArraysCache] = nix.Utils.delete_entity(obj, ...
-                del, 'nix.DataArray', 'Group::removeDataArray', ...
-                obj.dataArraysCache);
+            delCheck = nix.Utils.delete_entity(obj, del, ...
+                'nix.DataArray', 'Group::removeDataArray');
         end;
 
         % -----------------
@@ -47,9 +45,8 @@ classdef Group < nix.NamedEntity
         % -----------------
 
         function [] = add_tag(obj, add_this)
-            obj.tagsCache = nix.Utils.add_entity(obj, ...
-                add_this, 'nix.Tag', 'Group::addTag', ...
-                obj.tagsCache);
+            nix.Utils.add_entity(obj, add_this, ...
+                'nix.Tag', 'Group::addTag');
         end;
 
         function hasTag = has_tag(obj, id_or_name)
@@ -62,9 +59,8 @@ classdef Group < nix.NamedEntity
         end;
 
         function delCheck = remove_tag(obj, del)
-            [delCheck, obj.tagsCache] = nix.Utils.delete_entity(obj, ...
-                del, 'nix.Tag', 'Group::removeTag', ...
-                obj.tagsCache);
+            delCheck = nix.Utils.delete_entity(obj, del, ...
+                'nix.Tag', 'Group::removeTag');
         end;
 
         % -----------------
@@ -72,9 +68,8 @@ classdef Group < nix.NamedEntity
         % -----------------
         
         function [] = add_multi_tag(obj, add_this)
-            obj.multiTagsCache = nix.Utils.add_entity(obj, ...
-                add_this, 'nix.MultiTag', 'Group::addMultiTag', ...
-                obj.multiTagsCache);
+            nix.Utils.add_entity(obj, add_this, ...
+                'nix.MultiTag', 'Group::addMultiTag');
         end;
 
         function hasMTag = has_multi_tag(obj, id_or_name)
@@ -88,10 +83,9 @@ classdef Group < nix.NamedEntity
         end;
 
         function delCheck = remove_multi_tag(obj, del)
-            [delCheck, obj.multiTagsCache] = nix.Utils.delete_entity(obj, ...
-                del, 'nix.MultiTag', 'Group::removeMultiTag', ...
-                obj.multiTagsCache);
+            delCheck = nix.Utils.delete_entity(obj, del, ...
+                'nix.MultiTag', 'Group::removeMultiTag');
         end;
-
     end;
+
 end

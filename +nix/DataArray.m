@@ -4,8 +4,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
     properties (Hidden)
         % namespace reference for nix-mx functions
         alias = 'DataArray'
-        dimsCache
-    end
+    end;
 
     properties(Dependent)
         dimensions % should not be dynamic due to complex set operation
@@ -23,8 +22,6 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             nix.Dynamic.add_dyn_attr(obj, 'expansionOrigin', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'polynom_coefficients', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'shape', 'rw');
-            
-            obj.dimsCache = nix.CacheStruct();
         end;
 
         % -----------------
@@ -32,43 +29,35 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % -----------------
         
         function dimensions = get.dimensions(obj)
-            if obj.dimsCache.lastUpdate ~= obj.updatedAt
-                currList = nix_mx('DataArray::dimensions', obj.nix_handle);
-                obj.dimsCache.data = cell(length(currList), 1);
-                for i = 1:length(currList)
-                    
-                    switch currList(i).dtype
-                        case 'set'
-                            obj.dimsCache.data{i} = nix.SetDimension(currList(i).dimension);
-                        case 'sample'
-                            obj.dimsCache.data{i} = nix.SampledDimension(currList(i).dimension);
-                        case 'range'
-                            obj.dimsCache.data{i} = nix.RangeDimension(currList(i).dimension);
-                        otherwise
-                           disp('some dimension type is unknown! skip')
-                    end
+            dimensions = {};
+            currList = nix_mx('DataArray::dimensions', obj.nix_handle);
+            for i = 1:length(currList)
+                switch currList(i).dtype
+                    case 'set'
+                        dimensions{i} = nix.SetDimension(currList(i).dimension);
+                    case 'sample'
+                        dimensions{i} = nix.SampledDimension(currList(i).dimension);
+                    case 'range'
+                        dimensions{i} = nix.RangeDimension(currList(i).dimension);
+                    otherwise
+                       disp('some dimension type is unknown! skip')
                 end;
-                obj.dimsCache.lastUpdate = obj.updatedAt;
             end;
-            dimensions = obj.dimsCache.data;
         end;
         
         function dim = append_set_dimension(obj)
             func_name = strcat(obj.alias, '::append_set_dimension');
             dim = nix.SetDimension(nix_mx(func_name, obj.nix_handle));
-            obj.dimsCache.lastUpdate = 0;
         end
         
         function dim = append_sampled_dimension(obj, interval)
             func_name = strcat(obj.alias, '::append_sampled_dimension');
             dim = nix.SampledDimension(nix_mx(func_name, obj.nix_handle, interval));
-            obj.dimsCache.lastUpdate = 0;
         end
 
         function dim = append_range_dimension(obj, ticks)
             func_name = strcat(obj.alias, '::append_range_dimension');
             dim = nix.RangeDimension(nix_mx(func_name, obj.nix_handle, ticks));
-            obj.dimsCache.lastUpdate = 0;
         end
 
         function dim = append_alias_range_dimension(obj)
@@ -81,7 +70,6 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function delCheck = delete_dimension(obj, index)
             func_name = strcat(obj.alias, '::delete_dimension');
             delCheck = nix_mx(func_name, obj.nix_handle, index);
-            obj.dimsCache.lastUpdate = 0;
         end;
         
         % -----------------

@@ -5,7 +5,6 @@ classdef Section < nix.NamedEntity
     properties(Hidden)
         % namespace reference for nix-mx functions
         alias = 'Section'
-        propsCache
     end;
     
     properties(Dependent)
@@ -23,8 +22,6 @@ classdef Section < nix.NamedEntity
             
             % assign relations
             nix.Dynamic.add_dyn_relation(obj, 'sections', @nix.Section);
-            
-            obj.propsCache = nix.CacheStruct();
         end;
 
         function section = parent(obj)
@@ -65,13 +62,13 @@ classdef Section < nix.NamedEntity
         % ----------------
         
         function newSec = createSection(obj, name, type)
-            newSec = nix.Section(nix_mx('Section::createSection', obj.nix_handle, name, type));
-            obj.sectionsCache.lastUpdate = 0;
+            newSec = nix.Section(nix_mx('Section::createSection', ...
+                obj.nix_handle, name, type));
         end;
 
         function delCheck = deleteSection(obj, del)
-            delCheck = nix.Utils.delete_entity(obj, del, 'nix.Section', 'Section::deleteSection');
-            obj.sectionsCache.lastUpdate = 0;
+            delCheck = nix.Utils.delete_entity(obj, del, ...
+                'nix.Section', 'Section::deleteSection');
         end;
 
         function retObj = open_section(obj, id_or_name)
@@ -92,7 +89,6 @@ classdef Section < nix.NamedEntity
         function p = create_property(obj, name, datatype)
             p = nix.Property(nix_mx('Section::createProperty', ...
                 obj.nix_handle, name, datatype));
-            obj.propsCache.lastUpdate = 0;
         end;
 
         function p = create_property_with_value(obj, name, val)
@@ -101,7 +97,6 @@ classdef Section < nix.NamedEntity
             end;
             p = nix.Property(nix_mx('Section::createPropertyWithValue', ...
                 obj.nix_handle, name, val));
-            obj.propsCache.lastUpdate = 0;
         end;
 
         function delCheck = delete_property(obj, del)
@@ -113,7 +108,6 @@ classdef Section < nix.NamedEntity
                 delID = del;
             end;
             delCheck = nix_mx('Section::deleteProperty', obj.nix_handle, delID);
-            obj.propsCache.lastUpdate = 0;
         end;
 
         function retObj = open_property(obj, id_or_name)
@@ -122,15 +116,8 @@ classdef Section < nix.NamedEntity
         end;
 
         function props = get.allProperties(obj)
-            %-- if a value in a property is updated, this will not
-            %-- update the lastUpdate of the propertyCache of
-            %-- a loaded section. Therefore caching of the properties
-            %-- of a section is disabled by always resetting the lastUpdate
-            obj.propsCache.lastUpdate = 0;
-
-            [obj.propsCache, props] = nix.Utils.fetchPropList(obj.updatedAt, ...
-                'Section::properties', obj.nix_handle, obj.propsCache);
-        end
+            props = nix_mx('Section::properties', obj.nix_handle);
+        end;
         
         function p_map = get.allPropertiesMap(obj)
             p_map = containers.Map();
@@ -139,9 +126,7 @@ classdef Section < nix.NamedEntity
             for i=1:length(props)
                 p_map(props{i}.name) = cell2mat(props{i}.values);
             end
-        end
+        end;
 
     end
-
 end
-

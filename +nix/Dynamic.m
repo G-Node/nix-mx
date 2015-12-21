@@ -22,26 +22,32 @@ classdef Dynamic
                       prop, class(obj)));
                     throwAsCaller(ME);
                 end
-                
+
                 if (isempty(val))
                     nix_mx(strcat(obj.alias, '::set_none_', prop), obj.nix_handle, 0);
+                elseif(strcmp(prop, 'units') && (~iscell(val)))
+                %-- BUGFIX: Matlab crashes, if units in Tags and MultiTags 
+                %-- are set using anything else than a cell.
+                    ME = MException('MATLAB:class:SetProhibited', sprintf(...
+                      'Units can be only set by using cells.'));
+                    throwAsCaller(ME);
                 else
                     nix_mx(strcat(obj.alias, '::set_', prop), obj.nix_handle, val);
                 end
                 obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
             end
-            
+
             function val = get_method(obj)
                 val = obj.info.(prop);
             end
         end
         
         function add_dyn_relation(obj, name, constructor)
-            cacheAttr = strcat(name, 'Cache');
-            cache = addprop(obj, cacheAttr);
-            cache.Hidden = true;
-            obj.(cacheAttr) = nix.CacheStruct();
-            
+            dataAttr = strcat(name, 'Data');
+            data = addprop(obj, dataAttr);
+            data.Hidden = true;
+            obj.(dataAttr) = {};
+
             % adds a proxy property
             rel = addprop(obj, name);
             rel.GetMethod = @get_method;
@@ -52,9 +58,10 @@ classdef Dynamic
             rel_map.Hidden = true;
             
             function val = get_method(obj)
-                [obj.(cacheAttr), val] = nix.Utils.fetchObjList(obj.updatedAt, ...
+                obj.(dataAttr) = nix.Utils.fetchObjList(...
                     strcat(obj.alias, '::', name), obj.nix_handle, ...
-                    obj.(cacheAttr), constructor);
+                    constructor);
+                val = obj.(dataAttr);
             end
             
             function val = get_as_map(obj)
@@ -67,4 +74,5 @@ classdef Dynamic
             end
         end
     end
+
 end
