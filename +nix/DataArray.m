@@ -76,12 +76,38 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
            data = permute(tmp, length(size(tmp)):-1:1);
         end;
         
-        function write_all(obj, data)  % TODO add (optional) offset
-           % data must agree with file & dimensions
-           % see mkarray.cc(42)
-           tmp = permute(data, length(size(data)):-1:1);
-           nix_mx('DataArray::writeAll', obj.nix_handle, tmp);
+        %-- TODO add (optional) offset
+        %-- If a DataArray has been created as boolean or numeric,
+        %-- provide that only values of the proper DataType can be written.
+        function write_all(obj, data)
+            if(isinteger(obj.read_all) && isfloat(data))
+                disp('Warning: Writing Float data to an Integer DataArray');
+            end;
+            
+            errorStruct.identifier = 'DataArray:improperDataType';
+            if(islogical(obj.read_all) && ~islogical(data))
+                errorStruct.message = strcat('Trying to write', ...
+                    32, class(data), ' to a logical DataArray.');
+                error(errorStruct);
+            elseif(isnumeric(obj.read_all) && ~isnumeric(data))
+                errorStruct.message = strcat('Trying to write', ...
+                    32, class(data), ' to a ', 32, class(obj.read_all), ...
+                    ' DataArray.');
+                error(errorStruct);
+            elseif(ischar(data))
+                %-- Should actually not be reachable at the moment, 
+                %-- since writing Strings to DataArrays is not supported,
+                %-- but safety first.
+                errorStruct.identifier = 'DataArray:unsupportedDataType';
+                errorStruct.message = ('Writing char/string DataArrays is not supported as of yet.');
+                error(errorStruct);
+            else
+                % data must agree with file & dimensions
+                % see mkarray.cc(42)
+                tmp = permute(data, length(size(data)):-1:1);
+                nix_mx('DataArray::writeAll', obj.nix_handle, tmp);
+            end;
         end;
-        
+
     end;
 end

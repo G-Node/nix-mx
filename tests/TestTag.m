@@ -73,8 +73,8 @@ function [] = test_add_reference ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('referenceTest', 'nixBlock');
-    tmp = b.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
-    tmp = b.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array('referenceTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.create_data_array('referenceTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
     
     position = [1.0 1.2 1.3 15.9];
     t = b.create_tag('referenceTest', 'nixTag', position);
@@ -96,8 +96,8 @@ end
 function [] = test_remove_reference ( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     getBlock = test_file.createBlock('referenceTest', 'nixBlock');
-    getRefDA1 = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
-    getRefDA2 = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
+    getRefDA1 = getBlock.create_data_array('referenceTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    getRefDA2 = getBlock.create_data_array('referenceTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
     
     position = [1.0 1.2 1.3 15.9];
     getTag = getBlock.create_tag('referenceTest', 'nixTag', position);
@@ -118,12 +118,12 @@ function [] = test_add_feature ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
-    tmp = b.create_data_array('featureTestDataArray1', 'nixDataArray', 'double', [1 2]);
-    tmp = b.create_data_array('featureTestDataArray2', 'nixDataArray', 'double', [3 4]);
-    tmp = b.create_data_array('featureTestDataArray3', 'nixDataArray', 'double', [5 6]);
-    tmp = b.create_data_array('featureTestDataArray4', 'nixDataArray', 'double', [7 8]);
-    tmp = b.create_data_array('featureTestDataArray5', 'nixDataArray', 'double', [9 10]);
-    tmp = b.create_data_array('featureTestDataArray6', 'nixDataArray', 'double', [11 12]);
+    tmp = b.create_data_array('featureTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.create_data_array('featureTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
+    tmp = b.create_data_array('featureTestDataArray3', 'nixDataArray', nix.DataType.Double, [5 6]);
+    tmp = b.create_data_array('featureTestDataArray4', 'nixDataArray', nix.DataType.Double, [7 8]);
+    tmp = b.create_data_array('featureTestDataArray5', 'nixDataArray', nix.DataType.Double, [9 10]);
+    tmp = b.create_data_array('featureTestDataArray6', 'nixDataArray', nix.DataType.Double, [11 12]);
     position = [1.0 1.2 1.3 15.9];
     t = b.create_tag('featureTest', 'nixTag', position);
     
@@ -147,8 +147,8 @@ end
 function [] = test_remove_feature ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
-    tmp = b.create_data_array('featureTestDataArray1', 'nixDataArray', 'double', [1 2]);
-    tmp = b.create_data_array('featureTestDataArray2', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array('featureTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.create_data_array('featureTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
     position = [1.0 1.2 1.3 15.9];
     getTag = b.create_tag('featureTest', 'nixTag', position);
     tmp = getTag.add_feature(b.dataArrays{1}.id, nix.LinkType.Tagged);
@@ -166,9 +166,9 @@ end
 function [] = test_fetch_references( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     getBlock = test_file.createBlock('referenceTest', 'nixBlock');
-    tmp = getBlock.create_data_array('referenceTest1', 'nixDataArray', 'double', [1 2]);
-    tmp = getBlock.create_data_array('referenceTest2', 'nixDataArray', 'double', [3 4]);
-    tmp = getBlock.create_data_array('referenceTest3', 'nixDataArray', 'double', [5 6]);
+    tmp = getBlock.create_data_array('referenceTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = getBlock.create_data_array('referenceTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
+    tmp = getBlock.create_data_array('referenceTest3', 'nixDataArray', nix.DataType.Double, [5 6]);
     position = [1.0 1.2 1.3 15.9];
     getTag = getBlock.create_tag('referenceTest', 'nixTag', position);
     
@@ -200,8 +200,8 @@ end
 function [] = test_fetch_features( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
-    tmp = b.create_data_array('featureTestDataArray1', 'nixDataArray', 'double', [1 2]);
-    tmp = b.create_data_array('featureTestDataArray2', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array('featureTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.create_data_array('featureTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
     position = [1.0 1.2 1.3 15.9];
     getTag = b.create_tag('featureTest', 'nixTag', position);
 
@@ -238,7 +238,7 @@ end
 function [] = test_open_feature( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
-    tmp = b.create_data_array('featureTestDataArray', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     position = [1.0 1.2 1.3 15.9];
     getTag = b.create_tag('featureTest', 'nixTag', position);
     tmp = getTag.add_feature(b.dataArrays{1}, nix.LinkType.Tagged);
@@ -255,7 +255,7 @@ end
 function [] = test_open_reference( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     getBlock = test_file.createBlock('referenceTest', 'nixBlock');
-    tmp = getBlock.create_data_array('referenceTest', 'nixDataArray', 'double', [1 2]);
+    tmp = getBlock.create_data_array('referenceTest', 'nixDataArray', nix.DataType.Double, [1 2]);
     position = [1.0 1.2 1.3 15.9];
     getTag = getBlock.create_tag('referenceTest', 'nixTag', position);
     getTag.add_reference(getBlock.dataArrays{1});
@@ -401,7 +401,7 @@ function [] = test_has_feature( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
-    da = b.create_data_array('featureTestDataArray', 'nixDataArray', 'double', [1 2]);
+    da = b.create_data_array('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     t = b.create_tag('featureTest', 'nixTag', [1.0 1.2 1.3 15.9]);
     feature = t.add_feature(b.dataArrays{1}, nix.LinkType.Tagged);
     featureID = feature.id;
@@ -420,7 +420,7 @@ function [] = test_has_reference( varargin )
     daName = 'referenceTest';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('referenceTest', 'nixBlock');
-    da = b.create_data_array(daName, 'nixDataArray', 'double', [1 2]);
+    da = b.create_data_array(daName, 'nixDataArray', nix.DataType.Double, [1 2]);
     t = b.create_tag('referenceTest', 'nixTag', [1.0 1.2 1.3 15.9]);
     t.add_reference(b.dataArrays{1});
 

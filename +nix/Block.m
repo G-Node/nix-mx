@@ -52,18 +52,36 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 'Block::openDataArray', id_or_name, @nix.DataArray);
         end;
         
-        %-- As "datatype" provide one of the nix.DataTypes. Alternatively
-        %-- a string stating one of the datatypes supported by nix can be provided.
         function da = create_data_array(obj, name, nixtype, datatype, shape)
-            handle = nix_mx('Block::createDataArray', obj.nix_handle, ...
-                name, nixtype, datatype, shape);
-            da = nix.DataArray(handle);
+            errorStruct.identifier = 'Block:unsupportedDataType';
+            if(~isa(datatype, 'nix.DataType'))
+                errorStruct.message = 'Please provide a valid nix.DataType';
+                error(errorStruct);
+            elseif(isequal(datatype, nix.DataType.String))
+                errorStruct.message = 'Writing Strings to DataArrays is not supported as of yet.';
+                error(errorStruct);
+            else
+                handle = nix_mx('Block::createDataArray', obj.nix_handle, ...
+                    name, nixtype, lower(datatype.char), shape);
+                da = nix.DataArray(handle);
+            end;
         end
         
         function da = create_data_array_from_data(obj, name, nixtype, data)
-            shape = size(data);
-            dtype = class(data);
-            
+            errorStruct.identifier = 'Block:unsupportedDataType';
+            if(ischar(data))
+                errorStruct.message = 'Writing Strings to DataArrays is not supported as of yet.';
+                error(errorStruct);
+            elseif(islogical(data))
+                dtype = nix.DataType.Bool;
+            elseif(isnumeric(data))
+                dtype = nix.DataType.Double;
+            else
+                errorStruct.message = 'DataType of provided data is not supported.';
+                error(errorStruct);
+            end;
+
+            shape = size(data);            
             da = obj.create_data_array(name, nixtype, dtype, shape);
             da.write_all(data);
         end
@@ -137,7 +155,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 'Block::openMultiTag', id_or_name, @nix.MultiTag);
         end;
 
-        %-- creating a multitag requires an already existing data array
+        %-- Creating a multitag requires an already existing data array
         function multitag = create_multi_tag(obj, name, type, add_data_array)
             if(strcmp(class(add_data_array), 'nix.DataArray'))
                 addID = add_data_array.id;
@@ -153,6 +171,6 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.MultiTag', 'Block::deleteMultiTag');
         end;
-    end;
 
+    end;
 end

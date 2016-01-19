@@ -53,40 +53,88 @@ function [] = test_attrs( varargin )
     assert(isempty(b.definition));
 end
 
-function [] = test_create_data_array( varargin )
 %% Test: Create Data Array
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+function [] = test_create_data_array( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('arraytest', 'nixblock');
     
     assert(isempty(b.dataArrays));
     
-    d1 = b.create_data_array('foo', 'bar', 'double', [2 3]);
-
-    assert(strcmp(d1.name, 'foo'));
-    assert(strcmp(d1.type, 'bar'));
-    tmp = d1.read_all();
+    dtype = 'nix.DataArray';
+    doubleName = 'doubleDataArray';
+    da = b.create_data_array(doubleName, dtype, nix.DataType.Double, [2 3]);
+    assert(strcmp(da.name, doubleName));
+    assert(strcmp(da.type, dtype));
+    tmp = da.read_all();
     assert(all(tmp(:) == 0));
+
+    try
+        b.create_data_array('stringDataArray', dtype, nix.DataType.String, [1 5]);
+    catch ME
+        assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
+    end;
     
-    assert(~isempty(b.dataArrays));
+    try
+        b.create_data_array('I will crash and burn', dtype, 'Thou shalt not work!', [1 5]);
+    catch ME
+        assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
+    end;
+
+    da = b.create_data_array('floatDataArray', dtype, nix.DataType.Float, [3 3]);
+    da = b.create_data_array('Int8DataArray', dtype, nix.DataType.Int8, [3 3]);
+    da = b.create_data_array('Int16DataArray', dtype, nix.DataType.Int16, [3 3]);
+    da = b.create_data_array('Int32DataArray', dtype, nix.DataType.Int32, [3 3]);
+    da = b.create_data_array('Int64DataArray', dtype, nix.DataType.Int64, [3 3]);
+    da = b.create_data_array('UInt8DataArray', dtype, nix.DataType.UInt8, [3 3]);
+    da = b.create_data_array('UInt16DataArray', dtype, nix.DataType.UInt16, [3 3]);
+    da = b.create_data_array('UInt32DataArray', dtype, nix.DataType.UInt32, [3 3]);
+    da = b.create_data_array('UInt64DataArray', dtype, nix.DataType.UInt64, [3 3]);
+    da = b.create_data_array('logicalArray', dtype, nix.DataType.Bool, [3 3]);
+    
+    clear da b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.dataArrays, 1) == 11);
 end
 
-function [] = test_create_data_array_from_data( varargin )
 %% Test: Create Data Array from data
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+function [] = test_create_data_array_from_data( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    daType = 'nix.DataArray';
+    f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('arraytest', 'nixblock');
     
     assert(isempty(b.dataArrays));
     
-    data = [1, 2, 3; 4, 5, 6];
-    d1 = b.create_data_array_from_data('foo', 'bar', data);
-
-    assert(strcmp(d1.name, 'foo'));
-    assert(strcmp(d1.type, 'bar'));
+    numName = 'numDataArray';
+    numData = [1, 2, 3; 4, 5, 6];
+    da = b.create_data_array_from_data(numName, daType, numData);
+    assert(strcmp(da.name, numName));
+    assert(strcmp(da.type, daType));
     
-    tmp = d1.read_all();
-    assert(strcmp(class(tmp), class(data)));
-    assert(isequal(size(tmp), size(data)));
-    assert(isequal(tmp, data));
+    tmp = da.read_all();
+    assert(strcmp(class(tmp), class(numData)));
+    assert(isequal(size(tmp), size(numData)));
+    assert(isequal(tmp, numData));
+    
+    logName = 'logicalDataArray';
+    logData = logical([1 0 1; 0 1 0; 1 0 1]);
+    da = b.create_data_array_from_data(logName, daType, logData);
+    assert(islogical(da.read_all));
+    assert(isequal(size(da.read_all), size(logData)));
+    assert(isequal(da.read_all, logData));
+    
+    try
+        b.create_data_array_from_data('stringDataArray', daType, ['a' 'b']);
+    catch ME
+        assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
+    end;
+    
+    try
+        b.create_data_array_from_data('I will crash and burn', daType, {1 2 3});
+    catch ME
+        assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
+    end;
     
     assert(~isempty(b.dataArrays));
 end
@@ -95,7 +143,7 @@ end
 function [] = test_delete_data_array( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('arraytest', 'nixBlock');
-    tmp = b.create_data_array('dataArrayTest1', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('dataArrayTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
     tmp = b.create_data_array('dataArrayTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
     
     assert(size(b.dataArrays, 1) == 2);
@@ -143,8 +191,8 @@ function [] = test_create_multi_tag( varargin )
 %% Test: Create multitag by data_array entity and data_array id
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('mTagTestBlock', 'nixBlock');
-    tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', 'double', [1 2]);
-    tmp = b.create_data_array('mTagTestDataArray2', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.create_data_array('mTagTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
     assert(isempty(b.multiTags));
 
     %-- create by data_array entity
@@ -162,7 +210,7 @@ end
 function [] = test_delete_multi_tag( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('mTagTestBlock', 'nixBlock');
-    tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
     tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag1', b.dataArrays{1});
     tmp = b.create_multi_tag('mTagTest2', 'nixMultiTag2', b.dataArrays{1});
 
@@ -211,10 +259,8 @@ function [] = test_list_arrays( varargin )
     b = f.createBlock('arraytest', 'nixBlock');
 
     assert(isempty(b.dataArrays));
-    tmp = b.create_data_array('arrayTest1', 'nixDataArray', 'double', [1 2]);
-    assert(size(b.dataArrays, 1) == 1);
-    assert(size(f.blocks{1}.dataArrays, 1) == 1);
-    tmp = b.create_data_array('arrayTest2', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array('arrayTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.create_data_array('arrayTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
     assert(size(b.dataArrays, 1) == 2);
     assert(size(f.blocks{1}.dataArrays, 1) == 2);
 
@@ -267,7 +313,7 @@ function [] = test_list_multitags( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('mTagTestBlock', 'nixBlock');
-    tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
 
     assert(isempty(b.multiTags));
     tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag', b.dataArrays{1});
@@ -289,7 +335,7 @@ function [] = test_open_array( varargin )
     daName = 'arrayTest1';
     
     assert(isempty(b.dataArrays));
-    tmp = b.create_data_array(daName, 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array(daName, 'nixDataArray', nix.DataType.Double, [1 2]);
 
     getDataArrayByID = b.data_array(b.dataArrays{1,1}.id);
     assert(~isempty(getDataArrayByID));
@@ -325,7 +371,7 @@ function [] = test_open_multitag( varargin )
 %% Test: Open multi tag by ID or name
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('mTagTestBlock', 'nixBlock');
-    tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     mTagName = 'mTagTest1';
     tmp = b.create_multi_tag(mTagName, 'nixMultiTag', b.dataArrays{1});
 
@@ -362,7 +408,7 @@ function [] = test_has_multitag( varargin )
 %% Test: Block has multi tag by ID or name
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('mTagTestBlock', 'nixBlock');
-    tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', 'double', [1 2]);
+    tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag', b.dataArrays{1});
 
     assert(b.has_multi_tag(b.multiTags{1,1}.id));
@@ -429,7 +475,7 @@ function [] = test_has_data_array( varargin )
     daName = 'hasDataArrayTest';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('testblock', 'nixBlock');
-    da = b.create_data_array(daName, 'nixDataArray', 'double', [1 2]);
+    da = b.create_data_array(daName, 'nixDataArray', nix.DataType.Double, [1 2]);
     daID = da.id;
     
     assert(~b.has_data_array('I do not exist'));
