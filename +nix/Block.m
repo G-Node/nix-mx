@@ -73,7 +73,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             %-- 1D data arrays created with this function.
             %-- e.g. size([1 2 3]) returns shape [1 3], which would not
             %-- be accepted when trying to add an alias range dimension.
-            if(size(data, 1) == 1)
+            if(shape(1) == 1)
                 shape = size(data, 2);
             end;
 
