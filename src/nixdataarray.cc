@@ -42,8 +42,6 @@ namespace nixdataarray {
 
     void read_all(const extractor &input, infusor &output)
     {
-        //nix::DataArray da = input.entity<nix::DataArray>(1);
-
         nix::DataArray da = input.entity<nix::DataArray>(1);
         mxArray *data = make_mx_array_from_ds(da);
         output.set(0, data);
@@ -52,13 +50,17 @@ namespace nixdataarray {
     void write_all(const extractor &input, infusor &output)
     {
         nix::DataArray da = input.entity<nix::DataArray>(1);
-
         nix::DataType dtype = input.dtype(2);
+
         nix::NDSize count = input.ndsize(2);
         nix::NDSize offset(0);
         double *ptr = input.get_raw(2);
-
-        da.setData(dtype, ptr, count, offset);
+        
+        if (dtype == nix::DataType::String) {
+            throw std::domain_error("Writing Strings to DataArrays is not supported as of yet.");
+        } else {
+            da.setData(dtype, ptr, count, offset);
+        }
     }
 
     void delete_dimension(const extractor &input, infusor &output) {

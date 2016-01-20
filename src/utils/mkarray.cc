@@ -14,7 +14,6 @@ mxArray* make_mx_array_from_ds(const nix::DataSet &da) {
     for (size_t i = 0; i < len; i++) {
         dims[len - (i + 1)] = static_cast<mwSize>(size[i]);
     }
-
     nix::DataType da_type = da.dataType();
     DType2 dtype = dtype_nix2mex(da_type);
 
@@ -22,11 +21,15 @@ mxArray* make_mx_array_from_ds(const nix::DataSet &da) {
         throw std::domain_error("Unsupported data type");
     }
 
-    mxArray *data = mxCreateNumericArray(dims.size(), dims.data(), dtype.cid, dtype.clx);
-    double *ptr = mxGetPr(data);
-
-    nix::NDSize offset(size.size(), 0);
-    da.getData(da_type, ptr, size, offset);
+    mxArray *data;
+    if (dtype.cid == mxCHAR_CLASS) {
+        throw std::domain_error("String DataArrays are not supported as of yet.");
+    } else {
+        data = mxCreateNumericArray(dims.size(), dims.data(), dtype.cid, dtype.clx);
+        double *ptr = mxGetPr(data);
+        nix::NDSize offset(size.size(), 0);
+        da.getData(da_type, ptr, size, offset);
+    }
 
     return data;
 }
@@ -94,4 +97,3 @@ mxArray* make_mx_array(const nix::Value &v)
 	return res;
 
 }
-

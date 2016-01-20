@@ -84,11 +84,13 @@ classdef Section < nix.NamedEntity
         % Property methods
         % ----------------
 
-        %-- As "datatype" provide one of the nix.DataTypes. Alternatively
-        %-- a string stating one of the datatypes supported by nix can be provided.
         function p = create_property(obj, name, datatype)
-            p = nix.Property(nix_mx('Section::createProperty', ...
-                obj.nix_handle, name, datatype));
+            if(~isa(datatype, 'nix.DataType'))
+                error('Please provide a valid nix.DataType');
+            else
+                p = nix.Property(nix_mx('Section::createProperty', ...
+                    obj.nix_handle, name, lower(datatype.char)));
+            end;
         end;
 
         function p = create_property_with_value(obj, name, val)
@@ -128,5 +130,5 @@ classdef Section < nix.NamedEntity
             end
         end;
 
-    end
+    end;
 end

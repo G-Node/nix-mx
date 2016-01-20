@@ -60,7 +60,7 @@ function [] = test_add_data_array( varargin )
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
-    da = b.create_data_array(daName, daType, 'double', [2 3]);
+    da = b.create_data_array(daName, daType, nix.DataType.Double, [2 3]);
     g = b.create_group('testGroup', 'nixGroup');
 
     assert(isempty(g.dataArrays));
@@ -82,7 +82,7 @@ function [] = test_get_data_array( varargin )
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
-    da = b.create_data_array(daName, daType, 'double', [2 3]);
+    da = b.create_data_array(daName, daType, nix.DataType.Double, [2 3]);
     daID = da.id;
     g = b.create_group('testGroup', 'nixGroup');
     g.add_data_array(da);
@@ -107,9 +107,9 @@ function [] = test_remove_data_array( varargin )
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
-    da1 = b.create_data_array(daName1, daType, 'double', [1]);
-    da2 = b.create_data_array(daName2, daType, 'double', [2 3]);
-    da3 = b.create_data_array(daName3, daType, 'double', [4 5 6]);
+    da1 = b.create_data_array(daName1, daType, nix.DataType.Double, 1);
+    da2 = b.create_data_array(daName2, daType, nix.DataType.Double, [2 3]);
+    da3 = b.create_data_array(daName3, daType, nix.DataType.Double, [4 5 6]);
     g = b.create_group('testGroup', 'nixGroup');
     g.add_data_array(da1);
     g.add_data_array(da2);
@@ -143,9 +143,9 @@ function [] = test_update_linked_data_array( varargin )
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
-    da1 = b.create_data_array(daName1, daType, 'double', [1]);
-    da2 = b.create_data_array(daName2, daType, 'double', [2 3]);
-    da3 = b.create_data_array(daName3, daType, 'double', [4 5 6]);
+    da1 = b.create_data_array(daName1, daType, nix.DataType.Double, [1]);
+    da2 = b.create_data_array(daName2, daType, nix.DataType.Double, [2 3]);
+    da3 = b.create_data_array(daName3, daType, nix.DataType.Double, [4 5 6]);
     g = b.create_group('testGroup', 'nixGroup');
     g.add_data_array(da1);
     g.add_data_array(da2);
@@ -286,8 +286,10 @@ function [] = test_add_multi_tag( varargin )
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
-    tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', 'double', [1 2]);
-    tmp = b.create_data_array('mTagTestDataArray2', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array(...
+        'mTagTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.create_data_array(...
+        'mTagTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
     tmp = b.create_multi_tag(tagName1, tagType, b.dataArrays{1});
     tmp = b.create_multi_tag(tagName2, tagType, b.dataArrays{2});
     g = b.create_group('testGroup', 'nixGroup');
@@ -317,8 +319,10 @@ function [] = test_has_multi_tag( varargin )
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
-    tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', 'double', [1 2]);
-    tmp = b.create_data_array('mTagTestDataArray2', 'nixDataArray', 'double', [3 4]);
+    tmp = b.create_data_array(...
+        'mTagTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.create_data_array(...
+        'mTagTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
     tmp = b.create_multi_tag(tagName1, tagType, b.dataArrays{1});
     tmp = b.create_multi_tag(tagName2, tagType, b.dataArrays{2});
     g = b.create_group('testGroup', 'nixGroup');
@@ -338,7 +342,8 @@ function [] = test_get_multi_tag( varargin )
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
-    da = b.create_data_array('mTagTestDataArray1', 'nixDataArray', 'double', [1 2]);
+    da = b.create_data_array(...
+        'mTagTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
     t = b.create_multi_tag(tagName, tagType, b.dataArrays{1});
     g = b.create_group('testGroup', 'nixGroup');
 
@@ -362,7 +367,8 @@ function [] = test_remove_multi_tag( varargin )
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
-    da = b.create_data_array('mTagTestDataArray1', 'nixDataArray', 'double', [1 2]);
+    da = b.create_data_array(...
+        'mTagTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
     t1 = b.create_multi_tag(tagName1, tagType, b.dataArrays{1});
     t2 = b.create_multi_tag(tagName2, tagType, b.dataArrays{1});
     t3 = b.create_multi_tag(tagName3, tagType, b.dataArrays{1});
