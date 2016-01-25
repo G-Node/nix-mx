@@ -68,6 +68,15 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
         
         function da = create_data_array_from_data(obj, name, nixtype, data)
+            shape = size(data);
+            %-- Quick fix to enable alias range dimension with
+            %-- 1D data arrays created with this function.
+            %-- e.g. size([1 2 3]) returns shape [1 3], which would not
+            %-- be accepted when trying to add an alias range dimension.
+            if(shape(1) == 1)
+                shape = size(data, 2);
+            end;
+
             errorStruct.identifier = 'Block:unsupportedDataType';
             if(ischar(data))
                 errorStruct.message = 'Writing Strings to DataArrays is not supported as of yet.';
@@ -81,7 +90,6 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 error(errorStruct);
             end;
 
-            shape = size(data);            
             da = obj.create_data_array(name, nixtype, dtype, shape);
             da.write_all(data);
         end

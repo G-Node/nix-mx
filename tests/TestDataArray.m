@@ -305,7 +305,8 @@ end
 
 %% Test: Dimensions
 function [] = test_dimensions( varargin )
-    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.create_data_array('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
     
@@ -329,7 +330,8 @@ function [] = test_dimensions( varargin )
     assert(strcmp(da.dimensions{3}.dimensionType, 'range'));
     assert(isequal(da.dimensions{3}.ticks, ticks));
     assert(isequal(f.blocks{1}.dataArrays{1}.dimensions{3}.ticks, ticks));
-    
+    assert(~da.dimensions{3}.isAlias);
+
     da.delete_dimension(2);
     assert(length(da.dimensions) == 2);
     assert(strcmp(da.dimensions{1}.dimensionType, 'set'));
@@ -341,4 +343,40 @@ function [] = test_dimensions( varargin )
     
     da.delete_dimension(1);
     assert(isempty(da.dimensions));
+   
+    try
+        da.append_alias_range_dimension;
+    catch ME
+        assert(strcmp(ME.identifier, 'nix:arg:inval'));
+    end;
+    
+    da.append_set_dimension();
+    try
+        da.append_alias_range_dimension();
+    catch ME
+        assert(strcmp(ME.identifier, 'nix:arg:inval'));
+    end;
+    
+    daAlias = b.create_data_array('aliasDimTest', 'nix.DataArray', ...
+        nix.DataType.Double, 25);
+    daAlias.append_alias_range_dimension();
+    assert(f.blocks{1}.dataArrays{2}.dimensions{1}.isAlias);
+    
+    clear daAlias da b f;
+    f = nix.File(fileName, nix.FileMode.ReadWrite);
+    assert(f.blocks{1}.dataArrays{2}.dimensions{1}.isAlias);
+    
+    %-- Test for the alias dimension shape work around
+    daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWTest1', ...
+        'nix.DataArray', [1 2 3]);
+    daAliasWa.append_alias_range_dimension();
+    assert(daAliasWa.dimensions{1}.isAlias);
+    
+    daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest2', ...
+        'nix.DataArray', [1; 2; 3]);
+    assert(isequal(daAliasWa.shape, [3 1]));
+    
+    daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest3', ...
+        'nix.DataArray', [1 2 3; 2 4 5; 3 6 7]);
+    assert(isequal(daAliasWa.shape, [3 3]));
 end
