@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.4)
 project(nix_mx CXX)
 
-set(VERSION_MAJOR 0)
+set(VERSION_MAJOR 1)
 set(VERSION_MINOR 1)
 set(VERSION_PATCH 0)
 
