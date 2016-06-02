@@ -28,6 +28,7 @@ The Windows 64 package contains:
 - NIX dll (stable release 1.1.0 build, compiled using BOOST 1.57.0 and CPPUNIT 1.13.2)
 - NIX-MX (Beta-Release 1.1.0, 26.01.2016)
 
+NOTE: there was a small bugfix in examples/Primer.m after the latest release. If you want to use this small tutorial, please replace examples/Primer.m in your extracted quick start package with the corresponding file from the master branch.
 
 **Build NIX-MX under Windows**
 
