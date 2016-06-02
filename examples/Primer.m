@@ -6,7 +6,7 @@
 clear all;
 
 %% File operations
-path = 'module2.h5';
+path = 'tests/test.h5';
 
 % Open NIX file
 f = nix.File(path, nix.FileMode.ReadOnly);
@@ -40,9 +40,7 @@ selection1 = b.dataArrays(idx);
 % get DataArrays by several criteria
 cond1 = @(x) ~isempty(strfind(x.name, 'SpikeActivity'));
 cond2 = @(x) any(cellfun(@(y) strcmp(y.name, 'Unit 7'), x.sources));
-cond3 = @(x) x.open_metadata.properties_map('Target') == 2;
-cond4 = @(x) x.open_metadata.properties_map('BehavioralCondition') == 3;
-idx = cellfun(@(x) cond1(x) & cond2(x) & cond3(x) & cond4(x), b.dataArrays);
+idx = cellfun(@(x) cond1(x) & cond2(x), b.dataArrays);
 selection2 = b.dataArrays(idx);
 
 % get actual data
@@ -51,7 +49,7 @@ dataset = d1.read_all();
 
 % understand dimensions
 dim1 = d1.dimensions{1};
-dim1.type
+dim1.dimensionType
 dim1.unit
 
 % plot data
@@ -67,13 +65,11 @@ cellfun(@(x) disp(strcat(x.type, ': ', x.name)), f.sections);
 sec = f.sections{2}.sections{1};
 
 % display all Section properties
-cellfun(@(x) disp(x), sec.properties_cell);
+cellfun(@(x) disp(x), sec.allProperties);
 
 % get a certain Value by index
-value = sec.properties_cell{1}.values{1};
+value = sec.allProperties{1}.values{1};
 
 % or by name
-value = sec.properties_map('Name');
+value = sec.open_property('Name').values{1}.value;
 
-%% clear space
-clear all;
