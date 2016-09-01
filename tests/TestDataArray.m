@@ -332,16 +332,7 @@ function [] = test_dimensions( varargin )
     assert(isequal(f.blocks{1}.dataArrays{1}.dimensions{3}.ticks, ticks));
     assert(~da.dimensions{3}.isAlias);
 
-    da.delete_dimension(2);
-    assert(length(da.dimensions) == 2);
-    assert(strcmp(da.dimensions{1}.dimensionType, 'set'));
-    assert(strcmp(da.dimensions{2}.dimensionType, 'range'));
-
-    da.delete_dimension(1);
-    assert(length(da.dimensions) == 1);
-    assert(strcmp(da.dimensions{1}.dimensionType, 'range'));
-    
-    da.delete_dimension(1);
+    da.delete_dimensions();
     assert(isempty(da.dimensions));
    
     try

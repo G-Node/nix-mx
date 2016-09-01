@@ -65,11 +65,11 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             dim = nix.RangeDimension(nix_mx(func_name, obj.nix_handle));
         end
         
-        function delCheck = delete_dimension(obj, index)
-            func_name = strcat(obj.alias, '::delete_dimension');
-            delCheck = nix_mx(func_name, obj.nix_handle, index);
+        function delCheck = delete_dimensions(obj)
+            func_name = strcat(obj.alias, '::delete_dimensions');
+            delCheck = nix_mx(func_name, obj.nix_handle);
         end;
-        
+
         % -----------------
         % Data access methods
         % -----------------
