@@ -63,11 +63,10 @@ namespace nixdataarray {
         }
     }
 
-    void delete_dimension(const extractor &input, infusor &output) {
+    void delete_dimensions(const extractor &input, infusor &output) {
         nix::DataArray da = input.entity<nix::DataArray>(1);
 
-        const size_t idx = static_cast<size_t>(input.num<double>(2));
-        bool res = da.deleteDimension(idx);
+        bool res = da.deleteDimensions();
 
         output.set(0, res);
     }

@@ -15,7 +15,7 @@ namespace nixdataarray {
 
     void write_all(const extractor &input, infusor &output);
 
-    void delete_dimension(const extractor &input, infusor &output);
+    void delete_dimensions(const extractor &input, infusor &output);
 
 } // namespace nixdataarray
 
