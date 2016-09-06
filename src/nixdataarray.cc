@@ -52,8 +52,18 @@ namespace nixdataarray {
         nix::DataArray da = input.entity<nix::DataArray>(1);
         nix::DataType dtype = input.dtype(2);
 
-        nix::NDSize count = input.ndsize(2);
-        nix::NDSize offset(0);
+        const mxArray *arr = input.get_mx_array(2);
+
+        mwSize ndims = mxGetNumberOfDimensions(arr);
+        const mwSize *dims = mxGetDimensions(arr);
+
+        nix::NDSize count(ndims);
+
+        for (mwSize i = 0; i < ndims; i++) {
+            count[(ndims - i) - 1] = static_cast<nix::ndsize_t>(dims[i]);
+        }
+
+        nix::NDSize offset(count.size(), 0);
         double *ptr = input.get_raw(2);
         
         if (dtype == nix::DataType::String) {

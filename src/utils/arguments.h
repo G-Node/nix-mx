@@ -18,9 +18,9 @@ public:
 
     bool check_size(size_t pos, bool fatal = false) const {
         bool res = pos + 1 > number;
-		if (!res && fatal) {
-			throw std::out_of_range("argument position is out of bounds");
-		}
+        if (!res && fatal) {
+            throw std::out_of_range("argument position is out of bounds");
+        }
         return res;
     }
 
@@ -49,7 +49,7 @@ protected:
     size_t number;
 };
 
-class extractor : public argument_helper<const mxArray> {
+class extractor : public argument_helper < const mxArray > {
 public:
     extractor(const mxArray **arr, int n) : argument_helper(arr, n) { }
 
@@ -76,7 +76,7 @@ public:
     nix::NDSize ndsize(size_t pos) const {
         return mx_to_ndsize(array[pos]);
     }
-    
+
     nix::DataType dtype(size_t pos) const {
         return dtype_mex2nix(array[pos]);
     }
@@ -97,7 +97,7 @@ public:
     }
 
     handle hdl(size_t pos) const {
-		handle h = handle(num<uint64_t>(pos));
+        handle h = handle(num<uint64_t>(pos));
         return h;
     }
 
@@ -114,12 +114,16 @@ public:
         return mxGetPr(array[pos]);
     }
 
+    const mxArray *get_mx_array(size_t pos) const {
+        return array[pos];
+    }
+
 private:
 };
 
 template<>
 inline std::vector<std::string> extractor::vec(size_t pos) const {
-	return mx_to_strings(array[pos]);
+    return mx_to_strings(array[pos]);
 }
 
 
@@ -127,11 +131,11 @@ class infusor : public argument_helper<mxArray> {
 public:
     infusor(mxArray **arr, int n) : argument_helper(arr, n) { }
 
-	template<typename T>
-	void set(size_t pos, T &&value) {
-		mxArray *array = make_mx_array(std::forward<T>(value));
-		set(pos, array);
-	}
+    template<typename T>
+    void set(size_t pos, T &&value) {
+        mxArray *array = make_mx_array(std::forward<T>(value));
+        set(pos, array);
+    }
 
     void set(size_t pos, mxArray *arr) {
         array[pos] = arr;
