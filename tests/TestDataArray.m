@@ -149,7 +149,7 @@ function [] = test_write_data_double( varargin )
     charData = ['a' 'b' 'c' 'd' 'e'];
     cellData = {1 2 3 4 5};
     
-    da = b.create_data_array('numericArray', typeDA, nix.DataType.Double, [1 5]);
+    da = b.create_data_array('numericArray', typeDA, nix.DataType.Double, 5);
     da.write_all(numData);
     assert(isequal(da.read_all(), numData));
 
@@ -185,7 +185,7 @@ function [] = test_write_data_logical( varargin )
     numData = [1 2 3 4 5];
     charData = ['a' 'b' 'c' 'd' 'e'];
     
-    da = b.create_data_array('logicalArray', typeDA, nix.DataType.Bool, [1 5]);
+    da = b.create_data_array('logicalArray', typeDA, nix.DataType.Bool, 5);
     da.write_all(logData);
     assert(isequal(da.read_all, logData));
     try
@@ -213,7 +213,7 @@ function [] = test_write_data_float( varargin )
 
     numData = [1.3 2.4143 3.9878 4.1239 5];
     
-    da = b.create_data_array('floatArray', typeDA, nix.DataType.Float, [1 5]);
+    da = b.create_data_array('floatArray', typeDA, nix.DataType.Float, 5);
     da.write_all(numData);
     assert(isequal(da.read_all, single(numData)));
 

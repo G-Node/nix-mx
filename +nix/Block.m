@@ -53,6 +53,14 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end;
         
         function da = create_data_array(obj, name, nixtype, datatype, shape)
+            %-- Quick fix to enable alias range dimension with
+            %-- 1D data arrays created with this function.
+            %-- e.g. size([1 2 3]) returns shape [1 3], which would not
+            %-- be accepted when trying to add an alias range dimension.
+            if(shape(1) == 1)
+                shape(2:size(shape,2));
+            end;
+            
             errorStruct.identifier = 'Block:unsupportedDataType';
             if(~isa(datatype, 'nix.DataType'))
                 errorStruct.message = 'Please provide a valid nix.DataType';
