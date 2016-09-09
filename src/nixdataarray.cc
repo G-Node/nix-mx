@@ -52,8 +52,26 @@ namespace nixdataarray {
         nix::DataArray da = input.entity<nix::DataArray>(1);
         nix::DataType dtype = input.dtype(2);
 
-        nix::NDSize count = input.ndsize(2);
-        nix::NDSize offset(0);
+        const mxArray *arr = input.get_mx_array(2);
+
+        mwSize ndims = mxGetNumberOfDimensions(arr);
+        const mwSize *dims = mxGetDimensions(arr);
+        
+        mwSize tmp = ndims;
+        
+        // Quick fix for writing data arrays that have exactly one row.
+        // This fix does not resolve more complex arrays that have a 
+        // last dimension of exactly one row.
+        if (dims[ndims-1] == 1) {
+            ndims--;
+        }
+        nix::NDSize count(ndims);
+
+        for (mwSize i = 0; i < ndims; i++) {
+            count[(ndims - i) - 1] = static_cast<nix::ndsize_t>(dims[i]);
+        }
+
+        nix::NDSize offset(count.size(), 0);
         double *ptr = input.get_raw(2);
         
         if (dtype == nix::DataType::String) {
@@ -63,11 +81,10 @@ namespace nixdataarray {
         }
     }
 
-    void delete_dimension(const extractor &input, infusor &output) {
+    void delete_dimensions(const extractor &input, infusor &output) {
         nix::DataArray da = input.entity<nix::DataArray>(1);
 
-        const size_t idx = static_cast<size_t>(input.num<double>(2));
-        bool res = da.deleteDimension(idx);
+        bool res = da.deleteDimensions();
 
         output.set(0, res);
     }

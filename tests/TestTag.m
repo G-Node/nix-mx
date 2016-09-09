@@ -319,7 +319,7 @@ end
 function [] = test_retrieve_data( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     b = f.blocks{1};
-    tag = b.tags{1};
+    tag = b.open_tag('Arm movement epoch Trial 001');
     
     data = tag.retrieve_data(1);
     assert(~isempty(data));
