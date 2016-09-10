@@ -63,7 +63,7 @@ function [] = test_sample_dimension( varargin )
     assert(axis(end) == (length(axis) - 1) * d1.samplingInterval + d1.offset);
     
     assert(d1.position_at(0) == d1.offset);
-    assert(d1.position_at(9) == d1.offset + 9 * d1.samplingInterval);
+    assert(d1.position_at(10) == d1.offset + 9 * d1.samplingInterval);
 
     d1.label = '';
     d1.unit = '';
@@ -79,7 +79,7 @@ function [] = test_sample_dimension( varargin )
     assert(axis(end) == (length(axis) - 1) * d1.samplingInterval + d1.offset);
     
     assert(d1.position_at(0) == d1.offset);
-    assert(d1.position_at(9) == d1.offset + 9 * d1.samplingInterval);
+    assert(d1.position_at(10) == d1.offset + 9 * d1.samplingInterval);
 end
 
 function [] = test_range_dimension( varargin )
