@@ -41,7 +41,12 @@ function [] = test_sample_dimension( varargin )
     assert(isempty(d1.unit));
     assert(d1.samplingInterval == 200);
     assert(isempty(d1.offset));
-    
+
+    axis = d1.axis(10, 0);
+    assert(axis(1) == 0);
+    assert(length(axis) == 10);
+    assert(axis(end) == (length(axis) - 1) * d1.samplingInterval);
+
     d1.label = 'foo';
     d1.unit = 'mV';
     d1.samplingInterval = 325;
@@ -52,6 +57,14 @@ function [] = test_sample_dimension( varargin )
     assert(d1.samplingInterval == 325);
     assert(d1.offset == 500);
     
+    axis = d1.axis(10, 0);
+    assert(axis(1) == d1.offset);
+    assert(length(axis) == 10);
+    assert(axis(end) == (length(axis) - 1) * d1.samplingInterval + d1.offset);
+    
+    assert(d1.position_at(0) == d1.offset);
+    assert(d1.position_at(9) == d1.offset + 9 * d1.samplingInterval);
+
     d1.label = '';
     d1.unit = '';
     d1.offset = 0;
@@ -60,6 +73,13 @@ function [] = test_sample_dimension( varargin )
     assert(isempty(d1.unit));
     assert(d1.samplingInterval == 325);
     assert(d1.offset == 0);
+
+    axis = d1.axis(10, 0);
+    assert(axis(1) == 0);
+    assert(axis(end) == (length(axis) - 1) * d1.samplingInterval + d1.offset);
+    
+    assert(d1.position_at(0) == d1.offset);
+    assert(d1.position_at(9) == d1.offset + 9 * d1.samplingInterval);
 end
 
 function [] = test_range_dimension( varargin )
