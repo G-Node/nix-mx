@@ -95,7 +95,15 @@ function [] = test_range_dimension( varargin )
     assert(isempty(d1.label));
     assert(isempty(d1.unit));
     assert(isequal(d1.ticks, ticks));
-    
+
+    axis = d1.axis(3, 0);
+    assert(axis(1) == ticks(1));
+    assert(length(axis) == 3);
+    assert(axis(end) == ticks(length(axis)));
+
+    assert(d1.tick_at(0) == ticks(1));
+    assert(d1.tick_at(3) == ticks(3));
+
     new_ticks = [5 6 7 8];
     d1.label = 'foo';
     d1.unit = 'mV';

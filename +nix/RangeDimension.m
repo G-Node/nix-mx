@@ -19,8 +19,11 @@ classdef RangeDimension < nix.Entity
         end
 
         function tickAt = tick_at(obj, index)
+            if index > 0
+                index = index - 1;
+            end
             func_name = strcat(obj.alias, '::tick_at');
-            tickAt = nix_mx(func_name, obj.nix_handle, unit64(index));
+            tickAt = nix_mx(func_name, obj.nix_handle, uint64(index));
         end
         
         function indexOf = index_of(obj, position)
@@ -32,9 +35,12 @@ classdef RangeDimension < nix.Entity
             if nargin < 3
                 startIndex = 0;
             end
+            if(startIndex > 0)
+                startIndex = startIndex - 1;
+            end
             
             func_name = strcat(obj.alias, '::axis');
-            axis = nix_mx(func_name, obj.nix_handle, unit64(count), uint64(startIndex));
+            axis = nix_mx(func_name, obj.nix_handle, uint64(count), uint64(startIndex));
         end
 
     end
