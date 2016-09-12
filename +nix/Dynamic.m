@@ -25,11 +25,11 @@ classdef Dynamic
 
                 if (isempty(val))
                     nix_mx(strcat(obj.alias, '::set_none_', prop), obj.nix_handle, 0);
-                elseif(strcmp(prop, 'units') && (~iscell(val)))
-                %-- BUGFIX: Matlab crashes, if units in Tags and MultiTags 
-                %-- are set using anything else than a cell.
+                elseif((strcmp(prop, 'units') || strcmp(prop, 'labels')) && (~iscell(val)))
+                %-- BUGFIX: Matlab crashes, if units in Tags and MultiTags
+                %-- or labels of SetDimension are set using anything else than a cell.
                     ME = MException('MATLAB:class:SetProhibited', sprintf(...
-                      'Units can be only set by using cells.'));
+                      'This value only supports cells.'));
                     throwAsCaller(ME);
                 else
                     nix_mx(strcat(obj.alias, '::set_', prop), obj.nix_handle, val);
