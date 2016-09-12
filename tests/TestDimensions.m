@@ -23,9 +23,24 @@ function [] = test_set_dimension( varargin )
     assert(strcmp(d1.labels{1}, 'foo'));
     assert(strcmp(d1.labels{2}, 'bar'));
     
-    % fix this in NIX
-    %d1.labels = {};
-    %assert(isempty(d1.labels));
+    d1.labels = {};
+    assert(isempty(d1.labels));
+    
+    try
+        d1.labels = 'mV';
+    catch ME
+        assert(strcmp(ME.identifier, 'MATLAB:class:SetProhibited'));
+    end;
+    try
+        d1.labels = ['mV', 'uA'];
+    catch ME
+        assert(strcmp(ME.identifier, 'MATLAB:class:SetProhibited'));
+    end;
+    try
+        d1.labels = 1;
+    catch ME
+        assert(strcmp(ME.identifier, 'MATLAB:class:SetProhibited'));
+    end;
 end
 
 function [] = test_sample_dimension( varargin )
