@@ -323,9 +323,9 @@ void mexFunction(int            nlhs,
             .reg("set_offset", SETTER(double, nix::SampledDimension, offset))
             .reg("set_none_offset", SETTER(const boost::none_t, nix::SampledDimension, offset))
             .reg("index_of", &nix::SampledDimension::indexOf)
-            .reg("position_at", &nix::SampledDimension::positionAt)
-            .reg("axis", &nix::SampledDimension::axis);
-        
+            .reg("position_at", &nix::SampledDimension::positionAt);
+        methods->add("SampledDimension::axis", nixdimensions::sampled_axis);
+
         classdef<nix::RangeDimension>("RangeDimension", methods)
             .desc(&nixdimensions::describe)
             .reg("set_label", SETTER(const std::string&, nix::RangeDimension, label))
