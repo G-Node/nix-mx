@@ -334,8 +334,8 @@ void mexFunction(int            nlhs,
             .reg("set_none_unit", SETTER(const boost::none_t, nix::RangeDimension, unit))
             .reg("set_ticks", SETTER(const std::vector<double>&, nix::RangeDimension, ticks))
             .reg("index_of", &nix::RangeDimension::indexOf)
-            .reg("tick_at", &nix::RangeDimension::tickAt)
-            .reg("axis", &nix::RangeDimension::axis);
+            .reg("tick_at", &nix::RangeDimension::tickAt);
+        methods->add("RangeDimension::axis", nixdimensions::range_axis);
 
         mexAtExit(on_exit);
     });

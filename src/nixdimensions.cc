@@ -40,4 +40,17 @@ namespace nixdimensions {
 
         return sb.array();
     }
+
+    void range_axis(const extractor &input, infusor &output) {
+        nix::RangeDimension dim = input.entity<nix::RangeDimension>(1);
+        const mwSize count = static_cast<mwSize>(input.num<double>(2));
+        const mwSize startIndex = static_cast<mwSize>(input.num<double>(3));
+
+        std::vector<double> a = dim.axis(count, startIndex);
+        mxArray *axis = mxCreateDoubleMatrix(1, a.size(), mxREAL);
+        std::copy(a.begin(), a.end(), mxGetPr(axis));
+
+        output.set(0, axis);
+    }
+
 } // namespace nixdimensions

@@ -11,6 +11,8 @@ namespace nixdimensions {
 
     mxArray *describe(const nix::RangeDimension &dim);
 
-} // namespace nixtag
+    void range_axis(const extractor &input, infusor &output);
+
+} // namespace nixdimensions
 
 #endif
