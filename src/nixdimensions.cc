@@ -41,6 +41,14 @@ namespace nixdimensions {
         return sb.array();
     }
 
+    void range_tick_at(const extractor &input, infusor &output) {
+        nix::RangeDimension dim = input.entity<nix::RangeDimension>(1);
+        const mwSize index = static_cast<mwSize>(input.num<double>(2));
+
+        double tick = dim.tickAt(index);
+        output.set(0, tick);
+    }
+
     void range_axis(const extractor &input, infusor &output) {
         nix::RangeDimension dim = input.entity<nix::RangeDimension>(1);
         const mwSize count = static_cast<mwSize>(input.num<double>(2));

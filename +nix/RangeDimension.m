@@ -23,7 +23,7 @@ classdef RangeDimension < nix.Entity
                 index = index - 1;
             end
             func_name = strcat(obj.alias, '::tick_at');
-            tickAt = nix_mx(func_name, obj.nix_handle, uint64(index));
+            tickAt = nix_mx(func_name, obj.nix_handle, index);
         end
         
         function indexOf = index_of(obj, position)
