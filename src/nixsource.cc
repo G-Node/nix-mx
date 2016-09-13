@@ -10,8 +10,7 @@
 
 namespace nixsource {
 
-    mxArray *describe(const nix::Source &source)
-    {
+    mxArray *describe(const nix::Source &source) {
         struct_builder sb({ 1 }, { "id", "type", "name", "definition" });
         sb.set(source.id());
         sb.set(source.type());

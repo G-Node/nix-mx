@@ -13,6 +13,6 @@ namespace nixsection {
 
     void create_property_with_value(const extractor &input, infusor &output);
 
-} // namespace nixfile
+} // namespace nixsection
 
 #endif

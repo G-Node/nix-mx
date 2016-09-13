@@ -11,8 +11,7 @@
 
 namespace nixmultitag {
 
-    mxArray *describe(const nix::MultiTag &multitag)
-    {
+    mxArray *describe(const nix::MultiTag &multitag) {
         struct_builder sb({ 1 }, { "id", "type", "name", "definition", "units" });
 
         sb.set(multitag.id());
@@ -24,20 +23,17 @@ namespace nixmultitag {
         return sb.array();
     }
 
-    void add_reference(const extractor &input, infusor &output)
-    {
+    void add_reference(const extractor &input, infusor &output) {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
         currObj.addReference(input.str(2));
     }
 
-    void add_source(const extractor &input, infusor &output)
-    {
+    void add_source(const extractor &input, infusor &output) {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
         currObj.addSource(input.str(2));
     }
 
-    void create_feature(const extractor &input, infusor &output)
-    {
+    void create_feature(const extractor &input, infusor &output) {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
 
         nix::Feature newFeat = currObj.createFeature(input.str(2), input.ltype(3));
@@ -62,8 +58,7 @@ namespace nixmultitag {
         output.set(0, data);
     }
 
-    void add_positions(const extractor &input, infusor &output)
-    {
+    void add_positions(const extractor &input, infusor &output) {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
         currObj.positions(input.str(2));
     }

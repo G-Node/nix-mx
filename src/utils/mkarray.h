@@ -16,7 +16,7 @@
 
 inline mxArray* make_mx_array(const std::string &s)
 {
-	return mxCreateString(s.c_str());
+    return mxCreateString(s.c_str());
 }
 
 mxArray* make_mx_array_from_ds(const nix::DataSet &da);
@@ -31,88 +31,87 @@ mxArray* make_mx_array(const nix::DimensionType &dtype);
 
 template<typename T, nix::DataType dt = nix::to_data_type<T>::value>
 mxArray* make_mx_array(const std::vector<T> &v) {
-	DType2 dtype = dtype_nix2mex(dt);
-	mxArray *data = mxCreateNumericMatrix(1, v.size(), dtype.cid, dtype.clx);
-	double *ptr = mxGetPr(data);
-	memcpy(ptr, v.data(), sizeof(T) * v.size());
-	return data;
+    DType2 dtype = dtype_nix2mex(dt);
+    mxArray *data = mxCreateNumericMatrix(1, v.size(), dtype.cid, dtype.clx);
+    double *ptr = mxGetPr(data);
+    memcpy(ptr, v.data(), sizeof(T) * v.size());
+    return data;
 }
 
 template<>
 inline mxArray* make_mx_array(const std::vector<std::string> &v) {
 
-	if (v.empty()) {
-		return nullptr;
-	}
+    if (v.empty()) {
+        return nullptr;
+    }
 
-	mxArray *data = mxCreateCellMatrix(1, v.size());
-	for (size_t i = 0; i < v.size(); i++) {
-		mxSetCell(data, i, mxCreateString(v[i].c_str()));
-	}
+    mxArray *data = mxCreateCellMatrix(1, v.size());
+    for (size_t i = 0; i < v.size(); i++) {
+        mxSetCell(data, i, mxCreateString(v[i].c_str()));
+    }
 
-	return data;
+    return data;
 }
 
 inline mxArray* make_mx_array(const std::vector<nix::Value> &v) {
-	if (v.empty()) {
-		return nullptr;
-	}
+    if (v.empty()) {
+        return nullptr;
+    }
 
-	nix::DataType ntype = v[0].type();
-	mxArray *data;
-	if (ntype == nix::DataType::Nothing) {
-		data = nullptr; //fixme: something else?
-	} else {
-		data = mxCreateCellMatrix(1, v.size());
-		for (size_t i = 0; i < v.size(); i++) {
-			mxSetCell(data, i, make_mx_array(v[i]));
-		}
-	}
+    nix::DataType ntype = v[0].type();
+    mxArray *data;
+    if (ntype == nix::DataType::Nothing) {
+        data = nullptr; //fixme: something else?
+    } else {
+        data = mxCreateCellMatrix(1, v.size());
+        for (size_t i = 0; i < v.size(); i++) {
+            mxSetCell(data, i, make_mx_array(v[i]));
+        }
+    }
 
-	return data;
+    return data;
 }
 
 template<typename T>
 typename std::enable_if<std::is_arithmetic<T>::value, mxArray>::type* make_mx_array(T val) {
-	DType2 dtype = dtype_nix2mex(nix::to_data_type<T>::value);
-	mxArray *arr = mxCreateNumericMatrix(1, 1, dtype.cid, dtype.clx);
-	void *data = mxGetData(arr);
-	memcpy(data, &val, sizeof(T));
-	return arr;
+    DType2 dtype = dtype_nix2mex(nix::to_data_type<T>::value);
+    mxArray *arr = mxCreateNumericMatrix(1, 1, dtype.cid, dtype.clx);
+    void *data = mxGetData(arr);
+    memcpy(data, &val, sizeof(T));
+    return arr;
 }
 
 template<>
 inline mxArray* make_mx_array<bool>(bool val) {
-	return mxCreateLogicalScalar(val);
+    return mxCreateLogicalScalar(val);
 }
 
-inline mxArray* make_mx_array(const handle &h)
-{
-	return make_mx_array(h.address());
+inline mxArray* make_mx_array(const handle &h) {
+    return make_mx_array(h.address());
 }
 
 template<typename T, typename std::enable_if<entity_to_id<T>::is_valid>::type* = nullptr>
 inline mxArray *make_mx_array(const T& entity) {
 
-	if(!entity) {
-		return make_mx_array(uint64_t(0));
-	}
+    if(!entity) {
+        return make_mx_array(uint64_t(0));
+    }
 
-	handle hdl = handle(entity);
-	return make_mx_array(hdl.address());
+    handle hdl = handle(entity);
+    return make_mx_array(hdl.address());
 }
 
 template<typename T, int EntityId = entity_to_id<T>::value>
 inline mxArray *make_mx_array(const std::vector<T> &v) {
-	const mwSize size = static_cast<mwSize>(v.size());
-	mxArray *lst = mxCreateCellArray(1, &size);
+    const mwSize size = static_cast<mwSize>(v.size());
+    mxArray *lst = mxCreateCellArray(1, &size);
 
-	for (size_t i = 0; i < v.size(); i++) {
-		handle hdl = handle(v[i]);
-		mxSetCell(lst, i, make_mx_array(hdl));
-	}
+    for (size_t i = 0; i < v.size(); i++) {
+        handle hdl = handle(v[i]);
+        mxSetCell(lst, i, make_mx_array(hdl));
+    }
 
-	return lst;
+    return lst;
 }
 
 inline mxArray* make_mx_array(const std::vector<nix::Dimension> &dims) {
@@ -154,6 +153,5 @@ mxArray* make_mx_array(const boost::optional<T> &opt) {
         return nullptr;
     }
 }
-
 
 #endif

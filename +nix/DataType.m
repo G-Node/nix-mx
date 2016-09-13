@@ -17,4 +17,3 @@ classdef DataType
     end
     
 end
-

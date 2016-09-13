@@ -8,4 +8,3 @@ classdef FileMode
     end
     
 end
-

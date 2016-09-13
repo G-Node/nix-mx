@@ -10,8 +10,7 @@
 
 namespace nixblock {
 
-    mxArray *describe(const nix::Block &block)
-    {
+    mxArray *describe(const nix::Block &block) {
         struct_builder sb({ 1 }, { "id", "type", "name", "definition" });
 
         sb.set(block.id());
@@ -22,8 +21,7 @@ namespace nixblock {
         return sb.array();
     }
 
-    void create_data_array(const extractor &input, infusor &output)
-    {
+    void create_data_array(const extractor &input, infusor &output) {
         nix::Block block = input.entity<nix::Block>(1);
 
         std::string name = input.str(2);
@@ -35,8 +33,7 @@ namespace nixblock {
         output.set(0, dt);
     }
 
-    void create_multi_tag(const extractor &input, infusor &output)
-    {
+    void create_multi_tag(const extractor &input, infusor &output) {
         nix::Block block = input.entity<nix::Block>(1);
         std::string name = input.str(2);
         std::string type = input.str(3);
@@ -46,8 +43,7 @@ namespace nixblock {
         output.set(0, mTag);
     }
 
-    void create_group(const extractor &input, infusor &output)
-    {
+    void create_group(const extractor &input, infusor &output) {
         nix::Block block = input.entity<nix::Block>(1);
         std::string name = input.str(2);
         std::string type = input.str(3);

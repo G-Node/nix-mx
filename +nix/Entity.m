@@ -29,4 +29,3 @@ classdef Entity < dynamicprops
     end
     
 end
-

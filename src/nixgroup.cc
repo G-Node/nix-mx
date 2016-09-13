@@ -10,8 +10,7 @@
 
 namespace nixgroup {
 
-    mxArray *describe(const nix::Group &group)
-    {
+    mxArray *describe(const nix::Group &group) {
         struct_builder sb({ 1 }, { "id", "type", "name", "definition" });
 
         sb.set(group.id());
@@ -22,20 +21,17 @@ namespace nixgroup {
         return sb.array();
     }
     
-    void add_data_array(const extractor &input, infusor &output)
-    {
+    void add_data_array(const extractor &input, infusor &output) {
         nix::Group currObj = input.entity<nix::Group>(1);
         currObj.addDataArray(input.str(2));
     }
 
-    void add_tag(const extractor &input, infusor &output)
-    {
+    void add_tag(const extractor &input, infusor &output) {
         nix::Group currObj = input.entity<nix::Group>(1);
         currObj.addTag(input.str(2));
     }
 
-    void add_multi_tag(const extractor &input, infusor &output)
-    {
+    void add_multi_tag(const extractor &input, infusor &output) {
         nix::Group currObj = input.entity<nix::Group>(1);
         currObj.addMultiTag(input.str(2));
     }

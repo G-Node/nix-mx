@@ -9,8 +9,7 @@
 
 namespace nixproperty {
 
-    mxArray *describe(const nix::Property &prop)
-    {
+    mxArray *describe(const nix::Property &prop) {
         struct_builder sb({ 1 }, { "id", "name", "definition", "unit", "mapping", "datatype" });
 
         sb.set(prop.id());
@@ -23,8 +22,7 @@ namespace nixproperty {
         return sb.array();
     }
 
-    void values(const extractor &input, infusor &output)
-    {
+    void values(const extractor &input, infusor &output) {
         nix::Property prop = input.entity<nix::Property>(1);
         std::vector<nix::Value> vals = prop.values();
 
@@ -50,8 +48,7 @@ namespace nixproperty {
         output.set(0, lst);
     }
 
-    void update_values(const extractor &input, infusor &output)
-    {
+    void update_values(const extractor &input, infusor &output) {
         nix::Property prop = input.entity<nix::Property>(1);
         prop.deleteValues();
 

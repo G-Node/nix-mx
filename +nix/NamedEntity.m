@@ -15,4 +15,3 @@ classdef NamedEntity < nix.Entity
     end
     
 end
-

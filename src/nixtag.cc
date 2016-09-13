@@ -11,8 +11,7 @@
 
 namespace nixtag {
 
-    mxArray *describe(const nix::Tag &tag)
-    {
+    mxArray *describe(const nix::Tag &tag) {
         struct_builder sb({ 1 }, { "id", "type", "name", "definition", "position", "extent", "units" });
 
         sb.set(tag.id());
@@ -26,20 +25,17 @@ namespace nixtag {
         return sb.array();
     }
 
-    void add_reference(const extractor &input, infusor &output)
-    {
+    void add_reference(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         currObj.addReference(input.str(2));
     }
 
-    void add_source(const extractor &input, infusor &output)
-    {
+    void add_source(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         currObj.addSource(input.str(2));
     }
 
-    void create_feature(const extractor &input, infusor &output)
-    {
+    void create_feature(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
 
         nix::Feature newFeat = currObj.createFeature(input.str(2), input.ltype(3));

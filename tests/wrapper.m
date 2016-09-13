@@ -18,4 +18,3 @@ function stats = wrapper( func, stats )
     end;
 
 end
-
