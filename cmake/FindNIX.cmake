@@ -12,6 +12,7 @@ find_path(NIX_INCLUDE_DIR nix.hpp
   PATH_SUFFIXES nix)
 
 find_library(NIX_LIBRARY NAMES nix libnix
+  HINTS $ENV{NIX_ROOT}/build/Release
   HINTS $ENV{NIX_BUILD_DIR}
   HINTS ${NIX_INCLUDE_DIR}/../lib
   HINTS ${NIX_INCLUDE_DIR}/../build
