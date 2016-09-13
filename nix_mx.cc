@@ -322,10 +322,10 @@ void mexFunction(int            nlhs,
             .reg("set_samplingInterval", SETTER(double, nix::SampledDimension, samplingInterval))
             .reg("set_offset", SETTER(double, nix::SampledDimension, offset))
             .reg("set_none_offset", SETTER(const boost::none_t, nix::SampledDimension, offset))
-            .reg("index_of", &nix::SampledDimension::indexOf)
-            .reg("position_at", &nix::SampledDimension::positionAt)
-            .reg("axis", &nix::SampledDimension::axis);
-        
+            .reg("index_of", &nix::SampledDimension::indexOf);
+        methods->add("SampledDimension::position_at", nixdimensions::sampled_position_at);
+        methods->add("SampledDimension::axis", nixdimensions::sampled_axis);
+
         classdef<nix::RangeDimension>("RangeDimension", methods)
             .desc(&nixdimensions::describe)
             .reg("set_label", SETTER(const std::string&, nix::RangeDimension, label))
@@ -333,9 +333,9 @@ void mexFunction(int            nlhs,
             .reg("set_unit", SETTER(const std::string&, nix::RangeDimension, unit))
             .reg("set_none_unit", SETTER(const boost::none_t, nix::RangeDimension, unit))
             .reg("set_ticks", SETTER(const std::vector<double>&, nix::RangeDimension, ticks))
-            .reg("index_of", &nix::RangeDimension::indexOf)
-            .reg("tick_at", &nix::RangeDimension::tickAt)
-            .reg("axis", &nix::RangeDimension::axis);
+            .reg("index_of", &nix::RangeDimension::indexOf);
+        methods->add("RangeDimension::tick_at", nixdimensions::range_tick_at);
+        methods->add("RangeDimension::axis", nixdimensions::range_axis);
 
         mexAtExit(on_exit);
     });
