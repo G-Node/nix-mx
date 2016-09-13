@@ -64,7 +64,7 @@ namespace nixsection {
         output.set(0, lst);
     }
 
-    void create_property(const extractor &input, infusor &output) {
+    void createProperty(const extractor &input, infusor &output) {
         nix::Section currObj = input.entity<nix::Section>(1);
 
         nix::DataType dtype = nix::string_to_data_type(input.str(3));
@@ -73,7 +73,7 @@ namespace nixsection {
         output.set(0, handle(p));
     }
 
-    void create_property_with_value(const extractor &input, infusor &output) {
+    void createPropertyWithValue(const extractor &input, infusor &output) {
         nix::Section currObj = input.entity<nix::Section>(1);
 
         std::vector<nix::Value> vals = input.vec(3);

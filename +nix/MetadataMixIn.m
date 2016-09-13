@@ -25,11 +25,11 @@ classdef MetadataMixIn < handle
 
         function set_metadata(obj, val)
             if (isempty(val))
-                nix_mx(strcat(obj.alias, '::set_none_metadata'), ...
+                nix_mx(strcat(obj.alias, '::setNoneMetadata'), ...
                     obj.nix_handle, val);
             else
                 nix.Utils.add_entity(obj, val, 'nix.Section', ...
-                    strcat(obj.alias, '::set_metadata'));
+                    strcat(obj.alias, '::setMetadata'));
             end;
         end;
     end;

@@ -29,17 +29,17 @@ namespace nixgroup {
         return sb.array();
     }
     
-    void add_data_array(const extractor &input, infusor &output) {
+    void addDataArray(const extractor &input, infusor &output) {
         nix::Group currObj = input.entity<nix::Group>(1);
         currObj.addDataArray(input.str(2));
     }
 
-    void add_tag(const extractor &input, infusor &output) {
+    void addTag(const extractor &input, infusor &output) {
         nix::Group currObj = input.entity<nix::Group>(1);
         currObj.addTag(input.str(2));
     }
 
-    void add_multi_tag(const extractor &input, infusor &output) {
+    void addMultiTag(const extractor &input, infusor &output) {
         nix::Group currObj = input.entity<nix::Group>(1);
         currObj.addMultiTag(input.str(2));
     }

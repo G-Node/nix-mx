@@ -49,7 +49,7 @@ namespace nixdimensions {
         return sb.array();
     }
 
-    void sampled_position_at(const extractor &input, infusor &output) {
+    void sampledPositionAt(const extractor &input, infusor &output) {
         nix::SampledDimension dim = input.entity<nix::SampledDimension>(1);
         const size_t index = static_cast<size_t>(input.num<double>(2));
 
@@ -57,7 +57,7 @@ namespace nixdimensions {
         output.set(0, pos);
     }
 
-    void sampled_axis(const extractor &input, infusor &output) {
+    void sampledAxis(const extractor &input, infusor &output) {
         nix::SampledDimension dim = input.entity<nix::SampledDimension>(1);
         const size_t count = static_cast<size_t>(input.num<double>(2));
         const size_t startIndex = static_cast<size_t>(input.num<double>(3));
@@ -69,7 +69,7 @@ namespace nixdimensions {
         output.set(0, axis);
     }
 
-    void range_tick_at(const extractor &input, infusor &output) {
+    void rangeTickAt(const extractor &input, infusor &output) {
         nix::RangeDimension dim = input.entity<nix::RangeDimension>(1);
         const size_t index = static_cast<size_t>(input.num<double>(2));
 
@@ -77,7 +77,7 @@ namespace nixdimensions {
         output.set(0, tick);
     }
 
-    void range_axis(const extractor &input, infusor &output) {
+    void rangeAxis(const extractor &input, infusor &output) {
         nix::RangeDimension dim = input.entity<nix::RangeDimension>(1);
         const size_t count = static_cast<size_t>(input.num<double>(2));
         const size_t startIndex = static_cast<size_t>(input.num<double>(3));
@@ -90,4 +90,3 @@ namespace nixdimensions {
     }
 
 } // namespace nixdimensions
-

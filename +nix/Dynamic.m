@@ -32,7 +32,7 @@ classdef Dynamic
                 end
 
                 if (isempty(val))
-                    nix_mx(strcat(obj.alias, '::set_none_', prop), obj.nix_handle, 0);
+                    nix_mx(strcat(obj.alias, '::setNone', upper(prop(1)), prop(2:end)), obj.nix_handle, 0);
                 elseif((strcmp(prop, 'units') || strcmp(prop, 'labels')) && (~iscell(val)))
                 %-- BUGFIX: Matlab crashes, if units in Tags and MultiTags
                 %-- or labels of SetDimension are set using anything else than a cell.
@@ -40,7 +40,7 @@ classdef Dynamic
                       'This value only supports cells.'));
                     throwAsCaller(ME);
                 else
-                    nix_mx(strcat(obj.alias, '::set_', prop), obj.nix_handle, val);
+                    nix_mx(strcat(obj.alias, '::set', upper(prop(1)), prop(2:end)), obj.nix_handle, val);
                 end
                 obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
             end

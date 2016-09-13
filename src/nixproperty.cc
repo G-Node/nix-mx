@@ -56,7 +56,7 @@ namespace nixproperty {
         output.set(0, lst);
     }
 
-    void update_values(const extractor &input, infusor &output) {
+    void updateValues(const extractor &input, infusor &output) {
         nix::Property prop = input.entity<nix::Property>(1);
         prop.deleteValues();
 

@@ -54,27 +54,27 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end;
         
         function dim = append_set_dimension(obj)
-            func_name = strcat(obj.alias, '::append_set_dimension');
+            func_name = strcat(obj.alias, '::appendSetDimension');
             dim = nix.SetDimension(nix_mx(func_name, obj.nix_handle));
         end
         
         function dim = append_sampled_dimension(obj, interval)
-            func_name = strcat(obj.alias, '::append_sampled_dimension');
+            func_name = strcat(obj.alias, '::appendSampledDimension');
             dim = nix.SampledDimension(nix_mx(func_name, obj.nix_handle, interval));
         end
 
         function dim = append_range_dimension(obj, ticks)
-            func_name = strcat(obj.alias, '::append_range_dimension');
+            func_name = strcat(obj.alias, '::appendRangeDimension');
             dim = nix.RangeDimension(nix_mx(func_name, obj.nix_handle, ticks));
         end
 
         function dim = append_alias_range_dimension(obj)
-            func_name = strcat(obj.alias, '::append_alias_range_dimension');
+            func_name = strcat(obj.alias, '::appendAliasRangeDimension');
             dim = nix.RangeDimension(nix_mx(func_name, obj.nix_handle));
         end
         
         function delCheck = delete_dimensions(obj)
-            func_name = strcat(obj.alias, '::delete_dimensions');
+            func_name = strcat(obj.alias, '::deleteDimensions');
             delCheck = nix_mx(func_name, obj.nix_handle);
         end;
 

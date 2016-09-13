@@ -33,24 +33,24 @@ namespace nixtag {
         return sb.array();
     }
 
-    void add_reference(const extractor &input, infusor &output) {
+    void addReference(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         currObj.addReference(input.str(2));
     }
 
-    void add_source(const extractor &input, infusor &output) {
+    void addSource(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         currObj.addSource(input.str(2));
     }
 
-    void create_feature(const extractor &input, infusor &output) {
+    void createFeature(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
 
         nix::Feature newFeat = currObj.createFeature(input.str(2), input.ltype(3));
         output.set(0, handle(newFeat));
     }
 
-    void retrieve_data(const extractor &input, infusor &output) {
+    void retrieveData(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         double index = input.num<double>(2);
 
@@ -58,7 +58,7 @@ namespace nixtag {
         output.set(0, data);
     }
 
-    void retrieve_feature_data(const extractor &input, infusor &output) {
+    void retrieveFeatureData(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         double index = input.num<double>(2);
 

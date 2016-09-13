@@ -17,7 +17,7 @@ namespace nixproperty {
 
     void values(const extractor &input, infusor &output);
 
-    void update_values(const extractor &input, infusor &output);
+    void updateValues(const extractor &input, infusor &output);
 
 } // namespace nixproperty
 

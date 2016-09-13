@@ -135,19 +135,19 @@ void mexFunction(int            nlhs,
             .reg("openTag", GETBYSTR(nix::Tag, nix::Block, getTag))
             .reg("openMultiTag", GETBYSTR(nix::MultiTag, nix::Block, getMultiTag))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Block, metadata))
-            .reg("set_metadata", SETTER(const std::string&, nix::Block, metadata))
-            .reg("set_none_metadata", SETTER(const boost::none_t, nix::Block, metadata))
+            .reg("setMetadata", SETTER(const std::string&, nix::Block, metadata))
+            .reg("setNoneMetadata", SETTER(const boost::none_t, nix::Block, metadata))
             .reg("deleteDataArray", REMOVER(nix::DataArray, nix::Block, deleteDataArray))
             .reg("deleteSource", REMOVER(nix::Source, nix::Block, deleteSource))
             .reg("deleteTag", REMOVER(nix::Tag, nix::Block, deleteTag))
             .reg("deleteMultiTag", REMOVER(nix::MultiTag, nix::Block, deleteMultiTag))
             .reg("deleteGroup", REMOVER(nix::Group, nix::Block, deleteGroup))
-            .reg("set_type", SETTER(const std::string&, nix::Block, type))
-            .reg("set_definition", SETTER(const std::string&, nix::Block, definition))
-            .reg("set_none_definition", SETTER(const boost::none_t, nix::Block, definition));
-        methods->add("Block::createDataArray", nixblock::create_data_array);
-        methods->add("Block::createMultiTag", nixblock::create_multi_tag);
-        methods->add("Block::createGroup", nixblock::create_group);
+            .reg("setType", SETTER(const std::string&, nix::Block, type))
+            .reg("setDefinition", SETTER(const std::string&, nix::Block, definition))
+            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Block, definition));
+        methods->add("Block::createDataArray", nixblock::createDataArray);
+        methods->add("Block::createMultiTag", nixblock::createMultiTag);
+        methods->add("Block::createGroup", nixblock::createGroup);
 
         classdef<nix::Group>("Group", methods)
             .desc(&nixgroup::describe)
@@ -163,41 +163,41 @@ void mexFunction(int            nlhs,
             .reg("removeDataArray", REMOVER(nix::DataArray, nix::Group, removeDataArray))
             .reg("removeTag", REMOVER(nix::Tag, nix::Group, removeTag))
             .reg("removeMultiTag", REMOVER(nix::MultiTag, nix::Group, removeMultiTag))
-            .reg("set_type", SETTER(const std::string&, nix::Group, type))
-            .reg("set_definition", SETTER(const std::string&, nix::Group, definition))
-            .reg("set_none_definition", SETTER(const boost::none_t, nix::Group, definition));
-        methods->add("Group::addDataArray", nixgroup::add_data_array);
-        methods->add("Group::addTag", nixgroup::add_tag);
-        methods->add("Group::addMultiTag", nixgroup::add_multi_tag);
+            .reg("setType", SETTER(const std::string&, nix::Group, type))
+            .reg("setDefinition", SETTER(const std::string&, nix::Group, definition))
+            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Group, definition));
+        methods->add("Group::addDataArray", nixgroup::addDataArray);
+        methods->add("Group::addTag", nixgroup::addTag);
+        methods->add("Group::addMultiTag", nixgroup::addMultiTag);
 
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)
             .reg("sources", IDATAARRAY(std::vector<nix::Source>, EntityWithSources, std::function<bool(const nix::Source &)>, sources, const))
             .reg("openMetadataSection", IDATAARRAY(nix::Section, EntityWithMetadata, , metadata, const))
-            .reg("set_metadata", IDATAARRAY(void, EntityWithMetadata, const std::string&, metadata, ))
-            .reg("set_none_metadata", IDATAARRAY(void, EntityWithMetadata, const boost::none_t, metadata, ))
-            .reg("set_type", IDATAARRAY(void, NamedEntity, const std::string&, type, ))
-            .reg("set_definition", IDATAARRAY(void, NamedEntity, const std::string&, definition, ))
-            .reg("set_none_definition", IDATAARRAY(void, NamedEntity, const boost::none_t, definition, ))
-            .reg("set_label", SETTER(const std::string&, nix::DataArray, label))
-            .reg("set_none_label", SETTER(const boost::none_t, nix::DataArray, label))
-            .reg("set_unit", SETTER(const std::string&, nix::DataArray, unit))
-            .reg("set_none_unit", SETTER(const boost::none_t, nix::DataArray, unit))
+            .reg("setMetadata", IDATAARRAY(void, EntityWithMetadata, const std::string&, metadata, ))
+            .reg("setNoneMetadata", IDATAARRAY(void, EntityWithMetadata, const boost::none_t, metadata, ))
+            .reg("setType", IDATAARRAY(void, NamedEntity, const std::string&, type, ))
+            .reg("setDefinition", IDATAARRAY(void, NamedEntity, const std::string&, definition, ))
+            .reg("setNoneDefinition", IDATAARRAY(void, NamedEntity, const boost::none_t, definition, ))
+            .reg("setLabel", SETTER(const std::string&, nix::DataArray, label))
+            .reg("setNoneLabel", SETTER(const boost::none_t, nix::DataArray, label))
+            .reg("setUnit", SETTER(const std::string&, nix::DataArray, unit))
+            .reg("setNoneUnit", SETTER(const boost::none_t, nix::DataArray, unit))
             .reg("dimensions", FILTER(std::vector<nix::Dimension>, nix::DataArray, , dimensions))
-            .reg("append_set_dimension", &nix::DataArray::appendSetDimension)
-            .reg("append_range_dimension", &nix::DataArray::appendRangeDimension)
-            .reg("append_alias_range_dimension", &nix::DataArray::appendAliasRangeDimension)
-            .reg("append_sampled_dimension", &nix::DataArray::appendSampledDimension)
-            .reg("create_set_dimension", &nix::DataArray::createSetDimension)
-            .reg("create_range_dimension", &nix::DataArray::createRangeDimension)
-            .reg("create_alias_range_dimension", &nix::DataArray::createAliasRangeDimension)
-            .reg("create_sampled_dimension", &nix::DataArray::createSampledDimension);
-        methods->add("DataArray::delete_dimensions", nixdataarray::delete_dimensions);
-        methods->add("DataArray::readAll", nixdataarray::read_all);
-        methods->add("DataArray::writeAll", nixdataarray::write_all);
-        methods->add("DataArray::addSource", nixdataarray::add_source);
+            .reg("appendSetDimension", &nix::DataArray::appendSetDimension)
+            .reg("appendRangeDimension", &nix::DataArray::appendRangeDimension)
+            .reg("appendAliasRangeDimension", &nix::DataArray::appendAliasRangeDimension)
+            .reg("appendSampledDimension", &nix::DataArray::appendSampledDimension)
+            .reg("createSetDimension", &nix::DataArray::createSetDimension)
+            .reg("createRangeDimension", &nix::DataArray::createRangeDimension)
+            .reg("createAliasRangeDimension", &nix::DataArray::createAliasRangeDimension)
+            .reg("createSampledDimension", &nix::DataArray::createSampledDimension);
+        methods->add("DataArray::deleteDimensions", nixdataarray::deleteDimensions);
+        methods->add("DataArray::readAll", nixdataarray::readAll);
+        methods->add("DataArray::writeAll", nixdataarray::writeAll);
+        methods->add("DataArray::addSource", nixdataarray::addSource);
         // REMOVER for DataArray.removeSource leads to an error, therefore use method->add for now
-        methods->add("DataArray::removeSource", nixdataarray::remove_source);
+        methods->add("DataArray::removeSource", nixdataarray::removeSource);
 
         classdef<nix::Source>("Source", methods)
             .desc(&nixsource::describe)
@@ -207,11 +207,11 @@ void mexFunction(int            nlhs,
             .reg("hasSource", GETBYSTR(bool, nix::Source, hasSource))
             .reg("openSource", GETBYSTR(nix::Source, nix::Source, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Source, metadata))
-            .reg("set_metadata", SETTER(const std::string&, nix::Source, metadata))
-            .reg("set_none_metadata", SETTER(const boost::none_t, nix::Source, metadata))
-            .reg("set_type", SETTER(const std::string&, nix::Source, type))
-            .reg("set_definition", SETTER(const std::string&, nix::Source, definition))
-            .reg("set_none_definition", SETTER(const boost::none_t, nix::Source, definition));
+            .reg("setMetadata", SETTER(const std::string&, nix::Source, metadata))
+            .reg("setNoneMetadata", SETTER(const boost::none_t, nix::Source, metadata))
+            .reg("setType", SETTER(const std::string&, nix::Source, type))
+            .reg("setDefinition", SETTER(const std::string&, nix::Source, definition))
+            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Source, definition));
 
         classdef<nix::Tag>("Tag", methods)
             .desc(&nixtag::describe)
@@ -224,24 +224,24 @@ void mexFunction(int            nlhs,
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Tag, metadata))
-            .reg("set_units", SETTER(const std::vector<std::string>&, nix::Tag, units))
-            .reg("set_none_units", SETTER(const boost::none_t, nix::Tag, units))
-            .reg("set_metadata", SETTER(const std::string&, nix::Tag, metadata))
-            .reg("set_none_metadata", SETTER(const boost::none_t, nix::Tag, metadata))
-            .reg("set_type", SETTER(const std::string&, nix::Tag, type))
-            .reg("set_definition", SETTER(const std::string&, nix::Tag, definition))
-            .reg("set_none_definition", SETTER(const boost::none_t, nix::Tag, definition))
-            .reg("set_position", SETTER(const std::vector<double>&, nix::Tag, position))
-            .reg("set_extent", SETTER(const std::vector<double>&, nix::Tag, extent))
-            .reg("set_none_extent", SETTER(const boost::none_t, nix::Tag, extent))
+            .reg("setUnits", SETTER(const std::vector<std::string>&, nix::Tag, units))
+            .reg("setNoneUnits", SETTER(const boost::none_t, nix::Tag, units))
+            .reg("setMetadata", SETTER(const std::string&, nix::Tag, metadata))
+            .reg("setNoneMetadata", SETTER(const boost::none_t, nix::Tag, metadata))
+            .reg("setType", SETTER(const std::string&, nix::Tag, type))
+            .reg("setDefinition", SETTER(const std::string&, nix::Tag, definition))
+            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Tag, definition))
+            .reg("setPosition", SETTER(const std::vector<double>&, nix::Tag, position))
+            .reg("setExtent", SETTER(const std::vector<double>&, nix::Tag, extent))
+            .reg("setNoneExtent", SETTER(const boost::none_t, nix::Tag, extent))
             .reg("removeReference", REMOVER(nix::DataArray, nix::Tag, removeReference))
             .reg("removeSource", REMOVER(nix::Source, nix::Tag, removeSource))
             .reg("deleteFeature", REMOVER(nix::Feature, nix::Tag, deleteFeature));
-        methods->add("Tag::retrieveData", nixtag::retrieve_data);
-        methods->add("Tag::featureRetrieveData", nixtag::retrieve_feature_data);
-        methods->add("Tag::addReference", nixtag::add_reference);
-        methods->add("Tag::addSource", nixtag::add_source);
-        methods->add("Tag::createFeature", nixtag::create_feature);
+        methods->add("Tag::retrieveData", nixtag::retrieveData);
+        methods->add("Tag::featureRetrieveData", nixtag::retrieveFeatureData);
+        methods->add("Tag::addReference", nixtag::addReference);
+        methods->add("Tag::addSource", nixtag::addSource);
+        methods->add("Tag::createFeature", nixtag::createFeature);
 
         classdef<nix::MultiTag>("MultiTag", methods)
             .desc(&nixmultitag::describe)
@@ -257,21 +257,21 @@ void mexFunction(int            nlhs,
             .reg("openFeature", GETBYSTR(nix::Feature, nix::MultiTag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::MultiTag, getSource))
             .reg("openMetadataSection", GETCONTENT(nix::Section, nix::MultiTag, metadata))
-            .reg("set_units", SETTER(const std::vector<std::string>&, nix::MultiTag, units))
-            .reg("set_none_units", SETTER(const boost::none_t, nix::MultiTag, units))
-            .reg("set_extents", SETTER(const std::string&, nix::MultiTag, extents))
-            .reg("set_none_extents", SETTER(const boost::none_t, nix::MultiTag, extents))
-            .reg("set_metadata", SETTER(const std::string&, nix::MultiTag, metadata))
-            .reg("set_none_metadata", SETTER(const boost::none_t, nix::MultiTag, metadata))
+            .reg("setUnits", SETTER(const std::vector<std::string>&, nix::MultiTag, units))
+            .reg("setNoneUnits", SETTER(const boost::none_t, nix::MultiTag, units))
+            .reg("setExtents", SETTER(const std::string&, nix::MultiTag, extents))
+            .reg("setNoneExtents", SETTER(const boost::none_t, nix::MultiTag, extents))
+            .reg("setMetadata", SETTER(const std::string&, nix::MultiTag, metadata))
+            .reg("setNoneMetadata", SETTER(const boost::none_t, nix::MultiTag, metadata))
             .reg("removeReference", REMOVER(nix::DataArray, nix::MultiTag, removeReference))
             .reg("removeSource", REMOVER(nix::Source, nix::MultiTag, removeSource))
             .reg("deleteFeature", REMOVER(nix::Feature, nix::MultiTag, deleteFeature));
-        methods->add("MultiTag::retrieveData", nixmultitag::retrieve_data);
-        methods->add("MultiTag::featureRetrieveData", nixmultitag::retrieve_feature_data);
-        methods->add("MultiTag::addReference", nixmultitag::add_reference);
-        methods->add("MultiTag::addSource", nixmultitag::add_source);
-        methods->add("MultiTag::createFeature", nixmultitag::create_feature);
-        methods->add("MultiTag::addPositions", nixmultitag::add_positions);
+        methods->add("MultiTag::retrieveData", nixmultitag::retrieveData);
+        methods->add("MultiTag::featureRetrieveData", nixmultitag::retrieveFeatureData);
+        methods->add("MultiTag::addReference", nixmultitag::addReference);
+        methods->add("MultiTag::addSource", nixmultitag::addSource);
+        methods->add("MultiTag::createFeature", nixmultitag::createFeature);
+        methods->add("MultiTag::addPositions", nixmultitag::addPositions);
 
         classdef<nix::Section>("Section", methods)
             .desc(&nixsection::describe)
@@ -280,70 +280,70 @@ void mexFunction(int            nlhs,
             .reg("hasProperty", GETBYSTR(bool, nix::Section, hasProperty))
             .reg("hasSection", GETBYSTR(bool, nix::Section, hasSection))
             .reg("openLink", GETCONTENT(nix::Section, nix::Section, link))
-            .reg("set_link", SETTER(const std::string&, nix::Section, link))
-            .reg("set_none_link", SETTER(const boost::none_t, nix::Section, link))
+            .reg("setLink", SETTER(const std::string&, nix::Section, link))
+            .reg("setNoneLink", SETTER(const boost::none_t, nix::Section, link))
             .reg("parent", GETCONTENT(nix::Section, nix::Section, parent))
-            .reg("set_type", SETTER(const std::string&, nix::Section, type))
-            .reg("set_definition", SETTER(const std::string&, nix::Section, definition))
-            .reg("set_none_definition", SETTER(const boost::none_t, nix::Section, definition))
-            .reg("set_repository", SETTER(const std::string&, nix::Section, repository))
-            .reg("set_none_repository", SETTER(const boost::none_t, nix::Section, repository))
-            .reg("set_mapping", SETTER(const std::string&, nix::Section, mapping))
-            .reg("set_none_mapping", SETTER(const boost::none_t, nix::Section, mapping))
+            .reg("setType", SETTER(const std::string&, nix::Section, type))
+            .reg("setDefinition", SETTER(const std::string&, nix::Section, definition))
+            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Section, definition))
+            .reg("setRepository", SETTER(const std::string&, nix::Section, repository))
+            .reg("setNoneRepository", SETTER(const boost::none_t, nix::Section, repository))
+            .reg("setMapping", SETTER(const std::string&, nix::Section, mapping))
+            .reg("setNoneMapping", SETTER(const boost::none_t, nix::Section, mapping))
             .reg("createSection", &nix::Section::createSection)
             .reg("deleteSection", REMOVER(nix::Section, nix::Section, deleteSection))
             .reg("openProperty", GETBYSTR(nix::Property, nix::Section, getProperty))
             .reg("deleteProperty", REMOVER(nix::Property, nix::Section, deleteProperty));
         methods->add("Section::properties", nixsection::properties);
-        methods->add("Section::createProperty", nixsection::create_property);
-        methods->add("Section::createPropertyWithValue", nixsection::create_property_with_value);
+        methods->add("Section::createProperty", nixsection::createProperty);
+        methods->add("Section::createPropertyWithValue", nixsection::createPropertyWithValue);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)
             .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data))
             .reg("setData", SETTER(const std::string&, nix::Feature, data))
             .reg("getLinkType", GETCONTENT(nix::LinkType, nix::Feature, linkType));
-        methods->add("Feature::setLinkType", nixfeature::set_link_type);
+        methods->add("Feature::setLinkType", nixfeature::setLinkType);
 
         classdef<nix::Property>("Property", methods)
             .desc(&nixproperty::describe)
-            .reg("set_definition", SETTER(const std::string&, nix::Property, definition))
-            .reg("set_none_definition", SETTER(const boost::none_t, nix::Property, definition))
-            .reg("set_unit", SETTER(const std::string&, nix::Property, unit))
-            .reg("set_none_unit", SETTER(const boost::none_t, nix::Property, unit))
-            .reg("set_mapping", SETTER(const std::string&, nix::Property, mapping))
-            .reg("set_none_mapping", SETTER(const boost::none_t, nix::Property, mapping));
+            .reg("setDefinition", SETTER(const std::string&, nix::Property, definition))
+            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Property, definition))
+            .reg("setUnit", SETTER(const std::string&, nix::Property, unit))
+            .reg("setNoneUnit", SETTER(const boost::none_t, nix::Property, unit))
+            .reg("setMapping", SETTER(const std::string&, nix::Property, mapping))
+            .reg("setNoneMapping", SETTER(const boost::none_t, nix::Property, mapping));
         methods->add("Property::values", nixproperty::values);
-        methods->add("Property::updateValues", nixproperty::update_values);
+        methods->add("Property::updateValues", nixproperty::updateValues);
 
         classdef<nix::SetDimension>("SetDimension", methods)
             .desc(&nixdimensions::describe)
-            .reg("set_labels", SETTER(const std::vector<std::string>&, nix::SetDimension, labels))
-            .reg("set_none_labels", SETTER(const boost::none_t, nix::SetDimension, labels));
+            .reg("setLabels", SETTER(const std::vector<std::string>&, nix::SetDimension, labels))
+            .reg("setNoneLabels", SETTER(const boost::none_t, nix::SetDimension, labels));
 
         classdef<nix::SampledDimension>("SampledDimension", methods)
             .desc(&nixdimensions::describe)
-            .reg("set_label", SETTER(const std::string&, nix::SampledDimension, label))
-            .reg("set_none_label", SETTER(const boost::none_t, nix::SampledDimension, label))
-            .reg("set_unit", SETTER(const std::string&, nix::SampledDimension, unit))
-            .reg("set_none_unit", SETTER(const boost::none_t, nix::SampledDimension, unit))
-            .reg("set_samplingInterval", SETTER(double, nix::SampledDimension, samplingInterval))
-            .reg("set_offset", SETTER(double, nix::SampledDimension, offset))
-            .reg("set_none_offset", SETTER(const boost::none_t, nix::SampledDimension, offset))
-            .reg("index_of", &nix::SampledDimension::indexOf);
-        methods->add("SampledDimension::position_at", nixdimensions::sampled_position_at);
-        methods->add("SampledDimension::axis", nixdimensions::sampled_axis);
+            .reg("setLabel", SETTER(const std::string&, nix::SampledDimension, label))
+            .reg("setNoneLabel", SETTER(const boost::none_t, nix::SampledDimension, label))
+            .reg("setUnit", SETTER(const std::string&, nix::SampledDimension, unit))
+            .reg("setNoneUnit", SETTER(const boost::none_t, nix::SampledDimension, unit))
+            .reg("setSamplingInterval", SETTER(double, nix::SampledDimension, samplingInterval))
+            .reg("setOffset", SETTER(double, nix::SampledDimension, offset))
+            .reg("setNoneOffset", SETTER(const boost::none_t, nix::SampledDimension, offset))
+            .reg("indexOf", &nix::SampledDimension::indexOf);
+        methods->add("SampledDimension::positionAt", nixdimensions::sampledPositionAt);
+        methods->add("SampledDimension::axis", nixdimensions::sampledAxis);
 
         classdef<nix::RangeDimension>("RangeDimension", methods)
             .desc(&nixdimensions::describe)
-            .reg("set_label", SETTER(const std::string&, nix::RangeDimension, label))
-            .reg("set_none_label", SETTER(const boost::none_t, nix::RangeDimension, label))
-            .reg("set_unit", SETTER(const std::string&, nix::RangeDimension, unit))
-            .reg("set_none_unit", SETTER(const boost::none_t, nix::RangeDimension, unit))
-            .reg("set_ticks", SETTER(const std::vector<double>&, nix::RangeDimension, ticks))
-            .reg("index_of", &nix::RangeDimension::indexOf);
-        methods->add("RangeDimension::tick_at", nixdimensions::range_tick_at);
-        methods->add("RangeDimension::axis", nixdimensions::range_axis);
+            .reg("setLabel", SETTER(const std::string&, nix::RangeDimension, label))
+            .reg("setNoneLabel", SETTER(const boost::none_t, nix::RangeDimension, label))
+            .reg("setUnit", SETTER(const std::string&, nix::RangeDimension, unit))
+            .reg("setNoneUnit", SETTER(const boost::none_t, nix::RangeDimension, unit))
+            .reg("setTicks", SETTER(const std::vector<double>&, nix::RangeDimension, ticks))
+            .reg("indexOf", &nix::RangeDimension::indexOf);
+        methods->add("RangeDimension::tickAt", nixdimensions::rangeTickAt);
+        methods->add("RangeDimension::axis", nixdimensions::rangeAxis);
 
         mexAtExit(on_exit);
     });

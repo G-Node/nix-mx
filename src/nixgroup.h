@@ -15,11 +15,11 @@ namespace nixgroup {
 
     mxArray *describe(const nix::Group &group);
 
-    void add_data_array(const extractor &input, infusor &output);
+    void addDataArray(const extractor &input, infusor &output);
 
-    void add_tag(const extractor &input, infusor &output);
+    void addTag(const extractor &input, infusor &output);
 
-    void add_multi_tag(const extractor &input, infusor &output);
+    void addMultiTag(const extractor &input, infusor &output);
 
 } // namespace nixgroup
 

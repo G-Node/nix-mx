@@ -46,14 +46,14 @@ classdef Section < nix.NamedEntity
 
         function [] = set_link(obj, val)
             if (isempty(val))
-                nix_mx('Section::set_none_link', obj.nix_handle);
+                nix_mx('Section::setNoneLink', obj.nix_handle);
             else
                 if(strcmp(class(val), 'nix.Section'))
                     addID = val.id;
                 else
                     addID = val;
                 end;
-                nix_mx('Section::set_link', obj.nix_handle, addID);
+                nix_mx('Section::setLink', obj.nix_handle, addID);
             end;
         end;
 

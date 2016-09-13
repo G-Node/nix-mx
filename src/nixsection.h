@@ -17,9 +17,9 @@ namespace nixsection {
 
     void properties(const extractor &input, infusor &output);
 
-    void create_property(const extractor &input, infusor &output);
+    void createProperty(const extractor &input, infusor &output);
 
-    void create_property_with_value(const extractor &input, infusor &output);
+    void createPropertyWithValue(const extractor &input, infusor &output);
 
 } // namespace nixsection
 

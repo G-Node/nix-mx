@@ -13,9 +13,9 @@
 
 namespace nixfile {
 
-void open(const extractor &input, infusor &output);
+    void open(const extractor &input, infusor &output);
 
-mxArray *describe(const nix::File &f);
+    mxArray *describe(const nix::File &f);
 
 } // namespace nixfile
 

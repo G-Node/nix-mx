@@ -25,7 +25,7 @@ namespace nixfeature {
         return sb.array();
     }
 
-    void set_link_type(const extractor &input, infusor &output) {
+    void setLinkType(const extractor &input, infusor &output) {
         nix::Feature feat = input.entity<nix::Feature>(1);
 
         feat.linkType(input.ltype(2));

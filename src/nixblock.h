@@ -15,11 +15,11 @@ namespace nixblock {
 
     mxArray *describe(const nix::Block &block);
 
-    void create_data_array(const extractor &input, infusor &output);
+    void createDataArray(const extractor &input, infusor &output);
 
-    void create_multi_tag(const extractor &input, infusor &output);
+    void createMultiTag(const extractor &input, infusor &output);
 
-    void create_group(const extractor &input, infusor &output);
+    void createGroup(const extractor &input, infusor &output);
 
 } // namespace nixblock
 

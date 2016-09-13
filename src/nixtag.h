@@ -15,15 +15,15 @@ namespace nixtag {
 
     mxArray *describe(const nix::Tag &tag);
 
-    void add_reference(const extractor &input, infusor &output);
+    void addReference(const extractor &input, infusor &output);
 
-    void add_source(const extractor &input, infusor &output);
+    void addSource(const extractor &input, infusor &output);
 
-    void create_feature(const extractor &input, infusor &output);
+    void createFeature(const extractor &input, infusor &output);
 
-    void retrieve_data(const extractor &input, infusor &output);
+    void retrieveData(const extractor &input, infusor &output);
 
-    void retrieve_feature_data(const extractor &input, infusor &output);
+    void retrieveFeatureData(const extractor &input, infusor &output);
 
 } // namespace nixtag
 

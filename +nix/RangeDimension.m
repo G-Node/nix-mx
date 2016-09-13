@@ -30,12 +30,12 @@ classdef RangeDimension < nix.Entity
             if index > 0
                 index = index - 1;
             end
-            func_name = strcat(obj.alias, '::tick_at');
+            func_name = strcat(obj.alias, '::tickAt');
             tickAt = nix_mx(func_name, obj.nix_handle, index);
         end
         
         function indexOf = index_of(obj, position)
-            func_name = strcat(obj.alias, '::index_of');
+            func_name = strcat(obj.alias, '::indexOf');
             indexOf = nix_mx(func_name, obj.nix_handle, position);
         end
 

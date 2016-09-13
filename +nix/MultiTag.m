@@ -143,14 +143,14 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
         function [] = set_extents(obj, add_this)
             if(isempty(add_this))
-                nix_mx('MultiTag::set_none_extents', obj.nix_handle, 0);
+                nix_mx('MultiTag::setNoneExtents', obj.nix_handle, 0);
             else
                 if(strcmp(class(add_this), 'nix.DataArray'))
                     addID = add_this.id;
                 else
                     addID = add_this;
                 end;
-                nix_mx('MultiTag::set_extents', obj.nix_handle, addID);
+                nix_mx('MultiTag::setExtents', obj.nix_handle, addID);
             end;
         end;
 
