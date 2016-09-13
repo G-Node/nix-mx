@@ -11,6 +11,8 @@ namespace nixdimensions {
 
     mxArray *describe(const nix::RangeDimension &dim);
 
+    void sampled_position_at(const extractor &input, infusor &output);
+
     void sampled_axis(const extractor &input, infusor &output);
 
     void range_tick_at(const extractor &input, infusor &output);

@@ -28,7 +28,7 @@ classdef SampledDimension < nix.Entity
                 index = index - 1;
             end
             func_name = strcat(obj.alias, '::position_at');
-            posAt = nix_mx(func_name, obj.nix_handle, uint64(index));
+            posAt = nix_mx(func_name, obj.nix_handle, index);
         end
 
         function axis = axis(obj, count, startIndex)
@@ -43,4 +43,3 @@ classdef SampledDimension < nix.Entity
         end
     end
 end
-   

@@ -41,10 +41,18 @@ namespace nixdimensions {
         return sb.array();
     }
 
+    void sampled_position_at(const extractor &input, infusor &output) {
+        nix::SampledDimension dim = input.entity<nix::SampledDimension>(1);
+        const size_t index = static_cast<size_t>(input.num<double>(2));
+
+        double pos = dim.positionAt(index);
+        output.set(0, pos);
+    }
+
     void sampled_axis(const extractor &input, infusor &output) {
         nix::SampledDimension dim = input.entity<nix::SampledDimension>(1);
-        const mwSize count = static_cast<mwSize>(input.num<double>(2));
-        const mwSize startIndex = static_cast<mwSize>(input.num<double>(3));
+        const size_t count = static_cast<size_t>(input.num<double>(2));
+        const size_t startIndex = static_cast<size_t>(input.num<double>(3));
 
         std::vector<double> a = dim.axis(count, startIndex);
         mxArray *axis = mxCreateDoubleMatrix(1, a.size(), mxREAL);
@@ -55,7 +63,7 @@ namespace nixdimensions {
 
     void range_tick_at(const extractor &input, infusor &output) {
         nix::RangeDimension dim = input.entity<nix::RangeDimension>(1);
-        const mwSize index = static_cast<mwSize>(input.num<double>(2));
+        const size_t index = static_cast<size_t>(input.num<double>(2));
 
         double tick = dim.tickAt(index);
         output.set(0, tick);
@@ -63,8 +71,8 @@ namespace nixdimensions {
 
     void range_axis(const extractor &input, infusor &output) {
         nix::RangeDimension dim = input.entity<nix::RangeDimension>(1);
-        const mwSize count = static_cast<mwSize>(input.num<double>(2));
-        const mwSize startIndex = static_cast<mwSize>(input.num<double>(3));
+        const size_t count = static_cast<size_t>(input.num<double>(2));
+        const size_t startIndex = static_cast<size_t>(input.num<double>(3));
 
         std::vector<double> a = dim.axis(count, startIndex);
         mxArray *axis = mxCreateDoubleMatrix(1, a.size(), mxREAL);
@@ -74,3 +82,4 @@ namespace nixdimensions {
     }
 
 } // namespace nixdimensions
+
