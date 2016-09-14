@@ -1,3 +1,11 @@
+// Copyright (c) 2016, German Neuroinformatics Node (G-Node)
+//
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted under the terms of the BSD License. See
+// LICENSE file in the root of the Project.
+
 #ifndef NIX_MX_GLUE
 #define NIX_MX_GLUE
 
@@ -57,9 +65,9 @@ struct ex_getter < std::function<bool(const Klazz&)> > {
 
 template<typename Klazz>
 struct ex_getter < Klazz, typename std::enable_if<entity_to_id<Klazz>::is_valid>::type > {
-	static Klazz get(const extractor &input, int pos) {
-		return input.entity<Klazz>(pos + 2);
-	}
+    static Klazz get(const extractor &input, int pos) {
+        return input.entity<Klazz>(pos + 2);
+    }
 };
 
 
@@ -170,21 +178,21 @@ struct cons<0, tail...> {
 
 template<typename Klazz, typename Fn, typename return_type>
 struct invoker{
-	template<typename Args, int... I>
-	static void invoke(Fn wrapped, Args &&args, const extractor &input, infusor &output, iseq<I...>) {
-		Klazz entity = input.entity<Klazz>(1);
-		return_type ret = (entity.*wrapped)(matryoshka_get<I>(input, std::forward<Args>(args))...);
-		output.set(0, ret);
-	}
+    template<typename Args, int... I>
+    static void invoke(Fn wrapped, Args &&args, const extractor &input, infusor &output, iseq<I...>) {
+        Klazz entity = input.entity<Klazz>(1);
+        return_type ret = (entity.*wrapped)(matryoshka_get<I>(input, std::forward<Args>(args))...);
+        output.set(0, ret);
+    }
 };
 
 template<typename Klazz, typename Fn>
 struct invoker<Klazz, Fn, void> {
-	template<typename Args, int...I>
-	static void invoke(Fn wrapped, Args &&args, const extractor &input, infusor &output, iseq<I...>) {
-		Klazz entity = input.entity<Klazz>(1);
-		(entity.*wrapped)(matryoshka_get<I>(input, args)...);
-	}
+    template<typename Args, int...I>
+    static void invoke(Fn wrapped, Args &&args, const extractor &input, infusor &output, iseq<I...>) {
+        Klazz entity = input.entity<Klazz>(1);
+        (entity.*wrapped)(matryoshka_get<I>(input, args)...);
+    }
 };
 
 
@@ -195,7 +203,7 @@ template<typename Klazz, typename Fn>
 struct funcbox : box {
     typedef typename vanilla_mptr<Fn>::type vanilla_fn;
     typedef matryoshka<vanilla_fn> matryoshka_t;
-	typedef typename matryoshka_t::return_type fn_ret_t;
+    typedef typename matryoshka_t::return_type fn_ret_t;
 
     template<typename F>
     funcbox(F &&the_function) :
@@ -204,7 +212,7 @@ struct funcbox : box {
     void operator()(const extractor &input, infusor &output) {
         typedef typename cons<matryoshka_t::n_args>::type idx_type;
         //invoke(input, output, idx_type());
-		invoker<Klazz, Fn, fn_ret_t>::invoke(wrapped, args, input, output, idx_type());
+        invoker<Klazz, Fn, fn_ret_t>::invoke(wrapped, args, input, output, idx_type());
     }
 
     template<int... I>
