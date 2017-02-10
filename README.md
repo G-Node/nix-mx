@@ -16,17 +16,17 @@ Getting Started (Windows 32/64)
 **Quick start packages, Beta-Release 1.1.0**
 
 The [quick start packages] (https://github.com/G-Node/nix-mx/releases) are compiled under Windows 32/64 and contain all dlls, binary and Matlab files required to use NIX-MX with the respective Windows OS.
-The included *NIX* dll is a [stable release 1.1.0 build] (https://github.com/G-Node/nix/releases/tag/1.1.0) . To use the packages, unzip them into a folder of your choice and run the `startup.m` script from the root folder. Do not change the file/folder structure.
+The included *NIX* dll is a [stable release 1.2.1 build] (https://github.com/G-Node/nix/releases/tag/1.2.1) . To use the packages, unzip them into a folder of your choice and run the `startup.m` script from the root folder. Do not change the file/folder structure.
 
 The Windows 32 package contains:
 - HDF5 dlls (Release 1.8.14)
-- NIX dll (stable release 1.1.0 build, compiled using BOOST 1.57.0 and CPPUNIT 1.13.2)
-- NIX-MX (Beta-Release 1.1.0, 26.01.2016)
+- NIX dll (stable release 1.2.1 build, compiled using BOOST 1.57.0 and CPPUNIT 1.13.2)
+- NIX-MX (Beta-Release 1.2.0, 10.02.2017)
 
 The Windows 64 package contains:
 - HDF5 dlls (Release 1.8.14)
-- NIX dll (stable release 1.1.0 build, compiled using BOOST 1.57.0 and CPPUNIT 1.13.2)
-- NIX-MX (Beta-Release 1.1.0, 26.01.2016)
+- NIX dll (stable release 1.2.1 build, compiled using BOOST 1.57.0 and CPPUNIT 1.13.2)
+- NIX-MX (Beta-Release 1.2.0, 10.02.2017)
 
 NOTE: there was a small bugfix in examples/Primer.m after the latest release. If you want to use this small tutorial, please replace examples/Primer.m in your extracted quick start package with the corresponding file from the master branch.
 
