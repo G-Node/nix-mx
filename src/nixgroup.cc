@@ -34,6 +34,11 @@ namespace nixgroup {
         currObj.addDataArray(input.str(2));
     }
 
+    void addSource(const extractor &input, infusor & output) {
+        nix::Group currObj = input.entity<nix::Group>(1);
+        currObj.addSource(input.str(2));
+    }
+
     void addTag(const extractor &input, infusor &output) {
         nix::Group currObj = input.entity<nix::Group>(1);
         currObj.addTag(input.str(2));

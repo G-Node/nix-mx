@@ -152,21 +152,29 @@ void mexFunction(int            nlhs,
         classdef<nix::Group>("Group", methods)
             .desc(&nixgroup::describe)
             .reg("dataArrays", FILTER(std::vector<nix::DataArray>, nix::Group, , dataArrays))
+            .reg("sources", FILTER(std::vector<nix::Source>, nix::Group, std::function<bool(const nix::Source &)>, sources))
             .reg("tags", FILTER(std::vector<nix::Tag>, nix::Group, , tags))
             .reg("multiTags", FILTER(std::vector<nix::MultiTag>, nix::Group, , multiTags))
             .reg("hasDataArray", GETBYSTR(bool, nix::Group, hasDataArray))
+            .reg("hasSource", GETBYSTR(bool, nix::Group, hasSource))
             .reg("hasTag", GETBYSTR(bool, nix::Group, hasTag))
             .reg("hasMultiTag", GETBYSTR(bool, nix::Group, hasMultiTag))
             .reg("getDataArray", GETBYSTR(nix::DataArray, nix::Group, getDataArray))
+            .reg("openSource", GETBYSTR(nix::Source, nix::Group, getSource))
             .reg("getTag", GETBYSTR(nix::Tag, nix::Group, getTag))
             .reg("getMultiTag", GETBYSTR(nix::MultiTag, nix::Group, getMultiTag))
+            .reg("openMetadataSection", GETCONTENT(nix::Section, nix::Group, metadata))
+            .reg("setMetadata", SETTER(const std::string&, nix::Group, metadata))
+            .reg("setNoneMetadata", SETTER(const boost::none_t, nix::Group, metadata))
             .reg("removeDataArray", REMOVER(nix::DataArray, nix::Group, removeDataArray))
+            .reg("removeSource", REMOVER(nix::Source, nix::Group, removeSource))
             .reg("removeTag", REMOVER(nix::Tag, nix::Group, removeTag))
             .reg("removeMultiTag", REMOVER(nix::MultiTag, nix::Group, removeMultiTag))
             .reg("setType", SETTER(const std::string&, nix::Group, type))
             .reg("setDefinition", SETTER(const std::string&, nix::Group, definition))
             .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Group, definition));
         methods->add("Group::addDataArray", nixgroup::addDataArray);
+        methods->add("Group::addSource", nixgroup::addSource);
         methods->add("Group::addTag", nixgroup::addTag);
         methods->add("Group::addMultiTag", nixgroup::addMultiTag);
 
