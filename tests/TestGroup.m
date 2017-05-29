@@ -22,6 +22,12 @@ function funcs = TestGroup
     funcs{end+1} = @test_has_multi_tag;
     funcs{end+1} = @test_get_multi_tag;
     funcs{end+1} = @test_remove_multi_tag;
+    funcs{end+1} = @test_add_source;
+    funcs{end+1} = @test_remove_source;
+    funcs{end+1} = @test_fetch_sources;
+    funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_set_metadata;
+    funcs{end+1} = @test_open_metadata;
 end
 
 %% Test: Access nix.Group attributes
@@ -412,4 +418,130 @@ function [] = test_remove_multi_tag( varargin )
     clear t1 t2 t3 da g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(f.blocks{1}.groups{1}.has_multi_tag(tagName3));
+end
+
+
+%% Test: Add sources by entity and id
+function [] = test_add_source ( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.createBlock('sourceTest', 'nixBlock');
+    s = b.create_source('sourceTest', 'nixSource');
+    tmp = s.create_source('nestedSource1', 'nixSource');
+    tmp = s.create_source('nestedSource2', 'nixSource');
+    g = b.create_group('sourceTest', 'nixGroup');
+    
+    assert(isempty(g.sources));
+    assert(isempty(f.blocks{1}.groups{1}.sources));
+    g.add_source(s.sources{1}.id);
+    g.add_source(s.sources{2});
+    assert(size(g.sources, 1) == 2);
+    assert(size(f.blocks{1}.groups{1}.sources, 1) == 2);
+    
+    clear tmp g s b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.groups{1}.sources, 1) == 2);
+end
+
+%% Test: Remove sources by entity and id
+function [] = test_remove_source ( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = test_file.createBlock('test', 'nixBlock');
+    s = b.create_source('test', 'nixSource');
+    tmp = s.create_source('nestedSource1', 'nixSource');
+    tmp = s.create_source('nestedSource2', 'nixSource');
+    g = b.create_group('sourceTest', 'nixGroup');
+    g.add_source(s.sources{1}.id);
+    g.add_source(s.sources{2});
+
+    assert(size(g.sources,1) == 2);
+    g.remove_source(s.sources{2});
+    assert(size(g.sources,1) == 1);
+
+    g.remove_source(s.sources{1}.id);
+    assert(isempty(g.sources));
+
+    assert(g.remove_source('I do not exist'));
+    assert(size(s.sources, 1) == 2);
+end
+
+%% Test: fetch sources
+function [] = test_fetch_sources( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = test_file.createBlock('test', 'nixBlock');
+    s = b.create_source('test','nixSource');
+    tmp = s.create_source('nestedsource1', 'nixSource');
+    tmp = s.create_source('nestedsource2', 'nixSource');
+    tmp = s.create_source('nestedsource3', 'nixSource');
+    g = b.create_group('sourceTest', 'nixGroup');
+
+    g.add_source(s.sources{1});
+    g.add_source(s.sources{2});
+    g.add_source(s.sources{3});
+    assert(size(g.sources, 1) == 3);
+end
+
+%% Test: Open source by ID or name
+function [] = test_open_source( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = test_file.createBlock('test', 'nixBlock');
+    s = b.create_source('test', 'nixSource');
+    sourceName = 'nestedSource';
+    nSource = s.create_source(sourceName, 'nixSource');
+
+    g = b.create_group('sourceTest', 'nixGroup');
+    g.add_source(s.sources{1});
+
+    % -- test get source by ID
+    assert(~isempty(g.open_source(nSource.id)));
+
+    % -- test get source by name
+    assert(~isempty(g.open_source(sourceName)));
+
+    %-- test open non existing source
+    getNonSource = g.open_source('I do not exist');
+    assert(isempty(getNonSource));
+end
+
+
+%% Test: Set metadata, set metadata none
+function [] = test_set_metadata ( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    secName1 = 'testGroupSection1';
+    secName2 = 'testGroupSection2';
+
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    tmp = f.createSection(secName1, 'nixSection');
+    tmp = f.createSection(secName2, 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    assert(isempty(g.open_metadata));
+    assert(isempty(f.blocks{1}.groups{1}.open_metadata))
+    
+    g.set_metadata(f.sections{1});
+    assert(strcmp(g.open_metadata.name, secName1));
+    assert(strcmp(f.blocks{1}.groups{1}.open_metadata.name, secName1));
+
+    g.set_metadata(f.sections{2});
+    assert(strcmp(g.open_metadata.name, secName2));
+    assert(strcmp(f.blocks{1}.groups{1}.open_metadata.name, secName2));
+    g.set_metadata('');
+    assert(isempty(g.open_metadata));
+    assert(isempty(f.blocks{1}.groups{1}.open_metadata));
+
+    g.set_metadata(f.sections{2});
+    clear tmp g b f;
+    f = nix.File(fileName, nix.FileMode.ReadOnly);
+	assert(strcmp(f.blocks{1}.groups{1}.open_metadata.name, secName2));
+end
+
+function [] = test_open_metadata( varargin )
+%% Test: Open metadata
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    tmp = f.createSection('testSection', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    g.set_metadata(f.sections{1});
+
+    assert(strcmp(g.open_metadata.name, 'testSection'));
 end
