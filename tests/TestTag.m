@@ -21,6 +21,7 @@ function funcs = TestTag
     funcs{end+1} = @test_fetch_sources;
     funcs{end+1} = @test_fetch_features;
     funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_open_feature;
     funcs{end+1} = @test_open_reference;
     funcs{end+1} = @test_set_metadata;
@@ -239,6 +240,25 @@ function [] = test_open_source( varargin )
     %-- test open non existing source
     getNonSource = getTag.open_source('I do not exist');
     assert(isempty(getNonSource));
+end
+
+%% Test: nix.Tag has nix.Source by ID or entity
+function [] = test_has_source( varargin )
+    fileName = 'testRW.h5';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('testblock', 'nixBlock');
+    s = b.create_source('sourceTest1', 'nixSource');
+    sID = s.id;
+    position = [1.0 1.2 1.3 15.9];
+    t = b.create_tag('tagTest', 'nixTag', position);
+    t.add_source(b.sources{1});
+
+    assert(~t.has_source('I do not exist'));
+    assert(t.has_source(s));
+
+    clear t s b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.tags{1}.has_source(sID));
 end
 
 

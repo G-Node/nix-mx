@@ -24,6 +24,7 @@ function funcs = TestGroup
     funcs{end+1} = @test_remove_multi_tag;
     funcs{end+1} = @test_add_source;
     funcs{end+1} = @test_remove_source;
+    funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_fetch_sources;
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_set_metadata;
@@ -463,6 +464,25 @@ function [] = test_remove_source ( varargin )
 
     assert(g.remove_source('I do not exist'));
     assert(size(s.sources, 1) == 2);
+end
+
+%% Test: nix.Group has nix.Source by ID, name or entity
+function [] = test_has_source( varargin )
+    fileName = 'testRW.h5';
+    sName = 'sourcetest1';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('testblock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    s = b.create_source(sName, 'nixSource');
+    g.add_source(b.sources{1}.id)
+
+    assert(~g.has_source('I do not exist'));
+    assert(g.has_source(s.id));
+    assert(g.has_source(s));
+
+    clear s g b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.has_source(sName));
 end
 
 %% Test: fetch sources

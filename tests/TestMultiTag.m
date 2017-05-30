@@ -23,6 +23,7 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_fetch_sources;
     funcs{end+1} = @test_fetch_features;
     funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_open_feature;
     funcs{end+1} = @test_open_reference;
     funcs{end+1} = @test_add_positions;
@@ -260,6 +261,25 @@ function [] = test_open_source( varargin )
     %-- test open non existing source
     getSource = getMTag.open_source('I do not exist');
     assert(isempty(getSource));
+end
+
+%% Test: has nix.Source by ID or entity
+function [] = test_has_source( varargin )
+    fileName = 'testRW.h5';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('testblock', 'nixBlock');
+    s = b.create_source('sourceTest1', 'nixSource');
+    sID = s.id;
+    tmp = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
+    t.add_source(b.sources{1});
+
+    assert(~t.has_source('I do not exist'));
+    assert(t.has_source(s));
+
+    clear t tmp s b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.multiTags{1}.has_source(sID));
 end
 
 %% Test: Open feature by ID

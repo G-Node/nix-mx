@@ -22,6 +22,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_write_data_integer;
     funcs{end+1} = @test_add_source;
     funcs{end+1} = @test_remove_source;
+    funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_dimensions;
 end
 
@@ -309,6 +310,24 @@ function [] = test_remove_source ( varargin )
 
     assert(getDataArray.remove_source('I do not exist'));
     assert(size(getSource.sources, 1) == 2);
+end
+
+%% Test: has nix.Source by ID or entity
+function [] = test_has_source( varargin )
+    fileName = 'testRW.h5';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('testblock', 'nixBlock');
+    s = b.create_source('sourceTest1', 'nixSource');
+    sID = s.id;
+    d = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d.add_source(b.sources{1});
+
+    assert(~d.has_source('I do not exist'));
+    assert(d.has_source(s));
+
+    clear d s b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.dataArrays{1}.has_source(sID));
 end
 
 %% Test: Dimensions
