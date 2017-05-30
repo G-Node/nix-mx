@@ -21,6 +21,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_write_data_float;
     funcs{end+1} = @test_write_data_integer;
     funcs{end+1} = @test_add_source;
+    funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_dimensions;
@@ -290,6 +291,27 @@ function [] = test_add_source ( varargin )
     getDataArray.add_source(getSource.sources{1}.id);
     getDataArray.add_source(getSource.sources{2});
     assert(size(getDataArray.sources, 1) == 2);
+end
+
+%% Test: Open source by ID or name
+function [] = test_open_source( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = test_file.createBlock('test', 'nixBlock');
+    s = b.create_source('test', 'nixSource');
+    sourceName = 'nestedSource';
+    nSource = s.create_source(sourceName, 'nixSource');
+
+    d = b.create_data_array('sourceTest', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d.add_source(nSource);
+
+    % -- test get source by ID
+    assert(~isempty(d.open_source(nSource.id)));
+
+    % -- test get source by name
+    assert(~isempty(d.open_source(sourceName)));
+
+    %-- test open non existing source
+    assert(isempty(d.open_source('I do not exist')));
 end
 
 %% Test: Remove sources by entity and id
