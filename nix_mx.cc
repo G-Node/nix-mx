@@ -206,6 +206,7 @@ void mexFunction(int            nlhs,
         methods->add("DataArray::addSource", nixdataarray::addSource);
         // REMOVER for DataArray.removeSource leads to an error, therefore use method->add for now
         methods->add("DataArray::removeSource", nixdataarray::removeSource);
+        methods->add("DataArray::openSource", nixdataarray::getSource);
         methods->add("DataArray::hasSource", nixdataarray::hasSource);
 
         classdef<nix::Source>("Source", methods)
