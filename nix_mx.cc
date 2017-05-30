@@ -206,6 +206,7 @@ void mexFunction(int            nlhs,
         methods->add("DataArray::addSource", nixdataarray::addSource);
         // REMOVER for DataArray.removeSource leads to an error, therefore use method->add for now
         methods->add("DataArray::removeSource", nixdataarray::removeSource);
+        methods->add("DataArray::hasSource", nixdataarray::hasSource);
 
         classdef<nix::Source>("Source", methods)
             .desc(&nixsource::describe)
@@ -228,6 +229,7 @@ void mexFunction(int            nlhs,
             .reg("sources", FILTER(std::vector<nix::Source>, nix::Tag, std::function<bool(const nix::Source &)>, sources))
             .reg("hasReference", GETBYSTR(bool, nix::Tag, hasReference))
             .reg("hasFeature", GETBYSTR(bool, nix::Tag, hasFeature))
+            .reg("hasSource", GETBYSTR(bool, nix::Tag, hasSource))
             .reg("openReferenceDataArray", GETBYSTR(nix::DataArray, nix::Tag, getReference))
             .reg("openFeature", GETBYSTR(nix::Feature, nix::Tag, getFeature))
             .reg("openSource", GETBYSTR(nix::Source, nix::Tag, getSource))
@@ -259,6 +261,7 @@ void mexFunction(int            nlhs,
             .reg("hasPositions", GETCONTENT(bool, nix::MultiTag, hasPositions))
             .reg("hasReference", GETBYSTR(bool, nix::MultiTag, hasReference))
             .reg("hasFeature", GETBYSTR(bool, nix::MultiTag, hasFeature))
+            .reg("hasSource", GETBYSTR(bool, nix::MultiTag, hasSource))
             .reg("openPositions", GETCONTENT(nix::DataArray, nix::MultiTag, positions))
             .reg("openExtents", GETCONTENT(nix::DataArray, nix::MultiTag, extents))
             .reg("openReferences", GETBYSTR(nix::DataArray, nix::MultiTag, getReference))

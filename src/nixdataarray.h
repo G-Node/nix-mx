@@ -19,6 +19,8 @@ namespace nixdataarray {
 
     void removeSource(const extractor &input, infusor &output);
 
+    void hasSource(const extractor &input, infusor &output);
+
     void readAll(const extractor &input, infusor &output);
 
     void writeAll(const extractor &input, infusor &output);
