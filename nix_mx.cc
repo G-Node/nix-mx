@@ -113,7 +113,9 @@ void mexFunction(int            nlhs,
             .reg("openBlock", GETBYSTR(nix::Block, nix::File, getBlock))
             .reg("openSection", GETBYSTR(nix::Section, nix::File, getSection))
             .reg("createBlock", &nix::File::createBlock)
-            .reg("createSection", &nix::File::createSection);
+            .reg("createSection", &nix::File::createSection)
+            .reg("blockCount", GETTER(unsigned long long int, nix::File, blockCount))
+            .reg("sectionCount", GETTER(unsigned long long int, nix::File, sectionCount));
 
         classdef<nix::Block>("Block", methods)
             .desc(&nixblock::describe)

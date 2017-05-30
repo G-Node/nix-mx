@@ -37,6 +37,10 @@ classdef File < nix.Entity
             newBlock = nix.Block(nix_mx('File::createBlock', obj.nix_handle, name, type));
         end;
 
+        function c = blockCount(obj)
+            c = nix_mx('File::blockCount', obj.nix_handle);
+        end
+
         function hasBlock = hasBlock(obj, id_or_name)
             hasBlock = nix_mx('File::hasBlock', obj.nix_handle, id_or_name);
         end;
@@ -58,6 +62,10 @@ classdef File < nix.Entity
         function newSec = createSection(obj, name, type)
             newSec = nix.Section(nix_mx('File::createSection', obj.nix_handle, name, type));
         end;
+
+        function c = sectionCount(obj)
+            c = nix_mx('File::sectionCount', obj.nix_handle);
+        end
 
         function hasSec = hasSection(obj, id_or_name)
             hasSec = nix_mx('File::hasSection', obj.nix_handle, id_or_name);
