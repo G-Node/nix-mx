@@ -76,7 +76,11 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function delCheck = delete_dimensions(obj)
             func_name = strcat(obj.alias, '::deleteDimensions');
             delCheck = nix_mx(func_name, obj.nix_handle);
-        end;
+        end
+
+        function c = dimension_count(obj)
+            c = nix_mx('DataArray::dimensionCount', obj.nix_handle);
+        end
 
         % -----------------
         % Data access methods

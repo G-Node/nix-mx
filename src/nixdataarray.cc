@@ -107,4 +107,9 @@ namespace nixdataarray {
         output.set(0, res);
     }
 
+    void dimensionCount(const extractor &input, infusor &output) {
+        nix::DataArray da = input.entity<nix::DataArray>(1);
+        output.set(0, da.dimensionCount());
+    }
+
 } // namespace nixdataarray

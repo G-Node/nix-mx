@@ -26,6 +26,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_dimensions;
+    funcs{end+1} = @test_dimension_count;
 end
 
 function [] = test_attrs( varargin )
@@ -437,4 +438,29 @@ function [] = test_dimensions( varargin )
     daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest3', ...
         'nix.DataArray', [1 2 3; 2 4 5; 3 6 7]);
     assert(isequal(daAliasWa.shape, [3 3]));
+end
+
+%% Test: Dimension count
+function [] = test_dimension_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    
+    assert(da.dimension_count == 0);
+
+    da.append_set_dimension();
+    assert(da.dimension_count == 1);
+
+    da.append_sampled_dimension(200);
+    assert(da.dimension_count == 2);
+
+    da.delete_dimensions();
+    assert(da.dimension_count == 0);
+
+    da.append_range_dimension([1, 2, 3, 4]);
+
+    clear da b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.dataArrays{1}.dimension_count() == 1);
 end

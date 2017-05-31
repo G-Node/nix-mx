@@ -31,6 +31,8 @@ namespace nixdataarray {
 
     void deleteDimensions(const extractor &input, infusor &output);
 
+    void dimensionCount(const extractor &input, infusor &output);
+
 } // namespace nixdataarray
 
 #endif
