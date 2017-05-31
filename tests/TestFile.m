@@ -15,6 +15,7 @@ function funcs = TestFile
     funcs{end+1} = @test_read_write;
     funcs{end+1} = @test_overwrite;
     funcs{end+1} = @test_is_open;
+    funcs{end+1} = @test_file_mode;
     funcs{end+1} = @test_create_block;
     funcs{end+1} = @test_block_count;
     funcs{end+1} = @test_create_section;
@@ -48,6 +49,21 @@ end
 function [] = test_is_open( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadOnly);
     assert(f.is_open());
+end
+
+%% Test: File is open
+function [] = test_file_mode( varargin )
+    testFile = fullfile(pwd,'tests','testRW.h5');
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.file_mode() == nix.FileMode.ReadOnly);
+
+    clear f;
+    f = nix.File(testFile, nix.FileMode.ReadWrite);
+    assert(f.file_mode() == nix.FileMode.ReadWrite);
+
+    clear f;
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    assert(f.file_mode() == nix.FileMode.Overwrite);
 end
 
 %% Test: Create Block

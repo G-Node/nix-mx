@@ -34,6 +34,10 @@ classdef File < nix.Entity
             check = nix_mx('File::isOpen', obj.nix_handle);
         end
 
+        function mode = file_mode(obj)
+            mode = nix_mx('File::fileMode', obj.nix_handle);
+        end
+
         % ----------------
         % Block methods
         % ----------------

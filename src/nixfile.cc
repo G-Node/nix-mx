@@ -36,6 +36,21 @@ namespace nixfile {
         output.set(0, h);
     }
 
+    void fileMode(const extractor &input, infusor &output) {
+        nix::File currObj = input.entity<nix::File>(1);
+        nix::FileMode mode = currObj.fileMode();
+        uint8_t omode;
+
+        switch (mode) {
+        case nix::FileMode::ReadOnly: omode = 0; break;
+        case nix::FileMode::ReadWrite: omode = 1; break;
+        case nix::FileMode::Overwrite: omode = 2; break;
+        default: throw std::invalid_argument("unknown open mode");
+        }
+
+        output.set(0, omode);
+    }
+
     mxArray *describe(const nix::File &fd) {
         struct_builder sb({ 1 }, { "format", "version", "location", "createdAt", "updatedAt" });
         sb.set(fd.format());
