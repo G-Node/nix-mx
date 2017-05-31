@@ -31,7 +31,7 @@ end
 %% Test: Create Section
 function [] = test_create_section( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.createSection('mainSection', 'nixSection');
+    s = f.create_section('mainSection', 'nixSection');
 
     assert(isempty(s.sections));
     tmp = s.create_section('testSection1', 'nixSection');
@@ -42,7 +42,7 @@ end
 %% Test: Delete Section by entity or ID
 function [] = test_delete_section( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.createSection('mainSection', 'nixSection');
+    s = f.create_section('mainSection', 'nixSection');
     tmp = s.create_section('testSection1', 'nixSection');
     tmp = s.create_section('testSection2', 'nixSection');
 
@@ -105,7 +105,7 @@ end
 function [] = test_section_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    s = f.createSection('mainSection', 'nixSection');
+    s = f.create_section('mainSection', 'nixSection');
 
     assert(s.section_count() == 0);
     tmp = s.create_section('testSection1', 'nixSection');
@@ -121,7 +121,7 @@ end
 function [] = test_attrs( varargin )
 %% Test: Access Attributes / Links
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    s = f.createSection('foo', 'bar');
+    s = f.create_section('foo', 'bar');
 
     assert(~isempty(s.id));
 
@@ -166,7 +166,7 @@ end
 %% Test: Create property by data type
 function [] = test_create_property( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.createSection('mainSection', 'nixSection');
+    s = f.create_section('mainSection', 'nixSection');
 
     tmp = s.create_property('newProperty1', nix.DataType.Double);
     tmp = s.create_property('newProperty2', nix.DataType.Bool);
@@ -178,7 +178,7 @@ end
 %% Test: Create property with value
 function [] = test_create_property_with_value( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.createSection('mainSection', 'nixSection');
+    s = f.create_section('mainSection', 'nixSection');
 
     tmp = s.create_property_with_value('doubleProperty1', [5, 6, 7, 8]);
     assert(strcmp(s.allProperties{end}.name, 'doubleProperty1'));
@@ -244,7 +244,7 @@ end
 %% Test: Delete property by entity, propertyStruct, ID and name
 function [] = test_delete_property( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.createSection('mainSection', 'nixSection');
+    s = f.create_section('mainSection', 'nixSection');
     tmp = s.create_property('newProperty1', nix.DataType.Double);
     tmp = s.create_property('newProperty2', nix.DataType.Bool);
     tmp = s.create_property('newProperty3', nix.DataType.String);
@@ -272,7 +272,7 @@ end
 function [] = test_property_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    s = f.createSection('mainSection', 'nixSection');
+    s = f.create_section('mainSection', 'nixSection');
 
     assert(s.property_count() == 0);
     tmp = s.create_property('newProperty1', nix.DataType.Double);
@@ -287,9 +287,9 @@ end
 %% Test: set, open and remove section link
 function [] = test_link( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    mainSec = f.createSection('mainSection', 'nixSection');
-    tmp = f.createSection('linkSection1', 'nixSection');
-    tmp = f.createSection('linkSection2', 'nixSection');
+    mainSec = f.create_section('mainSection', 'nixSection');
+    tmp = f.create_section('linkSection1', 'nixSection');
+    tmp = f.create_section('linkSection2', 'nixSection');
     
     assert(isempty(mainSec.openLink));
     mainSec.set_link(f.sections{3}.id);

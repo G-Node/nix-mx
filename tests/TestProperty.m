@@ -20,7 +20,7 @@ end
 %% Test: Access Attributes
 function [] = test_attrs( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    s = f.createSection('testSectionProperty', 'nixSection');
+    s = f.create_section('testSectionProperty', 'nixSection');
     p = s.create_property('testProperty1', nix.DataType.String);
 
     assert(~isempty(p.id));
@@ -53,7 +53,7 @@ end
 %% Test: Access values
 function [] = test_values( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.createSection('mainSection', 'nixSection');
+    s = f.create_section('mainSection', 'nixSection');
     currProp = s.create_property_with_value('booleanProperty', {true, false, true});
 
     assert(size(currProp.values, 1) == 3);
@@ -68,7 +68,7 @@ end
 %% Test: Update values
 function [] = test_update_values( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.createSection('mainSection', 'nixSection');
+    s = f.create_section('mainSection', 'nixSection');
 
     %-- test update boolean
     updateBool = s.create_property_with_value('booleanProperty', {true, false, true});
@@ -115,7 +115,7 @@ end
 function [] = test_value_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    s = f.createSection('testSection', 'nixSection');
+    s = f.create_section('testSection', 'nixSection');
     p = s.create_property_with_value('booleanProperty', {true, false, true});
 
     assert(p.value_count() == 3);

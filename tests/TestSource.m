@@ -26,7 +26,7 @@ end
 function [] = test_fetch_sources( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.createBlock('sourcetest', 'nixBlock');
+    b = f.create_block('sourcetest', 'nixBlock');
     s = b.create_source('sourcetest', 'nixSource');
 
     assert(isempty(s.sources));
@@ -47,7 +47,7 @@ end
 function [] = test_open_source( varargin )
 
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('sourcetest', 'nixBlock');
+    getBlock = test_file.create_block('sourcetest', 'nixBlock');
     getSource = getBlock.create_source('sourcetest', 'nixSource');
     assert(isempty(getSource.sources));
 
@@ -68,7 +68,7 @@ end
 function [] = test_source_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.createBlock('testBlock', 'nixBlock');
+    b = f.create_block('testBlock', 'nixBlock');
     s = b.create_source('testSource', 'nixSource');
 
     assert(s.source_count() == 0);
@@ -87,9 +87,9 @@ function [] = test_set_metadata ( varargin )
     secName1 = 'testSection1';
     secName2 = 'testSection2';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    tmp = f.createSection('testSection1', 'nixSection');
-    tmp = f.createSection('testSection2', 'nixSection');
-    b = f.createBlock('testBlock', 'nixBlock');
+    tmp = f.create_section('testSection1', 'nixSection');
+    tmp = f.create_section('testSection2', 'nixSection');
+    b = f.create_block('testBlock', 'nixBlock');
     s = b.create_source('testSource', 'nixSource');
 
     assert(isempty(s.open_metadata));
@@ -116,8 +116,8 @@ end
 %% Test: Open metadata
 function [] = test_open_metadata( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    tmp = f.createSection('testSection', 'nixSection');
-    b = f.createBlock('testBlock', 'nixBlock');
+    tmp = f.create_section('testSection', 'nixSection');
+    b = f.create_block('testBlock', 'nixBlock');
     s = b.create_source('testSource', 'nixSource');
     s.set_metadata(f.sections{1});
 
@@ -127,7 +127,7 @@ end
 %% Test: create source
 function [] = test_create_source ( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('sourcetest', 'nixBlock');
+    getBlock = test_file.create_block('sourcetest', 'nixBlock');
     getSource = getBlock.create_source('sourcetest', 'nixSource');
     assert(isempty(getSource.sources));
 
@@ -140,7 +140,7 @@ end
 %% Test: delete source
 function [] = test_delete_source( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.createBlock('sourcetest', 'nixBlock');
+    getBlock = test_file.create_block('sourcetest', 'nixBlock');
     getSource = getBlock.create_source('sourcetest', 'nixSource');
     assert(isempty(getSource.sources));
 
@@ -155,7 +155,7 @@ end
 function [] = test_attrs( varargin )
 %% Test: Access Attributes
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.createBlock('tagtest', 'test nixBlock');
+    b = f.create_block('tagtest', 'test nixBlock');
     s = b.create_source('sourcetest', 'test nixSource');
 
     assert(~isempty(s.id));
@@ -178,7 +178,7 @@ function [] = test_has_source( varargin )
     fileName = 'testRW.h5';
     sName = 'nestedsource';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.createBlock('testblock', 'nixBlock');
+    b = f.create_block('testblock', 'nixBlock');
     s = b.create_source('sourcetest', 'nixSource');
     nested = s.create_source(sName, 'nixSource');
     nestedID = nested.id;

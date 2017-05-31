@@ -38,24 +38,24 @@ classdef File < nix.Entity
         % Block methods
         % ----------------
 
-        function newBlock = createBlock(obj, name, type)
+        function newBlock = create_block(obj, name, type)
             newBlock = nix.Block(nix_mx('File::createBlock', obj.nix_handle, name, type));
         end;
 
-        function c = blockCount(obj)
+        function c = block_count(obj)
             c = nix_mx('File::blockCount', obj.nix_handle);
         end
 
-        function hasBlock = hasBlock(obj, id_or_name)
+        function hasBlock = has_block(obj, id_or_name)
             hasBlock = nix_mx('File::hasBlock', obj.nix_handle, id_or_name);
         end;
 
-        function retObj = openBlock(obj, id_or_name)
+        function retObj = open_block(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'File::openBlock', id_or_name, @nix.Block);
         end
 
-        function delCheck = deleteBlock(obj, del)
+        function delCheck = delete_block(obj, del)
             delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Block', 'File::deleteBlock');
         end;
@@ -64,24 +64,24 @@ classdef File < nix.Entity
         % Section methods
         % ----------------
 
-        function newSec = createSection(obj, name, type)
+        function newSec = create_section(obj, name, type)
             newSec = nix.Section(nix_mx('File::createSection', obj.nix_handle, name, type));
         end;
 
-        function c = sectionCount(obj)
+        function c = section_count(obj)
             c = nix_mx('File::sectionCount', obj.nix_handle);
         end
 
-        function hasSec = hasSection(obj, id_or_name)
+        function hasSec = has_section(obj, id_or_name)
             hasSec = nix_mx('File::hasSection', obj.nix_handle, id_or_name);
         end;
 
-        function retObj = openSection(obj, id_or_name)
+        function retObj = open_section(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'File::openSection', id_or_name, @nix.Section);
         end
 
-        function delCheck = deleteSection(obj, del)
+        function delCheck = delete_section(obj, del)
             delCheck = nix.Utils.delete_entity(obj, del, 'nix.Section', 'File::deleteSection');
         end;
     end
