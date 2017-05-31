@@ -14,6 +14,7 @@ function funcs = TestFile
     funcs{end+1} = @test_read_only;
     funcs{end+1} = @test_read_write;
     funcs{end+1} = @test_overwrite;
+    funcs{end+1} = @test_is_open;
     funcs{end+1} = @test_create_block;
     funcs{end+1} = @test_block_count;
     funcs{end+1} = @test_create_section;
@@ -41,6 +42,12 @@ end
 %% Test: Open HDF5 file in Overwrite mode
 function [] = test_overwrite( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
+end
+
+%% Test: File is open
+function [] = test_is_open( varargin )
+    f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadOnly);
+    assert(f.is_open());
 end
 
 %% Test: Create Block
