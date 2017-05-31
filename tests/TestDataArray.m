@@ -24,6 +24,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_has_source;
+    funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_dimensions;
 end
 
@@ -350,6 +351,23 @@ function [] = test_has_source( varargin )
     clear d s b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(f.blocks{1}.dataArrays{1}.has_source(sID));
+end
+
+%% Test: Source count
+function [] = test_source_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    
+    assert(d.source_count() == 0);
+    d.add_source(b.create_source('testSource1', 'nixSource'));
+    assert(d.source_count() == 1);
+    d.add_source(b.create_source('testSource2', 'nixSource'));
+    
+    clear d b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.dataArrays{1}.source_count() == 2);
 end
 
 %% Test: Dimensions

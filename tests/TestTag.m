@@ -22,6 +22,7 @@ function funcs = TestTag
     funcs{end+1} = @test_fetch_features;
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_has_source;
+    funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_open_feature;
     funcs{end+1} = @test_open_reference;
     funcs{end+1} = @test_set_metadata;
@@ -261,6 +262,22 @@ function [] = test_has_source( varargin )
     assert(f.blocks{1}.tags{1}.has_source(sID));
 end
 
+%% Test: Source count
+function [] = test_source_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    t = b.create_tag('testTag', 'nixTag', [1.0 1.2]);
+
+    assert(t.source_count() == 0);
+    t.add_source(b.create_source('testSource1', 'nixSource'));
+    assert(t.source_count() == 1);
+    t.add_source(b.create_source('testSource2', 'nixSource'));
+
+    clear t b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.tags{1}.source_count() == 2);
+end
 
 %% Test: Open feature by ID
 function [] = test_open_feature( varargin )

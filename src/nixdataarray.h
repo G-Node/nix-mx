@@ -23,6 +23,8 @@ namespace nixdataarray {
 
     void getSource(const extractor &input, infusor &output);
 
+    void sourceCount(const extractor &input, infusor &output);
+
     void readAll(const extractor &input, infusor &output);
 
     void writeAll(const extractor &input, infusor &output);

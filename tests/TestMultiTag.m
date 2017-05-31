@@ -24,6 +24,7 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_fetch_features;
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_has_source;
+    funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_open_feature;
     funcs{end+1} = @test_open_reference;
     funcs{end+1} = @test_add_positions;
@@ -281,6 +282,24 @@ function [] = test_has_source( varargin )
     clear t tmp s b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(f.blocks{1}.multiTags{1}.has_source(sID));
+end
+
+%% Test: Source count
+function [] = test_source_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', b.dataArrays{1});
+
+    assert(t.source_count() == 0);
+    t.add_source(b.create_source('testSource1', 'nixSource'));
+    assert(t.source_count() == 1);
+    t.add_source(b.create_source('testSource2', 'nixSource'));
+
+    clear t d b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.multiTags{1}.source_count() == 2);
 end
 
 %% Test: Open feature by ID

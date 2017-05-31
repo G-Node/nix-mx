@@ -6,7 +6,7 @@
 % modification, are permitted under the terms of the BSD License. See
 % LICENSE file in the root of the Project.
 
-function funcs = testSource
+function funcs = TestSource
 %TESTSOURCE tests for Source
 %   Detailed explanation goes here
 
@@ -17,6 +17,7 @@ function funcs = testSource
     funcs{end+1} = @test_fetch_sources;
     funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
 end
@@ -61,6 +62,23 @@ function [] = test_open_source( varargin )
     %-- test open non existing source
     getNonSource = getSource.open_source('I dont exist');
     assert(isempty(getNonSource));
+end
+
+%% Test: Source count
+function [] = test_source_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    s = b.create_source('testSource', 'nixSource');
+
+    assert(s.source_count() == 0);
+    s.create_source('testSource1', 'nixSource');
+    assert(s.source_count() == 1);
+    s.create_source('testSource2', 'nixSource');
+
+    clear s b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.sources{1}.source_count() == 2);
 end
 
 %% Test: Set metadata
