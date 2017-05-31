@@ -6,7 +6,7 @@
 % modification, are permitted under the terms of the BSD License. See
 % LICENSE file in the root of the Project.
 
-function funcs = testSection
+function funcs = TestSection
 %TESTFILE % Tests for the nix.Section object
 %   Detailed explanation goes here
 
@@ -17,12 +17,14 @@ function funcs = testSection
     funcs{end+1} = @test_open_section;
     funcs{end+1} = @test_parent;
     funcs{end+1} = @test_has_section;
+    funcs{end+1} = @test_section_count;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_properties;
     funcs{end+1} = @test_create_property;
     funcs{end+1} = @test_create_property_with_value;
     funcs{end+1} = @test_delete_property;
     funcs{end+1} = @test_open_property;
+    funcs{end+1} = @test_property_count;
     funcs{end+1} = @test_link;
 end
 
@@ -32,8 +34,8 @@ function [] = test_create_section( varargin )
     s = f.createSection('mainSection', 'nixSection');
 
     assert(isempty(s.sections));
-    tmp = s.createSection('testSection1', 'nixSection');
-    tmp = s.createSection('testSection2', 'nixSection');
+    tmp = s.create_section('testSection1', 'nixSection');
+    tmp = s.create_section('testSection2', 'nixSection');
     assert(size(s.sections, 1) == 2);
 end
 
@@ -41,15 +43,15 @@ end
 function [] = test_delete_section( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
-    tmp = s.createSection('testSection1', 'nixSection');
-    tmp = s.createSection('testSection2', 'nixSection');
+    tmp = s.create_section('testSection1', 'nixSection');
+    tmp = s.create_section('testSection2', 'nixSection');
 
-    assert(s.deleteSection(s.sections{2}.id));
+    assert(s.delete_section(s.sections{2}.id));
     assert(size(s.sections, 1) == 1);
-    assert(s.deleteSection(s.sections{1}));
+    assert(s.delete_section(s.sections{1}));
     assert(isempty(s.sections));
 
-    assert(~s.deleteSection('I do not exist'));
+    assert(~s.delete_section('I do not exist'));
 end
 
 function [] = test_list_subsections( varargin )
@@ -98,6 +100,23 @@ function [] = test_has_section( varargin )
     assert(root.has_section(child.id));
     assert(~root.has_section('whatever'));
 end
+
+%% Test: Section count
+function [] = test_section_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    s = f.createSection('mainSection', 'nixSection');
+
+    assert(s.section_count() == 0);
+    tmp = s.create_section('testSection1', 'nixSection');
+    assert(s.section_count() == 1);
+    tmp = s.create_section('testSection2', 'nixSection');
+
+    clear tmp s f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.sections{1}.section_count() == 2);
+end
+
 
 function [] = test_attrs( varargin )
 %% Test: Access Attributes / Links
@@ -247,6 +266,22 @@ function [] = test_open_property( varargin )
 
     assert(~isempty(trial.open_property(trial.allProperties{1}.id)));
     assert(~isempty(trial.open_property(trial.allProperties{1}.name)));
+end
+
+%% Test: Property count
+function [] = test_property_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    s = f.createSection('mainSection', 'nixSection');
+
+    assert(s.property_count() == 0);
+    tmp = s.create_property('newProperty1', nix.DataType.Double);
+    assert(s.property_count() == 1);
+    tmp = s.create_property('newProperty2', nix.DataType.Bool);
+
+    clear tmp s f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.sections{1}.property_count() == 2);
 end
 
 %% Test: set, open and remove section link

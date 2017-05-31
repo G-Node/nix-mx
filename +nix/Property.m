@@ -57,6 +57,10 @@ classdef Property < nix.NamedEntity
             dispStr = [dispStr, char(10), 'Attributes like uncertainty or checksum cannot be set at the moment.'];
             disp(dispStr);
         end
+        
+        function c = value_count(obj)
+            c = nix_mx('Property::valueCount', obj.nix_handle);
+        end
     end
 
 end

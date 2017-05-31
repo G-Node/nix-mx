@@ -14,6 +14,7 @@ function funcs = TestProperty
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_update_values;
     funcs{end+1} = @test_values;
+    funcs{end+1} = @test_value_count;
 end
 
 %% Test: Access Attributes
@@ -108,4 +109,22 @@ function [] = test_update_values( varargin )
     updateNewDouble = s.create_property('doubleProperty2', nix.DataType.Double);
     updateNewDouble.values = {val1, val2};
     assert(s.open_property(s.allProperties{end}.id).values{2}.value == val2.value);
+end
+
+%% Test: Value count
+function [] = test_value_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    s = f.createSection('testSection', 'nixSection');
+    p = s.create_property_with_value('booleanProperty', {true, false, true});
+
+    assert(p.value_count() == 3);
+    p.values = {};
+    assert(p.value_count() == 0);
+    p.values = {false};
+
+    clear p s f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    pid = f.sections{1}.allProperties{1}.id;
+    assert(f.sections{1}.open_property(pid).value_count() == 1);
 end

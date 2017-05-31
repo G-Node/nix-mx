@@ -69,12 +69,12 @@ classdef Section < nix.NamedEntity
         % Section methods
         % ----------------
         
-        function newSec = createSection(obj, name, type)
+        function newSec = create_section(obj, name, type)
             newSec = nix.Section(nix_mx('Section::createSection', ...
                 obj.nix_handle, name, type));
         end;
 
-        function delCheck = deleteSection(obj, del)
+        function delCheck = delete_section(obj, del)
             delCheck = nix.Utils.delete_entity(obj, del, ...
                 'nix.Section', 'Section::deleteSection');
         end;
@@ -87,7 +87,11 @@ classdef Section < nix.NamedEntity
         function hs = has_section(obj, id_or_name)
             hs = nix_mx('Section::hasSection', obj.nix_handle, id_or_name);
         end;
-        
+
+        function c = section_count(obj)
+            c = nix_mx('Section::sectionCount', obj.nix_handle);
+        end
+
         % ----------------
         % Property methods
         % ----------------
@@ -137,6 +141,10 @@ classdef Section < nix.NamedEntity
                 p_map(props{i}.name) = cell2mat(props{i}.values);
             end
         end;
+
+        function c = property_count(obj)
+            c = nix_mx('Section::propertyCount', obj.nix_handle);
+        end
 
     end;
 end
