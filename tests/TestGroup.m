@@ -14,14 +14,17 @@ function funcs = TestGroup
     funcs{end+1} = @test_get_data_array;
     funcs{end+1} = @test_remove_data_array;
     funcs{end+1} = @test_update_linked_data_array;
+    funcs{end+1} = @test_data_array_count;
     funcs{end+1} = @test_add_tag;
     funcs{end+1} = @test_has_tag;
     funcs{end+1} = @test_get_tag;
     funcs{end+1} = @test_remove_tag;
+    funcs{end+1} = @test_tag_count;
     funcs{end+1} = @test_add_multi_tag;
     funcs{end+1} = @test_has_multi_tag;
     funcs{end+1} = @test_get_multi_tag;
     funcs{end+1} = @test_remove_multi_tag;
+    funcs{end+1} = @test_multi_tag_count;
     funcs{end+1} = @test_add_source;
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_has_source;
@@ -189,6 +192,23 @@ function [] = test_update_linked_data_array( varargin )
     assert(strcmp(f.blocks{1}.data_array(daName3).definition, upDADefFromBlock));
 end
 
+%% Test: DataArray count
+function [] = test_data_array_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    
+    assert(g.data_array_count() == 0);
+    g.add_data_array(b.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]));
+    assert(g.data_array_count() == 1);
+    g.add_data_array(b.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]));
+
+    clear g b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.groups{1}.data_array_count() == 2);
+end
+
 %% Test: Add nix.Tag by entity or id
 function [] = test_add_tag( varargin )
     fileName = 'testRW.h5';
@@ -291,6 +311,23 @@ function [] = test_remove_tag( varargin )
     clear t1 t2 t3 g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(f.blocks{1}.groups{1}.has_tag(tagName3));
+end
+
+%% Test: Tag count
+function [] = test_tag_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    
+    assert(g.tag_count() == 0);
+    g.add_tag(b.create_tag('testTag1', 'nixTag', [1 2 3]));
+    assert(g.tag_count() == 1);
+    g.add_tag(b.create_tag('testTag2', 'nixTag', [1 2 3]));
+
+    clear g b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.groups{1}.tag_count() == 2);
 end
 
 %% Test: Add nix.MultiTag by entity and id
@@ -420,6 +457,24 @@ function [] = test_remove_multi_tag( varargin )
     clear t1 t2 t3 da g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(f.blocks{1}.groups{1}.has_multi_tag(tagName3));
+end
+
+%% Test: MultiTag count
+function [] = test_multi_tag_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+
+    assert(g.multi_tag_count() == 0);
+    g.add_multi_tag(b.create_multi_tag('testMultiTag1', 'nixMultiTag', da));
+    assert(g.multi_tag_count() == 1);
+    g.add_multi_tag(b.create_multi_tag('testMultiTag2', 'nixMultiTag', da));
+
+    clear da g b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.groups{1}.multi_tag_count() == 2);
 end
 
 

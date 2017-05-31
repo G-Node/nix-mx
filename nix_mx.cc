@@ -180,7 +180,10 @@ void mexFunction(int            nlhs,
             .reg("setType", SETTER(const std::string&, nix::Group, type))
             .reg("setDefinition", SETTER(const std::string&, nix::Group, definition))
             .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Group, definition))
-            .reg("sourceCount", GETTER(unsigned long long int, nix::Group, sourceCount));
+            .reg("sourceCount", GETTER(unsigned long long int, nix::Group, sourceCount))
+            .reg("dataArrayCount", GETTER(unsigned long long int, nix::Group, dataArrayCount))
+            .reg("tagCount", GETTER(unsigned long long int, nix::Group, tagCount))
+            .reg("multiTagCount", GETTER(unsigned long long int, nix::Group, multiTagCount));
         methods->add("Group::addDataArray", nixgroup::addDataArray);
         methods->add("Group::addSource", nixgroup::addSource);
         methods->add("Group::addTag", nixgroup::addTag);
