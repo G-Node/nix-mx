@@ -39,6 +39,11 @@ function funcs = TestBlock
     funcs{end+1} = @test_has_group;
     funcs{end+1} = @test_get_group;
     funcs{end+1} = @test_delete_group;
+    funcs{end+1} = @test_group_count;
+    funcs{end+1} = @test_data_array_count;
+    funcs{end+1} = @test_tag_count;
+    funcs{end+1} = @test_multi_tag_count;
+    funcs{end+1} = @test_source_count;
 end
 
 function [] = test_attrs( varargin )
@@ -584,4 +589,84 @@ function [] = test_delete_group( varargin )
     clear g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(isempty(f.blocks{1}.groups));
+end
+
+%% Test: Group count
+function [] = test_group_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    assert(b.group_count() == 0);
+    g = b.create_group('testGroup', 'nixGroup');
+    assert(b.group_count() == 1);
+    g = b.create_group('testGroup2', 'nixGroup');
+    
+    clear g b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.group_count() == 2);
+end
+
+%% Test: DataArray count
+function [] = test_data_array_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+
+    assert(b.data_array_count() == 0);
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    assert(b.data_array_count() == 1);
+    d = b.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    
+    clear d b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.data_array_count() == 2);
+end
+
+%% Test: Tag count
+function [] = test_tag_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+
+    assert(b.tag_count() == 0);
+    t = b.create_tag('testTag1', 'nixTag', [1.0 1.2 1.3 15.9]);
+    assert(b.tag_count() == 1);
+    t = b.create_tag('testTag2', 'nixTag', [1.0 1.2 1.3 15.9]);
+    
+    clear t b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.tag_count() == 2);
+end
+
+%% Test: MultiTag count
+function [] = test_multi_tag_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    d = b.create_data_array('mTagTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+
+    assert(b.multi_tag_count() == 0);
+    t = b.create_multi_tag('testMultiTag1', 'nixMultiTag', b.dataArrays{1});
+    assert(b.multi_tag_count() == 1);
+    t = b.create_multi_tag('testMultiTag2', 'nixMultiTag', b.dataArrays{1});
+    
+    clear t d b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.multi_tag_count() == 2);
+end
+
+%% Test: Source count
+function [] = test_source_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+
+    assert(b.source_count() == 0);
+    s = b.create_source('testSource1', 'nixSource');
+    assert(b.source_count() == 1);
+    s = b.create_source('testSource2', 'nixSource');
+    
+    clear s b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.source_count() == 2);
 end

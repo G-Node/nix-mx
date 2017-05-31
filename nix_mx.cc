@@ -146,7 +146,12 @@ void mexFunction(int            nlhs,
             .reg("deleteGroup", REMOVER(nix::Group, nix::Block, deleteGroup))
             .reg("setType", SETTER(const std::string&, nix::Block, type))
             .reg("setDefinition", SETTER(const std::string&, nix::Block, definition))
-            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Block, definition));
+            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Block, definition))
+            .reg("sourceCount", GETTER(unsigned long long int, nix::Block, sourceCount))
+            .reg("dataArrayCount", GETTER(unsigned long long int, nix::Block, dataArrayCount))
+            .reg("tagCount", GETTER(unsigned long long int, nix::Block, tagCount))
+            .reg("multiTagCount", GETTER(unsigned long long int, nix::Block, multiTagCount))
+            .reg("groupCount", GETTER(unsigned long long int, nix::Block, groupCount));
         methods->add("Block::createDataArray", nixblock::createDataArray);
         methods->add("Block::createMultiTag", nixblock::createMultiTag);
         methods->add("Block::createGroup", nixblock::createGroup);
