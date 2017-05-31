@@ -17,6 +17,8 @@ namespace nixfile {
 
     void fileMode(const extractor &input, infusor &output);
 
+    void validate(const extractor &input, infusor &output);
+
     mxArray *describe(const nix::File &f);
 
 } // namespace nixfile

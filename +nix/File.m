@@ -38,6 +38,10 @@ classdef File < nix.Entity
             mode = nix_mx('File::fileMode', obj.nix_handle);
         end
 
+        function res = validate(obj)
+            res = nix_mx('File::validate', obj.nix_handle);
+        end
+
         % ----------------
         % Block methods
         % ----------------

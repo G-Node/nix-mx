@@ -16,6 +16,7 @@ function funcs = TestFile
     funcs{end+1} = @test_overwrite;
     funcs{end+1} = @test_is_open;
     funcs{end+1} = @test_file_mode;
+    funcs{end+1} = @test_validate;
     funcs{end+1} = @test_create_block;
     funcs{end+1} = @test_block_count;
     funcs{end+1} = @test_create_section;
@@ -32,28 +33,28 @@ end
 
 %% Test: Open HDF5 file in ReadOnly mode
 function [] = test_read_only( varargin )
-    f = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
+    f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
 end
 
 %% Test: Open HDF5 file in ReadWrite mode
 function [] = test_read_write( varargin )
-    f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadWrite);
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.ReadWrite);
 end
 
 %% Test: Open HDF5 file in Overwrite mode
 function [] = test_overwrite( varargin )
-    f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
 end
 
 %% Test: File is open
 function [] = test_is_open( varargin )
-    f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.ReadOnly);
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.ReadOnly);
     assert(f.is_open());
 end
 
-%% Test: File is open
+%% Test: File mode
 function [] = test_file_mode( varargin )
-    testFile = fullfile(pwd,'tests','testRW.h5');
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.ReadOnly);
     assert(f.file_mode() == nix.FileMode.ReadOnly);
 
@@ -64,6 +65,19 @@ function [] = test_file_mode( varargin )
     clear f;
     f = nix.File(testFile, nix.FileMode.Overwrite);
     assert(f.file_mode() == nix.FileMode.Overwrite);
+end
+
+%% Test: Validate
+function [] = test_validate( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    validation = f.validate();
+
+    assert(validation.ok());
+    assert(~validation.hasErrors());
+    assert(~validation.hasWarnings());
+    assert(~size(validation.errors, 1));
+    assert(~size(validation.warnings, 1));
 end
 
 %% Test: Create Block
