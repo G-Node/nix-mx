@@ -63,6 +63,10 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             data = permute(tmp, length(size(tmp)):-1:1);
         end;
 
+        function c = reference_count(obj)
+            c = nix_mx('Tag::referenceCount', obj.nix_handle);
+        end
+
         % ------------------
         % Features methods
         % ------------------
@@ -99,7 +103,10 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             % data must agree with file & dimensions
             % see mkarray.cc(42)
             data = permute(tmp, length(size(tmp)):-1:1);
-        end;
+        end
 
+        function c = feature_count(obj)
+            c = nix_mx('Tag::featureCount', obj.nix_handle);
+        end
     end;
 end

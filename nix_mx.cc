@@ -262,7 +262,9 @@ void mexFunction(int            nlhs,
             .reg("removeReference", REMOVER(nix::DataArray, nix::Tag, removeReference))
             .reg("removeSource", REMOVER(nix::Source, nix::Tag, removeSource))
             .reg("deleteFeature", REMOVER(nix::Feature, nix::Tag, deleteFeature))
-            .reg("sourceCount", GETTER(unsigned long long int, nix::Tag, sourceCount));
+            .reg("sourceCount", GETTER(unsigned long long int, nix::Tag, sourceCount))
+            .reg("referenceCount", GETTER(unsigned long long int, nix::Tag, referenceCount))
+            .reg("featureCount", GETTER(unsigned long long int, nix::Tag, featureCount));
         methods->add("Tag::retrieveData", nixtag::retrieveData);
         methods->add("Tag::featureRetrieveData", nixtag::retrieveFeatureData);
         methods->add("Tag::addReference", nixtag::addReference);
