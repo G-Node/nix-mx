@@ -298,7 +298,9 @@ void mexFunction(int            nlhs,
             .reg("removeReference", REMOVER(nix::DataArray, nix::MultiTag, removeReference))
             .reg("removeSource", REMOVER(nix::Source, nix::MultiTag, removeSource))
             .reg("deleteFeature", REMOVER(nix::Feature, nix::MultiTag, deleteFeature))
-            .reg("sourceCount", GETTER(unsigned long long int, nix::MultiTag, sourceCount));
+            .reg("sourceCount", GETTER(unsigned long long int, nix::MultiTag, sourceCount))
+            .reg("referenceCount", GETTER(unsigned long long int, nix::MultiTag, referenceCount))
+            .reg("featureCount", GETTER(unsigned long long int, nix::MultiTag, featureCount));
         methods->add("MultiTag::retrieveData", nixmultitag::retrieveData);
         methods->add("MultiTag::featureRetrieveData", nixmultitag::retrieveFeatureData);
         methods->add("MultiTag::addReference", nixmultitag::addReference);
