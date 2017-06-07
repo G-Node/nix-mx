@@ -39,6 +39,11 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'nix.DataArray', 'Tag::addReference');
         end;
 
+        function [] = add_references(obj, add_cell_array)
+            nix.Utils.add_entity_array(obj, add_cell_array, ...
+                'nix.DataArray', strcat(obj.alias, '::addReferences'));
+        end
+
         function hasRef = has_reference(obj, id_or_name)
             hasRef = nix_mx('Tag::hasReference', obj.nix_handle, id_or_name);
         end;
