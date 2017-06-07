@@ -35,6 +35,20 @@ classdef Utils
             nix_mx(mxMethod, obj.nix_handle, addID);
         end;
 
+        function [] = add_entity_array(obj, add_cell_array, nixEntity, mxMethod)
+            if(~iscell(add_cell_array))
+                error('Expected cell array');
+            end
+            handle_array = cell(1, length(add_cell_array));
+            for i = 1:length(add_cell_array)
+                if (~strcmpi(class(add_cell_array{i}), nixEntity))
+                    error(sprintf('Element #%s is not a %s.', num2str(i), nixEntity));
+                end
+                handle_array{i} = add_cell_array{i}.nix_handle;
+            end
+            nix_mx(mxMethod, obj.nix_handle, handle_array);
+        end
+
         % Function can be used for both nix delete and remove methods.
         % The first actually removes the entity, the latter
         % removes only the reference to the entity.
