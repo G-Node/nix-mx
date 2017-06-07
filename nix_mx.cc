@@ -188,9 +188,13 @@ void mexFunction(int            nlhs,
             .reg("tagCount", GETTER(nix::ndsize_t, nix::Group, tagCount))
             .reg("multiTagCount", GETTER(nix::ndsize_t, nix::Group, multiTagCount));
         methods->add("Group::addDataArray", nixgroup::addDataArray);
+        methods->add("Group::addDataArrays", nixgroup::addDataArrays);
         methods->add("Group::addSource", nixgroup::addSource);
+        methods->add("Group::addSources", nixgroup::addSources);
         methods->add("Group::addTag", nixgroup::addTag);
+        methods->add("Group::addTags", nixgroup::addTags);
         methods->add("Group::addMultiTag", nixgroup::addMultiTag);
+        methods->add("Group::addMultiTags", nixgroup::addMultiTags);
 
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)

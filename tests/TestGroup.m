@@ -11,21 +11,25 @@ function funcs = TestGroup
     funcs = {};
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_add_data_array;
+    funcs{end+1} = @test_add_data_arrays;
     funcs{end+1} = @test_get_data_array;
     funcs{end+1} = @test_remove_data_array;
     funcs{end+1} = @test_update_linked_data_array;
     funcs{end+1} = @test_data_array_count;
     funcs{end+1} = @test_add_tag;
+    funcs{end+1} = @test_add_tags;
     funcs{end+1} = @test_has_tag;
     funcs{end+1} = @test_get_tag;
     funcs{end+1} = @test_remove_tag;
     funcs{end+1} = @test_tag_count;
     funcs{end+1} = @test_add_multi_tag;
+    funcs{end+1} = @test_add_multi_tags;
     funcs{end+1} = @test_has_multi_tag;
     funcs{end+1} = @test_get_multi_tag;
     funcs{end+1} = @test_remove_multi_tag;
     funcs{end+1} = @test_multi_tag_count;
     funcs{end+1} = @test_add_source;
+    funcs{end+1} = @test_add_sources;
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_fetch_sources;
@@ -91,6 +95,40 @@ function [] = test_add_data_array( varargin )
     clear g da b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(strcmp(f.blocks{1}.groups{1}.dataArrays{1}.name, daName));
+end
+
+%% Test: Add dataArrays by entity cell array
+function [] = test_add_data_arrays ( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    tmp = b.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [2 3]);
+    tmp = b.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [2 3]);
+    tmp = b.create_data_array('testDataArray3', 'nixDataArray', nix.DataType.Double, [2 3]);
+
+    assert(isempty(g.dataArrays));
+
+    try
+        g.add_data_arrays('hurra');
+    catch ME
+        assert(strcmp(ME.message, 'Expected cell array'));
+    end;
+    assert(isempty(g.dataArrays));
+
+    try
+        g.add_data_arrays({12, 13});
+    catch ME
+        assert(~isempty(strfind(ME.message, 'not a nix.DataArray')));
+    end;
+    assert(isempty(g.dataArrays));
+
+    g.add_data_arrays(b.dataArrays());
+    assert(size(g.dataArrays, 1) == 3);
+
+    clear g tmp b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.groups{1}.dataArrays, 1) == 3);
 end
 
 %% Test: Get nix.DataArray by id or name
@@ -236,6 +274,40 @@ function [] = test_add_tag( varargin )
     assert(strcmp(f.blocks{1}.groups{1}.tags{2}.name, tagName2));
 end
 
+%% Test: Add tags by entity cell array
+function [] = test_add_tags ( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    tmp = b.create_tag('testTag1', 'nixTag', [1.0 1.2]);
+    tmp = b.create_tag('testTag2', 'nixTag', [1.0 1.2]);
+    tmp = b.create_tag('testTag3', 'nixTag', [1.0 1.2]);
+
+    assert(isempty(g.tags));
+
+    try
+        g.add_tags('hurra');
+    catch ME
+        assert(strcmp(ME.message, 'Expected cell array'));
+    end;
+    assert(isempty(g.tags));
+
+    try
+        g.add_tags({12, 13});
+    catch ME
+        assert(~isempty(strfind(ME.message, 'not a nix.Tag')));
+    end;
+    assert(isempty(g.tags));
+
+    g.add_tags(b.tags());
+    assert(size(g.tags, 1) == 3);
+
+    clear g tmp b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.groups{1}.tags, 1) == 3);
+end
+
 %% Test: has nix.Tag by id or name
 function [] = test_has_tag( varargin )
     fileName = 'testRW.h5';
@@ -361,6 +433,42 @@ function [] = test_add_multi_tag( varargin )
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(strcmp(f.blocks{1}.groups{1}.multiTags{1}.name, tagName1));
     assert(strcmp(f.blocks{1}.groups{1}.multiTags{2}.name, tagName2));
+end
+
+%% Test: Add multiTags by entity cell array
+function [] = test_add_multi_tags ( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    tmp = b.create_data_array(...
+        'testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.create_multi_tag('testMultiTag1', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.create_multi_tag('testMultiTag2', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.create_multi_tag('testMultiTag3', 'nixMultiTag', b.dataArrays{1});
+
+    assert(isempty(g.multiTags));
+
+    try
+        g.add_multi_tags('hurra');
+    catch ME
+        assert(strcmp(ME.message, 'Expected cell array'));
+    end;
+    assert(isempty(g.multiTags));
+
+    try
+        g.add_multi_tags({12, 13});
+    catch ME
+        assert(~isempty(strfind(ME.message, 'not a nix.MultiTag')));
+    end;
+    assert(isempty(g.multiTags));
+
+    g.add_multi_tags(b.multiTags());
+    assert(size(g.multiTags, 1) == 3);
+
+    clear g tmp b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.groups{1}.multiTags, 1) == 3);
 end
 
 %% Test: has nix.MultiTag by id or name
@@ -498,6 +606,40 @@ function [] = test_add_source ( varargin )
     clear tmp g s b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
     assert(size(f.blocks{1}.groups{1}.sources, 1) == 2);
+end
+
+%% Test: Add sources by entity cell array
+function [] = test_add_sources ( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    g = b.create_group('sourceTest', 'nixGroup');
+    tmp = b.create_source('testSource1', 'nixSource');
+    tmp = b.create_source('testSource2', 'nixSource');
+    tmp = b.create_source('testSource3', 'nixSource');
+
+    assert(isempty(g.sources));
+
+    try
+        g.add_sources('hurra');
+    catch ME
+        assert(strcmp(ME.message, 'Expected cell array'));
+    end;
+    assert(isempty(g.sources));
+
+    try
+        g.add_sources({12, 13});
+    catch ME
+        assert(~isempty(strfind(ME.message, 'not a nix.Source')));
+    end;
+    assert(isempty(g.sources));
+
+    g.add_sources(b.sources());
+    assert(size(g.sources, 1) == 3);
+
+    clear g tmp b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.groups{1}.sources, 1) == 3);
 end
 
 %% Test: Remove sources by entity and id
