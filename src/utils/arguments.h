@@ -103,6 +103,40 @@ public:
         return hdl(pos).get<T>();
     }
 
+    template<typename T>
+    std::vector<T> entity_vec(size_t pos) const {
+
+        const mxArray *arr = array[pos];
+        std::vector<T> entities;
+        const mxArray *cell_element_ptr;
+
+        if (mxGetClassID(arr) == mxCELL_CLASS) {
+            mwSize size = mxGetNumberOfElements(arr);
+
+            for (mwIndex index = 0; index < size; index++)  {
+                cell_element_ptr = mxGetCell(arr, index);
+                check_arg_type(cell_element_ptr, nix::to_data_type<uint64_t>::value);
+
+                if (mxGetNumberOfElements(cell_element_ptr) < 1) {
+                    throw std::runtime_error("array empty");
+                }
+
+                // fetch entity handle via address
+                const void *data = mxGetData(cell_element_ptr);
+                uint64_t res;
+                memcpy(&res, data, sizeof(uint64_t));
+                handle h = handle(res);
+
+                // add entity via handle to vector
+                entities.push_back(h.get<T>());
+            }
+        } else {
+            throw std::invalid_argument("Expected cell array");
+        }
+
+        return entities;
+    }
+
     handle hdl(size_t pos) const {
         handle h = handle(num<uint64_t>(pos));
         return h;
