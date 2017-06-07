@@ -17,6 +17,8 @@ namespace nixdataarray {
 
     void addSource(const extractor &input, infusor &output);
 
+    void addSources(const extractor &input, infusor &output);
+
     void removeSource(const extractor &input, infusor &output);
 
     void hasSource(const extractor &input, infusor &output);

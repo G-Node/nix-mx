@@ -40,6 +40,12 @@ namespace nixdataarray {
         currObj.addSource(input.str(2));
     }
 
+    void addSources(const extractor &input, infusor &output) {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        std::vector<nix::Source> sv = input.entity_vec<nix::Source>(2);
+        currObj.sources(sv);
+    }
+
     void removeSource(const extractor &input, infusor &output) {
         nix::DataArray currObj = input.entity<nix::DataArray>(1);
         output.set(0, currObj.removeSource(input.str(2)));
