@@ -12,8 +12,10 @@ function funcs = TestMultiTag
 
     funcs = {};
     funcs{end+1} = @test_add_source;
+    funcs{end+1} = @test_add_sources;
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_add_reference;
+    funcs{end+1} = @test_add_references;
     funcs{end+1} = @test_has_reference;
     funcs{end+1} = @test_remove_reference;
     funcs{end+1} = @test_add_feature;
@@ -68,6 +70,41 @@ function [] = test_add_source ( varargin )
     assert(size(f.blocks{1}.multiTags{1}.sources, 1) == 2);
 end
 
+%% Test: Add sources by entity cell array
+function [] = test_add_sources ( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    tmp = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.create_source('testSource1', 'nixSource');
+    tmp = b.create_source('testSource2', 'nixSource');
+    tmp = b.create_source('testSource3', 'nixSource');
+
+    assert(isempty(t.sources));
+
+    try
+        t.add_sources('hurra');
+    catch ME
+        assert(strcmp(ME.message, 'Expected cell array'));
+    end;
+    assert(isempty(t.sources));
+
+    try
+        t.add_sources({12, 13});
+    catch ME
+        assert(~isempty(strfind(ME.message, 'not a nix.Source')));
+    end;
+    assert(isempty(t.sources));
+
+    t.add_sources(b.sources());
+    assert(size(t.sources, 1) == 3);
+
+    clear t tmp b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.multiTags{1}.sources, 1) == 3);
+end
+
 %% Test: Remove sources by entity and id
 function [] = test_remove_source ( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
@@ -117,6 +154,40 @@ function [] = test_add_reference ( varargin )
     clear tmp mTag b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
     assert(size(f.blocks{1}.multiTags{1}.references, 1) == 2);
+end
+
+%% Test: Add references by entity cell array
+function [] = test_add_references ( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    tmp = b.create_data_array('referenceTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.create_multi_tag('referencetest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.create_data_array('referenceTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
+    tmp = b.create_data_array('referenceTest3', 'nixDataArray', nix.DataType.Double, [3 4]);
+
+    assert(isempty(t.references));
+
+    try
+        t.add_references('hurra');
+    catch ME
+        assert(strcmp(ME.message, 'Expected cell array'));
+    end;
+    assert(isempty(t.references));
+
+    try
+        t.add_references({12, 13});
+    catch ME
+        assert(~isempty(strfind(ME.message, 'not a nix.DataArray')));
+    end;
+    assert(isempty(t.references));
+
+    t.add_references(b.dataArrays);
+    assert(size(t.references, 1) == 3);
+
+    clear t tmp b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.multiTags{1}.references, 1) == 3);
 end
 
 %% Test: Remove references by entity and id
