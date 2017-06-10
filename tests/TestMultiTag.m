@@ -23,6 +23,7 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_fetch_sources;
     funcs{end+1} = @test_fetch_features;
     funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_open_feature;
     funcs{end+1} = @test_open_reference;
     funcs{end+1} = @test_add_positions;
@@ -34,6 +35,7 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_retrieve_data;
     funcs{end+1} = @test_retrieve_feature_data;
     funcs{end+1} = @test_set_units;
+    funcs{end+1} = @test_attrs;
 end
 
 %% Test: Add sources by entity and id
@@ -260,6 +262,25 @@ function [] = test_open_source( varargin )
     %-- test open non existing source
     getSource = getMTag.open_source('I do not exist');
     assert(isempty(getSource));
+end
+
+%% Test: has nix.Source by ID or entity
+function [] = test_has_source( varargin )
+    fileName = 'testRW.h5';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('testblock', 'nixBlock');
+    s = b.create_source('sourceTest1', 'nixSource');
+    sID = s.id;
+    tmp = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
+    t.add_source(b.sources{1});
+
+    assert(~t.has_source('I do not exist'));
+    assert(t.has_source(s));
+
+    clear t tmp s b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.multiTags{1}.has_source(sID));
 end
 
 %% Test: Open feature by ID
@@ -519,4 +540,37 @@ function [] = test_set_units( varargin )
     clear t da b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(isequal(f.blocks{1}.multiTags{1}.units, newUnits));
+end
+
+%% Test: Read and write nix.MultiTag attributes
+function [] = test_attrs( varargin )
+    fileName = 'testRW.h5';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    tmp = b.create_data_array('attributeTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', b.dataArrays{1});
+
+    testType = 'setType';
+    testDefinition = 'definition';
+
+    assert(~isempty(t.id));
+    assert(strcmp(t.name, 'testMultiTag'));
+    assert(strcmp(t.type, 'nixMultiTag'));
+
+    % test set type
+    t.type = testType;
+    assert(strcmp(t.type, testType));
+
+    % test set definition
+    assert(isempty(t.definition));
+    t.definition = testDefinition;
+    assert(strcmp(t.definition, testDefinition));
+
+    % test set definition none
+    t.definition = '';
+    assert(isempty(t.definition));
+
+    clear t tmp b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(isequal(f.blocks{1}.multiTags{1}.type, testType));
 end

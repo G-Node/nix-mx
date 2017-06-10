@@ -45,6 +45,16 @@ namespace nixdataarray {
         output.set(0, currObj.removeSource(input.str(2)));
     }
 
+    void hasSource(const extractor &input, infusor &output) {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        output.set(0, currObj.hasSource(input.str(2)));
+    }
+
+    void getSource(const extractor &input, infusor &output) {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        output.set(0, currObj.getSource(input.str(2)));
+    }
+
     void readAll(const extractor &input, infusor &output) {
         nix::DataArray da = input.entity<nix::DataArray>(1);
         mxArray *data = make_mx_array_from_ds(da);

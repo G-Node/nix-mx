@@ -13,27 +13,37 @@ classdef SourcesMixIn < handle
     properties (Abstract, Hidden)
         alias
     end
-    
+
     methods
         function obj = SourcesMixIn()
             nix.Dynamic.add_dyn_relation(obj, 'sources', @nix.Source);
         end
         
+        % has_source supports only check by id, not by name
+        function ret = has_source(obj, id_or_entity)
+            has = id_or_entity;
+            if(strcmp(class(has), 'nix.Source'))
+            	has = id_or_entity.id;
+            end;
+            ret = nix_mx(strcat(obj.alias, '::hasSource'), ...
+                            obj.nix_handle, has);
+        end
+
         function [] = add_source(obj, add_this)
             nix.Utils.add_entity(obj, add_this, ...
                 'nix.Source', strcat(obj.alias, '::addSource'));
-        end;
+        end
 
         function delCheck = remove_source(obj, del)
             delCheck = nix.Utils.delete_entity(obj, del, ...
                 'nix.Source', strcat(obj.alias, '::removeSource'));
-        end;
+        end
 
         function retObj = open_source(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 strcat(obj.alias, '::openSource'), id_or_name, ...
                 @nix.Source);
-        end;
+        end
     end
-    
+
 end

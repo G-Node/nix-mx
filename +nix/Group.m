@@ -6,7 +6,7 @@
 % modification, are permitted under the terms of the BSD License. See
 % LICENSE file in the root of the Project.
 
-classdef Group < nix.NamedEntity
+classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
     %Group nix Group object
 
     properties (Hidden)
@@ -17,7 +17,9 @@ classdef Group < nix.NamedEntity
     methods
         function obj = Group(h)
             obj@nix.NamedEntity(h);
-            
+            obj@nix.MetadataMixIn();
+            obj@nix.SourcesMixIn();
+
             % assign relations
             nix.Dynamic.add_dyn_relation(obj, 'dataArrays', @nix.DataArray);
             nix.Dynamic.add_dyn_relation(obj, 'tags', @nix.Tag);

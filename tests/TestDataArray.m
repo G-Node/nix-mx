@@ -21,7 +21,9 @@ function funcs = TestDataArray
     funcs{end+1} = @test_write_data_float;
     funcs{end+1} = @test_write_data_integer;
     funcs{end+1} = @test_add_source;
+    funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_remove_source;
+    funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_dimensions;
 end
 
@@ -291,6 +293,27 @@ function [] = test_add_source ( varargin )
     assert(size(getDataArray.sources, 1) == 2);
 end
 
+%% Test: Open source by ID or name
+function [] = test_open_source( varargin )
+    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = test_file.createBlock('test', 'nixBlock');
+    s = b.create_source('test', 'nixSource');
+    sourceName = 'nestedSource';
+    nSource = s.create_source(sourceName, 'nixSource');
+
+    d = b.create_data_array('sourceTest', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d.add_source(nSource);
+
+    % -- test get source by ID
+    assert(~isempty(d.open_source(nSource.id)));
+
+    % -- test get source by name
+    assert(~isempty(d.open_source(sourceName)));
+
+    %-- test open non existing source
+    assert(isempty(d.open_source('I do not exist')));
+end
+
 %% Test: Remove sources by entity and id
 function [] = test_remove_source ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
@@ -309,6 +332,24 @@ function [] = test_remove_source ( varargin )
 
     assert(getDataArray.remove_source('I do not exist'));
     assert(size(getSource.sources, 1) == 2);
+end
+
+%% Test: has nix.Source by ID or entity
+function [] = test_has_source( varargin )
+    fileName = 'testRW.h5';
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
+    b = f.createBlock('testblock', 'nixBlock');
+    s = b.create_source('sourceTest1', 'nixSource');
+    sID = s.id;
+    d = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d.add_source(b.sources{1});
+
+    assert(~d.has_source('I do not exist'));
+    assert(d.has_source(s));
+
+    clear d s b f;
+    f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.dataArrays{1}.has_source(sID));
 end
 
 %% Test: Dimensions
