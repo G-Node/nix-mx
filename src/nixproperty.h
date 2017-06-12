@@ -21,6 +21,8 @@ namespace nixproperty {
 
     void deleteValues(const extractor &input, infusor &output);
 
+    void compare(const extractor &input, infusor &output);
+
 } // namespace nixproperty
 
 #endif

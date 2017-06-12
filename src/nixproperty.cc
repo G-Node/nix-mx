@@ -69,4 +69,10 @@ namespace nixproperty {
         prop.deleteValues();
     }
 
+    void compare(const extractor &input, infusor &output) {
+        nix::Property pm = input.entity<nix::Property>(1);
+        nix::Property pc = input.entity<nix::Property>(2);
+        output.set(0, pm.compare(pc));
+    }
+
 } // namespace nixproperty

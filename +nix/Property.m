@@ -65,6 +65,16 @@ classdef Property < nix.NamedEntity
         function [] = values_delete(obj)
             nix_mx('Property::deleteValues', obj.nix_handle);
         end
+        
+        % return value 0 means name and id of two properties are
+        % identical, any other value means either name or id differ.
+        function cmp_val = compare(obj, property)
+            if (~strcmp(class(property), class(obj)))
+               error('Function only supports comparison of Properties.');
+            end
+            cmp_val = nix_mx('Property::compare', obj.nix_handle, property.nix_handle);
+        end
+
     end
 
 end

@@ -367,6 +367,7 @@ void mexFunction(int            nlhs,
         methods->add("Property::values", nixproperty::values);
         methods->add("Property::updateValues", nixproperty::updateValues);
         methods->add("Property::deleteValues", nixproperty::deleteValues);
+        methods->add("Property::compare", nixproperty::compare);
 
         classdef<nix::SetDimension>("SetDimension", methods)
             .desc(&nixdimensions::describe)
