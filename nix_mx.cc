@@ -362,9 +362,11 @@ void mexFunction(int            nlhs,
             .reg("setNoneUnit", SETTER(const boost::none_t, nix::Property, unit))
             .reg("setMapping", SETTER(const std::string&, nix::Property, mapping))
             .reg("setNoneMapping", SETTER(const boost::none_t, nix::Property, mapping))
-            .reg("valueCount", GETTER(nix::ndsize_t, nix::Property, valueCount));
+            .reg("valueCount", GETTER(nix::ndsize_t, nix::Property, valueCount))
+            .reg("setNoneValue", SETTER(const boost::none_t, nix::Property, values));
         methods->add("Property::values", nixproperty::values);
         methods->add("Property::updateValues", nixproperty::updateValues);
+        methods->add("Property::deleteValues", nixproperty::deleteValues);
 
         classdef<nix::SetDimension>("SetDimension", methods)
             .desc(&nixdimensions::describe)

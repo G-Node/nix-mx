@@ -64,4 +64,9 @@ namespace nixproperty {
         prop.values(getVals);
     }
 
+    void deleteValues(const extractor &input, infusor &output) {
+        nix::Property prop = input.entity<nix::Property>(1);
+        prop.deleteValues();
+    }
+
 } // namespace nixproperty

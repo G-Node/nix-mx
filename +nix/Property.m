@@ -61,6 +61,10 @@ classdef Property < nix.NamedEntity
         function c = value_count(obj)
             c = nix_mx('Property::valueCount', obj.nix_handle);
         end
+
+        function [] = values_delete(obj)
+            nix_mx('Property::deleteValues', obj.nix_handle);
+        end
     end
 
 end

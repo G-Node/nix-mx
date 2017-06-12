@@ -15,6 +15,7 @@ function funcs = TestProperty
     funcs{end+1} = @test_update_values;
     funcs{end+1} = @test_values;
     funcs{end+1} = @test_value_count;
+    funcs{end+1} = @test_values_delete;
 end
 
 %% Test: Access Attributes
@@ -127,4 +128,20 @@ function [] = test_value_count( varargin )
     f = nix.File(testFile, nix.FileMode.ReadOnly);
     pid = f.sections{1}.allProperties{1}.id;
     assert(f.sections{1}.open_property(pid).value_count() == 1);
+end
+
+%% Test: Delete values
+function [] = test_values_delete( varargin )
+    testFile = fullfile(pwd,'tests','testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    s = f.create_section('testSection', 'nixSection');
+
+    p = s.create_property_with_value('property1', {true, false, true});
+    assert(~isempty(p.values));
+    p.values_delete();
+    assert(isempty(p.values));
+
+    clear p s f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(isempty(f.sections{1}.allProperties{1}.values));
 end
