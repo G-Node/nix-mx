@@ -243,6 +243,7 @@ void mexFunction(int            nlhs,
             .reg("setType", SETTER(const std::string&, nix::Source, type))
             .reg("setDefinition", SETTER(const std::string&, nix::Source, definition))
             .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Source, definition))
+            .reg("parentSource", GETTER(nix::Source, nix::Source, parentSource))
             .reg("sourceCount", GETTER(nix::ndsize_t, nix::Source, sourceCount));
 
         classdef<nix::Tag>("Tag", methods)

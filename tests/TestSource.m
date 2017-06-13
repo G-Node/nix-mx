@@ -18,6 +18,7 @@ function funcs = TestSource
     funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_source_count;
+    funcs{end+1} = @test_parent_source;
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
 end
@@ -189,4 +190,19 @@ function [] = test_has_source( varargin )
     clear nested s b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(f.blocks{1}.sources{1}.has_source(nestedID));
+end
+
+%% Test: Get parent source
+function [] = test_parent_source( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('sourcetest', 'nixBlock');
+    sourceName1 = 'testSource1';
+    sourceName2 = 'testSource2';
+    s1 = b.create_source(sourceName1, 'nixSource');
+    s2 = s1.create_source(sourceName2, 'nixSource');
+    s3 = s2.create_source('testSource3', 'nixSource');
+
+    assert(strcmp(s3.parent_source.name, sourceName2));
+    assert(strcmp(s2.parent_source.name, sourceName1));
 end
