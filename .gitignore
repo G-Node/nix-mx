@@ -8,3 +8,7 @@ build/
 
 # test sample files
 tests/*.h5
+
+# library files
+*.dll
+*.mex*
