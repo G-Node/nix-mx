@@ -53,5 +53,10 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
             retObj = nix.Utils.fetchObj('Source::parentSource', ...
                 obj.nix_handle, @nix.Source);
         end
+
+        function retObj = referring_data_arrays(obj)
+            retObj = nix.Utils.fetchObjList('Source::referringDataArrays', ...
+                obj.nix_handle, @nix.DataArray);
+        end
     end;
 end

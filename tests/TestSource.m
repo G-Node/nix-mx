@@ -21,6 +21,7 @@ function funcs = TestSource
     funcs{end+1} = @test_parent_source;
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
+    funcs{end+1} = @test_referring_data_arrays;
 end
 
 %% Test: fetch sources
@@ -205,4 +206,23 @@ function [] = test_parent_source( varargin )
 
     assert(strcmp(s3.parent_source.name, sourceName2));
     assert(strcmp(s2.parent_source.name, sourceName1));
+end
+
+%% Test: Referring data arrays
+function [] = test_referring_data_arrays( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    s = b.create_source('testSource', 'nixSource');
+
+    assert(isempty(s.referring_data_arrays));
+
+    d1 = b.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d1.add_source(s);
+    assert(~isempty(s.referring_data_arrays));
+    assert(strcmp(s.referring_data_arrays{1}.name, d1.name));
+
+    d2 = b.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d2.add_source(s);
+    assert(size(s.referring_data_arrays, 1) == 2);
 end
