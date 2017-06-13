@@ -63,7 +63,11 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             % see mkarray.cc(42)
             data = permute(tmp, length(size(tmp)):-1:1);
         end;
-        
+
+        function c = reference_count(obj)
+            c = nix_mx('MultiTag::referenceCount', obj.nix_handle);
+        end
+
         % ------------------
         % Features methods
         % ------------------
@@ -104,6 +108,10 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             data = permute(tmp, length(size(tmp)):-1:1);
         end;
         
+        function c = feature_count(obj)
+            c = nix_mx('MultiTag::featureCount', obj.nix_handle);
+        end
+
         % ------------------
         % Positions methods
         % ------------------

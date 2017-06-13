@@ -30,6 +30,10 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % DataArray methods
         % -----------------
 
+        function c = data_array_count(obj)
+            c = nix_mx('Group::dataArrayCount', obj.nix_handle);
+        end
+
         function hasDataArray = has_data_array(obj, id_or_name)
             hasDataArray = nix_mx('Group::hasDataArray', ...
                 obj.nix_handle, id_or_name);
@@ -73,6 +77,10 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'nix.Tag', 'Group::removeTag');
         end;
 
+        function c = tag_count(obj)
+            c = nix_mx('Group::tagCount', obj.nix_handle);
+        end
+
         % -----------------
         % MultiTag methods
         % -----------------
@@ -95,7 +103,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function delCheck = remove_multi_tag(obj, del)
             delCheck = nix.Utils.delete_entity(obj, del, ...
                 'nix.MultiTag', 'Group::removeMultiTag');
-        end;
+        end
+
+        function c = multi_tag_count(obj)
+            c = nix_mx('Group::multiTagCount', obj.nix_handle);
+        end
     end;
 
 end

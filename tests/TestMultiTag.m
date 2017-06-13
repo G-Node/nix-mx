@@ -24,8 +24,11 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_fetch_features;
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_has_source;
+    funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_open_feature;
     funcs{end+1} = @test_open_reference;
+    funcs{end+1} = @test_feature_count;
+    funcs{end+1} = @test_reference_count;
     funcs{end+1} = @test_add_positions;
     funcs{end+1} = @test_has_positions;
     funcs{end+1} = @test_open_positions;
@@ -283,6 +286,24 @@ function [] = test_has_source( varargin )
     assert(f.blocks{1}.multiTags{1}.has_source(sID));
 end
 
+%% Test: Source count
+function [] = test_source_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', b.dataArrays{1});
+
+    assert(t.source_count() == 0);
+    t.add_source(b.create_source('testSource1', 'nixSource'));
+    assert(t.source_count() == 1);
+    t.add_source(b.create_source('testSource2', 'nixSource'));
+
+    clear t d b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.multiTags{1}.source_count() == 2);
+end
+
 %% Test: Open feature by ID
 function [] = test_open_feature( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
@@ -318,6 +339,44 @@ function [] = test_open_reference( varargin )
     %-- test open non existing reference
     getRef = getMTag.open_reference('I do not exist');
     assert(isempty(getRef));
+end
+
+%% Test: Feature count
+function [] = test_feature_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', da);
+
+    assert(t.feature_count() == 0);
+    t.add_feature(b.create_data_array('testDataArray1', 'nixDataArray', ...
+        nix.DataType.Double, [1 2]), nix.LinkType.Tagged);
+    assert(t.feature_count() == 1);
+    t.add_feature(b.create_data_array('testDataArray2', 'nixDataArray', ...
+        nix.DataType.Double, [3 4]), nix.LinkType.Tagged);
+
+    clear t da b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.multiTags{1}.feature_count() == 2);
+end
+
+%% Test: Reference count
+function [] = test_reference_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', da);
+
+    assert(t.reference_count() == 0);
+    t.add_reference(b.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]));
+    assert(t.reference_count() == 1);
+    t.add_reference(b.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]));
+    
+    clear t da b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.multiTags{1}.reference_count() == 2);
 end
 
 %% Test: Add positions by entity and id

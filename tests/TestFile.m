@@ -6,7 +6,7 @@
 % modification, are permitted under the terms of the BSD License. See
 % LICENSE file in the root of the Project.
 
-function funcs = testFile
+function funcs = TestFile
 %TESTFILE tests for File
 %   Detailed explanation goes here
 
@@ -15,7 +15,9 @@ function funcs = testFile
     funcs{end+1} = @test_read_write;
     funcs{end+1} = @test_overwrite;
     funcs{end+1} = @test_create_block;
+    funcs{end+1} = @test_block_count;
     funcs{end+1} = @test_create_section;
+    funcs{end+1} = @test_section_count;
     funcs{end+1} = @test_fetch_block;
     funcs{end+1} = @test_fetch_section;
     funcs{end+1} = @test_open_section;
@@ -24,7 +26,6 @@ function funcs = testFile
     funcs{end+1} = @test_delete_section;
     funcs{end+1} = @test_has_block;
     funcs{end+1} = @test_has_section;
-
 end
 
 %% Test: Open HDF5 file in ReadOnly mode
@@ -50,12 +51,40 @@ function [] = test_create_block( varargin )
     assert(strcmp(newBlock.name(), useName));
 end
 
+%% Test: Block Count
+function [] = test_block_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    assert(f.blockCount() == 0);
+    b = f.createBlock('testBlock 1', 'testType 1');
+    assert(f.blockCount() == 1);
+    b = f.createBlock('testBlock 2', 'testType 2');
+
+    clear b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blockCount() == 2);
+end
+
 %% Test: Create Section
 function [] = test_create_section( varargin )
     test_file = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     useName = 'testSection 1';
     newSection = test_file.createSection(useName, 'testType 1');
     assert(strcmp(newSection.name(), useName));
+end
+
+%% Test: Section Count
+function [] = test_section_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    assert(f.sectionCount() == 0);
+    b = f.createSection('testSection 1', 'testType 1');
+    assert(f.sectionCount() == 1);
+    b = f.createSection('testSection 2', 'testType 2');
+
+    clear b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.sectionCount() == 2);
 end
 
 %% Test: Fetch Block

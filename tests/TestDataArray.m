@@ -24,7 +24,9 @@ function funcs = TestDataArray
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_has_source;
+    funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_dimensions;
+    funcs{end+1} = @test_dimension_count;
 end
 
 function [] = test_attrs( varargin )
@@ -352,6 +354,23 @@ function [] = test_has_source( varargin )
     assert(f.blocks{1}.dataArrays{1}.has_source(sID));
 end
 
+%% Test: Source count
+function [] = test_source_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    
+    assert(d.source_count() == 0);
+    d.add_source(b.create_source('testSource1', 'nixSource'));
+    assert(d.source_count() == 1);
+    d.add_source(b.create_source('testSource2', 'nixSource'));
+    
+    clear d b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.dataArrays{1}.source_count() == 2);
+end
+
 %% Test: Dimensions
 function [] = test_dimensions( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
@@ -419,4 +438,29 @@ function [] = test_dimensions( varargin )
     daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest3', ...
         'nix.DataArray', [1 2 3; 2 4 5; 3 6 7]);
     assert(isequal(daAliasWa.shape, [3 3]));
+end
+
+%% Test: Dimension count
+function [] = test_dimension_count( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.createBlock('testBlock', 'nixBlock');
+    da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    
+    assert(da.dimension_count == 0);
+
+    da.append_set_dimension();
+    assert(da.dimension_count == 1);
+
+    da.append_sampled_dimension(200);
+    assert(da.dimension_count == 2);
+
+    da.delete_dimensions();
+    assert(da.dimension_count == 0);
+
+    da.append_range_dimension([1, 2, 3, 4]);
+
+    clear da b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(f.blocks{1}.dataArrays{1}.dimension_count() == 1);
 end

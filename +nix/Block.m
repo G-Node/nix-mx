@@ -31,6 +31,10 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % Group methods
         % -----------------
         
+        function c = group_count(obj)
+            c = nix_mx('Block::groupCount', obj.nix_handle);
+        end
+
         function g = create_group(obj, name, nixtype)
             handle = nix_mx('Block::createGroup', obj.nix_handle, ...
                 name, nixtype);
@@ -55,6 +59,10 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % DataArray methods
         % -----------------
         
+        function c = data_array_count(obj)
+            c = nix_mx('Block::dataArrayCount', obj.nix_handle);
+        end
+
         function retObj = data_array(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'Block::openDataArray', id_or_name, @nix.DataArray);
@@ -123,6 +131,10 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % Sources methods
         % -----------------
         
+        function c = source_count(obj)
+            c = nix_mx('Block::sourceCount', obj.nix_handle);
+        end
+
         function s = create_source(obj, name, type)
             s = nix.Source(nix_mx('Block::createSource', ...
                 obj.nix_handle, name, type));
@@ -146,6 +158,10 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % Tags methods
         % -----------------
         
+        function c = tag_count(obj)
+            c = nix_mx('Block::tagCount', obj.nix_handle);
+        end
+
         function hasTag = has_tag(obj, id_or_name)
             hasTag = nix_mx('Block::hasTag', obj.nix_handle, id_or_name);
         end;
@@ -170,6 +186,10 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % MultiTag methods
         % -----------------
         
+        function c = multi_tag_count(obj)
+            c = nix_mx('Block::multiTagCount', obj.nix_handle);
+        end
+
         function hasMTag = has_multi_tag(obj, id_or_name)
             hasMTag = nix_mx('Block::hasMultiTag', obj.nix_handle, id_or_name);
         end;

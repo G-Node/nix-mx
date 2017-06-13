@@ -113,7 +113,9 @@ void mexFunction(int            nlhs,
             .reg("openBlock", GETBYSTR(nix::Block, nix::File, getBlock))
             .reg("openSection", GETBYSTR(nix::Section, nix::File, getSection))
             .reg("createBlock", &nix::File::createBlock)
-            .reg("createSection", &nix::File::createSection);
+            .reg("createSection", &nix::File::createSection)
+            .reg("blockCount", GETTER(nix::ndsize_t, nix::File, blockCount))
+            .reg("sectionCount", GETTER(nix::ndsize_t, nix::File, sectionCount));
 
         classdef<nix::Block>("Block", methods)
             .desc(&nixblock::describe)
@@ -144,7 +146,12 @@ void mexFunction(int            nlhs,
             .reg("deleteGroup", REMOVER(nix::Group, nix::Block, deleteGroup))
             .reg("setType", SETTER(const std::string&, nix::Block, type))
             .reg("setDefinition", SETTER(const std::string&, nix::Block, definition))
-            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Block, definition));
+            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Block, definition))
+            .reg("sourceCount", GETTER(nix::ndsize_t, nix::Block, sourceCount))
+            .reg("dataArrayCount", GETTER(nix::ndsize_t, nix::Block, dataArrayCount))
+            .reg("tagCount", GETTER(nix::ndsize_t, nix::Block, tagCount))
+            .reg("multiTagCount", GETTER(nix::ndsize_t, nix::Block, multiTagCount))
+            .reg("groupCount", GETTER(nix::ndsize_t, nix::Block, groupCount));
         methods->add("Block::createDataArray", nixblock::createDataArray);
         methods->add("Block::createMultiTag", nixblock::createMultiTag);
         methods->add("Block::createGroup", nixblock::createGroup);
@@ -172,7 +179,11 @@ void mexFunction(int            nlhs,
             .reg("removeMultiTag", REMOVER(nix::MultiTag, nix::Group, removeMultiTag))
             .reg("setType", SETTER(const std::string&, nix::Group, type))
             .reg("setDefinition", SETTER(const std::string&, nix::Group, definition))
-            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Group, definition));
+            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Group, definition))
+            .reg("sourceCount", GETTER(nix::ndsize_t, nix::Group, sourceCount))
+            .reg("dataArrayCount", GETTER(nix::ndsize_t, nix::Group, dataArrayCount))
+            .reg("tagCount", GETTER(nix::ndsize_t, nix::Group, tagCount))
+            .reg("multiTagCount", GETTER(nix::ndsize_t, nix::Group, multiTagCount));
         methods->add("Group::addDataArray", nixgroup::addDataArray);
         methods->add("Group::addSource", nixgroup::addSource);
         methods->add("Group::addTag", nixgroup::addTag);
@@ -208,6 +219,8 @@ void mexFunction(int            nlhs,
         methods->add("DataArray::removeSource", nixdataarray::removeSource);
         methods->add("DataArray::openSource", nixdataarray::getSource);
         methods->add("DataArray::hasSource", nixdataarray::hasSource);
+        methods->add("DataArray::sourceCount", nixdataarray::sourceCount);
+        methods->add("DataArray::dimensionCount", nixdataarray::dimensionCount);
 
         classdef<nix::Source>("Source", methods)
             .desc(&nixsource::describe)
@@ -221,7 +234,8 @@ void mexFunction(int            nlhs,
             .reg("setNoneMetadata", SETTER(const boost::none_t, nix::Source, metadata))
             .reg("setType", SETTER(const std::string&, nix::Source, type))
             .reg("setDefinition", SETTER(const std::string&, nix::Source, definition))
-            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Source, definition));
+            .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Source, definition))
+            .reg("sourceCount", GETTER(nix::ndsize_t, nix::Source, sourceCount));
 
         classdef<nix::Tag>("Tag", methods)
             .desc(&nixtag::describe)
@@ -247,7 +261,10 @@ void mexFunction(int            nlhs,
             .reg("setNoneExtent", SETTER(const boost::none_t, nix::Tag, extent))
             .reg("removeReference", REMOVER(nix::DataArray, nix::Tag, removeReference))
             .reg("removeSource", REMOVER(nix::Source, nix::Tag, removeSource))
-            .reg("deleteFeature", REMOVER(nix::Feature, nix::Tag, deleteFeature));
+            .reg("deleteFeature", REMOVER(nix::Feature, nix::Tag, deleteFeature))
+            .reg("sourceCount", GETTER(nix::ndsize_t, nix::Tag, sourceCount))
+            .reg("referenceCount", GETTER(nix::ndsize_t, nix::Tag, referenceCount))
+            .reg("featureCount", GETTER(nix::ndsize_t, nix::Tag, featureCount));
         methods->add("Tag::retrieveData", nixtag::retrieveData);
         methods->add("Tag::featureRetrieveData", nixtag::retrieveFeatureData);
         methods->add("Tag::addReference", nixtag::addReference);
@@ -280,7 +297,10 @@ void mexFunction(int            nlhs,
             .reg("setNoneMetadata", SETTER(const boost::none_t, nix::MultiTag, metadata))
             .reg("removeReference", REMOVER(nix::DataArray, nix::MultiTag, removeReference))
             .reg("removeSource", REMOVER(nix::Source, nix::MultiTag, removeSource))
-            .reg("deleteFeature", REMOVER(nix::Feature, nix::MultiTag, deleteFeature));
+            .reg("deleteFeature", REMOVER(nix::Feature, nix::MultiTag, deleteFeature))
+            .reg("sourceCount", GETTER(nix::ndsize_t, nix::MultiTag, sourceCount))
+            .reg("referenceCount", GETTER(nix::ndsize_t, nix::MultiTag, referenceCount))
+            .reg("featureCount", GETTER(nix::ndsize_t, nix::MultiTag, featureCount));
         methods->add("MultiTag::retrieveData", nixmultitag::retrieveData);
         methods->add("MultiTag::featureRetrieveData", nixmultitag::retrieveFeatureData);
         methods->add("MultiTag::addReference", nixmultitag::addReference);
@@ -308,7 +328,9 @@ void mexFunction(int            nlhs,
             .reg("createSection", &nix::Section::createSection)
             .reg("deleteSection", REMOVER(nix::Section, nix::Section, deleteSection))
             .reg("openProperty", GETBYSTR(nix::Property, nix::Section, getProperty))
-            .reg("deleteProperty", REMOVER(nix::Property, nix::Section, deleteProperty));
+            .reg("deleteProperty", REMOVER(nix::Property, nix::Section, deleteProperty))
+            .reg("sectionCount", GETTER(nix::ndsize_t, nix::Section, sectionCount))
+            .reg("propertyCount", GETTER(nix::ndsize_t, nix::Section, propertyCount));
         methods->add("Section::properties", nixsection::properties);
         methods->add("Section::createProperty", nixsection::createProperty);
         methods->add("Section::createPropertyWithValue", nixsection::createPropertyWithValue);
@@ -327,7 +349,8 @@ void mexFunction(int            nlhs,
             .reg("setUnit", SETTER(const std::string&, nix::Property, unit))
             .reg("setNoneUnit", SETTER(const boost::none_t, nix::Property, unit))
             .reg("setMapping", SETTER(const std::string&, nix::Property, mapping))
-            .reg("setNoneMapping", SETTER(const boost::none_t, nix::Property, mapping));
+            .reg("setNoneMapping", SETTER(const boost::none_t, nix::Property, mapping))
+            .reg("valueCount", GETTER(nix::ndsize_t, nix::Property, valueCount));
         methods->add("Property::values", nixproperty::values);
         methods->add("Property::updateValues", nixproperty::updateValues);
 

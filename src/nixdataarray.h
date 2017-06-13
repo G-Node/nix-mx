@@ -23,11 +23,15 @@ namespace nixdataarray {
 
     void getSource(const extractor &input, infusor &output);
 
+    void sourceCount(const extractor &input, infusor &output);
+
     void readAll(const extractor &input, infusor &output);
 
     void writeAll(const extractor &input, infusor &output);
 
     void deleteDimensions(const extractor &input, infusor &output);
+
+    void dimensionCount(const extractor &input, infusor &output);
 
 } // namespace nixdataarray
 

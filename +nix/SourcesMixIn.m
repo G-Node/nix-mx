@@ -19,6 +19,10 @@ classdef SourcesMixIn < handle
             nix.Dynamic.add_dyn_relation(obj, 'sources', @nix.Source);
         end
         
+        function c = source_count(obj)
+            c = nix_mx(strcat(obj.alias, '::sourceCount'), obj.nix_handle);
+        end
+
         % has_source supports only check by id, not by name
         function ret = has_source(obj, id_or_entity)
             has = id_or_entity;
