@@ -246,7 +246,8 @@ void mexFunction(int            nlhs,
             .reg("parentSource", GETTER(nix::Source, nix::Source, parentSource))
             .reg("sourceCount", GETTER(nix::ndsize_t, nix::Source, sourceCount))
             .reg("referringDataArrays", GETTER(std::vector<nix::DataArray>, nix::Source, referringDataArrays))
-            .reg("referringTags", GETTER(std::vector<nix::Tag>, nix::Source, referringTags));
+            .reg("referringTags", GETTER(std::vector<nix::Tag>, nix::Source, referringTags))
+            .reg("referringMultiTags", GETTER(std::vector<nix::MultiTag>, nix::Source, referringMultiTags));
 
         classdef<nix::Tag>("Tag", methods)
             .desc(&nixtag::describe)

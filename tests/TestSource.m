@@ -23,6 +23,7 @@ function funcs = TestSource
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_referring_data_arrays;
     funcs{end+1} = @test_referring_tags;
+    funcs{end+1} = @test_referring_multi_tags;
 end
 
 %% Test: fetch sources
@@ -245,4 +246,24 @@ function [] = test_referring_tags( varargin )
     t2 = b.create_tag('testTag2', 'nixTag', [1, 2]);
     t2.add_source(s);
     assert(size(s.referring_tags, 1) == 2);
+end
+
+%% Test: Referring multi tags
+function [] = test_referring_multi_tags( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    s = b.create_source('testSource', 'nixSource');
+
+    assert(isempty(s.referring_multi_tags));
+
+    t1 = b.create_multi_tag('testMultiTag1', 'nixMultiTag', d);
+    t1.add_source(s);
+    assert(~isempty(s.referring_multi_tags));
+    assert(strcmp(s.referring_multi_tags{1}.name, t1.name));
+
+    t2 = b.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
+    t2.add_source(s);
+    assert(size(s.referring_multi_tags, 1) == 2);
 end

@@ -63,5 +63,10 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
             retObj = nix.Utils.fetchObjList('Source::referringTags', ...
                 obj.nix_handle, @nix.Tag);
         end
+
+        function retObj = referring_multi_tags(obj)
+            retObj = nix.Utils.fetchObjList('Source::referringMultiTags', ...
+                obj.nix_handle, @nix.MultiTag);
+        end
     end;
 end
