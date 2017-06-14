@@ -27,6 +27,7 @@ function funcs = TestSection
     funcs{end+1} = @test_property_count;
     funcs{end+1} = @test_link;
     funcs{end+1} = @test_inherited_properties;
+    funcs{end+1} = @test_referring_data_arrays;
 end
 
 %% Test: Create Section
@@ -319,4 +320,26 @@ function [] = test_inherited_properties( varargin )
     
     s.create_property('testProperty1', nix.DataType.String);
     assert(size(s.inherited_properties, 1) == 2);
+end
+
+%% Test: referring data arrays
+function [] = test_referring_data_arrays( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    d1 = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    d2 = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    s = f.create_section('testSection', 'nixSection');
+    
+    assert(isempty(s.referring_data_arrays));
+
+    d1.set_metadata(s);
+    assert(~isempty(s.referring_data_arrays));
+    
+    d2.set_metadata(s);
+    assert(size(s.referring_data_arrays, 1) == 2);
+    
+    b2.delete_data_array(d2);
+    d1.set_metadata('');
+    assert(isempty(s.referring_data_arrays));
 end

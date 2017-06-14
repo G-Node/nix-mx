@@ -151,5 +151,13 @@ classdef Section < nix.NamedEntity
             c = nix_mx('Section::propertyCount', obj.nix_handle);
         end
 
+        % ----------------
+        % Referring entity methods
+        % ----------------
+
+        function das = referring_data_arrays(obj)
+            das = nix.Utils.fetchObjList('Section::referringDataArrays', ...
+                obj.nix_handle, @nix.DataArray);
+        end
     end;
 end
