@@ -174,5 +174,10 @@ classdef Section < nix.NamedEntity
             ret = nix.Utils.fetchObjList('Section::referringSources', ...
                 obj.nix_handle, @nix.Source);
         end
+
+        function ret = referring_blocks(obj)
+            ret = nix.Utils.fetchObjList('Section::referringBlocks', ...
+                obj.nix_handle, @nix.Block);
+        end
     end;
 end

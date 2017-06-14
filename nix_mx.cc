@@ -351,7 +351,8 @@ void mexFunction(int            nlhs,
             .reg("referringDataArrays", GETTER(std::vector<nix::DataArray>, nix::Section, referringDataArrays))
             .reg("referringTags", GETTER(std::vector<nix::Tag>, nix::Section, referringTags))
             .reg("referringMultiTags", GETTER(std::vector<nix::MultiTag>, nix::Section, referringMultiTags))
-            .reg("referringSources", GETTER(std::vector<nix::Source>, nix::Section, referringSources));
+            .reg("referringSources", GETTER(std::vector<nix::Source>, nix::Section, referringSources))
+            .reg("referringBlocks", GETTER(std::vector<nix::Block>, nix::Section, referringBlocks));
         methods->add("Section::properties", nixsection::properties);
         methods->add("Section::createProperty", nixsection::createProperty);
         methods->add("Section::createPropertyWithValue", nixsection::createPropertyWithValue);

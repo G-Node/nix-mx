@@ -31,6 +31,7 @@ function funcs = TestSection
     funcs{end+1} = @test_referring_tags;
     funcs{end+1} = @test_referring_multi_tags;
     funcs{end+1} = @test_referring_sources;
+    funcs{end+1} = @test_referring_blocks;
 end
 
 %% Test: Create Section
@@ -413,4 +414,23 @@ function [] = test_referring_sources( varargin )
     b2.delete_source(s2);
     s1.set_metadata('');
     assert(isempty(s.referring_sources));
+end
+
+%% Test: referring blocks
+function [] = test_referring_blocks( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    s = f.create_section('testSection', 'nixSection');
+    
+    assert(isempty(s.referring_blocks));
+
+    b1.set_metadata(s);
+    assert(~isempty(s.referring_blocks));
+    
+    b2.set_metadata(s);
+    assert(size(s.referring_blocks, 1) == 2);
+    
+    b2.set_metadata('')
+    assert(size(s.referring_blocks, 1) == 1);
 end
