@@ -159,5 +159,10 @@ classdef Section < nix.NamedEntity
             das = nix.Utils.fetchObjList('Section::referringDataArrays', ...
                 obj.nix_handle, @nix.DataArray);
         end
+
+        function ret = referring_tags(obj)
+            ret = nix.Utils.fetchObjList('Section::referringTags', ...
+                obj.nix_handle, @nix.Tag);
+        end
     end;
 end

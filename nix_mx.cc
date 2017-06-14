@@ -348,7 +348,8 @@ void mexFunction(int            nlhs,
             .reg("sectionCount", GETTER(nix::ndsize_t, nix::Section, sectionCount))
             .reg("propertyCount", GETTER(nix::ndsize_t, nix::Section, propertyCount))
             .reg("inheritedProperties", GETTER(std::vector<nix::Property>, nix::Section, inheritedProperties))
-            .reg("referringDataArrays", GETTER(std::vector<nix::DataArray>, nix::Section, referringDataArrays));
+            .reg("referringDataArrays", GETTER(std::vector<nix::DataArray>, nix::Section, referringDataArrays))
+            .reg("referringTags", GETTER(std::vector<nix::Tag>, nix::Section, referringTags));
         methods->add("Section::properties", nixsection::properties);
         methods->add("Section::createProperty", nixsection::createProperty);
         methods->add("Section::createPropertyWithValue", nixsection::createPropertyWithValue);
