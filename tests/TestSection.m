@@ -30,6 +30,7 @@ function funcs = TestSection
     funcs{end+1} = @test_referring_data_arrays;
     funcs{end+1} = @test_referring_tags;
     funcs{end+1} = @test_referring_multi_tags;
+    funcs{end+1} = @test_referring_sources;
 end
 
 %% Test: Create Section
@@ -390,4 +391,26 @@ function [] = test_referring_tags( varargin )
     b2.delete_multi_tag(t2);
     t1.set_metadata('');
     assert(isempty(s.referring_multi_tags));
+end
+
+%% Test: referring sources
+function [] = test_referring_sources( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    s1 = b1.create_source('testSource1', 'nixSource');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    s2 = b2.create_source('testSource2', 'nixSource');
+    s = f.create_section('testSection', 'nixSection');
+    
+    assert(isempty(s.referring_sources));
+
+    s1.set_metadata(s);
+    assert(~isempty(s.referring_sources));
+    
+    s2.set_metadata(s);
+    assert(size(s.referring_sources, 1) == 2);
+    
+    b2.delete_source(s2);
+    s1.set_metadata('');
+    assert(isempty(s.referring_sources));
 end
