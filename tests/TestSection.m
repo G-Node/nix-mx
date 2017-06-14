@@ -29,6 +29,7 @@ function funcs = TestSection
     funcs{end+1} = @test_inherited_properties;
     funcs{end+1} = @test_referring_data_arrays;
     funcs{end+1} = @test_referring_tags;
+    funcs{end+1} = @test_referring_multi_tags;
 end
 
 %% Test: Create Section
@@ -346,7 +347,7 @@ function [] = test_referring_data_arrays( varargin )
 end
 
 %% Test: referring tags
-function [] = test_referring_tags( varargin )
+function [] = test_referring_multi_tags( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.create_block('testBlock1', 'nixBlock');
     t1 = b1.create_tag('testTag1', 'nixTag', [1, 2]);
@@ -365,4 +366,28 @@ function [] = test_referring_tags( varargin )
     b2.delete_tag(t2);
     t1.set_metadata('');
     assert(isempty(s.referring_tags));
+end
+
+%% Test: referring multi tags
+function [] = test_referring_tags( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    d = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t1 = b1.create_multi_tag('testMultiTag1', 'nixMultiTag', d);
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    d = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t2 = b2.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
+    s = f.create_section('testSection', 'nixSection');
+    
+    assert(isempty(s.referring_multi_tags));
+
+    t1.set_metadata(s);
+    assert(~isempty(s.referring_multi_tags));
+    
+    t2.set_metadata(s);
+    assert(size(s.referring_multi_tags, 1) == 2);
+    
+    b2.delete_multi_tag(t2);
+    t1.set_metadata('');
+    assert(isempty(s.referring_multi_tags));
 end
