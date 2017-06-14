@@ -32,7 +32,7 @@ end
 function [] = test_attrs( varargin )
 %% Test: Access Attributes
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.createBlock('daTestBlock', 'test nixBlock');
+    b = f.create_block('daTestBlock', 'test nixBlock');
     da = b.create_data_array('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
 
     assert(~isempty(da.id));
@@ -69,7 +69,7 @@ function [] = test_open_data( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     daType = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.createBlock('testBlock', 'nix.Block');
+    b = f.create_block('testBlock', 'nix.Block');
 
     da = b.create_data_array('logicalArray', daType, nix.DataType.Bool, [3 3]);
     assert(islogical(da.read_all));
@@ -101,10 +101,10 @@ function [] = test_set_metadata ( varargin )
     secName1 = 'testSection1';
     secName2 = 'testSection2';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    tmp = f.createSection(secName1, 'nixSection');
-    tmp = f.createSection(secName2, 'nixSection');
+    tmp = f.create_section(secName1, 'nixSection');
+    tmp = f.create_section(secName2, 'nixSection');
 
-    b = f.createBlock('testBlock', 'nixBlock');
+    b = f.create_block('testBlock', 'nixBlock');
     da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
 
     assert(isempty(da.open_metadata));
@@ -131,8 +131,8 @@ end
 %% Test: Open metadata
 function [] = test_open_metadata( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    tmp = f.createSection('testSection', 'nixSection');
-    b = f.createBlock('testBlock', 'nixBlock');
+    tmp = f.create_section('testSection', 'nixSection');
+    b = f.create_block('testBlock', 'nixBlock');
     da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     da.set_metadata(f.sections{1});
 
@@ -154,7 +154,7 @@ function [] = test_write_data_double( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.createBlock('testDataArray', 'nixblock');
+    b = f.create_block('testDataArray', 'nixblock');
 
     numData = [1 2 3 4 5];
     logData = logical([1 0 1 0 1]);
@@ -191,7 +191,7 @@ function [] = test_write_data_logical( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.createBlock('testDataArray', 'nixblock');
+    b = f.create_block('testDataArray', 'nixblock');
 
     logData = logical([1 0 1 0 1]);
     numData = [1 2 3 4 5];
@@ -221,7 +221,7 @@ function [] = test_write_data_float( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.createBlock('testDataArray', 'nixblock');
+    b = f.create_block('testDataArray', 'nixblock');
 
     numData = [1.3 2.4143 3.9878 4.1239 5];
     
@@ -239,7 +239,7 @@ function [] = test_write_data_integer( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.createBlock('testDataArray', 'nixblock');
+    b = f.create_block('testDataArray', 'nixblock');
 
     numData = [1 2 3; 4 5 6; 7 8 9];
     
@@ -283,7 +283,7 @@ end
 %% Test: Add sources by entity and id
 function [] = test_add_source ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.createBlock('sourceTest', 'nixBlock');
+    b = f.create_block('sourceTest', 'nixBlock');
     getSource = b.create_source('sourceTest', 'nixSource');
     tmp = getSource.create_source('nestedSource1', 'nixSource');
     tmp = getSource.create_source('nestedSource2', 'nixSource');
@@ -298,7 +298,7 @@ end
 %% Test: Open source by ID or name
 function [] = test_open_source( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = test_file.createBlock('test', 'nixBlock');
+    b = test_file.create_block('test', 'nixBlock');
     s = b.create_source('test', 'nixSource');
     sourceName = 'nestedSource';
     nSource = s.create_source(sourceName, 'nixSource');
@@ -319,7 +319,7 @@ end
 %% Test: Remove sources by entity and id
 function [] = test_remove_source ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.createBlock('sourceTest', 'nixBlock');
+    b = f.create_block('sourceTest', 'nixBlock');
     getSource = b.create_source('sourceTest', 'nixSource');
     tmp = getSource.create_source('nestedSource1', 'nixSource');
     tmp = getSource.create_source('nestedSource2', 'nixSource');
@@ -340,7 +340,7 @@ end
 function [] = test_has_source( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.createBlock('testblock', 'nixBlock');
+    b = f.create_block('testblock', 'nixBlock');
     s = b.create_source('sourceTest1', 'nixSource');
     sID = s.id;
     d = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
@@ -358,7 +358,7 @@ end
 function [] = test_source_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.createBlock('testBlock', 'nixBlock');
+    b = f.create_block('testBlock', 'nixBlock');
     d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     
     assert(d.source_count() == 0);
@@ -375,7 +375,7 @@ end
 function [] = test_dimensions( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.createBlock('daTestBlock', 'test nixBlock');
+    b = f.create_block('daTestBlock', 'test nixBlock');
     da = b.create_data_array('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
     
     assert(isempty(da.dimensions));
@@ -444,7 +444,7 @@ end
 function [] = test_dimension_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.createBlock('testBlock', 'nixBlock');
+    b = f.create_block('testBlock', 'nixBlock');
     da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     
     assert(da.dimension_count == 0);
