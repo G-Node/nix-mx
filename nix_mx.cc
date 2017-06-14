@@ -346,7 +346,8 @@ void mexFunction(int            nlhs,
             .reg("openProperty", GETBYSTR(nix::Property, nix::Section, getProperty))
             .reg("deleteProperty", REMOVER(nix::Property, nix::Section, deleteProperty))
             .reg("sectionCount", GETTER(nix::ndsize_t, nix::Section, sectionCount))
-            .reg("propertyCount", GETTER(nix::ndsize_t, nix::Section, propertyCount));
+            .reg("propertyCount", GETTER(nix::ndsize_t, nix::Section, propertyCount))
+            .reg("inheritedProperties", GETTER(std::vector<nix::Property>, nix::Section, inheritedProperties));
         methods->add("Section::properties", nixsection::properties);
         methods->add("Section::createProperty", nixsection::createProperty);
         methods->add("Section::createPropertyWithValue", nixsection::createPropertyWithValue);

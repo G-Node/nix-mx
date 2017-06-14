@@ -65,6 +65,11 @@ classdef Section < nix.NamedEntity
            end;
         end;
 
+        function retList = inherited_properties(obj)
+            retList = nix.Utils.fetchObjList('Section::inheritedProperties', ...
+                obj.nix_handle, @nix.Property);
+        end
+
         % ----------------
         % Section methods
         % ----------------

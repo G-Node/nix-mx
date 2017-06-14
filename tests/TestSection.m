@@ -26,6 +26,7 @@ function funcs = TestSection
     funcs{end+1} = @test_open_property;
     funcs{end+1} = @test_property_count;
     funcs{end+1} = @test_link;
+    funcs{end+1} = @test_inherited_properties;
 end
 
 %% Test: Create Section
@@ -299,4 +300,23 @@ function [] = test_link( varargin )
     
     mainSec.set_link('');
     assert(isempty(mainSec.openLink));
+end
+
+%% Test: inherited properties
+function [] = test_inherited_properties( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    s = f.create_section('mainSection', 'nixSection');
+    ls = f.create_section('linkSection', 'nixSection');
+    
+    assert(isempty(s.inherited_properties));
+
+    s.set_link(ls);
+    assert(isempty(s.inherited_properties));
+
+    lp = ls.create_property('testProperty2', nix.DataType.String);
+    assert(~isempty(s.inherited_properties));
+    assert(strcmp(s.inherited_properties{1}.name, lp.name));
+    
+    s.create_property('testProperty1', nix.DataType.String);
+    assert(size(s.inherited_properties, 1) == 2);
 end
