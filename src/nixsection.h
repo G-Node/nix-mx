@@ -23,6 +23,8 @@ namespace nixsection {
 
     void referringBlockSources(const extractor &input, infusor &output);
 
+    void referringBlockTags(const extractor &input, infusor &output);
+
 } // namespace nixsection
 
 #endif

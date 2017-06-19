@@ -29,6 +29,7 @@ function funcs = TestSection
     funcs{end+1} = @test_inherited_properties;
     funcs{end+1} = @test_referring_data_arrays;
     funcs{end+1} = @test_referring_tags;
+    funcs{end+1} = @test_referring_block_tags;
     funcs{end+1} = @test_referring_multi_tags;
     funcs{end+1} = @test_referring_sources;
     funcs{end+1} = @test_referring_block_sources;
@@ -350,7 +351,7 @@ function [] = test_referring_data_arrays( varargin )
 end
 
 %% Test: referring tags
-function [] = test_referring_multi_tags( varargin )
+function [] = test_referring_tags( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.create_block('testBlock1', 'nixBlock');
     t1 = b1.create_tag('testTag1', 'nixTag', [1, 2]);
@@ -371,8 +372,44 @@ function [] = test_referring_multi_tags( varargin )
     assert(isempty(s.referring_tags));
 end
 
+%% Test: referring block tags
+function [] = test_referring_block_tags( varargin )
+    err = 'Provide either empty arguments or a single Block entity';
+    testName = 'testTag1';
+
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    t1 = b1.create_tag(testName, 'nixTag', [1, 2]);
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    t2 = b2.create_tag('testTag2', 'nixTag', [3, 4]);
+    s = f.create_section('testSection', 'nixSection');
+
+    t1.set_metadata(s);
+    t2.set_metadata(s);
+
+    % test multiple arguments fail
+    try
+        s.referring_tags('a', 'b');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test non block entity argument fail
+    try
+        s.referring_tags(s);
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test return only tags from block 1
+    testTag = s.referring_tags(b1);
+    assert(size(testTag, 2) == 1);
+    assert(strcmp(testTag{1}.name, testName));
+end
+
+
 %% Test: referring multi tags
-function [] = test_referring_tags( varargin )
+function [] = test_referring_multi_tags( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.create_block('testBlock1', 'nixBlock');
     d = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
