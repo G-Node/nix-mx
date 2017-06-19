@@ -17,6 +17,19 @@ classdef Utils
             end;
         end;
 
+        % This method calls the nix-mx function specified by 'nixMxFunc', handing 
+        % over 'handle' as the main nix entity handle and 'related_handle' as a 
+        % second nix entity handle related to the first one.
+        % 'objConstrucor' requires the Matlab entity constructor of the expected 
+        % returned nix Entities.
+        function currData = fetchObjListByEntity(nixMxFunc, handle, related_handle, objConstructor)
+            currList = nix_mx(nixMxFunc, handle, related_handle);
+            currData = cell(length(currList), 1);
+            for i = 1:length(currList)
+                currData{i} = objConstructor(currList{i});
+            end;
+        end;
+
         function retCell = fetchObj(nixMxFunc, handle, objConstructor)
             sh = nix_mx(nixMxFunc, handle);
             if sh ~= 0

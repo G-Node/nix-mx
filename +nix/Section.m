@@ -180,4 +180,26 @@ classdef Section < nix.NamedEntity
                 obj.nix_handle, @nix.Block);
         end
     end;
+
+    % ----------------
+    % Referring utility method
+    % ----------------
+
+    methods(Access=protected)
+        % referring_util receives a nix entityConstructor, part of a function
+        % name and varargin to provide abstract access to nix.Section
+        % referringXXX and referringXXX(Block) methods.
+        function ret = referring_util(obj, entityConstructor, funcName, varargin)
+            if (isempty(varargin))
+                ret = nix.Utils.fetchObjList(strcat('Section::referring', funcName), ...
+                    obj.nix_handle, entityConstructor);
+            elseif ((size(varargin, 2) > 1) || ...
+                    (~strcmp(class(varargin{1}), 'nix.Block')))
+                error('Provide either empty arguments or a single Block entity');
+            else
+                ret = nix.Utils.fetchObjListByEntity(strcat('Section::referringBlock', funcName), ...
+                    obj.nix_handle, varargin{1}.nix_handle, entityConstructor);
+            end
+        end
+    end
 end
