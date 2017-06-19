@@ -31,6 +31,7 @@ function funcs = TestSection
     funcs{end+1} = @test_referring_tags;
     funcs{end+1} = @test_referring_block_tags;
     funcs{end+1} = @test_referring_multi_tags;
+    funcs{end+1} = @test_referring_block_multi_tags;
     funcs{end+1} = @test_referring_sources;
     funcs{end+1} = @test_referring_block_sources;
     funcs{end+1} = @test_referring_blocks;
@@ -407,7 +408,6 @@ function [] = test_referring_block_tags( varargin )
     assert(strcmp(testTag{1}.name, testName));
 end
 
-
 %% Test: referring multi tags
 function [] = test_referring_multi_tags( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
@@ -430,6 +430,43 @@ function [] = test_referring_multi_tags( varargin )
     b2.delete_multi_tag(t2);
     t1.set_metadata('');
     assert(isempty(s.referring_multi_tags));
+end
+
+%% Test: referring block multi tags
+function [] = test_referring_block_multi_tags( varargin )
+    err = 'Provide either empty arguments or a single Block entity';
+    testName = 'testMultiTag1';
+
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    d = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t1 = b1.create_multi_tag(testName, 'nixMultiTag', d);
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    d = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t2 = b2.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
+    s = f.create_section('testSection', 'nixSection');
+
+    t1.set_metadata(s);
+    t2.set_metadata(s);
+
+    % test multiple arguments fail
+    try
+        s.referring_multi_tags('a', 'b');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test non block entity argument fail
+    try
+        s.referring_multi_tags(s);
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test return only tags from block 1
+    testTag = s.referring_multi_tags(b1);
+    assert(size(testTag, 2) == 1);
+    assert(strcmp(testTag{1}.name, testName));
 end
 
 %% Test: referring sources
