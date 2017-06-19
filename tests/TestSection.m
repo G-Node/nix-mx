@@ -31,6 +31,7 @@ function funcs = TestSection
     funcs{end+1} = @test_referring_tags;
     funcs{end+1} = @test_referring_multi_tags;
     funcs{end+1} = @test_referring_sources;
+    funcs{end+1} = @test_referring_block_sources;
     funcs{end+1} = @test_referring_blocks;
 end
 
@@ -414,6 +415,41 @@ function [] = test_referring_sources( varargin )
     b2.delete_source(s2);
     s1.set_metadata('');
     assert(isempty(s.referring_sources));
+end
+
+%% Test: referring block sources
+function [] = test_referring_block_sources( varargin )
+    err = 'Provide either empty arguments or a single Block entity';
+    testName = 'testSource1';
+
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    s1 = b1.create_source(testName, 'nixSource');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    s2 = b2.create_source('testSource2', 'nixSource');
+    s = f.create_section('testSection', 'nixSection');
+
+    s1.set_metadata(s);
+    s2.set_metadata(s);
+
+    % test multiple arguments fail
+    try
+        s.referring_sources('a', 'b');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test non block entity argument fail
+    try
+        s.referring_sources(s);
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test return only sources from block 1
+    testSource = s.referring_sources(b1);
+    assert(size(testSource, 2) == 1);
+    assert(strcmp(testSource{1}.name, testName));
 end
 
 %% Test: referring blocks

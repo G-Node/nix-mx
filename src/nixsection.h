@@ -21,6 +21,8 @@ namespace nixsection {
 
     void createPropertyWithValue(const extractor &input, infusor &output);
 
+    void referringBlockSources(const extractor &input, infusor &output);
+
 } // namespace nixsection
 
 #endif

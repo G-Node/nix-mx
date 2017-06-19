@@ -170,9 +170,8 @@ classdef Section < nix.NamedEntity
                 obj.nix_handle, @nix.MultiTag);
         end
 
-        function ret = referring_sources(obj)
-            ret = nix.Utils.fetchObjList('Section::referringSources', ...
-                obj.nix_handle, @nix.Source);
+        function ret = referring_sources(obj, varargin)
+            ret = obj.referring_util(@nix.Source, 'Sources', varargin{:});
         end
 
         function ret = referring_blocks(obj)
