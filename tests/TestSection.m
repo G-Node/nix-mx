@@ -28,6 +28,7 @@ function funcs = TestSection
     funcs{end+1} = @test_link;
     funcs{end+1} = @test_inherited_properties;
     funcs{end+1} = @test_referring_data_arrays;
+    funcs{end+1} = @test_referring_block_data_arrays;
     funcs{end+1} = @test_referring_tags;
     funcs{end+1} = @test_referring_block_tags;
     funcs{end+1} = @test_referring_multi_tags;
@@ -349,6 +350,41 @@ function [] = test_referring_data_arrays( varargin )
     b2.delete_data_array(d2);
     d1.set_metadata('');
     assert(isempty(s.referring_data_arrays));
+end
+
+%% Test: referring block data arrays
+function [] = test_referring_block_data_arrays( varargin )
+    err = 'Provide either empty arguments or a single Block entity';
+    testName = 'testDataArray1';
+
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    d1 = b1.create_data_array(testName, 'nixDataArray', nix.DataType.Double, [1 2]);
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    d2 = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    s = f.create_section('testSection', 'nixSection');
+    
+    d1.set_metadata(s);
+    d2.set_metadata(s);
+
+    % test multiple arguments fail
+    try
+        s.referring_data_arrays('a', 'b');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test non block entity argument fail
+    try
+        s.referring_data_arrays(s);
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test return only tags from block 1
+    testDataArray = s.referring_data_arrays(b1);
+    assert(size(testDataArray, 2) == 1);
+    assert(strcmp(testDataArray{1}.name, testName));
 end
 
 %% Test: referring tags

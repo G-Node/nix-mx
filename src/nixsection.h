@@ -27,6 +27,8 @@ namespace nixsection {
 
     void referringBlockMultiTags(const extractor &input, infusor &output);
 
+    void referringBlockDataArrays(const extractor &input, infusor &output);
+
 } // namespace nixsection
 
 #endif

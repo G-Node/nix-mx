@@ -155,9 +155,8 @@ classdef Section < nix.NamedEntity
         % Referring entity methods
         % ----------------
 
-        function das = referring_data_arrays(obj)
-            das = nix.Utils.fetchObjList('Section::referringDataArrays', ...
-                obj.nix_handle, @nix.DataArray);
+        function ret = referring_data_arrays(obj, varargin)
+            ret = obj.referring_util(@nix.DataArray, 'DataArrays', varargin{:});
         end
 
         function ret = referring_tags(obj, varargin)

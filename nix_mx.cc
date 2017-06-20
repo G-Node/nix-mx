@@ -359,6 +359,7 @@ void mexFunction(int            nlhs,
         methods->add("Section::referringBlockSources", nixsection::referringBlockSources);
         methods->add("Section::referringBlockTags", nixsection::referringBlockTags);
         methods->add("Section::referringBlockMultiTags", nixsection::referringBlockMultiTags);
+        methods->add("Section::referringBlockDataArrays", nixsection::referringBlockDataArrays);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)
