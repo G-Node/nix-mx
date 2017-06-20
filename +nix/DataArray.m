@@ -126,5 +126,9 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             end;
         end;
 
+        function s = datatype(obj)
+            s = nix_mx('DataArray::dataType', obj.nix_handle);
+        end
+
     end;
 end

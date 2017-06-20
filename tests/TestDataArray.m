@@ -28,6 +28,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_dimensions;
     funcs{end+1} = @test_dimension_count;
+    funcs{end+1} = @test_datatype;
 end
 
 function [] = test_attrs( varargin )
@@ -513,4 +514,19 @@ function [] = test_dimension_count( varargin )
     clear da b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
     assert(f.blocks{1}.dataArrays{1}.dimension_count() == 1);
+end
+
+%% Test: Datatype
+function [] = test_datatype( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    typeDA = 'nix.DataArray';
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixblock');
+
+    da = b.create_data_array_from_data('testDataArray1', typeDA, [1 2 3]);
+    assert(strcmp(da.datatype, 'double'));
+    
+    da = b.create_data_array('testDataArray2', typeDA, nix.DataType.Bool, 5);
+    da.write_all(logical([1 0 1 1 1]));
+    assert(strcmp(da.datatype, 'logical'));
 end

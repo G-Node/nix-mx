@@ -125,4 +125,9 @@ namespace nixdataarray {
         da.polynomCoefficients(pc);
     }
 
+    void dataType(const extractor &input, infusor &output) {
+        nix::DataArray da = input.entity<nix::DataArray>(1);
+        output.set(0, string_nix2mex(da.dataType()));
+    }
+
 } // namespace nixdataarray

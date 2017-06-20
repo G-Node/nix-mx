@@ -37,6 +37,8 @@ namespace nixdataarray {
 
     void polynomCoefficients(const extractor &input, infusor &output);
 
+    void dataType(const extractor &input, infusor &output);
+
 } // namespace nixdataarray
 
 #endif
