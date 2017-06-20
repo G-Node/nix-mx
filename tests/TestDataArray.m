@@ -70,6 +70,14 @@ function [] = test_attrs( varargin )
     
     da.expansionOrigin = '';
     assert(isempty(da.expansionOrigin));
+    
+    assert(isempty(da.polynomCoefficients));
+    c = [1.1 1.2];
+    da.polynomCoefficients = c;
+    assert(da.polynomCoefficients(1) == c(1))
+    
+    da.polynomCoefficients = '';
+    assert(isempty(da.polynomCoefficients));
 end
 
 %% Test: Read all data from DataArray

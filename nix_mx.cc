@@ -211,6 +211,7 @@ void mexFunction(int            nlhs,
             .reg("setNoneUnit", SETTER(const boost::none_t, nix::DataArray, unit))
             .reg("setExpansionOrigin", SETTER(double, nix::DataArray, expansionOrigin))
             .reg("setNoneExpansionOrigin", SETTER(boost::none_t, nix::DataArray, expansionOrigin))
+            .reg("setNonePolynomCoefficients", SETTER(boost::none_t, nix::DataArray, polynomCoefficients))
             .reg("dimensions", FILTER(std::vector<nix::Dimension>, nix::DataArray, , dimensions))
             .reg("appendSetDimension", &nix::DataArray::appendSetDimension)
             .reg("appendRangeDimension", &nix::DataArray::appendRangeDimension)
@@ -231,6 +232,7 @@ void mexFunction(int            nlhs,
         methods->add("DataArray::hasSource", nixdataarray::hasSource);
         methods->add("DataArray::sourceCount", nixdataarray::sourceCount);
         methods->add("DataArray::dimensionCount", nixdataarray::dimensionCount);
+        methods->add("DataArray::setPolynomCoefficients", nixdataarray::polynomCoefficients);
 
         classdef<nix::Source>("Source", methods)
             .desc(&nixsource::describe)

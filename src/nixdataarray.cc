@@ -21,7 +21,7 @@ namespace nixdataarray {
 
     mxArray *describe(const nix::DataArray &da) {
         struct_builder sb({ 1 }, { "id", "type", "name", "definition", "label",
-            "shape", "unit", "expansionOrigin", "polynom_coefficients" });
+            "shape", "unit", "expansionOrigin", "polynomCoefficients" });
 
         sb.set(da.id());
         sb.set(da.type());
@@ -117,6 +117,12 @@ namespace nixdataarray {
     void dimensionCount(const extractor &input, infusor &output) {
         nix::DataArray da = input.entity<nix::DataArray>(1);
         output.set(0, da.dimensionCount());
+    }
+
+    void polynomCoefficients(const extractor &input, infusor &output) {
+        nix::DataArray da = input.entity<nix::DataArray>(1);
+        std::vector<double> pc = input.vec<double>(2);
+        da.polynomCoefficients(pc);
     }
 
 } // namespace nixdataarray
