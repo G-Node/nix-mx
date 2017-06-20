@@ -39,6 +39,8 @@ namespace nixdataarray {
 
     void dataType(const extractor &input, infusor &output);
 
+    void setDataExtent(const extractor &input, infusor &output);
+
 } // namespace nixdataarray
 
 #endif

@@ -234,6 +234,7 @@ void mexFunction(int            nlhs,
         methods->add("DataArray::dimensionCount", nixdataarray::dimensionCount);
         methods->add("DataArray::setPolynomCoefficients", nixdataarray::polynomCoefficients);
         methods->add("DataArray::dataType", nixdataarray::dataType);
+        methods->add("DataArray::setDataExtent", nixdataarray::setDataExtent);
 
         classdef<nix::Source>("Source", methods)
             .desc(&nixsource::describe)

@@ -29,6 +29,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_dimensions;
     funcs{end+1} = @test_dimension_count;
     funcs{end+1} = @test_datatype;
+    funcs{end+1} = @test_set_data_extent;
 end
 
 function [] = test_attrs( varargin )
@@ -484,11 +485,11 @@ function [] = test_dimensions( varargin )
     
     daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest2', ...
         'nix.DataArray', [1; 2; 3]);
-    assert(isequal(daAliasWa.shape, [3 1]));
+    assert(isequal(daAliasWa.dataExtent, [3 1]));
     
     daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest3', ...
         'nix.DataArray', [1 2 3; 2 4 5; 3 6 7]);
-    assert(isequal(daAliasWa.shape, [3 3]));
+    assert(isequal(daAliasWa.dataExtent, [3 3]));
 end
 
 %% Test: Dimension count
@@ -529,4 +530,16 @@ function [] = test_datatype( varargin )
     da = b.create_data_array('testDataArray2', typeDA, nix.DataType.Bool, 5);
     da.write_all(logical([1 0 1 1 1]));
     assert(strcmp(da.datatype, 'logical'));
+end
+
+%% Test: Set extent
+function [] = test_set_data_extent( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixblock');
+
+    da = b.create_data_array_from_data('testDataArray1', 'nix.DataArray', [1 2 3; 4 5 6]);
+    extent = [4 6];
+    da.set_data_extent(extent);
+    assert(da.dataExtent(1) == extent(1) && size(da.read_all, 2) == extent(2));
 end

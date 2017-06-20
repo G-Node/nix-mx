@@ -21,7 +21,7 @@ namespace nixdataarray {
 
     mxArray *describe(const nix::DataArray &da) {
         struct_builder sb({ 1 }, { "id", "type", "name", "definition", "label",
-            "shape", "unit", "expansionOrigin", "polynomCoefficients" });
+            "dataExtent", "unit", "expansionOrigin", "polynomCoefficients" });
 
         sb.set(da.id());
         sb.set(da.type());
@@ -128,6 +128,12 @@ namespace nixdataarray {
     void dataType(const extractor &input, infusor &output) {
         nix::DataArray da = input.entity<nix::DataArray>(1);
         output.set(0, string_nix2mex(da.dataType()));
+    }
+
+    void setDataExtent(const extractor &input, infusor &output) {
+        nix::DataArray da = input.entity<nix::DataArray>(1);
+        nix::NDSize size = input.ndsize(2);
+        da.dataExtent(size);
     }
 
 } // namespace nixdataarray

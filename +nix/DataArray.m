@@ -29,7 +29,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'expansionOrigin', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'polynomCoefficients', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'shape', 'rw');
+            nix.Dynamic.add_dyn_attr(obj, 'dataExtent', 'rw');
         end;
 
         % -----------------
@@ -129,6 +129,20 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function s = datatype(obj)
             s = nix_mx('DataArray::dataType', obj.nix_handle);
         end
-
+        
+        % set data extent enabels to increase the original size 
+        % of a data array within the same dimensions.
+        % e.g. increase the size of a 2D array [5 10] to another
+        % 2D array [5 11]. Changing the dimensions is not possible
+        % e.g. changing from a 2D array to a 3D array.
+        % Furthermore if the extent shrinks the size of an array
+        % or remodels the size of an array to a completely different
+        % shape, existing data that does not fit into the new shape
+        % will be lost!
+        function [] = set_data_extent(obj, extent)
+            nix_mx('DataArray::setDataExtent', obj.nix_handle, extent);
+            % update changed dataExtent in obj.info
+            obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
+        end
     end;
 end
