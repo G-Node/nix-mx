@@ -209,6 +209,8 @@ void mexFunction(int            nlhs,
             .reg("setNoneLabel", SETTER(const boost::none_t, nix::DataArray, label))
             .reg("setUnit", SETTER(const std::string&, nix::DataArray, unit))
             .reg("setNoneUnit", SETTER(const boost::none_t, nix::DataArray, unit))
+            .reg("setExpansionOrigin", SETTER(double, nix::DataArray, expansionOrigin))
+            .reg("setNoneExpansionOrigin", SETTER(boost::none_t, nix::DataArray, expansionOrigin))
             .reg("dimensions", FILTER(std::vector<nix::Dimension>, nix::DataArray, , dimensions))
             .reg("appendSetDimension", &nix::DataArray::appendSetDimension)
             .reg("appendRangeDimension", &nix::DataArray::appendRangeDimension)

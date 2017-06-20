@@ -63,6 +63,13 @@ function [] = test_attrs( varargin )
 
     da.label = '';
     assert(isempty(da.label));
+
+    assert(isempty(da.expansionOrigin));
+    da.expansionOrigin = 2.5;
+    assert(da.expansionOrigin == 2.5)
+    
+    da.expansionOrigin = '';
+    assert(isempty(da.expansionOrigin));
 end
 
 %% Test: Read all data from DataArray

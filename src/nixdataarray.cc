@@ -21,7 +21,7 @@ namespace nixdataarray {
 
     mxArray *describe(const nix::DataArray &da) {
         struct_builder sb({ 1 }, { "id", "type", "name", "definition", "label",
-            "shape", "unit", "polynom_coefficients" });
+            "shape", "unit", "expansionOrigin", "polynom_coefficients" });
 
         sb.set(da.id());
         sb.set(da.type());
@@ -30,6 +30,7 @@ namespace nixdataarray {
         sb.set(da.label());
         sb.set(da.dataExtent());
         sb.set(da.unit());
+        sb.set(da.expansionOrigin());
         sb.set(da.polynomCoefficients());
 
         return sb.array();

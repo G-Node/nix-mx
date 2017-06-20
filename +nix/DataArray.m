@@ -28,7 +28,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             nix.Dynamic.add_dyn_attr(obj, 'label', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'expansionOrigin', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'polynom_coefficients', 'rw');
+            nix.Dynamic.add_dyn_attr(obj, 'polynomCoefficients', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'shape', 'rw');
         end;
 
