@@ -96,4 +96,10 @@ namespace nixtag {
         output.set(0, currObj.getSource(idx));
     }
 
+    void compare(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        nix::Tag other = input.entity<nix::Tag>(2);
+        output.set(0, currObj.compare(other));
+    }
+
 } // namespace nixtag

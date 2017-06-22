@@ -39,6 +39,7 @@ function funcs = TestTag
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_has_feature;
     funcs{end+1} = @test_has_reference;
+    funcs{end+1} = @test_compare;
 end
 
 %% Test: Add sources by entity and id
@@ -635,4 +636,19 @@ function [] = test_has_reference( varargin )
     clear t da b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(f.blocks{1}.tags{1}.has_reference(daName));
+end
+
+function [] = test_compare( varargin )
+%% Test: Compare Tag entities
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    t1 = b1.create_tag('testTag1', 'nixTag', [1 2 3]);
+    t2 = b1.create_tag('testTag2', 'nixTag', [1 2 3]);
+    t3 = b2.create_tag('testTag1', 'nixTag', [1 2 3]);
+
+    assert(t1.compare(t2) < 0);
+    assert(t1.compare(t1) == 0);
+    assert(t2.compare(t1) > 0);
+    assert(t1.compare(t3) ~= 0);
 end
