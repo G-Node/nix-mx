@@ -31,6 +31,12 @@ namespace nixmultitag {
 
     void addPositions(const extractor &input, infusor &output);
 
+    void openReferenceIdx(const extractor &input, infusor &output);
+
+    void openFeatureIdx(const extractor &input, infusor &output);
+
+    void openSourceIdx(const extractor &input, infusor &output);
+
 } // namespace nixmultitag
 
 #endif
