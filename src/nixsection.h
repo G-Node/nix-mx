@@ -32,6 +32,9 @@ namespace nixsection {
     void openSectionIdx(const extractor &input, infusor &output);
 
     void openPropertyIdx(const extractor &input, infusor &output);
+
+    void compare(const extractor &input, infusor &output);
+
 } // namespace nixsection
 
 #endif

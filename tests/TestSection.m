@@ -38,6 +38,7 @@ function funcs = TestSection
     funcs{end+1} = @test_referring_sources;
     funcs{end+1} = @test_referring_block_sources;
     funcs{end+1} = @test_referring_blocks;
+    funcs{end+1} = @test_compare;
 end
 
 %% Test: Create Section
@@ -607,4 +608,15 @@ function [] = test_referring_blocks( varargin )
     
     b2.set_metadata('')
     assert(size(s.referring_blocks, 1) == 1);
+end
+
+function [] = test_compare( varargin )
+%% Test: Compare group entities
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    s1 = f.create_section('testSection1', 'nixSection');
+    s2 = f.create_section('testSection2', 'nixSection');
+
+    assert(s1.compare(s2) < 0);
+    assert(s1.compare(s1) == 0);
+    assert(s2.compare(s1) > 0);
 end
