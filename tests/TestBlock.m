@@ -49,6 +49,7 @@ function funcs = TestBlock
     funcs{end+1} = @test_tag_count;
     funcs{end+1} = @test_multi_tag_count;
     funcs{end+1} = @test_source_count;
+    funcs{end+1} = @test_compare;
 end
 
 function [] = test_attrs( varargin )
@@ -740,4 +741,15 @@ function [] = test_source_count( varargin )
     clear s b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
     assert(f.blocks{1}.source_count() == 2);
+end
+
+function [] = test_compare( varargin )
+%% Test: Compare block entities
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+
+    assert(b1.compare(b2) < 0);
+    assert(b1.compare(b1) == 0);
+    assert(b2.compare(b1) > 0);
 end
