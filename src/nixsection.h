@@ -29,6 +29,9 @@ namespace nixsection {
 
     void referringBlockDataArrays(const extractor &input, infusor &output);
 
+    void openSectionIdx(const extractor &input, infusor &output);
+
+    void openPropertyIdx(const extractor &input, infusor &output);
 } // namespace nixsection
 
 #endif

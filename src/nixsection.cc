@@ -105,4 +105,16 @@ namespace nixsection {
         output.set(0, currSec.referringDataArrays(currBlock));
     }
 
+    void openSectionIdx(const extractor &input, infusor &output) {
+        nix::Section currObj = input.entity<nix::Section>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getSection(idx));
+    }
+
+    void openPropertyIdx(const extractor &input, infusor &output) {
+        nix::Section currObj = input.entity<nix::Section>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getProperty(idx));
+    }
+
 } // namespace nixsection
