@@ -54,6 +54,11 @@ classdef SourcesMixIn < handle
                 @nix.Source);
         end
 
+        function retObj = open_source_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                strcat(obj.alias, '::openSourceIdx'), idx, @nix.Source);
+        end
+
     end
 
 end
