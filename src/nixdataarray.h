@@ -43,6 +43,8 @@ namespace nixdataarray {
 
     void openSourceIdx(const extractor &input, infusor &output);
 
+    void openDimensionIdx(const extractor &input, infusor &output);
+
 } // namespace nixdataarray
 
 #endif

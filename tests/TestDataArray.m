@@ -28,6 +28,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_dimensions;
+    funcs{end+1} = @test_open_dimension_idx;
     funcs{end+1} = @test_dimension_count;
     funcs{end+1} = @test_datatype;
     funcs{end+1} = @test_set_data_extent;
@@ -508,6 +509,24 @@ function [] = test_dimensions( varargin )
     daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest3', ...
         'nix.DataArray', [1 2 3; 2 4 5; 3 6 7]);
     assert(isequal(daAliasWa.dataExtent, [3 3]));
+end
+
+function [] = test_open_dimension_idx( varargin )
+%% Test: Open dimension by index
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('daTestBlock', 'test nixBlock');
+    da = b.create_data_array('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
+    
+    da.append_set_dimension();
+    da.append_sampled_dimension(200);
+    da.append_range_dimension([1, 2, 3, 4]);
+
+    % for some weird reason getting the dimension by index starts with 1
+    % instead of 0 compared to all other index functions.
+    assert(strcmp(da.open_dimension_idx(1).dimensionType, 'set'));
+    assert(strcmp(da.open_dimension_idx(2).dimensionType, 'sample'));
+    assert(strcmp(da.open_dimension_idx(3).dimensionType, 'range'));
 end
 
 %% Test: Dimension count
