@@ -25,6 +25,7 @@ function funcs = TestSource
     funcs{end+1} = @test_referring_data_arrays;
     funcs{end+1} = @test_referring_tags;
     funcs{end+1} = @test_referring_multi_tags;
+    funcs{end+1} = @test_compare;
 end
 
 %% Test: fetch sources
@@ -281,4 +282,19 @@ function [] = test_referring_multi_tags( varargin )
     t2 = b.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
     t2.add_source(s);
     assert(size(s.referring_multi_tags, 1) == 2);
+end
+
+function [] = test_compare( varargin )
+%% Test: Compare Source entities
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    s1 = b1.create_source('testSource1', 'nixSource');
+    s2 = b1.create_source('testSource2', 'nixSource');
+    s3 = b2.create_source('testSource1', 'nixSource');
+
+    assert(s1.compare(s2) < 0);
+    assert(s1.compare(s1) == 0);
+    assert(s2.compare(s1) > 0);
+    assert(s1.compare(s3) ~= 0);
 end
