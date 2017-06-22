@@ -207,6 +207,7 @@ void mexFunction(int            nlhs,
         methods->add("Group::openTagIdx", nixgroup::openTagIdx);
         methods->add("Group::openMultiTagIdx", nixgroup::openMultiTagIdx);
         methods->add("Group::openSourceIdx", nixgroup::openSourceIdx);
+        methods->add("Group::compare", nixgroup::compare);
 
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)

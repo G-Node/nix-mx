@@ -41,6 +41,7 @@ function funcs = TestGroup
     funcs{end+1} = @test_open_tag_idx;
     funcs{end+1} = @test_open_multi_tag_idx;
     funcs{end+1} = @test_open_source_idx;
+    funcs{end+1} = @test_compare;
 end
 
 %% Test: Access nix.Group attributes
@@ -852,4 +853,19 @@ function [] = test_open_source_idx( varargin )
     assert(strcmp(f.blocks{1}.groups{1}.open_source_idx(0).name, s1.name));
     assert(strcmp(f.blocks{1}.groups{1}.open_source_idx(1).name, s2.name));
     assert(strcmp(f.blocks{1}.groups{1}.open_source_idx(2).name, s3.name));
+end
+
+function [] = test_compare( varargin )
+%% Test: Compare group entities
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    g1 = b1.create_group('testGroup1', 'nixGroup');
+    g2 = b1.create_group('testGroup2', 'nixGroup');
+    g3 = b2.create_group('testGroup1', 'nixGroup');
+
+    assert(g1.compare(g2) < 0);
+    assert(g1.compare(g1) == 0);
+    assert(g2.compare(g1) > 0);
+    assert(g1.compare(g3) ~= 0);
 end

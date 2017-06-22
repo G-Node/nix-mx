@@ -97,4 +97,10 @@ namespace nixgroup {
         output.set(0, currObj.getSource(idx));
     }
 
+    void compare(const extractor &input, infusor &output) {
+        nix::Group currObj = input.entity<nix::Group>(1);
+        nix::Group other = input.entity<nix::Group>(2);
+        output.set(0, currObj.compare(other));
+    }
+
 } // namespace nixgroup
