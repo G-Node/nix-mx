@@ -45,6 +45,8 @@ namespace nixdataarray {
 
     void openDimensionIdx(const extractor &input, infusor &output);
 
+    void compare(const extractor &input, infusor &output);
+
 } // namespace nixdataarray
 
 #endif

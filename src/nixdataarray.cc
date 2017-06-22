@@ -170,4 +170,10 @@ namespace nixdataarray {
         output.set(0, sb.array());
     }
 
+    void compare(const extractor &input, infusor &output) {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        nix::DataArray other = input.entity<nix::DataArray>(2);
+        output.set(0, currObj.compare(other));
+    }
+
 } // namespace nixdataarray

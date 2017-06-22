@@ -32,6 +32,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_dimension_count;
     funcs{end+1} = @test_datatype;
     funcs{end+1} = @test_set_data_extent;
+    funcs{end+1} = @test_compare;
 end
 
 function [] = test_attrs( varargin )
@@ -579,4 +580,19 @@ function [] = test_set_data_extent( varargin )
     extent = [4 6];
     da.set_data_extent(extent);
     assert(da.dataExtent(1) == extent(1) && size(da.read_all, 2) == extent(2));
+end
+
+function [] = test_compare( varargin )
+%% Test: Compare DataArray entities
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    d1 = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Bool, [2 9]);
+    d2 = b1.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Bool, [2 9]);
+    d3 = b2.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Bool, [2 9]);
+
+    assert(d1.compare(d2) < 0);
+    assert(d1.compare(d1) == 0);
+    assert(d2.compare(d1) > 0);
+    assert(d1.compare(d3) ~= 0);
 end
