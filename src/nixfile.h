@@ -21,6 +21,10 @@ namespace nixfile {
 
     mxArray *describe(const nix::File &f);
 
+    void openBlockIdx(const extractor &input, infusor &output);
+
+    void openSectionIdx(const extractor &input, infusor &output);
+
 } // namespace nixfile
 
 #endif

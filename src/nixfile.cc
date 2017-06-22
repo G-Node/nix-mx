@@ -101,4 +101,16 @@ namespace nixfile {
         return sb.array();
     }
 
+    void openBlockIdx(const extractor &input, infusor &output) {
+        nix::File currObj = input.entity<nix::File>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getBlock(idx));
+    }
+
+    void openSectionIdx(const extractor &input, infusor &output) {
+        nix::File currObj = input.entity<nix::File>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getSection(idx));
+    }
+
 } // namespace nixfile

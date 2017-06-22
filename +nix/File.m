@@ -63,6 +63,11 @@ classdef File < nix.Entity
                 'File::openBlock', id_or_name, @nix.Block);
         end
 
+        function retObj = open_block_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'File::openBlockIdx', idx, @nix.Block);
+        end
+
         function delCheck = delete_block(obj, del)
             delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Block', 'File::deleteBlock');
@@ -87,6 +92,11 @@ classdef File < nix.Entity
         function retObj = open_section(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'File::openSection', id_or_name, @nix.Section);
+        end
+
+        function retObj = open_section_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'File::openSectionIdx', idx, @nix.Section);
         end
 
         function delCheck = delete_section(obj, del)

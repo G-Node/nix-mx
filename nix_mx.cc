@@ -119,6 +119,8 @@ void mexFunction(int            nlhs,
             .reg("isOpen", GETTER(bool, nix::File, isOpen));
         methods->add("File::fileMode", nixfile::fileMode);
         methods->add("File::validate", nixfile::validate);
+        methods->add("File::openBlockIdx", nixfile::openBlockIdx);
+        methods->add("File::openSectionIdx", nixfile::openSectionIdx);
 
         classdef<nix::Block>("Block", methods)
             .desc(&nixblock::describe)
