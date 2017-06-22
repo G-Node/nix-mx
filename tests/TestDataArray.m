@@ -23,6 +23,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_add_source;
     funcs{end+1} = @test_add_sources;
     funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_open_source_idx;
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_source_count;
@@ -366,6 +367,23 @@ function [] = test_open_source( varargin )
 
     %-- test open non existing source
     assert(isempty(d.open_source('I do not exist')));
+end
+
+function [] = test_open_source_idx( varargin )
+%% Test Open Source by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
+    s1 = b.create_source('testSource1', 'nixSource');
+    s2 = b.create_source('testSource2', 'nixSource');
+    s3 = b.create_source('testSource3', 'nixSource');
+    d.add_source(s1);
+    d.add_source(s2);
+    d.add_source(s3);
+
+    assert(strcmp(f.blocks{1}.dataArrays{1}.open_source_idx(0).name, s1.name));
+    assert(strcmp(f.blocks{1}.dataArrays{1}.open_source_idx(1).name, s2.name));
+    assert(strcmp(f.blocks{1}.dataArrays{1}.open_source_idx(2).name, s3.name));
 end
 
 %% Test: Remove sources by entity and id

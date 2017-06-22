@@ -136,4 +136,10 @@ namespace nixdataarray {
         da.dataExtent(size);
     }
 
+    void openSourceIdx(const extractor &input, infusor &output) {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getSource(idx));
+    }
+
 } // namespace nixdataarray
