@@ -44,6 +44,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'Group::getDataArray', id_or_name, @nix.DataArray);
         end;
 
+        function retObj = open_data_array_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Group::openDataArrayIdx', idx, @nix.DataArray);
+        end
+
         function [] = add_data_array(obj, add_this)
             nix.Utils.add_entity(obj, add_this, ...
                 'nix.DataArray', 'Group::addDataArray');
@@ -82,6 +87,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'Group::getTag', id_or_name, @nix.Tag);
         end;
 
+        function retObj = open_tag_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Group::openTagIdx', idx, @nix.Tag);
+        end
+
         function delCheck = remove_tag(obj, del)
             delCheck = nix.Utils.delete_entity(obj, del, ...
                 'nix.Tag', 'Group::removeTag');
@@ -114,6 +124,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             retObj = nix.Utils.open_entity(obj, ...
                 'Group::getMultiTag', id_or_name, @nix.MultiTag);
         end;
+
+        function retObj = open_multi_tag_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Group::openMultiTagIdx', idx, @nix.MultiTag);
+        end
 
         function delCheck = remove_multi_tag(obj, del)
             delCheck = nix.Utils.delete_entity(obj, del, ...

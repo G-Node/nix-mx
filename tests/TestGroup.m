@@ -37,6 +37,10 @@ function funcs = TestGroup
     funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
+    funcs{end+1} = @test_open_data_array_idx;
+    funcs{end+1} = @test_open_tag_idx;
+    funcs{end+1} = @test_open_multi_tag_idx;
+    funcs{end+1} = @test_open_source_idx;
 end
 
 %% Test: Access nix.Group attributes
@@ -779,4 +783,73 @@ function [] = test_open_metadata( varargin )
     g.set_metadata(f.sections{1});
 
     assert(strcmp(g.open_metadata.name, 'testSection'));
+end
+
+function [] = test_open_data_array_idx( varargin )
+%% Test Open DataArray by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    d1 = b.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [3 2]);
+    d2 = b.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [6 2]);
+    d3 = b.create_data_array('testDataArray3', 'nixDataArray', nix.DataType.Double, [9 2]);
+    g.add_data_array(d1);
+    g.add_data_array(d2);
+    g.add_data_array(d3);
+    
+    assert(strcmp(f.blocks{1}.groups{1}.open_data_array_idx(0).name, d1.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_data_array_idx(1).name, d2.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_data_array_idx(2).name, d3.name));
+end
+
+function [] = test_open_tag_idx( varargin )
+%% Test Open Tag by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    t1 = b.create_tag('testTag1', 'nixTag', [1 2]);
+    t2 = b.create_tag('testTag2', 'nixTag', [1 2]);
+    t3 = b.create_tag('testTag3', 'nixTag', [1 2]);
+    g.add_tag(t1);
+    g.add_tag(t2);
+    g.add_tag(t3);
+
+    assert(strcmp(f.blocks{1}.groups{1}.open_tag_idx(0).name, t1.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_tag_idx(1).name, t2.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_tag_idx(2).name, t3.name));
+end
+
+function [] = test_open_multi_tag_idx( varargin )
+%% Test Open MultiTag by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Bool, [2 3]);
+    t1 = b.create_multi_tag('testMultiTag1', 'nixMultiTag', d);
+    t2 = b.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
+    t3 = b.create_multi_tag('testMultiTag3', 'nixMultiTag', d);
+    g.add_multi_tag(t1);
+    g.add_multi_tag(t2);
+    g.add_multi_tag(t3);
+    
+    assert(strcmp(f.blocks{1}.groups{1}.open_multi_tag_idx(0).name, t1.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_multi_tag_idx(1).name, t2.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_multi_tag_idx(2).name, t3.name));
+end
+
+function [] = test_open_source_idx( varargin )
+%% Test Open Source by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    g = b.create_group('testGroup', 'nixGroup');
+    s1 = b.create_source('testSource1', 'nixSource');
+    s2 = b.create_source('testSource2', 'nixSource');
+    s3 = b.create_source('testSource3', 'nixSource');
+    g.add_source(s1);
+    g.add_source(s2);
+    g.add_source(s3);
+
+    assert(strcmp(f.blocks{1}.groups{1}.open_source_idx(0).name, s1.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_source_idx(1).name, s2.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_source_idx(2).name, s3.name));
 end
