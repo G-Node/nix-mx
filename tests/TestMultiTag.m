@@ -44,6 +44,7 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_retrieve_feature_data;
     funcs{end+1} = @test_set_units;
     funcs{end+1} = @test_attrs;
+    funcs{end+1} = @test_compare;
 end
 
 %% Test: Add sources by entity and id
@@ -760,4 +761,21 @@ function [] = test_attrs( varargin )
     clear t tmp b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(isequal(f.blocks{1}.multiTags{1}.type, testType));
+end
+
+function [] = test_compare( varargin )
+%% Test: Compare MultiTag entities
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    d = b1.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 2]);
+    t1 = b1.create_multi_tag('testMultiTag1', 'nixMultiTag', d);
+    t2 = b1.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
+    d = b2.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 2]);
+    t3 = b2.create_multi_tag('testMultiTag1', 'nixMultiTag', d);
+
+    assert(t1.compare(t2) < 0);
+    assert(t1.compare(t1) == 0);
+    assert(t2.compare(t1) > 0);
+    assert(t1.compare(t3) ~= 0);
 end
