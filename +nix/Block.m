@@ -50,6 +50,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 'Block::getGroup', id_or_name, @nix.Group);
         end;
 
+        function retObj = open_group_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Block::openGroupIdx', idx, @nix.Group);
+        end
+
         function delCheck = delete_group(obj, del)
             delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Group', 'Block::deleteGroup');
@@ -67,7 +72,12 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             retObj = nix.Utils.open_entity(obj, ...
                 'Block::openDataArray', id_or_name, @nix.DataArray);
         end;
-        
+
+        function retObj = open_data_array_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Block::openDataArrayIdx', idx, @nix.DataArray);
+        end
+
         function da = create_data_array(obj, name, nixtype, datatype, shape)
             %-- Quick fix to enable alias range dimension with
             %-- 1D data arrays created with this function.
@@ -154,6 +164,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 'Block::openSource', id_or_name, @nix.Source);
         end;
 
+        function retObj = open_source_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Block::openSourceIdx', idx, @nix.Source);
+        end
+
         % -----------------
         % Tags methods
         % -----------------
@@ -170,7 +185,12 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             retObj = nix.Utils.open_entity(obj, ...
                 'Block::openTag', id_or_name, @nix.Tag);
         end;
-        
+
+        function retObj = open_tag_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Block::openTagIdx', idx, @nix.Tag);
+        end
+
         function tag = create_tag(obj, name, type, position)
            th = nix_mx('Block::createTag', obj.nix_handle, ...
                name, type, position);
@@ -198,6 +218,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             retObj = nix.Utils.open_entity(obj, ...
                 'Block::openMultiTag', id_or_name, @nix.MultiTag);
         end;
+
+        function retObj = open_multi_tag_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Block::openMultiTagIdx', idx, @nix.MultiTag);
+        end
 
         %-- Creating a multitag requires an already existing data array
         function multitag = create_multi_tag(obj, name, type, add_data_array)

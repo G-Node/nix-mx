@@ -160,6 +160,11 @@ void mexFunction(int            nlhs,
         methods->add("Block::createDataArray", nixblock::createDataArray);
         methods->add("Block::createMultiTag", nixblock::createMultiTag);
         methods->add("Block::createGroup", nixblock::createGroup);
+        methods->add("Block::openGroupIdx", nixblock::openGroupIdx);
+        methods->add("Block::openDataArrayIdx", nixblock::openDataArrayIdx);
+        methods->add("Block::openTagIdx", nixblock::openTagIdx);
+        methods->add("Block::openMultiTagIdx", nixblock::openMultiTagIdx);
+        methods->add("Block::openSourceIdx", nixblock::openSourceIdx);
 
         classdef<nix::Group>("Group", methods)
             .desc(&nixgroup::describe)
