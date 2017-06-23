@@ -25,6 +25,8 @@ namespace nixfile {
 
     void openSectionIdx(const extractor &input, infusor &output);
 
+    void sectionsFiltered(const extractor &input, infusor &output);
+
 } // namespace nixfile
 
 #endif

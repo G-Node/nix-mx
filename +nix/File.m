@@ -101,7 +101,12 @@ classdef File < nix.Entity
 
         function delCheck = delete_section(obj, del)
             delCheck = nix.Utils.delete_entity(obj, del, 'nix.Section', 'File::deleteSection');
-        end;
+        end
+
+        function filtered = filter_sections(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'File::sectionsFiltered', @nix.Section);
+        end
     end
 
 end

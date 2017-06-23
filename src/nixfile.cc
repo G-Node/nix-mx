@@ -16,6 +16,8 @@
 #include "handle.h"
 #include "arguments.h"
 #include "struct.h"
+#include "datatypes.h"
+#include "filters.h"
 
 // helper function
 mxArray *message(std::vector<nix::valid::Message> mes) {
@@ -111,6 +113,15 @@ namespace nixfile {
         nix::File currObj = input.entity<nix::File>(1);
         nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
         output.set(0, currObj.getSection(idx));
+    }
+
+    void sectionsFiltered(const extractor &input, infusor &output) {
+        nix::File currObj = input.entity<nix::File>(1);
+        std::vector<nix::Section> res = filterFileEntity<nix::Section>(input, 
+                                            [currObj](const nix::util::Filter<nix::Section>::type &filter) {
+            return currObj.sections(filter);
+        });
+        output.set(0, res);
     }
 
 } // namespace nixfile
