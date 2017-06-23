@@ -81,6 +81,25 @@ classdef Utils
                 retObj = objConstructor(handle);
             end;
         end;
+
+        % -----------------------------------------------------------
+        % nix.Filter helper functions
+        % -----------------------------------------------------------
+
+        function err = valid_filter(filter, val)
+            err = '';
+            if (~isa(filter, 'nix.Filter'))
+                err = 'Valid nix.Filter required';
+                return
+            end
+
+            % Currently matlab will crash, if anything other than
+            % a cell array is handed over to a nix.Filter.ids.
+            if (filter == nix.Filter.ids && ~iscell(val))
+                err = 'nix.Filter.ids requires a cell array';
+                return
+            end
+        end
         
     end;
 end
