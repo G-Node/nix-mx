@@ -169,6 +169,7 @@ void mexFunction(int            nlhs,
         methods->add("Block::openSourceIdx", nixblock::openSourceIdx);
         methods->add("Block::compare", nixblock::compare);
         methods->add("Block::sourcesFiltered", nixblock::sourcesFiltered);
+        methods->add("Block::groupsFiltered", nixblock::groupsFiltered);
         methods->add("Block::tagsFiltered", nixblock::tagsFiltered);
 
         classdef<nix::Group>("Group", methods)

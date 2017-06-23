@@ -106,6 +106,15 @@ namespace nixblock {
         output.set(0, res);
     }
 
+    void groupsFiltered(const extractor &input, infusor &output) {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        std::vector<nix::Group> res = filterEntity<nix::Group>(input,
+                                            [currObj](const nix::util::Filter<nix::Group>::type &filter) {
+            return currObj.groups(filter);
+        });
+        output.set(0, res);
+    }
+
     void tagsFiltered(const extractor &input, infusor &output) {
         nix::Block currObj = input.entity<nix::Block>(1);
         std::vector<nix::Tag> res = filterEntity<nix::Tag>(input,

@@ -59,6 +59,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Group', 'Block::deleteGroup');
         end;
+
+        function filtered = filter_groups(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Block::groupsFiltered', @nix.Group);
+        end
         
         % -----------------
         % DataArray methods
