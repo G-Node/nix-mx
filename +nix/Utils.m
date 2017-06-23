@@ -100,6 +100,19 @@ classdef Utils
                 return
             end
         end
-        
+
+        function currData = filter(obj, filter, val, mxMethod, objConstructor)
+            valid = nix.Utils.valid_filter(filter, val);
+            if(~isempty(valid))
+                error(valid);
+            end
+
+            currList = nix_mx(mxMethod, obj.nix_handle, uint8(filter), val);
+            currData = cell(length(currList), 1);
+            for i = 1:length(currList)
+                currData{i} = objConstructor(currList{i});
+            end;
+        end
+
     end;
 end
