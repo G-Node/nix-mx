@@ -12,8 +12,9 @@
 
 #include <nix.hpp>
 
-#include "handle.h"
 #include "arguments.h"
+#include "filters.h"
+#include "handle.h"
 #include "struct.h"
 
 namespace nixblock {
@@ -94,6 +95,15 @@ namespace nixblock {
         nix::Block currObj = input.entity<nix::Block>(1);
         nix::Block other = input.entity<nix::Block>(2);
         output.set(0, currObj.compare(other));
+    }
+
+    void sourcesFiltered(const extractor &input, infusor &output) {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        std::vector<nix::Source> res = filterEntity<nix::Source>(input,
+            [currObj](const nix::util::Filter<nix::Source>::type &filter) {
+            return currObj.sources(filter);
+        });
+        output.set(0, res);
     }
 
 } // namespace nixblock

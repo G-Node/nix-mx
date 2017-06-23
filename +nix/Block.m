@@ -169,6 +169,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 'Block::openSourceIdx', idx, @nix.Source);
         end
 
+        function filtered = filter_sources(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Block::sourcesFiltered', @nix.Source);
+        end
+
         % -----------------
         % Tags methods
         % -----------------
