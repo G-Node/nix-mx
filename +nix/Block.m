@@ -207,6 +207,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 del, 'nix.Tag', 'Block::deleteTag');
         end;
 
+        function filtered = filter_tags(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Block::tagsFiltered', @nix.Tag);
+        end
+
         % -----------------
         % MultiTag methods
         % -----------------

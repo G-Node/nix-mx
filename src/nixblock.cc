@@ -100,8 +100,17 @@ namespace nixblock {
     void sourcesFiltered(const extractor &input, infusor &output) {
         nix::Block currObj = input.entity<nix::Block>(1);
         std::vector<nix::Source> res = filterEntity<nix::Source>(input,
-            [currObj](const nix::util::Filter<nix::Source>::type &filter) {
+                                            [currObj](const nix::util::Filter<nix::Source>::type &filter) {
             return currObj.sources(filter);
+        });
+        output.set(0, res);
+    }
+
+    void tagsFiltered(const extractor &input, infusor &output) {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        std::vector<nix::Tag> res = filterEntity<nix::Tag>(input,
+                                        [currObj](const nix::util::Filter<nix::Tag>::type &filter) {
+            return currObj.tags(filter);
         });
         output.set(0, res);
     }

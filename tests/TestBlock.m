@@ -51,6 +51,7 @@ function funcs = TestBlock
     funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_compare;
     funcs{end+1} = @test_filter_source;
+    funcs{end+1} = @test_filter_tag;
 end
 
 function [] = test_attrs( varargin )
@@ -820,6 +821,71 @@ function [] = test_filter_source( varargin )
     assert(strcmp(filtered{1}.id, mainID));
 
     filtered = f.blocks{1}.filter_sources(nix.Filter.source, subID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, mainName));
+end
+
+%% Test: filter tags
+function [] = test_filter_tag( varargin )
+    filterName = 'filterMe';
+    filterType = 'filterType';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    t = b.create_tag(filterName, 'nixTag', [1 2 3]);
+    filterID = t.id;
+	t = b.create_tag('testTag1', filterType, [1 2 3 4]);
+    filterIDs = {filterID, t.id};
+    t = b.create_tag('testTag2', filterType, [1 2]);
+
+    % test empty id filter
+    assert(isempty(f.blocks{1}.filter_tags(nix.Filter.id, 'IdoNotExist')));
+
+    % test nix.Filter.accept_all
+    filtered = f.blocks{1}.filter_tags(nix.Filter.accept_all, '');
+    assert(size(filtered, 1) == 3);
+    
+    % test nix.Filter.id
+    filtered = f.blocks{1}.filter_tags(nix.Filter.id, filterID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.id, filterID));
+
+    % test nix.Filter.ids
+    filtered = f.blocks{1}.filter_tags(nix.Filter.ids, filterIDs);
+    assert(size(filtered, 1) == 2);
+    assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
+    
+    % test nix.Filter.name
+    filtered  = f.blocks{1}.filter_tags(nix.Filter.name, filterName);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, filterName));
+    
+    % test nix.Filter.type
+    filtered = f.blocks{1}.filter_tags(nix.Filter.type, filterType);
+    assert(size(filtered, 1) == 2);
+
+    % test nix.Filter.metadata
+    mainName = 'testSubSection';
+    mainEntity = b.create_tag(mainName, 'nixTag', [1 8]);
+    subName = 'testSubSection1';
+    s = f.create_section(subName, 'nixSection');
+    mainEntity.set_metadata(s);
+    subID = s.id;
+
+    assert(isempty(f.blocks{1}.filter_tags(nix.Filter.metadata, 'Do not exist')));
+    filtered = f.blocks{1}.filter_tags(nix.Filter.metadata, subID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, mainName));
+
+    % test nix.Filter.source
+    mainName = 'testSubSource';
+    mainEntity = b.create_tag(mainName, 'nixTag', [12 3]);
+    subName = 'testSubSource1';
+    s = b.create_source(subName, 'nixSource');
+    mainEntity.add_source(s);
+    subID = s.id;
+
+    % filter works only for ID, not for name
+    filtered = f.blocks{1}.filter_tags(nix.Filter.source, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 end
