@@ -122,6 +122,7 @@ void mexFunction(int            nlhs,
         methods->add("File::openBlockIdx", nixfile::openBlockIdx);
         methods->add("File::openSectionIdx", nixfile::openSectionIdx);
         methods->add("File::sectionsFiltered", nixfile::sectionsFiltered);
+        methods->add("File::blocksFiltered", nixfile::blocksFiltered);
 
         classdef<nix::Block>("Block", methods)
             .desc(&nixblock::describe)

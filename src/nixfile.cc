@@ -124,4 +124,13 @@ namespace nixfile {
         output.set(0, res);
     }
 
+    void blocksFiltered(const extractor &input, infusor &output) {
+        nix::File currObj = input.entity<nix::File>(1);
+        std::vector<nix::Block> res = filterFileEntity<nix::Block>(input,
+                                        [currObj](const nix::util::Filter<nix::Block>::type &filter) {
+            return currObj.blocks(filter);
+        });
+        output.set(0, res);
+    }
+
 } // namespace nixfile

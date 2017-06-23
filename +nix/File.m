@@ -73,6 +73,11 @@ classdef File < nix.Entity
                 del, 'nix.Block', 'File::deleteBlock');
         end;
 
+        function filtered = filter_blocks(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'File::blocksFiltered', @nix.Block);
+        end
+
         % ----------------
         % Section methods
         % ----------------

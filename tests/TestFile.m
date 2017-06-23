@@ -32,6 +32,7 @@ function funcs = TestFile
     funcs{end+1} = @test_has_block;
     funcs{end+1} = @test_has_section;
     funcs{end+1} = @test_filter_section;
+    funcs{end+1} = @test_filter_block;
 end
 
 %% Test: Open HDF5 file in ReadOnly mode
@@ -348,6 +349,63 @@ function [] = test_filter_section( varargin )
     % test fail on nix.Filter.source
     try
         f.filter_sections(nix.Filter.source, 'someSource');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+end
+
+function [] = test_filter_block( varargin )
+%% Test: filter Blocks
+    filterName = 'filterMe';
+    filterType = 'filterType';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+
+    b = f.create_block(filterName, 'nixBlock');
+    filterID = b.id;
+	b = f.create_block('testBlock1', filterType);
+    filterIDs = {filterID, b.id};
+    b = f.create_block('testBlock2', filterType);
+
+    % ToDO add basic filter crash tests
+    
+    % test empty id filter
+    assert(isempty(f.filter_blocks(nix.Filter.id, 'IdoNotExist')));
+
+    % test nix.Filter.accept_all
+    filtered = f.filter_blocks(nix.Filter.accept_all, '');
+    assert(size(filtered, 1) == 3);
+    
+    % test nix.Filter.id
+    filtered = f.filter_blocks(nix.Filter.id, filterID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.id, filterID));
+
+    % test nix.Filter.ids
+    filtered = f.filter_blocks(nix.Filter.ids, filterIDs);
+    assert(size(filtered, 1) == 2);
+    assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
+    
+    % test nix.Filter.name
+    filtered  = f.filter_blocks(nix.Filter.name, filterName);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, filterName));
+    
+    % test nix.Filter.type
+    filtered = f.filter_blocks(nix.Filter.type, filterType);
+    assert(size(filtered, 1) == 2);
+    
+    % test fail on nix.Filter.metadata
+    err = 'unknown or unsupported filter';
+    try
+        f.filter_blocks(nix.Filter.metadata, 'someMetadata');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+    
+    % test fail on nix.Filter.source
+    try
+        f.filter_blocks(nix.Filter.source, 'someSource');
     catch ME
         assert(strcmp(ME.message, err));
     end
