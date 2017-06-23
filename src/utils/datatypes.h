@@ -12,6 +12,16 @@
 #include <nix/DataType.hpp>
 #include <mex.h>
 
+enum switchFilter : int8_t {
+    AcceptAll,
+    Id,
+    Ids,
+    Type,
+    Name,
+    Metadata,
+    Source
+};
+
 inline nix::DataType dtype_mex2nix(const mxArray *array) {
     mxClassID cid = mxGetClassID(array);
 
