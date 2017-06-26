@@ -43,6 +43,8 @@ namespace nixgroup {
 
     void sourcesFiltered(const extractor &input, infusor &output);
 
+    void tagsFiltered(const extractor &input, infusor &output);
+
 } // namespace nixgroup
 
 #endif

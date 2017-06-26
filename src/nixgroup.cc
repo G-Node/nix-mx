@@ -113,4 +113,13 @@ namespace nixgroup {
         output.set(0, res);
     }
 
+    void tagsFiltered(const extractor &input, infusor &output) {
+        nix::Group currObj = input.entity<nix::Group>(1);
+        std::vector<nix::Tag> res = filterEntity<nix::Tag>(input,
+                                        [currObj](const nix::util::Filter<nix::Tag>::type &filter) {
+            return currObj.tags(filter);
+        });
+        output.set(0, res);
+    }
+
 } // namespace nixgroup
