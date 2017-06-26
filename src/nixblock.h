@@ -39,6 +39,8 @@ namespace nixblock {
 
     void tagsFiltered(const extractor &input, infusor &output);
 
+    void multiTagsFiltered(const extractor &input, infusor &output);
+
 } // namespace nixblock
 
 #endif

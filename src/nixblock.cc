@@ -124,4 +124,13 @@ namespace nixblock {
         output.set(0, res);
     }
 
+    void multiTagsFiltered(const extractor &input, infusor &output) {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        std::vector<nix::MultiTag> res = filterEntity<nix::MultiTag>(input,
+                                        [currObj](const nix::util::Filter<nix::MultiTag>::type &filter) {
+            return currObj.multiTags(filter);
+        });
+        output.set(0, res);
+    }
+
 } // namespace nixblock
