@@ -142,6 +142,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 del, 'nix.DataArray', 'Block::deleteDataArray');
         end;
 
+        function filtered = filter_data_arrays(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Block::dataArraysFiltered', @nix.DataArray);
+        end
+
         % -----------------
         % Sources methods
         % -----------------

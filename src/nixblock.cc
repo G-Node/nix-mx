@@ -133,4 +133,13 @@ namespace nixblock {
         output.set(0, res);
     }
 
+    void dataArraysFiltered(const extractor &input, infusor &output) {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        std::vector<nix::DataArray> res = filterEntity<nix::DataArray>(input,
+                                            [currObj](const nix::util::Filter<nix::DataArray>::type &filter) {
+            return currObj.dataArrays(filter);
+        });
+        output.set(0, res);
+    }
+
 } // namespace nixblock
