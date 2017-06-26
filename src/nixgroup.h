@@ -41,6 +41,8 @@ namespace nixgroup {
 
     void compare(const extractor &input, infusor &output);
 
+    void sourcesFiltered(const extractor &input, infusor &output);
+
 } // namespace nixgroup
 
 #endif
