@@ -42,6 +42,7 @@ function funcs = TestTag
     funcs{end+1} = @test_compare;
     funcs{end+1} = @test_filter_source;
     funcs{end+1} = @test_filter_reference;
+    funcs{end+1} = @test_filter_feature;
 end
 
 %% Test: Add sources by entity and id
@@ -802,4 +803,65 @@ function [] = test_filter_reference( varargin )
     filtered = f.blocks{1}.tags{1}.filter_references(nix.Filter.source, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
+end
+
+%% Test: filter features
+function [] = test_filter_feature( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    t = b.create_tag('testTag', 'nixTag', [1 2 3]);
+    d = b.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    feat = t.add_feature(d, nix.LinkType.Tagged);
+    filterID = feat.id;
+	d = b.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    feat = t.add_feature(d, nix.LinkType.Tagged);
+    filterIDs = {filterID, feat.id};
+
+    % test empty id filter
+    assert(isempty(f.blocks{1}.tags{1}.filter_features(nix.Filter.id, 'IdoNotExist')));
+
+    % test nix.Filter.accept_all
+    filtered = f.blocks{1}.tags{1}.filter_features(nix.Filter.accept_all, '');
+    assert(size(filtered, 1) == 2);
+
+    % test nix.Filter.id
+    filtered = f.blocks{1}.tags{1}.filter_features(nix.Filter.id, filterID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.id, filterID));
+
+    % test nix.Filter.ids
+    filtered = f.blocks{1}.tags{1}.filter_features(nix.Filter.ids, filterIDs);
+    assert(size(filtered, 1) == 2);
+    assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
+
+    % test fail on nix.Filter.name
+    err = 'unknown or unsupported filter';
+    try
+        f.blocks{1}.tags{1}.filter_features(nix.Filter.name, 'someName');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test fail on nix.Filter.type
+    err = 'unknown or unsupported filter';
+    try
+        f.blocks{1}.tags{1}.filter_features(nix.Filter.type, 'someType');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test fail on nix.Filter.metadata
+    err = 'unknown or unsupported filter';
+    try
+        f.blocks{1}.tags{1}.filter_features(nix.Filter.metadata, 'someMetadata');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test fail on nix.Filter.source
+    try
+        f.blocks{1}.tags{1}.filter_features(nix.Filter.source, 'someSource');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
 end

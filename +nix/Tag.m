@@ -128,5 +128,10 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function c = feature_count(obj)
             c = nix_mx('Tag::featureCount', obj.nix_handle);
         end
+
+        function filtered = filter_features(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Tag::featuresFiltered', @nix.Feature);
+        end
     end;
 end
