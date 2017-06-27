@@ -8,15 +8,17 @@
 
 #include "nixdataarray.h"
 #include "nixdimensions.h"
-#include "mkarray.h"
+
 #include "mex.h"
 
 #include <nix.hpp>
 
-#include "handle.h"
 #include "arguments.h"
-#include "struct.h"
+#include "filters.h"
+#include "handle.h"
+#include "mkarray.h"
 #include "mknix.h"
+#include "struct.h"
 
 namespace nixdataarray {
 
@@ -174,6 +176,15 @@ namespace nixdataarray {
         nix::DataArray currObj = input.entity<nix::DataArray>(1);
         nix::DataArray other = input.entity<nix::DataArray>(2);
         output.set(0, currObj.compare(other));
+    }
+
+    void sourcesFiltered(const extractor &input, infusor &output) {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        std::vector<nix::Source> res = filterEntity<nix::Source>(input,
+                                            [currObj](const nix::util::Filter<nix::Source>::type &filter) {
+            return currObj.sources(filter);
+        });
+        output.set(0, res);
     }
 
 } // namespace nixdataarray

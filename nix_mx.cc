@@ -262,6 +262,7 @@ void mexFunction(int            nlhs,
         methods->add("DataArray::openSourceIdx", nixdataarray::openSourceIdx);
         methods->add("DataArray::openDimensionIdx", nixdataarray::openDimensionIdx);
         methods->add("DataArray::compare", nixdataarray::compare);
+        methods->add("DataArray::sourcesFiltered", nixdataarray::sourcesFiltered);
 
         classdef<nix::Source>("Source", methods)
             .desc(&nixsource::describe)
