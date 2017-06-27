@@ -45,6 +45,8 @@ namespace nixgroup {
 
     void tagsFiltered(const extractor &input, infusor &output);
 
+    void multiTagsFiltered(const extractor &input, infusor &output);
+
 } // namespace nixgroup
 
 #endif

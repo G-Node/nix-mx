@@ -143,6 +143,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function c = multi_tag_count(obj)
             c = nix_mx('Group::multiTagCount', obj.nix_handle);
         end
+
+        function filtered = filter_multi_tags(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Group::multiTagsFiltered', @nix.MultiTag);
+        end
     end;
 
 end

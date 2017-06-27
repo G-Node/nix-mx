@@ -44,6 +44,7 @@ function funcs = TestGroup
     funcs{end+1} = @test_compare;
     funcs{end+1} = @test_filter_source;
     funcs{end+1} = @test_filter_tag;
+    funcs{end+1} = @test_filter_multi_tag;
 end
 
 %% Test: Access nix.Group attributes
@@ -1017,6 +1018,81 @@ function [] = test_filter_tag( varargin )
 
     % filter works only for ID, not for name
     filtered = f.blocks{1}.groups{1}.filter_tags(nix.Filter.source, subID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, mainName));
+end
+
+%% Test: filter multi tags
+function [] = test_filter_multi_tag( varargin )
+    filterName = 'filterMe';
+    filterType = 'filterType';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    g = b.create_group('testGroup', 'nixGroup');
+    t = b.create_multi_tag(filterName, 'nixMultiTag', d);
+    g.add_multi_tag(t);
+    filterID = t.id;
+	t = b.create_multi_tag('testMultiTag1', filterType, d);
+    g.add_multi_tag(t);
+    filterIDs = {filterID, t.id};
+    t = b.create_multi_tag('testMultiTag2', filterType, d);
+    g.add_multi_tag(t);
+
+    % test empty id filter
+    assert(isempty(f.blocks{1}.groups{1}.filter_multi_tags(nix.Filter.id, 'IdoNotExist')));
+
+    % test nix.Filter.accept_all
+    filtered = f.blocks{1}.groups{1}.filter_multi_tags(nix.Filter.accept_all, '');
+    assert(size(filtered, 1) == 3);
+    
+    % test nix.Filter.id
+    filtered = f.blocks{1}.groups{1}.filter_multi_tags(nix.Filter.id, filterID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.id, filterID));
+
+    % test nix.Filter.ids
+    filtered = f.blocks{1}.groups{1}.filter_multi_tags(nix.Filter.ids, filterIDs);
+    assert(size(filtered, 1) == 2);
+    assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
+    
+    % test nix.Filter.name
+    filtered  = f.blocks{1}.groups{1}.filter_multi_tags(nix.Filter.name, filterName);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, filterName));
+    
+    % test nix.Filter.type
+    filtered = f.blocks{1}.groups{1}.filter_multi_tags(nix.Filter.type, filterType);
+    assert(size(filtered, 1) == 2);
+
+    % test nix.Filter.metadata
+    mainName = 'testSubSection';
+    main = b.create_multi_tag(mainName, 'nixMultiTag', d);
+    g.add_multi_tag(main);
+    subName = 'testSubSection1';
+    s = f.create_section(subName, 'nixSection');
+    main.set_metadata(s);
+    subID = s.id;
+
+    assert(isempty(f.blocks{1}.groups{1}.filter_multi_tags(nix.Filter.metadata, 'Do not exist')));
+    filtered = f.blocks{1}.groups{1}.filter_multi_tags(nix.Filter.metadata, subID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, mainName));
+
+    % test nix.Filter.source
+    mainName = 'testSubSource';
+    main = b.create_multi_tag(mainName, 'nixMultiTag', d);
+    g.add_multi_tag(main);
+    mainID = main.id;
+    subName = 'testSubSource1';
+    s = b.create_source(subName, 'nixSource');
+    main.add_source(s);
+    subID = s.id;
+
+    assert(isempty(f.blocks{1}.groups{1}.filter_multi_tags(nix.Filter.source, 'Do not exist')));
+
+    % filter works only for ID, not for name
+    filtered = f.blocks{1}.groups{1}.filter_multi_tags(nix.Filter.source, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 end

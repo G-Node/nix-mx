@@ -122,4 +122,13 @@ namespace nixgroup {
         output.set(0, res);
     }
 
+    void multiTagsFiltered(const extractor &input, infusor &output) {
+        nix::Group currObj = input.entity<nix::Group>(1);
+        std::vector<nix::MultiTag> res = filterEntity<nix::MultiTag>(input,
+            [currObj](const nix::util::Filter<nix::MultiTag>::type &filter) {
+            return currObj.multiTags(filter);
+        });
+        output.set(0, res);
+    }
+
 } // namespace nixgroup
