@@ -35,6 +35,8 @@ namespace nixsection {
 
     void compare(const extractor &input, infusor &output);
 
+    void sectionsFiltered(const extractor &input, infusor &output);
+
 } // namespace nixsection
 
 #endif

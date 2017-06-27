@@ -102,6 +102,11 @@ classdef Section < nix.NamedEntity
             c = nix_mx('Section::sectionCount', obj.nix_handle);
         end
 
+        function filtered = filter_sections(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Section::sectionsFiltered', @nix.Section);
+        end
+
         % ----------------
         % Property methods
         % ----------------

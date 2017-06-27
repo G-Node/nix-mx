@@ -414,6 +414,7 @@ void mexFunction(int            nlhs,
         methods->add("Section::openSectionIdx", nixsection::openSectionIdx);
         methods->add("Section::openPropertyIdx", nixsection::openPropertyIdx);
         methods->add("Section::compare", nixsection::compare);
+        methods->add("Section::sectionsFiltered", nixsection::sectionsFiltered);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)
