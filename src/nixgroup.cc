@@ -106,7 +106,7 @@ namespace nixgroup {
 
     void sourcesFiltered(const extractor &input, infusor &output) {
         nix::Group currObj = input.entity<nix::Group>(1);
-        std::vector<nix::Source> res = filterEntity<nix::Source>(input,
+        std::vector<nix::Source> res = filterFullEntity<nix::Source>(input,
                                             [currObj](const nix::util::Filter<nix::Source>::type &filter) {
             return currObj.sources(filter);
         });
@@ -115,7 +115,7 @@ namespace nixgroup {
 
     void tagsFiltered(const extractor &input, infusor &output) {
         nix::Group currObj = input.entity<nix::Group>(1);
-        std::vector<nix::Tag> res = filterEntity<nix::Tag>(input,
+        std::vector<nix::Tag> res = filterFullEntity<nix::Tag>(input,
                                         [currObj](const nix::util::Filter<nix::Tag>::type &filter) {
             return currObj.tags(filter);
         });
@@ -124,7 +124,7 @@ namespace nixgroup {
 
     void multiTagsFiltered(const extractor &input, infusor &output) {
         nix::Group currObj = input.entity<nix::Group>(1);
-        std::vector<nix::MultiTag> res = filterEntity<nix::MultiTag>(input,
+        std::vector<nix::MultiTag> res = filterFullEntity<nix::MultiTag>(input,
                                             [currObj](const nix::util::Filter<nix::MultiTag>::type &filter) {
             return currObj.multiTags(filter);
         });
@@ -133,7 +133,7 @@ namespace nixgroup {
 
     void dataArraysFiltered(const extractor &input, infusor &output) {
         nix::Group currObj = input.entity<nix::Group>(1);
-        std::vector<nix::DataArray> res = filterEntity<nix::DataArray>(input,
+        std::vector<nix::DataArray> res = filterFullEntity<nix::DataArray>(input,
                                             [currObj](const nix::util::Filter<nix::DataArray>::type &filter) {
             return currObj.dataArrays(filter);
         });

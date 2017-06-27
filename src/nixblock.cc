@@ -99,7 +99,7 @@ namespace nixblock {
 
     void sourcesFiltered(const extractor &input, infusor &output) {
         nix::Block currObj = input.entity<nix::Block>(1);
-        std::vector<nix::Source> res = filterEntity<nix::Source>(input,
+        std::vector<nix::Source> res = filterFullEntity<nix::Source>(input,
                                             [currObj](const nix::util::Filter<nix::Source>::type &filter) {
             return currObj.sources(filter);
         });
@@ -108,7 +108,7 @@ namespace nixblock {
 
     void groupsFiltered(const extractor &input, infusor &output) {
         nix::Block currObj = input.entity<nix::Block>(1);
-        std::vector<nix::Group> res = filterEntity<nix::Group>(input,
+        std::vector<nix::Group> res = filterFullEntity<nix::Group>(input,
                                             [currObj](const nix::util::Filter<nix::Group>::type &filter) {
             return currObj.groups(filter);
         });
@@ -117,7 +117,7 @@ namespace nixblock {
 
     void tagsFiltered(const extractor &input, infusor &output) {
         nix::Block currObj = input.entity<nix::Block>(1);
-        std::vector<nix::Tag> res = filterEntity<nix::Tag>(input,
+        std::vector<nix::Tag> res = filterFullEntity<nix::Tag>(input,
                                         [currObj](const nix::util::Filter<nix::Tag>::type &filter) {
             return currObj.tags(filter);
         });
@@ -126,7 +126,7 @@ namespace nixblock {
 
     void multiTagsFiltered(const extractor &input, infusor &output) {
         nix::Block currObj = input.entity<nix::Block>(1);
-        std::vector<nix::MultiTag> res = filterEntity<nix::MultiTag>(input,
+        std::vector<nix::MultiTag> res = filterFullEntity<nix::MultiTag>(input,
                                         [currObj](const nix::util::Filter<nix::MultiTag>::type &filter) {
             return currObj.multiTags(filter);
         });
@@ -135,7 +135,7 @@ namespace nixblock {
 
     void dataArraysFiltered(const extractor &input, infusor &output) {
         nix::Block currObj = input.entity<nix::Block>(1);
-        std::vector<nix::DataArray> res = filterEntity<nix::DataArray>(input,
+        std::vector<nix::DataArray> res = filterFullEntity<nix::DataArray>(input,
                                             [currObj](const nix::util::Filter<nix::DataArray>::type &filter) {
             return currObj.dataArrays(filter);
         });

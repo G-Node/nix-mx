@@ -110,7 +110,7 @@ namespace nixmultitag {
 
     void sourcesFiltered(const extractor &input, infusor &output) {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
-        std::vector<nix::Source> res = filterEntity<nix::Source>(input,
+        std::vector<nix::Source> res = filterFullEntity<nix::Source>(input,
                                             [currObj](const nix::util::Filter<nix::Source>::type &filter) {
             return currObj.sources(filter);
         });
@@ -119,7 +119,7 @@ namespace nixmultitag {
 
     void referencesFiltered(const extractor &input, infusor &output) {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
-        std::vector<nix::DataArray> res = filterEntity<nix::DataArray>(input,
+        std::vector<nix::DataArray> res = filterFullEntity<nix::DataArray>(input,
                                                 [currObj](const nix::util::Filter<nix::DataArray>::type &filter) {
             return currObj.references(filter);
         });
@@ -128,7 +128,7 @@ namespace nixmultitag {
 
     void featuresFiltered(const extractor &input, infusor &output) {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
-        std::vector<nix::Feature> res = filterFeature<nix::Feature>(input,
+        std::vector<nix::Feature> res = filterEntity<nix::Feature>(input,
                                             [currObj](const nix::util::Filter<nix::Feature>::type &filter) {
             return currObj.features(filter);
         });

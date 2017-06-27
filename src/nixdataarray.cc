@@ -180,7 +180,7 @@ namespace nixdataarray {
 
     void sourcesFiltered(const extractor &input, infusor &output) {
         nix::DataArray currObj = input.entity<nix::DataArray>(1);
-        std::vector<nix::Source> res = filterEntity<nix::Source>(input,
+        std::vector<nix::Source> res = filterFullEntity<nix::Source>(input,
                                             [currObj](const nix::util::Filter<nix::Source>::type &filter) {
             return currObj.sources(filter);
         });

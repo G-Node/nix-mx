@@ -126,7 +126,7 @@ namespace nixsection {
 
     void sectionsFiltered(const extractor &input, infusor &output) {
         nix::Section currObj = input.entity<nix::Section>(1);
-        std::vector<nix::Section> res = filterFileEntity<nix::Section>(input,
+        std::vector<nix::Section> res = filterNameTypeEntity<nix::Section>(input,
                                             [currObj](const nix::util::Filter<nix::Section>::type &filter) {
             return currObj.sections(filter);
         });
@@ -135,7 +135,7 @@ namespace nixsection {
 
     void propertiesFiltered(const extractor &input, infusor &output) {
         nix::Section currObj = input.entity<nix::Section>(1);
-        std::vector<nix::Property> res = filterProperty<nix::Property>(input,
+        std::vector<nix::Property> res = filterNamedEntity<nix::Property>(input,
                                             [currObj](const nix::util::Filter<nix::Property>::type &filter) {
             return currObj.properties(filter);
         });

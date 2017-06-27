@@ -42,7 +42,7 @@ namespace nixsource {
 
     void sourcesFiltered(const extractor &input, infusor &output) {
         nix::Source currObj = input.entity<nix::Source>(1);
-        std::vector<nix::Source> res = filterEntity<nix::Source>(input,
+        std::vector<nix::Source> res = filterFullEntity<nix::Source>(input,
                                             [currObj](const nix::util::Filter<nix::Source>::type &filter) {
             return currObj.sources(filter);
         });
