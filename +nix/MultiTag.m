@@ -132,6 +132,11 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             c = nix_mx('MultiTag::featureCount', obj.nix_handle);
         end
 
+        function filtered = filter_features(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'MultiTag::featuresFiltered', @nix.Feature);
+        end
+
         % ------------------
         % Positions methods
         % ------------------

@@ -43,6 +43,8 @@ namespace nixmultitag {
 
     void referencesFiltered(const extractor &input, infusor &output);
 
+    void featuresFiltered(const extractor &input, infusor &output);
+
 } // namespace nixmultitag
 
 #endif

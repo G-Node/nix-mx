@@ -126,4 +126,13 @@ namespace nixmultitag {
         output.set(0, res);
     }
 
+    void featuresFiltered(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        std::vector<nix::Feature> res = filterFeature<nix::Feature>(input,
+                                            [currObj](const nix::util::Filter<nix::Feature>::type &filter) {
+            return currObj.features(filter);
+        });
+        output.set(0, res);
+    }
+
 } // namespace nixmultitag
