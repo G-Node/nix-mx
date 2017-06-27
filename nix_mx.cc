@@ -323,6 +323,7 @@ void mexFunction(int            nlhs,
         methods->add("Tag::openFeatureIdx", nixtag::openFeatureIdx);
         methods->add("Tag::openSourceIdx", nixtag::openSourceIdx);
         methods->add("Tag::compare", nixtag::compare);
+        methods->add("Tag::sourcesFiltered", nixtag::sourcesFiltered);
 
         classdef<nix::MultiTag>("MultiTag", methods)
             .desc(&nixmultitag::describe)

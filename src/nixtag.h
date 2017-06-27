@@ -37,6 +37,8 @@ namespace nixtag {
 
     void compare(const extractor &input, infusor &output);
 
+    void sourcesFiltered(const extractor &input, infusor &output);
+
 } // namespace nixtag
 
 #endif
