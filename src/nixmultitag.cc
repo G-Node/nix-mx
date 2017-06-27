@@ -117,4 +117,13 @@ namespace nixmultitag {
         output.set(0, res);
     }
 
+    void referencesFiltered(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        std::vector<nix::DataArray> res = filterEntity<nix::DataArray>(input,
+                                                [currObj](const nix::util::Filter<nix::DataArray>::type &filter) {
+            return currObj.references(filter);
+        });
+        output.set(0, res);
+    }
+
 } // namespace nixmultitag

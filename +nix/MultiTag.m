@@ -78,6 +78,11 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             c = nix_mx('MultiTag::referenceCount', obj.nix_handle);
         end
 
+        function filtered = filter_references(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'MultiTag::referencesFiltered', @nix.DataArray);
+        end
+
         % ------------------
         % Features methods
         % ------------------
