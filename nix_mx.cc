@@ -218,6 +218,7 @@ void mexFunction(int            nlhs,
         methods->add("Group::sourcesFiltered", nixgroup::sourcesFiltered);
         methods->add("Group::tagsFiltered", nixgroup::tagsFiltered);
         methods->add("Group::multiTagsFiltered", nixgroup::multiTagsFiltered);
+        methods->add("Group::dataArraysFiltered", nixgroup::dataArraysFiltered);
 
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)

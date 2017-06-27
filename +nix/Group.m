@@ -64,6 +64,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'nix.DataArray', 'Group::removeDataArray');
         end;
 
+        function filtered = filter_data_arrays(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Group::dataArraysFiltered', @nix.DataArray);
+        end
+
         % -----------------
         % Tags methods
         % -----------------
