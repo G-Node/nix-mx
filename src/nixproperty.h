@@ -19,6 +19,10 @@ namespace nixproperty {
 
     void updateValues(const extractor &input, infusor &output);
 
+    void deleteValues(const extractor &input, infusor &output);
+
+    void compare(const extractor &input, infusor &output);
+
 } // namespace nixproperty
 
 #endif
