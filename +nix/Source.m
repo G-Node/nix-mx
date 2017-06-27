@@ -48,6 +48,25 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
             retObj = nix.Utils.open_entity(obj, ...
                 'Source::openSource', id_or_name, @nix.Source);
         end;
-        
+
+        function retObj = parent_source(obj)
+            retObj = nix.Utils.fetchObj('Source::parentSource', ...
+                obj.nix_handle, @nix.Source);
+        end
+
+        function retObj = referring_data_arrays(obj)
+            retObj = nix.Utils.fetchObjList('Source::referringDataArrays', ...
+                obj.nix_handle, @nix.DataArray);
+        end
+
+        function retObj = referring_tags(obj)
+            retObj = nix.Utils.fetchObjList('Source::referringTags', ...
+                obj.nix_handle, @nix.Tag);
+        end
+
+        function retObj = referring_multi_tags(obj)
+            retObj = nix.Utils.fetchObjList('Source::referringMultiTags', ...
+                obj.nix_handle, @nix.MultiTag);
+        end
     end;
 end

@@ -18,8 +18,12 @@ function funcs = TestSource
     funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_source_count;
+    funcs{end+1} = @test_parent_source;
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
+    funcs{end+1} = @test_referring_data_arrays;
+    funcs{end+1} = @test_referring_tags;
+    funcs{end+1} = @test_referring_multi_tags;
 end
 
 %% Test: fetch sources
@@ -189,4 +193,77 @@ function [] = test_has_source( varargin )
     clear nested s b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(f.blocks{1}.sources{1}.has_source(nestedID));
+end
+
+%% Test: Get parent source
+function [] = test_parent_source( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('sourcetest', 'nixBlock');
+    sourceName1 = 'testSource1';
+    sourceName2 = 'testSource2';
+    s1 = b.create_source(sourceName1, 'nixSource');
+    s2 = s1.create_source(sourceName2, 'nixSource');
+    s3 = s2.create_source('testSource3', 'nixSource');
+
+    assert(strcmp(s3.parent_source.name, sourceName2));
+    assert(strcmp(s2.parent_source.name, sourceName1));
+end
+
+%% Test: Referring data arrays
+function [] = test_referring_data_arrays( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    s = b.create_source('testSource', 'nixSource');
+
+    assert(isempty(s.referring_data_arrays));
+
+    d1 = b.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d1.add_source(s);
+    assert(~isempty(s.referring_data_arrays));
+    assert(strcmp(s.referring_data_arrays{1}.name, d1.name));
+
+    d2 = b.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d2.add_source(s);
+    assert(size(s.referring_data_arrays, 1) == 2);
+end
+
+%% Test: Referring tags
+function [] = test_referring_tags( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    s = b.create_source('testSource', 'nixSource');
+
+    assert(isempty(s.referring_tags));
+
+    t1 = b.create_tag('testTag1', 'nixTag', [1, 2]);
+    t1.add_source(s);
+    assert(~isempty(s.referring_tags));
+    assert(strcmp(s.referring_tags{1}.name, t1.name));
+
+    t2 = b.create_tag('testTag2', 'nixTag', [1, 2]);
+    t2.add_source(s);
+    assert(size(s.referring_tags, 1) == 2);
+end
+
+%% Test: Referring multi tags
+function [] = test_referring_multi_tags( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    s = b.create_source('testSource', 'nixSource');
+
+    assert(isempty(s.referring_multi_tags));
+
+    t1 = b.create_multi_tag('testMultiTag1', 'nixMultiTag', d);
+    t1.add_source(s);
+    assert(~isempty(s.referring_multi_tags));
+    assert(strcmp(s.referring_multi_tags{1}.name, t1.name));
+
+    t2 = b.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
+    t2.add_source(s);
+    assert(size(s.referring_multi_tags, 1) == 2);
 end
