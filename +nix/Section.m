@@ -166,6 +166,11 @@ classdef Section < nix.NamedEntity
             c = nix_mx('Section::propertyCount', obj.nix_handle);
         end
 
+        function filtered = filter_properties(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Section::propertiesFiltered', @nix.Property);
+        end
+
         % ----------------
         % Referring entity methods
         % ----------------
