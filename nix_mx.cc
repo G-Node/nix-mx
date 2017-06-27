@@ -283,6 +283,7 @@ void mexFunction(int            nlhs,
             .reg("referringMultiTags", GETTER(std::vector<nix::MultiTag>, nix::Source, referringMultiTags));
         methods->add("Source::openSourceIdx", nixsource::openSourceIdx);
         methods->add("Source::compare", nixsource::compare);
+        methods->add("Source::sourcesFiltered", nixsource::sourcesFiltered);
 
         classdef<nix::Tag>("Tag", methods)
             .desc(&nixtag::describe)
