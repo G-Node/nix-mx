@@ -38,6 +38,11 @@ classdef SourcesMixIn < handle
                 'nix.Source', strcat(obj.alias, '::addSource'));
         end
 
+        function [] = add_sources(obj, add_cell_array)
+            nix.Utils.add_entity_array(obj, add_cell_array, ...
+                'nix.Source', strcat(obj.alias, '::addSources'));
+        end
+
         function delCheck = remove_source(obj, del)
             delCheck = nix.Utils.delete_entity(obj, del, ...
                 'nix.Source', strcat(obj.alias, '::removeSource'));
@@ -48,6 +53,7 @@ classdef SourcesMixIn < handle
                 strcat(obj.alias, '::openSource'), id_or_name, ...
                 @nix.Source);
         end
+
     end
 
 end

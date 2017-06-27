@@ -188,9 +188,13 @@ void mexFunction(int            nlhs,
             .reg("tagCount", GETTER(nix::ndsize_t, nix::Group, tagCount))
             .reg("multiTagCount", GETTER(nix::ndsize_t, nix::Group, multiTagCount));
         methods->add("Group::addDataArray", nixgroup::addDataArray);
+        methods->add("Group::addDataArrays", nixgroup::addDataArrays);
         methods->add("Group::addSource", nixgroup::addSource);
+        methods->add("Group::addSources", nixgroup::addSources);
         methods->add("Group::addTag", nixgroup::addTag);
+        methods->add("Group::addTags", nixgroup::addTags);
         methods->add("Group::addMultiTag", nixgroup::addMultiTag);
+        methods->add("Group::addMultiTags", nixgroup::addMultiTags);
 
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)
@@ -218,6 +222,7 @@ void mexFunction(int            nlhs,
         methods->add("DataArray::readAll", nixdataarray::readAll);
         methods->add("DataArray::writeAll", nixdataarray::writeAll);
         methods->add("DataArray::addSource", nixdataarray::addSource);
+        methods->add("DataArray::addSources", nixdataarray::addSources);
         // REMOVER for DataArray.removeSource leads to an error, therefore use method->add for now
         methods->add("DataArray::removeSource", nixdataarray::removeSource);
         methods->add("DataArray::openSource", nixdataarray::getSource);
@@ -271,7 +276,9 @@ void mexFunction(int            nlhs,
         methods->add("Tag::retrieveData", nixtag::retrieveData);
         methods->add("Tag::featureRetrieveData", nixtag::retrieveFeatureData);
         methods->add("Tag::addReference", nixtag::addReference);
+        methods->add("Tag::addReferences", nixtag::addReferences);
         methods->add("Tag::addSource", nixtag::addSource);
+        methods->add("Tag::addSources", nixtag::addSources);
         methods->add("Tag::createFeature", nixtag::createFeature);
 
         classdef<nix::MultiTag>("MultiTag", methods)
@@ -307,7 +314,9 @@ void mexFunction(int            nlhs,
         methods->add("MultiTag::retrieveData", nixmultitag::retrieveData);
         methods->add("MultiTag::featureRetrieveData", nixmultitag::retrieveFeatureData);
         methods->add("MultiTag::addReference", nixmultitag::addReference);
+        methods->add("MultiTag::addReferences", nixmultitag::addReferences);
         methods->add("MultiTag::addSource", nixmultitag::addSource);
+        methods->add("MultiTag::addSources", nixmultitag::addSources);
         methods->add("MultiTag::createFeature", nixmultitag::createFeature);
         methods->add("MultiTag::addPositions", nixmultitag::addPositions);
 

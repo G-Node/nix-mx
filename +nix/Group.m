@@ -49,6 +49,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'nix.DataArray', 'Group::addDataArray');
         end;
 
+        function [] = add_data_arrays(obj, add_cell_array)
+            nix.Utils.add_entity_array(obj, add_cell_array, ...
+                'nix.DataArray', strcat(obj.alias, '::addDataArrays'));
+        end
+
         function delCheck = remove_data_array(obj, del)
             delCheck = nix.Utils.delete_entity(obj, del, ...
                 'nix.DataArray', 'Group::removeDataArray');
@@ -62,6 +67,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             nix.Utils.add_entity(obj, add_this, ...
                 'nix.Tag', 'Group::addTag');
         end;
+
+        function [] = add_tags(obj, add_cell_array)
+            nix.Utils.add_entity_array(obj, add_cell_array, ...
+                'nix.Tag', strcat(obj.alias, '::addTags'));
+        end
 
         function hasTag = has_tag(obj, id_or_name)
             hasTag = nix_mx('Group::hasTag', obj.nix_handle, id_or_name);
@@ -89,6 +99,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             nix.Utils.add_entity(obj, add_this, ...
                 'nix.MultiTag', 'Group::addMultiTag');
         end;
+
+        function [] = add_multi_tags(obj, add_cell_array)
+            nix.Utils.add_entity_array(obj, add_cell_array, ...
+                'nix.MultiTag', strcat(obj.alias, '::addMultiTags'));
+        end
 
         function hasMTag = has_multi_tag(obj, id_or_name)
             hasMTag = nix_mx('Group::hasMultiTag', ...

@@ -17,7 +17,11 @@ namespace nixmultitag {
 
     void addReference(const extractor &input, infusor &output);
 
+    void addReferences(const extractor &input, infusor &output);
+
     void addSource(const extractor &input, infusor &output);
+
+    void addSources(const extractor &input, infusor &output);
 
     void createFeature(const extractor &input, infusor &output);
 

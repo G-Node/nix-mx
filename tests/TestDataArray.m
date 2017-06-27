@@ -21,6 +21,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_write_data_float;
     funcs{end+1} = @test_write_data_integer;
     funcs{end+1} = @test_add_source;
+    funcs{end+1} = @test_add_sources;
     funcs{end+1} = @test_open_source;
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_has_source;
@@ -293,6 +294,40 @@ function [] = test_add_source ( varargin )
     getDataArray.add_source(getSource.sources{1}.id);
     getDataArray.add_source(getSource.sources{2});
     assert(size(getDataArray.sources, 1) == 2);
+end
+
+%% Test: Add sources by entity cell array
+function [] = test_add_sources ( varargin )
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.create_source('testSource1', 'nixSource');
+    tmp = b.create_source('testSource2', 'nixSource');
+    tmp = b.create_source('testSource3', 'nixSource');
+
+    assert(isempty(d.sources));
+
+    try
+        d.add_sources('hurra');
+    catch ME
+        assert(strcmp(ME.message, 'Expected cell array'));
+    end;
+    assert(isempty(d.sources));
+
+    try
+        d.add_sources({12, 13});
+    catch ME
+        assert(~isempty(strfind(ME.message, 'not a nix.Source')));
+    end;
+    assert(isempty(d.sources));
+
+    d.add_sources(b.sources());
+    assert(size(d.sources, 1) == 3);
+
+    clear d tmp b f;
+    f = nix.File(testFile, nix.FileMode.ReadOnly);
+    assert(size(f.blocks{1}.dataArrays{1}.sources, 1) == 3);
 end
 
 %% Test: Open source by ID or name

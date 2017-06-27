@@ -34,9 +34,21 @@ namespace nixgroup {
         currObj.addDataArray(input.str(2));
     }
 
+    void addDataArrays(const extractor &input, infusor &output) {
+        nix::Group currObj = input.entity<nix::Group>(1);
+        std::vector<nix::DataArray> curr = input.entity_vec<nix::DataArray>(2);
+        currObj.dataArrays(curr);
+    }
+
     void addSource(const extractor &input, infusor & output) {
         nix::Group currObj = input.entity<nix::Group>(1);
         currObj.addSource(input.str(2));
+    }
+
+    void addSources(const extractor &input, infusor &output) {
+        nix::Group currObj = input.entity<nix::Group>(1);
+        std::vector<nix::Source> curr = input.entity_vec<nix::Source>(2);
+        currObj.sources(curr);
     }
 
     void addTag(const extractor &input, infusor &output) {
@@ -44,9 +56,21 @@ namespace nixgroup {
         currObj.addTag(input.str(2));
     }
 
+    void addTags(const extractor &input, infusor &output) {
+        nix::Group currObj = input.entity<nix::Group>(1);
+        std::vector<nix::Tag> curr = input.entity_vec<nix::Tag>(2);
+        currObj.tags(curr);
+    }
+
     void addMultiTag(const extractor &input, infusor &output) {
         nix::Group currObj = input.entity<nix::Group>(1);
         currObj.addMultiTag(input.str(2));
+    }
+
+    void addMultiTags(const extractor &input, infusor &output) {
+        nix::Group currObj = input.entity<nix::Group>(1);
+        std::vector<nix::MultiTag> curr = input.entity_vec<nix::MultiTag>(2);
+        currObj.multiTags(curr);
     }
 
 } // namespace nixgroup

@@ -17,11 +17,19 @@ namespace nixgroup {
 
     void addDataArray(const extractor &input, infusor &output);
 
+    void addDataArrays(const extractor &input, infusor &output);
+
     void addSource(const extractor &input, infusor & output);
+
+    void addSources(const extractor &input, infusor & output);
 
     void addTag(const extractor &input, infusor &output);
 
+    void addTags(const extractor &input, infusor &output);
+
     void addMultiTag(const extractor &input, infusor &output);
+
+    void addMultiTags(const extractor &input, infusor &output);
 
 } // namespace nixgroup
 

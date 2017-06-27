@@ -38,9 +38,21 @@ namespace nixtag {
         currObj.addReference(input.str(2));
     }
 
+    void addReferences(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        std::vector<nix::DataArray> curr = input.entity_vec<nix::DataArray>(2);
+        currObj.references(curr);
+    }
+
     void addSource(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         currObj.addSource(input.str(2));
+    }
+
+    void addSources(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        std::vector<nix::Source> curr = input.entity_vec<nix::Source>(2);
+        currObj.sources(curr);
     }
 
     void createFeature(const extractor &input, infusor &output) {
