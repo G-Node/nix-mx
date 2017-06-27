@@ -77,6 +77,11 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             c = nix_mx('Tag::referenceCount', obj.nix_handle);
         end
 
+        function filtered = filter_references(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Tag::referencesFiltered', @nix.DataArray);
+        end
+
         % ------------------
         % Features methods
         % ------------------

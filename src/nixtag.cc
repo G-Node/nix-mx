@@ -112,4 +112,13 @@ namespace nixtag {
         output.set(0, res);
     }
 
+    void referencesFiltered(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        std::vector<nix::DataArray> res = filterEntity<nix::DataArray>(input,
+                                            [currObj](const nix::util::Filter<nix::DataArray>::type &filter) {
+            return currObj.references(filter);
+        });
+        output.set(0, res);
+    }
+
 } // namespace nixtag
