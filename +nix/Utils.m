@@ -114,5 +114,29 @@ classdef Utils
             end;
         end
 
+        % -----------------------------------------------------------
+        % findXXX helper functions
+        % -----------------------------------------------------------
+
+        function currData = find(obj, max_depth, filter, val, ...
+                                                mxMethod, objConstructor)
+            if (~isnumeric(max_depth))
+                error('Provide a valid search depth');
+            end
+
+            valid = nix.Utils.valid_filter(filter, val);
+            if(~isempty(valid))
+                error(valid);
+            end
+
+            currList = nix_mx(mxMethod, ...
+                            obj.nix_handle, max_depth, uint8(filter), val);
+
+            currData = cell(length(currList), 1);
+            for i = 1:length(currList)
+                currData{i} = objConstructor(currList{i});
+            end;
+        end
+
     end;
 end

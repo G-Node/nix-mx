@@ -123,21 +123,8 @@ classdef Section < nix.NamedEntity
 
         % maxdepth is an index
         function sec = find_filtered_sections(obj, max_depth, filter, val)
-            if (~isnumeric(max_depth))
-                error('Provide a valid search depth');
-            end
-
-            valid = nix.Utils.valid_filter(filter, val);
-            if(~isempty(valid))
-                error(valid);
-            end
-
-            ret = nix_mx('Section::findSections', obj.nix_handle, ...
-                                            max_depth, uint8(filter), val);
-            sec = cell(length(ret), 1);
-            for i = 1:length(ret)
-                sec{i} = nix.Section(ret{i});
-            end;
+            sec = nix.Utils.find(obj, ...
+                max_depth, filter, val, 'Section::findSections', @nix.Section);
         end
 
         % ----------------

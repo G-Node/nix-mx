@@ -88,21 +88,8 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
         % maxdepth is an index where idx = 0 corresponds to the calling
         % source
         function sec = find_filtered_sources(obj, max_depth, filter, val)
-            if (~isnumeric(max_depth))
-                error('Provide a valid search depth');
-            end
-
-            valid = nix.Utils.valid_filter(filter, val);
-            if(~isempty(valid))
-                error(valid);
-            end
-
-            ret = nix_mx('Source::findSources', obj.nix_handle, ...
-                                            max_depth, uint8(filter), val);
-            sec = cell(length(ret), 1);
-            for i = 1:length(ret)
-                sec{i} = nix.Source(ret{i});
-            end;
+            sec = nix.Utils.find(obj, ...
+                max_depth, filter, val, 'Source::findSources', @nix.Source);
         end
     end;
 end

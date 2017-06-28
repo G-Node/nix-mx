@@ -191,21 +191,8 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
 
         % maxdepth is an index
         function sec = find_filtered_sources(obj, max_depth, filter, val)
-            if (~isnumeric(max_depth))
-                error('Provide a valid search depth');
-            end
-
-            valid = nix.Utils.valid_filter(filter, val);
-            if(~isempty(valid))
-                error(valid);
-            end
-
-            ret = nix_mx('Block::findSources', obj.nix_handle, ...
-                                            max_depth, uint8(filter), val);
-            sec = cell(length(ret), 1);
-            for i = 1:length(ret)
-                sec{i} = nix.Source(ret{i});
-            end;
+            sec = nix.Utils.find(obj, ...
+                max_depth, filter, val, 'Block::findSources', @nix.Source);
         end
 
         % -----------------
@@ -289,6 +276,6 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             filtered = nix.Utils.filter(obj, filter, val, ...
                 'Block::multiTagsFiltered', @nix.MultiTag);
         end
+    end
 
-    end;
 end
