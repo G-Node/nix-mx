@@ -43,6 +43,7 @@ function funcs = TestSection
     funcs{end+1} = @test_filter_property;
     funcs{end+1} = @test_find_section;
     funcs{end+1} = @test_find_section_filtered;
+    funcs{end+1} = @test_find_related;
 end
 
 %% Test: Create Section
@@ -851,6 +852,69 @@ function [] = test_find_section_filtered
     % test fail on nix.Filter.source
     try
         sl1.find_filtered_sections(1, nix.Filter.source, 'source');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+end
+
+%% Test: Find sections related to the current section
+function [] = test_find_related
+    findSectionType = 'nixFindSection';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    main = f.create_section('testSection', 'nixSection');
+    sl1 = main.create_section('sectionLvl1', 'nixSection');
+
+    sl21 = sl1.create_section('sectionLvl2_1', findSectionType);
+    sl22 = sl1.create_section('sectionLvl2_2', findSectionType);
+
+    sl31 = sl21.create_section('sectionLvl3_1', findSectionType);
+    sl32 = sl21.create_section('sectionLvl3_2', 'nixSection');
+    sl33 = sl21.create_section('sectionLvl3_3', 'nixSection');
+
+    sl41 = sl31.create_section('sectionLvl4_1', findSectionType);
+    sl42 = sl31.create_section('sectionLvl4_2', findSectionType);
+    sl43 = sl31.create_section('sectionLvl4_3', 'nixSection');
+    sl44 = sl31.create_section('sectionLvl4_4', 'nixSection');
+
+    sideName = 'sideSubSection';
+    side = f.create_section('sideSection', 'nixSection');
+    side1 = side.create_section(sideName, 'nixSection');
+
+    % find first downstream by id
+    rel = sl21.find_related(nix.Filter.id, sl44.id);
+    assert(size(rel, 1) == 1);
+
+    % find first updstream by ids
+    rel = sl33.find_related(nix.Filter.ids, {sl21.id, sl1.id});
+    assert(size(rel, 1) == 1);
+
+    % find first downstream by name, one occurrence
+    rel = sl21.find_related(nix.Filter.name, 'sectionLvl4_4');
+    assert(size(rel, 1) == 1);
+
+    % find first downstream by type, one occurrence
+    rel = sl21.find_related(nix.Filter.type, findSectionType);
+    assert(size(rel, 1) == 1);
+
+    % find first downstream by type, multiple occurrences
+    rel = sl31.find_related(nix.Filter.type, findSectionType);
+    assert(size(rel, 1) == 2);
+
+    % find first upstream by name, one occurrence
+    rel = sl31.find_related(nix.Filter.name, 'sectionLvl2_1');
+    assert(size(rel, 1) == 1);
+
+    % test fail on nix.Filter.metadata
+    err = 'unknown or unsupported filter';
+    try
+        sl1.find_related(nix.Filter.metadata, 'metadata');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test fail on nix.Filter.source
+    try
+        sl1.find_related(nix.Filter.source, 'source');
     catch ME
         assert(strcmp(ME.message, err));
     end

@@ -155,4 +155,13 @@ namespace nixsection {
         output.set(0, res);
     }
 
+    void findRelated(const extractor &input, infusor &output) {
+        nix::Section currObj = input.entity<nix::Section>(1);
+        std::vector<nix::Section> res = filterNameTypeEntity<nix::Section>(input,
+                                            [currObj](const nix::util::Filter<nix::Section>::type &filter) {
+            return currObj.findRelated(filter);
+        });
+        output.set(0, res);
+    }
+
 } // namespace nixsection
