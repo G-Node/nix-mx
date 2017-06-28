@@ -43,6 +43,8 @@ namespace nixblock {
 
     void dataArraysFiltered(const extractor &input, infusor &output);
 
+    void findSources(const extractor &input, infusor &output);
+
 } // namespace nixblock
 
 #endif

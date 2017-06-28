@@ -55,6 +55,8 @@ function funcs = TestBlock
     funcs{end+1} = @test_filter_tag;
     funcs{end+1} = @test_filter_multi_tag;
     funcs{end+1} = @test_filter_data_array;
+    funcs{end+1} = @test_find_source;
+    funcs{end+1} = @test_find_source_filtered;
 end
 
 function [] = test_attrs( varargin )
@@ -1094,4 +1096,115 @@ function [] = test_filter_data_array( varargin )
     filtered = f.blocks{1}.filter_data_arrays(nix.Filter.source, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
+end
+
+%% Test: Find source w/o filter
+function [] = test_find_source
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    sl1 = b.create_source('sourceLvl1', 'nixSource');
+
+    sl21 = sl1.create_source('sourceLvl2_1', 'nixSource');
+    sl22 = sl1.create_source('sourceLvl2_2', 'nixSource');
+
+    sl31 = sl21.create_source('sourceLvl3_1', 'nixSource');
+    sl32 = sl21.create_source('sourceLvl3_2', 'nixSource');
+    sl33 = sl21.create_source('sourceLvl3_3', 'nixSource');
+
+    sl41 = sl31.create_source('sourceLvl4_1', 'nixSource');
+    sl42 = sl31.create_source('sourceLvl4_2', 'nixSource');
+    sl43 = sl31.create_source('sourceLvl4_3', 'nixSource');
+    sl44 = sl31.create_source('sourceLvl4_4', 'nixSource');
+
+    % Check invalid entry
+    err = 'Provide a valid search depth';
+    try
+        b.find_sources('hurra');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % find all
+    filtered = b.find_sources(4);
+    assert(size(filtered, 1) == 10);
+
+    % find until level 4
+    filtered = b.find_sources(3);
+    assert(size(filtered, 1) == 10);
+
+    % find until level 3
+    filtered = b.find_sources(2);
+    assert(size(filtered, 1) == 6);
+
+    % find until level 2
+    filtered = b.find_sources(1);
+    assert(size(filtered, 1) == 3);
+
+    % find until level 1
+    filtered = b.find_sources(0);
+    assert(size(filtered, 1) == 1);
+end
+
+%% Test: Find sources with filters
+function [] = test_find_source_filtered
+    findSource = 'nixFindSection';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    sl1 = b.create_source('sourceLvl1', 'nixSource');
+
+    sl21 = sl1.create_source('sourceLvl2_1', 'nixSource');
+    sl22 = sl1.create_source('sourceLvl2_2', findSource);
+
+    sl31 = sl21.create_source('sourceLvl3_1', findSource);
+    sl32 = sl21.create_source('sourceLvl3_2', 'nixSource');
+    sl33 = sl21.create_source('sourceLvl3_3', 'nixSource');
+
+    sl41 = sl31.create_source('sourceLvl4_1', findSource);
+    sl42 = sl31.create_source('sourceLvl4_2', 'nixSource');
+    sl43 = sl31.create_source('sourceLvl4_3', 'nixSource');
+    sl44 = sl31.create_source('sourceLvl4_4', 'nixSource');
+
+    % test find by id
+    filtered = b.find_filtered_sources(0, nix.Filter.id, sl41.id);
+    assert(isempty(filtered));
+    filtered = b.find_filtered_sources(3, nix.Filter.id, sl41.id);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.id, sl41.id));
+
+    % test find by ids
+    filterids = {sl1.id, sl41.id};
+    filtered = b.find_filtered_sources(0, nix.Filter.ids, filterids);
+    assert(size(filtered, 1) == 1);
+    filtered = b.find_filtered_sources(3, nix.Filter.ids, filterids);
+    assert(size(filtered, 1) == 2);
+
+    % test find by name
+    filtered = b.find_filtered_sources(0, nix.Filter.name, sl41.name);
+    assert(isempty(filtered));
+    filtered = b.find_filtered_sources(3, nix.Filter.name, sl41.name);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, sl41.name));
+
+    % test find by type
+    filtered = b.find_filtered_sources(0, nix.Filter.type, findSource);
+    assert(isempty(filtered));
+    filtered = b.find_filtered_sources(3, nix.Filter.type, findSource);
+    assert(size(filtered, 1) == 3);
+    assert(strcmp(filtered{1}.type, findSource));
+
+    % test nix.Filter.metadata
+    sec = f.create_section('testSection', 'nixSection');
+    sl43.set_metadata(sec);
+    filtered = b.find_filtered_sources(0, nix.Filter.metadata, sec.id);
+    assert(isempty(filtered));
+    filtered = b.find_filtered_sources(3, nix.Filter.metadata, sec.id);
+    assert(size(filtered, 1) == 1);
+    strcmp(filtered{1}.id, sl43.id);
+
+    % test nix.Filter.source
+    filtered = b.find_filtered_sources(0, nix.Filter.source, sl44.id);
+    assert(isempty(filtered));
+    filtered = b.find_filtered_sources(3, nix.Filter.source, sl44.id);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.id, sl31.id));
 end

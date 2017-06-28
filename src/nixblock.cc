@@ -142,4 +142,17 @@ namespace nixblock {
         output.set(0, res);
     }
 
+    void findSources(const extractor &input, infusor &output) {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        size_t max_depth = (size_t)input.num<double>(2);
+        uint8_t filter_id = input.num<uint8_t>(3);
+
+        std::vector<nix::Source> res = filterFullEntity<nix::Source>(input, filter_id, 4, max_depth,
+            [currObj](const nix::util::Filter<nix::Source>::type &filter, size_t &md) {
+                return currObj.findSources(filter, md);
+        });
+
+        output.set(0, res);
+    }
+
 } // namespace nixblock
