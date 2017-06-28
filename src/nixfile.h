@@ -29,6 +29,8 @@ namespace nixfile {
 
     void blocksFiltered(const extractor &input, infusor &output);
 
+    void findSections(const extractor &input, infusor &output);
+
 } // namespace nixfile
 
 #endif
