@@ -287,6 +287,7 @@ void mexFunction(int            nlhs,
         methods->add("Source::openSourceIdx", nixsource::openSourceIdx);
         methods->add("Source::compare", nixsource::compare);
         methods->add("Source::sourcesFiltered", nixsource::sourcesFiltered);
+        methods->add("Source::findSources", nixsource::findSources);
 
         classdef<nix::Tag>("Tag", methods)
             .desc(&nixtag::describe)
