@@ -1,4 +1,5 @@
 @ECHO off
+SET MATLAB_BINARY=c:\work\MATLAB_R2011a\bin
 REM Latest dependencies at https://projects.g-node.org/nix/
 SET NIX_DEP=c:\work\nix-dep
 REM clone nix source from https://github.com/G-Node/nix
@@ -82,8 +83,8 @@ COPY %NIX_BUILD_DIR%\nix.dll %NIX_MX_ROOT%\ /Y
 COPY %HDF5_BASE%\bin\hdf5.dll %NIX_MX_ROOT%\ /Y
 COPY %HDF5_BASE%\bin\msvcp120.dll %NIX_MX_ROOT%\ /Y
 COPY %HDF5_BASE%\bin\msvcr120.dll %NIX_MX_ROOT%\ /Y
-COPY %HDF5_BASE%\bin\szip.dll %NIX_MX_ROOT%\ /Y
 COPY %HDF5_BASE%\bin\zlib.dll %NIX_MX_ROOT%\ /Y
+COPY %HDF5_BASE%\bin\szip.dll %NIX_MX_ROOT%\ /Y
 
 IF %PROCESSOR_ARCHITECTURE% == x86 (cmake .. -G "Visual Studio 12") ELSE (cmake .. -G "Visual Studio 12 Win64")
 
@@ -100,6 +101,17 @@ COPY %NIX_MX_ROOT%\build\%BUILD_TYPE%\nix_mx.mexw* %NIX_MX_ROOT%\ /Y
 CD %NIX_MX_ROOT%
 
 ECHO --------------------------------------------------------------------------
-ECHO Starting matlab ...
+ECHO Running nix-mx tests ...
 ECHO --------------------------------------------------------------------------
-Start %NIX_MX_ROOT%\startup.m
+SET PATH=%PATH%;%MATLAB_BINARY%
+SET TEST_LOG=nix-mx-build.log~
+matlab -wait -nodesktop -nosplash -logfile %TEST_LOG% -r startuptests
+
+IF %ERRORLEVEL% == 1 (
+	TYPE %TEST_LOG%
+	ECHO --------------------------------------------------------------------------
+	ECHO Matlab tests failed, check details above.
+	ECHO --------------------------------------------------------------------------
+)
+
+DEL %TEST_LOG%
