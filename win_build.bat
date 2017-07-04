@@ -136,6 +136,11 @@ IF %ERRORLEVEL% == 1 (
 	ECHO --------------------------------------------------------------------------
 	ECHO Matlab tests failed, check details above.
 	ECHO --------------------------------------------------------------------------
+) ELSE (
+	ECHO --------------------------------------------------------------------------
+	ECHO Build complete, all tests passed!
+	ECHO Use "startup.m" to start your nix-mx experience!
+	ECHO --------------------------------------------------------------------------
 )
 
 DEL %TEST_LOG%
