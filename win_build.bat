@@ -75,9 +75,18 @@ cmake --build . --config %BUILD_TYPE% --target nix
 IF %ERRORLEVEL% == 1 (EXIT /b)
 
 ECHO --------------------------------------------------------------------------
+ECHO Building nix testrunner ...
+ECHO --------------------------------------------------------------------------
+cmake --build . --config %BUILD_TYPE% --target testrunner
+
+IF %ERRORLEVEL% == 1 (EXIT /b)
+
+ECHO --------------------------------------------------------------------------
 ECHO Testing nix ...
 ECHO --------------------------------------------------------------------------
 %NIX_BUILD_DIR%\TestRunner.exe
+
+IF %ERRORLEVEL% == 1 (EXIT /b)
 
 REM nix-mx requires nixversion file in ../nix/include/nix
 IF EXIST %NIX_ROOT%\build\include\nix\nixversion.hpp (
