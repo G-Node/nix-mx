@@ -6,6 +6,21 @@ REM clone nix source from https://github.com/G-Node/nix
 SET NIX_ROOT=c:\work\nix
 SET NIX_MX_ROOT=c:\work\nix-mx
 
+IF NOT EXIST %NIX_DEP% (
+	ECHO Please provide valid nix dependencies.
+	EXIT /b
+)
+
+IF NOT EXIST %NIX_ROOT% (
+	ECHO Please provide valid nix root directory.
+	EXIT /b
+)
+
+IF NOT EXIST %NIX_MX_ROOT% (
+	ECHO Please provide valid nix-mx root directory.
+	EXIT /b
+)
+
 ECHO Use only build types "Release" or "Debug"
 IF "%1" == "Debug" (SET BUILD_TYPE=Debug)
 IF "%BUILD_TYPE%" == "" (SET BUILD_TYPE=Release)
