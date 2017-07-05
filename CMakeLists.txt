@@ -86,6 +86,18 @@ if(DEBUG_GLUE)
    add_definitions(-DDEBUG_GLUE=1)
 endif()
 
+
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_VERSION} GREATER 3.2)
+  add_custom_target(macOS_zip COMMAND
+    ${CMAKE_COMMAND} -E tar "cfv" "nix_mx_macOS.zip" --format=zip
+    "${CMAKE_CURRENT_SOURCE_DIR}/+nix"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests"
+    "${CMAKE_CURRENT_SOURCE_DIR}/examples"
+    "${CMAKE_CURRENT_SOURCE_DIR}/startup.m"
+    "${CMAKE_BINARY_DIR}/*.mexmac*")
+endif()
+
 MESSAGE(STATUS "=====================")
 MESSAGE(STATUS "Computing environment")
 MESSAGE(STATUS "  Package: ${CE_PACKAGE}")
