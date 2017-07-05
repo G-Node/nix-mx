@@ -346,10 +346,20 @@ void mexFunction(int            nlhs,
             .reg("openProperty", GETBYSTR(nix::Property, nix::Section, getProperty))
             .reg("deleteProperty", REMOVER(nix::Property, nix::Section, deleteProperty))
             .reg("sectionCount", GETTER(nix::ndsize_t, nix::Section, sectionCount))
-            .reg("propertyCount", GETTER(nix::ndsize_t, nix::Section, propertyCount));
+            .reg("propertyCount", GETTER(nix::ndsize_t, nix::Section, propertyCount))
+            .reg("inheritedProperties", GETTER(std::vector<nix::Property>, nix::Section, inheritedProperties))
+            .reg("referringDataArrays", GETTER(std::vector<nix::DataArray>, nix::Section, referringDataArrays))
+            .reg("referringTags", GETTER(std::vector<nix::Tag>, nix::Section, referringTags))
+            .reg("referringMultiTags", GETTER(std::vector<nix::MultiTag>, nix::Section, referringMultiTags))
+            .reg("referringSources", GETTER(std::vector<nix::Source>, nix::Section, referringSources))
+            .reg("referringBlocks", GETTER(std::vector<nix::Block>, nix::Section, referringBlocks));
         methods->add("Section::properties", nixsection::properties);
         methods->add("Section::createProperty", nixsection::createProperty);
         methods->add("Section::createPropertyWithValue", nixsection::createPropertyWithValue);
+        methods->add("Section::referringBlockSources", nixsection::referringBlockSources);
+        methods->add("Section::referringBlockTags", nixsection::referringBlockTags);
+        methods->add("Section::referringBlockMultiTags", nixsection::referringBlockMultiTags);
+        methods->add("Section::referringBlockDataArrays", nixsection::referringBlockDataArrays);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)

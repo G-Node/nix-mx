@@ -65,6 +65,11 @@ classdef Section < nix.NamedEntity
            end;
         end;
 
+        function retList = inherited_properties(obj)
+            retList = nix.Utils.fetchObjList('Section::inheritedProperties', ...
+                obj.nix_handle, @nix.Property);
+        end
+
         % ----------------
         % Section methods
         % ----------------
@@ -146,5 +151,51 @@ classdef Section < nix.NamedEntity
             c = nix_mx('Section::propertyCount', obj.nix_handle);
         end
 
+        % ----------------
+        % Referring entity methods
+        % ----------------
+
+        function ret = referring_data_arrays(obj, varargin)
+            ret = obj.referring_util(@nix.DataArray, 'DataArrays', varargin{:});
+        end
+
+        function ret = referring_tags(obj, varargin)
+            ret = obj.referring_util(@nix.Tag, 'Tags', varargin{:});
+        end
+
+        function ret = referring_multi_tags(obj, varargin)
+            ret = obj.referring_util(@nix.MultiTag, 'MultiTags', varargin{:});
+        end
+
+        function ret = referring_sources(obj, varargin)
+            ret = obj.referring_util(@nix.Source, 'Sources', varargin{:});
+        end
+
+        function ret = referring_blocks(obj)
+            ret = nix.Utils.fetchObjList('Section::referringBlocks', ...
+                obj.nix_handle, @nix.Block);
+        end
     end;
+
+    % ----------------
+    % Referring utility method
+    % ----------------
+
+    methods(Access=protected)
+        % referring_util receives a nix entityConstructor, part of a function
+        % name and varargin to provide abstract access to nix.Section
+        % referringXXX and referringXXX(Block) methods.
+        function ret = referring_util(obj, entityConstructor, funcName, varargin)
+            if (isempty(varargin))
+                ret = nix.Utils.fetchObjList(strcat('Section::referring', funcName), ...
+                    obj.nix_handle, entityConstructor);
+            elseif ((size(varargin, 2) > 1) || ...
+                    (~strcmp(class(varargin{1}), 'nix.Block')))
+                error('Provide either empty arguments or a single Block entity');
+            else
+                ret = nix.Utils.fetchObjListByEntity(strcat('Section::referringBlock', funcName), ...
+                    obj.nix_handle, varargin{1}.nix_handle, entityConstructor);
+            end
+        end
+    end
 end

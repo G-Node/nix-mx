@@ -81,4 +81,28 @@ namespace nixsection {
         output.set(0, handle(p));
     }
 
+    void referringBlockSources(const extractor &input, infusor &output) {
+        nix::Section currSec = input.entity<nix::Section>(1);
+        nix::Block currBlock = input.entity<nix::Block>(2);
+        output.set(0, currSec.referringSources(currBlock));
+    }
+
+    void referringBlockTags(const extractor &input, infusor &output) {
+        nix::Section currSec = input.entity<nix::Section>(1);
+        nix::Block currBlock = input.entity<nix::Block>(2);
+        output.set(0, currSec.referringTags(currBlock));
+    }
+
+    void referringBlockMultiTags(const extractor &input, infusor &output) {
+        nix::Section currSec = input.entity<nix::Section>(1);
+        nix::Block currBlock = input.entity<nix::Block>(2);
+        output.set(0, currSec.referringMultiTags(currBlock));
+    }
+
+    void referringBlockDataArrays(const extractor &input, infusor &output) {
+        nix::Section currSec = input.entity<nix::Section>(1);
+        nix::Block currBlock = input.entity<nix::Block>(2);
+        output.set(0, currSec.referringDataArrays(currBlock));
+    }
+
 } // namespace nixsection

@@ -26,6 +26,16 @@ function funcs = TestSection
     funcs{end+1} = @test_open_property;
     funcs{end+1} = @test_property_count;
     funcs{end+1} = @test_link;
+    funcs{end+1} = @test_inherited_properties;
+    funcs{end+1} = @test_referring_data_arrays;
+    funcs{end+1} = @test_referring_block_data_arrays;
+    funcs{end+1} = @test_referring_tags;
+    funcs{end+1} = @test_referring_block_tags;
+    funcs{end+1} = @test_referring_multi_tags;
+    funcs{end+1} = @test_referring_block_multi_tags;
+    funcs{end+1} = @test_referring_sources;
+    funcs{end+1} = @test_referring_block_sources;
+    funcs{end+1} = @test_referring_blocks;
 end
 
 %% Test: Create Section
@@ -299,4 +309,274 @@ function [] = test_link( varargin )
     
     mainSec.set_link('');
     assert(isempty(mainSec.openLink));
+end
+
+%% Test: inherited properties
+function [] = test_inherited_properties( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    s = f.create_section('mainSection', 'nixSection');
+    ls = f.create_section('linkSection', 'nixSection');
+    
+    assert(isempty(s.inherited_properties));
+
+    s.set_link(ls);
+    assert(isempty(s.inherited_properties));
+
+    lp = ls.create_property('testProperty2', nix.DataType.String);
+    assert(~isempty(s.inherited_properties));
+    assert(strcmp(s.inherited_properties{1}.name, lp.name));
+    
+    s.create_property('testProperty1', nix.DataType.String);
+    assert(size(s.inherited_properties, 1) == 2);
+end
+
+%% Test: referring data arrays
+function [] = test_referring_data_arrays( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    d1 = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    d2 = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    s = f.create_section('testSection', 'nixSection');
+    
+    assert(isempty(s.referring_data_arrays));
+
+    d1.set_metadata(s);
+    assert(~isempty(s.referring_data_arrays));
+    
+    d2.set_metadata(s);
+    assert(size(s.referring_data_arrays, 1) == 2);
+    
+    b2.delete_data_array(d2);
+    d1.set_metadata('');
+    assert(isempty(s.referring_data_arrays));
+end
+
+%% Test: referring block data arrays
+function [] = test_referring_block_data_arrays( varargin )
+    err = 'Provide either empty arguments or a single Block entity';
+    testName = 'testDataArray1';
+
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    d1 = b1.create_data_array(testName, 'nixDataArray', nix.DataType.Double, [1 2]);
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    d2 = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    s = f.create_section('testSection', 'nixSection');
+    
+    d1.set_metadata(s);
+    d2.set_metadata(s);
+
+    % test multiple arguments fail
+    try
+        s.referring_data_arrays('a', 'b');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test non block entity argument fail
+    try
+        s.referring_data_arrays(s);
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test return only tags from block 1
+    testDataArray = s.referring_data_arrays(b1);
+    assert(size(testDataArray, 2) == 1);
+    assert(strcmp(testDataArray{1}.name, testName));
+end
+
+%% Test: referring tags
+function [] = test_referring_tags( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    t1 = b1.create_tag('testTag1', 'nixTag', [1, 2]);
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    t2 = b2.create_tag('testTag2', 'nixTag', [3, 4]);
+    s = f.create_section('testSection', 'nixSection');
+    
+    assert(isempty(s.referring_tags));
+
+    t1.set_metadata(s);
+    assert(~isempty(s.referring_tags));
+    
+    t2.set_metadata(s);
+    assert(size(s.referring_tags, 1) == 2);
+    
+    b2.delete_tag(t2);
+    t1.set_metadata('');
+    assert(isempty(s.referring_tags));
+end
+
+%% Test: referring block tags
+function [] = test_referring_block_tags( varargin )
+    err = 'Provide either empty arguments or a single Block entity';
+    testName = 'testTag1';
+
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    t1 = b1.create_tag(testName, 'nixTag', [1, 2]);
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    t2 = b2.create_tag('testTag2', 'nixTag', [3, 4]);
+    s = f.create_section('testSection', 'nixSection');
+
+    t1.set_metadata(s);
+    t2.set_metadata(s);
+
+    % test multiple arguments fail
+    try
+        s.referring_tags('a', 'b');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test non block entity argument fail
+    try
+        s.referring_tags(s);
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test return only tags from block 1
+    testTag = s.referring_tags(b1);
+    assert(size(testTag, 2) == 1);
+    assert(strcmp(testTag{1}.name, testName));
+end
+
+%% Test: referring multi tags
+function [] = test_referring_multi_tags( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    d = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t1 = b1.create_multi_tag('testMultiTag1', 'nixMultiTag', d);
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    d = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t2 = b2.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
+    s = f.create_section('testSection', 'nixSection');
+    
+    assert(isempty(s.referring_multi_tags));
+
+    t1.set_metadata(s);
+    assert(~isempty(s.referring_multi_tags));
+    
+    t2.set_metadata(s);
+    assert(size(s.referring_multi_tags, 1) == 2);
+    
+    b2.delete_multi_tag(t2);
+    t1.set_metadata('');
+    assert(isempty(s.referring_multi_tags));
+end
+
+%% Test: referring block multi tags
+function [] = test_referring_block_multi_tags( varargin )
+    err = 'Provide either empty arguments or a single Block entity';
+    testName = 'testMultiTag1';
+
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    d = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t1 = b1.create_multi_tag(testName, 'nixMultiTag', d);
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    d = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t2 = b2.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
+    s = f.create_section('testSection', 'nixSection');
+
+    t1.set_metadata(s);
+    t2.set_metadata(s);
+
+    % test multiple arguments fail
+    try
+        s.referring_multi_tags('a', 'b');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test non block entity argument fail
+    try
+        s.referring_multi_tags(s);
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test return only tags from block 1
+    testTag = s.referring_multi_tags(b1);
+    assert(size(testTag, 2) == 1);
+    assert(strcmp(testTag{1}.name, testName));
+end
+
+%% Test: referring sources
+function [] = test_referring_sources( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    s1 = b1.create_source('testSource1', 'nixSource');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    s2 = b2.create_source('testSource2', 'nixSource');
+    s = f.create_section('testSection', 'nixSection');
+    
+    assert(isempty(s.referring_sources));
+
+    s1.set_metadata(s);
+    assert(~isempty(s.referring_sources));
+    
+    s2.set_metadata(s);
+    assert(size(s.referring_sources, 1) == 2);
+    
+    b2.delete_source(s2);
+    s1.set_metadata('');
+    assert(isempty(s.referring_sources));
+end
+
+%% Test: referring block sources
+function [] = test_referring_block_sources( varargin )
+    err = 'Provide either empty arguments or a single Block entity';
+    testName = 'testSource1';
+
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    s1 = b1.create_source(testName, 'nixSource');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    s2 = b2.create_source('testSource2', 'nixSource');
+    s = f.create_section('testSection', 'nixSection');
+
+    s1.set_metadata(s);
+    s2.set_metadata(s);
+
+    % test multiple arguments fail
+    try
+        s.referring_sources('a', 'b');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test non block entity argument fail
+    try
+        s.referring_sources(s);
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test return only sources from block 1
+    testSource = s.referring_sources(b1);
+    assert(size(testSource, 2) == 1);
+    assert(strcmp(testSource{1}.name, testName));
+end
+
+%% Test: referring blocks
+function [] = test_referring_blocks( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    s = f.create_section('testSection', 'nixSection');
+    
+    assert(isempty(s.referring_blocks));
+
+    b1.set_metadata(s);
+    assert(~isempty(s.referring_blocks));
+    
+    b2.set_metadata(s);
+    assert(size(s.referring_blocks, 1) == 2);
+    
+    b2.set_metadata('')
+    assert(size(s.referring_blocks, 1) == 1);
 end
