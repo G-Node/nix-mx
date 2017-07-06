@@ -35,12 +35,12 @@ NOTE: there was a small bugfix in examples/Primer.m after the latest release. If
 To build NIX-MX under Windows please follow the guide provided at [WinBuild.md](https://github.com/G-Node/nix-mx/blob/master/WinBuild.md)
 
 
-Getting Started (MacOS)
+Getting Started (macOS)
 -------------------------------
 
 **Quick start packages, Beta-Release 1.4.0**
 
-The [quick start packages] (https://github.com/G-Node/nix-mx/releases) are compiled under MacOS Sierra using Matlab 2016b and contain the compiled mex files, nix m-Files, tests, and a stratup.m script. To run it unzip the file and run the startup.m file in MATLAB. This file simply adds the current folder containing the mex files to the MATLAB path. Do not change the file/folder structure.
+The [quick start packages] (https://github.com/G-Node/nix-mx/releases) are compiled under macOS Sierra using Matlab 2016b and contain the compiled mex files, nix m-Files, tests, and a stratup.m script. To run it unzip the file and run the startup.m file in MATLAB. This file simply adds the current folder containing the mex files to the MATLAB path. Do not change the file/folder structure.
 
 In order to have it working the respective NIX C++ library must be installed on the system. The easiest way is using homebrew.
 ''''
