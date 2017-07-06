@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.4)
 project(nix_mx CXX)
 
 set(VERSION_MAJOR 1)
-set(VERSION_MINOR 1)
+set(VERSION_MINOR 4)
 set(VERSION_PATCH 0)
 
 set(VERSION_ABI   1)
@@ -84,6 +84,20 @@ endif()
 
 if(DEBUG_GLUE)
    add_definitions(-DDEBUG_GLUE=1)
+endif()
+
+
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_VERSION} GREATER 3.2)
+  add_custom_target(macOS_zip COMMAND
+    ${CMAKE_COMMAND} -E tar "cfv" "nix_mx_macOS_${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.zip" --format=zip
+    "${CMAKE_CURRENT_SOURCE_DIR}/+nix"
+    "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt"
+    "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests"
+    "${CMAKE_CURRENT_SOURCE_DIR}/examples"
+    "${CMAKE_CURRENT_SOURCE_DIR}/startup.m"
+    "${CMAKE_BINARY_DIR}/*.mexmac*")
 endif()
 
 MESSAGE(STATUS "=====================")

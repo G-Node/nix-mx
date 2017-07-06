@@ -33,3 +33,25 @@ NOTE: there was a small bugfix in examples/Primer.m after the latest release. If
 **Build NIX-MX under Windows**
 
 To build NIX-MX under Windows please follow the guide provided at [WinBuild.md](https://github.com/G-Node/nix-mx/blob/master/WinBuild.md)
+
+
+Getting Started (macOS)
+-------------------------------
+
+**Quick start packages, Beta-Release 1.4.0**
+
+The quick start packages (https://github.com/G-Node/nix-mx/releases)
+are compiled under macOS Sierra using Matlab 2016b and contain the compiled mex files, nix m-files, tests, and a startup.m script. To use nix-mx unzip the file and run the startup.m script in MATLAB. This simply adds the current folder containing the mex files to the MATLAB path. Do not change the file/folder structure.
+
+
+In order to have it working the respective NIX C++ library must be installed on the system. The easiest way is using homebrew `brew install nixio`
+
+Once this is done, you may want to test it. Go to the MATLAB command line, change into the nix-mx folder and execute:
+
+`>>RunTests`
+
+This will execute a bunch of tests, there may be warnings but no test should fail.
+
+**Build NIX-MX under macOS**
+
+To build NIX-MX under macOS please follow the guide provided at [MacOSBuild.md](https://github.com/G-Node/nix-mx/blob/master/MacOSBuild.md)
