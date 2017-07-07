@@ -28,6 +28,8 @@ function funcs = TestDataArray
     funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_dimensions;
     funcs{end+1} = @test_dimension_count;
+    funcs{end+1} = @test_datatype;
+    funcs{end+1} = @test_set_data_extent;
 end
 
 function [] = test_attrs( varargin )
@@ -63,6 +65,21 @@ function [] = test_attrs( varargin )
 
     da.label = '';
     assert(isempty(da.label));
+
+    assert(isempty(da.expansionOrigin));
+    da.expansionOrigin = 2.5;
+    assert(da.expansionOrigin == 2.5)
+    
+    da.expansionOrigin = '';
+    assert(isempty(da.expansionOrigin));
+    
+    assert(isempty(da.polynomCoefficients));
+    c = [1.1 1.2];
+    da.polynomCoefficients = c;
+    assert(da.polynomCoefficients(1) == c(1))
+    
+    da.polynomCoefficients = '';
+    assert(isempty(da.polynomCoefficients));
 end
 
 %% Test: Read all data from DataArray
@@ -468,11 +485,11 @@ function [] = test_dimensions( varargin )
     
     daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest2', ...
         'nix.DataArray', [1; 2; 3]);
-    assert(isequal(daAliasWa.shape, [3 1]));
+    assert(isequal(daAliasWa.dataExtent, [3 1]));
     
     daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest3', ...
         'nix.DataArray', [1 2 3; 2 4 5; 3 6 7]);
-    assert(isequal(daAliasWa.shape, [3 3]));
+    assert(isequal(daAliasWa.dataExtent, [3 3]));
 end
 
 %% Test: Dimension count
@@ -498,4 +515,31 @@ function [] = test_dimension_count( varargin )
     clear da b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
     assert(f.blocks{1}.dataArrays{1}.dimension_count() == 1);
+end
+
+%% Test: Datatype
+function [] = test_datatype( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    typeDA = 'nix.DataArray';
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixblock');
+
+    da = b.create_data_array_from_data('testDataArray1', typeDA, [1 2 3]);
+    assert(strcmp(da.datatype, 'double'));
+    
+    da = b.create_data_array('testDataArray2', typeDA, nix.DataType.Bool, 5);
+    da.write_all(logical([1 0 1 1 1]));
+    assert(strcmp(da.datatype, 'logical'));
+end
+
+%% Test: Set extent
+function [] = test_set_data_extent( varargin )
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixblock');
+
+    da = b.create_data_array_from_data('testDataArray1', 'nix.DataArray', [1 2 3; 4 5 6]);
+    extent = [4 6];
+    da.set_data_extent(extent);
+    assert(da.dataExtent(1) == extent(1) && size(da.read_all, 2) == extent(2));
 end

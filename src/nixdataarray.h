@@ -35,6 +35,12 @@ namespace nixdataarray {
 
     void dimensionCount(const extractor &input, infusor &output);
 
+    void polynomCoefficients(const extractor &input, infusor &output);
+
+    void dataType(const extractor &input, infusor &output);
+
+    void setDataExtent(const extractor &input, infusor &output);
+
 } // namespace nixdataarray
 
 #endif
