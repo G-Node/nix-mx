@@ -73,10 +73,10 @@ cellfun(@(x) disp(strcat(x.type, ': ', x.name)), f.sections);
 sec = f.sections{2}.sections{1};
 
 % display all Section properties
-cellfun(@(x) disp(x), sec.allProperties);
+cellfun(@(x) disp(x), sec.properties);
 
 % get a certain Value by index
-value = sec.allProperties{1}.values{1};
+value = sec.properties{1}.values{1};
 
 % or by name
 value = sec.open_property('Name').values{1}.value;
