@@ -184,19 +184,8 @@ function [] = test_properties( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     trial = f.sections{2}.sections{2}.sections{1};
 
-    assert(~isempty(trial.allProperties));
     assert(~isempty(trial.properties));
-    
-    p1 = trial.allProperties{1};
-    assert(strcmp(p1.name, 'ExperimentalCondition'));
-
-    p1 = trial.properties{1};
-    assert(strcmp(p1.name, 'ExperimentalCondition'));
-
-    disp(f.sections{3}.allProperties);
-    disp(f.sections{3}.properties);
-    
-    assert(isempty(f.sections{3}.allProperties));
+    assert(strcmp(trial.properties{1}.name, 'ExperimentalCondition'));
     assert(isempty(f.sections{3}.properties));
 end
 
@@ -205,11 +194,11 @@ function [] = test_create_property( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.create_section('mainSection', 'nixSection');
 
-    tmp = s.create_property('newProperty1', nix.DataType.Double);
-    tmp = s.create_property('newProperty2', nix.DataType.Bool);
-    tmp = s.create_property('newProperty3', nix.DataType.String);
-    assert(size(s.allProperties, 1) == 3);
-    assert(strcmp(s.allProperties{1}.name, 'newProperty1'));
+    s.create_property('newProperty1', nix.DataType.Double);
+    s.create_property('newProperty2', nix.DataType.Bool);
+    s.create_property('newProperty3', nix.DataType.String);
+    assert(size(s.properties, 1) == 3);
+    assert(strcmp(s.properties{1}.name, 'newProperty1'));
 end
 
 %% Test: Create property with value
@@ -217,82 +206,77 @@ function [] = test_create_property_with_value( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.create_section('mainSection', 'nixSection');
 
-    tmp = s.create_property_with_value('doubleProperty1', [5, 6, 7, 8]);
-    assert(strcmp(s.allProperties{end}.name, 'doubleProperty1'));
-    assert(s.allProperties{end}.values{1} == 5);
-    assert(size(s.allProperties{end}.values, 2) == 4);
-    assert(s.open_property(s.allProperties{end}.id).values{1}.value == 5);
-    assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 4);
-    assert(strcmpi(tmp.datatype,'double'));
-    
-    tmp = s.create_property_with_value('doubleProperty2', {5, 6, 7, 8});
-    assert(strcmp(s.allProperties{end}.name, 'doubleProperty2'));
-    assert(s.open_property(s.allProperties{end}.id).values{1}.value == 5);
-    assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 4);
-    assert(strcmpi(tmp.datatype,'double'));
+    % test create by array
+    s.create_property_with_value('doubleProperty1', [5, 6, 7, 8]);
+    assert(strcmp(s.properties{end}.name, 'doubleProperty1'));
+    assert(s.properties{end}.values{1}.value == 5);
+    assert(size(s.properties{end}.values, 1) == 4);
+    assert(strcmpi(s.properties{end}.datatype, 'double'));
 
-    tmp = s.create_property_with_value('stringProperty1', ['a', 'string']);
-    assert(strcmp(s.allProperties{end}.name, 'stringProperty1'));
-    assert(strcmp(s.open_property(s.allProperties{end}.id).values{1}.value, 'a'));
-    assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 7);
-    assert(strcmpi(tmp.datatype, 'char'));
-    
-    tmp = s.create_property_with_value('stringProperty2', {'this', 'has', 'strings'});
-    assert(strcmp(s.allProperties{end}.name, 'stringProperty2'));
-    assert(strcmp(s.allProperties{end}.values{1}, 'this'));
-    assert(size(s.allProperties{end}.values, 2) == 3);
-    assert(strcmp(s.open_property(s.allProperties{end}.id).values{1}.value, 'this'));
-    assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 3);
-    assert(strcmpi(tmp.datatype, 'char'));
+    % test create by cell array
+    s.create_property_with_value('doubleProperty2', {5, 6, 7, 8});
+    assert(strcmp(s.properties{end}.name, 'doubleProperty2'));
+    assert(s.properties{end}.values{2}.value == 6);
+    assert(size(s.properties{end}.values, 1) == 4);
+    assert(strcmpi(s.properties{end}.datatype, 'double'));
 
-    tmp = s.create_property_with_value('booleanProperty1', [true, false, true]);
-    assert(strcmp(s.allProperties{end}.name, 'booleanProperty1'));
-    assert(s.allProperties{end}.values{1});
-    assert(~s.allProperties{end}.values{2});
-    assert(size(s.allProperties{end}.values, 2) == 3);
-    assert(s.open_property(s.allProperties{end}.id).values{1}.value);
-    assert(~s.open_property(s.allProperties{end}.id).values{2}.value);
-    assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 3);
-    assert(strcmpi(tmp.datatype, 'logical'));
+    s.create_property_with_value('stringProperty1', ['a', 'string']);
+    assert(strcmp(s.properties{end}.name, 'stringProperty1'));
+    assert(strcmp(s.properties{end}.values{1}.value, 'a'));
+    assert(size(s.properties{end}.values, 1) == 7);
+    assert(strcmpi(s.properties{end}.datatype, 'char'));
 
-    tmp = s.create_property_with_value('booleanProperty2', {true, false, true});
-    assert(strcmp(s.allProperties{end}.name, 'booleanProperty2'));
-    assert(s.open_property(s.allProperties{end}.id).values{1}.value);
-    assert(~s.open_property(s.allProperties{end}.id).values{2}.value);
-    assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 3);
-    assert(strcmpi(tmp.datatype, 'logical'));
+    s.create_property_with_value('stringProperty2', {'this', 'has', 'strings'});
+    assert(strcmp(s.properties{end}.name, 'stringProperty2'));
+    assert(strcmp(s.properties{end}.values{1}.value, 'this'));
+    assert(size(s.properties{end}.values, 1) == 3);
+    assert(strcmpi(s.properties{end}.datatype, 'char'));
+
+    s.create_property_with_value('booleanProperty1', [true, false, true]);
+    assert(strcmp(s.properties{end}.name, 'booleanProperty1'));
+    assert(s.properties{end}.values{1}.value);
+    assert(~s.properties{end}.values{2}.value);
+    assert(size(s.properties{end}.values, 1) == 3);
+    assert(strcmpi(s.properties{end}.datatype, 'logical'));
+
+    s.create_property_with_value('booleanProperty2', {true, false, true});
+    assert(strcmp(s.properties{end}.name, 'booleanProperty2'));
+    assert(s.properties{end}.values{1}.value);
+    assert(~s.properties{end}.values{2}.value);
+    assert(size(s.properties{end}.values, 1) == 3);
+    assert(strcmpi(s.properties{end}.datatype, 'logical'));
+
+    val1 = s.properties{1}.values{1};
+    val2 = s.properties{1}.values{2};
+    s.create_property_with_value('doubleByStrunct1', [val1, val2]);
+    assert(strcmp(s.properties{end}.name, 'doubleByStrunct1'));
+    assert(s.properties{end}.values{1}.value == 5);
+    assert(size(s.properties{end}.values, 1) == 2);
+    assert(strcmpi(s.properties{end}.datatype, 'double'));
     
-    val1 = s.open_property(s.allProperties{1}.id).values{1};
-    val2 = s.open_property(s.allProperties{1}.id).values{2};
-    tmp = s.create_property_with_value('doubleByStrunct1', [val1, val2]);
-    assert(strcmp(s.allProperties{end}.name, 'doubleByStrunct1'));
-    assert(s.open_property(s.allProperties{end}.id).values{1}.value == 5);
-    assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 2);
-    assert(strcmpi(tmp.datatype,'double'));
-    
-    val3 = s.open_property(s.allProperties{1}.id).values{3};
-    tmp = s.create_property_with_value('doubleByStrunct2', {val1, val2, val3});
-    assert(strcmp(s.allProperties{end}.name, 'doubleByStrunct2'));
-    assert(s.open_property(s.allProperties{end}.id).values{3}.value == 7);
-    assert(size(s.open_property(s.allProperties{end}.id).values, 1) == 3);
-    assert(strcmpi(tmp.datatype,'double'));
+    val3 = s.properties{1}.values{3};
+    s.create_property_with_value('doubleByStrunct2', {val1, val2, val3});
+    assert(strcmp(s.properties{end}.name, 'doubleByStrunct2'));
+    assert(s.properties{end}.values{3}.value == 7);
+    assert(size(s.properties{end}.values, 1) == 3);
+    assert(strcmpi(s.properties{end}.datatype, 'double'));
 end
 
 %% Test: Delete property by entity, propertyStruct, ID and name
 function [] = test_delete_property( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.create_section('mainSection', 'nixSection');
-    tmp = s.create_property('newProperty1', nix.DataType.Double);
-    tmp = s.create_property('newProperty2', nix.DataType.Bool);
-    tmp = s.create_property('newProperty3', nix.DataType.String);
-    tmp = s.create_property('newProperty4', nix.DataType.Double);
+    s.create_property('newProperty1', nix.DataType.Double);
+    s.create_property('newProperty2', nix.DataType.Bool);
+    s.create_property('newProperty3', nix.DataType.String);
+    s.create_property('newProperty4', nix.DataType.Double);
 
     assert(s.delete_property('newProperty4'));
-    assert(s.delete_property(s.allProperties{3}.id));
-    delProp = s.open_property(s.allProperties{2}.id);
+    assert(s.delete_property(s.properties{3}.id));
+    delProp = s.properties{2};
     assert(s.delete_property(delProp));
-    assert(s.delete_property(s.allProperties{1}));
-    
+    assert(s.delete_property(s.properties{1}));
+
     assert(~s.delete_property('I do not exist'));
 end
 
@@ -301,8 +285,8 @@ function [] = test_open_property( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     trial = f.sections{2}.sections{2}.sections{1};
 
-    assert(~isempty(trial.open_property(trial.allProperties{1}.id)));
-    assert(~isempty(trial.open_property(trial.allProperties{1}.name)));
+    assert(~isempty(trial.open_property(trial.properties{1}.id)));
+    assert(~isempty(trial.open_property(trial.properties{1}.name)));
 end
 
 function [] = test_open_property_idx( varargin )
