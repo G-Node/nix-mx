@@ -30,6 +30,7 @@ classdef Section < nix.NamedEntity
             
             % assign relations
             nix.Dynamic.add_dyn_relation(obj, 'sections', @nix.Section);
+            nix.Dynamic.add_dyn_relation(obj, 'properties', @nix.Property);
         end;
 
         function section = parent(obj)
@@ -170,7 +171,7 @@ classdef Section < nix.NamedEntity
         end;
 
         function props = get.allProperties(obj)
-            props = nix_mx('Section::properties', obj.nix_handle);
+            props = nix_mx('Section::propertiesMap', obj.nix_handle);
         end;
         
         function p_map = get.allPropertiesMap(obj)

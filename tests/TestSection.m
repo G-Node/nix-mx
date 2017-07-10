@@ -183,15 +183,21 @@ function [] = test_properties( varargin )
 %% Test: Properties
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     trial = f.sections{2}.sections{2}.sections{1};
-    
+
     assert(~isempty(trial.allProperties));
+    assert(~isempty(trial.properties));
     
     p1 = trial.allProperties{1};
     assert(strcmp(p1.name, 'ExperimentalCondition'));
-    
+
+    p1 = trial.properties{1};
+    assert(strcmp(p1.name, 'ExperimentalCondition'));
+
     disp(f.sections{3}.allProperties);
+    disp(f.sections{3}.properties);
     
     assert(isempty(f.sections{3}.allProperties));
+    assert(isempty(f.sections{3}.properties));
 end
 
 %% Test: Create property by data type

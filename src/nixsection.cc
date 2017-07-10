@@ -34,7 +34,7 @@ namespace nixsection {
         return sb.array();
     }
 
-    void properties(const extractor &input, infusor &output) {
+    void propertiesMap(const extractor &input, infusor &output) {
         nix::Section section = input.entity<nix::Section>(1);
         std::vector<nix::Property> properties = section.properties();
 
