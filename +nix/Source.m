@@ -49,6 +49,11 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
                 'Source::openSource', id_or_name, @nix.Source);
         end;
 
+        function retObj = open_source_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Source::openSourceIdx', idx, @nix.Source);
+        end;
+
         function retObj = parent_source(obj)
             retObj = nix.Utils.fetchObj('Source::parentSource', ...
                 obj.nix_handle, @nix.Source);

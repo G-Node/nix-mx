@@ -25,10 +25,13 @@ function funcs = TestTag
     funcs{end+1} = @test_fetch_features;
     funcs{end+1} = @test_feature_count;
     funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_open_source_idx;
     funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_open_feature;
+    funcs{end+1} = @test_open_feature_idx;
     funcs{end+1} = @test_open_reference;
+    funcs{end+1} = @test_open_reference_idx;
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data;
@@ -350,6 +353,23 @@ function [] = test_open_source( varargin )
     assert(isempty(getNonSource));
 end
 
+function [] = test_open_source_idx( varargin )
+%% Test Open Source by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    t = b.create_tag('testTag', 'nixTag', [2 9]);
+    s1 = b.create_source('testSource1', 'nixSource');
+    s2 = b.create_source('testSource2', 'nixSource');
+    s3 = b.create_source('testSource3', 'nixSource');
+    t.add_source(s1);
+    t.add_source(s2);
+    t.add_source(s3);
+
+    assert(strcmp(f.blocks{1}.tags{1}.open_source_idx(0).name, s1.name));
+    assert(strcmp(f.blocks{1}.tags{1}.open_source_idx(1).name, s2.name));
+    assert(strcmp(f.blocks{1}.tags{1}.open_source_idx(2).name, s3.name));
+end
+
 %% Test: nix.Tag has nix.Source by ID or entity
 function [] = test_has_source( varargin )
     fileName = 'testRW.h5';
@@ -402,6 +422,22 @@ function [] = test_open_feature( varargin )
     assert(isempty(getFeat));
 end
 
+function [] = test_open_feature_idx( varargin )
+%% Test Open feature by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    t = b.create_tag('testTag', 'nixTag', [2 9]);
+    d1 = b.create_data_array('testFeature1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d2 = b.create_data_array('testFeature2', 'nixDataArray', nix.DataType.Double, [3 2]);
+    d3 = b.create_data_array('testFeature3', 'nixDataArray', nix.DataType.Double, [7 2]);
+    t.add_feature(d1, nix.LinkType.Tagged);
+    t.add_feature(d2, nix.LinkType.Untagged);
+    t.add_feature(d3, nix.LinkType.Indexed);
+
+    assert(f.blocks{1}.tags{1}.open_feature_idx(0).linkType == nix.LinkType.Tagged);
+    assert(f.blocks{1}.tags{1}.open_feature_idx(1).linkType == nix.LinkType.Untagged);
+    assert(f.blocks{1}.tags{1}.open_feature_idx(2).linkType == nix.LinkType.Indexed);
+end
 
 %% Test: Open reference by ID or name
 function [] = test_open_reference( varargin )
@@ -421,6 +457,23 @@ function [] = test_open_reference( varargin )
     %-- test open non existing source
     getNonRef = getTag.open_reference('I do not exist');
     assert(isempty(getNonRef));
+end
+
+function [] = test_open_reference_idx( varargin )
+%% Test Open reference by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    t = b.create_tag('testTag', 'nixTag', [2 9]);
+    d1 = b.create_data_array('testReference1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d2 = b.create_data_array('testReference2', 'nixDataArray', nix.DataType.Double, [3 2]);
+    d3 = b.create_data_array('testReference3', 'nixDataArray', nix.DataType.Double, [7 2]);
+    t.add_reference(d1);
+    t.add_reference(d2);
+    t.add_reference(d3);
+
+    assert(strcmp(f.blocks{1}.tags{1}.open_reference_idx(0).name, d1.name));
+    assert(strcmp(f.blocks{1}.tags{1}.open_reference_idx(1).name, d2.name));
+    assert(strcmp(f.blocks{1}.tags{1}.open_reference_idx(2).name, d3.name));
 end
 
 %% Test: Set metadata

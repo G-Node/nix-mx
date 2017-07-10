@@ -60,4 +60,34 @@ namespace nixblock {
         output.set(0, group);
     }
 
+    void openGroupIdx(const extractor &input, infusor &output) {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getGroup(idx));
+    }
+
+    void openDataArrayIdx(const extractor &input, infusor &output) {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getDataArray(idx));
+    }
+
+    void openTagIdx(const extractor &input, infusor &output) {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getTag(idx));
+    }
+
+    void openMultiTagIdx(const extractor &input, infusor &output) {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getMultiTag(idx));
+    }
+
+    void openSourceIdx(const extractor &input, infusor &output) {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getSource(idx));
+    }
+
 } // namespace nixblock

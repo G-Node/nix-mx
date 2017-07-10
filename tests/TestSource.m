@@ -17,6 +17,7 @@ function funcs = TestSource
     funcs{end+1} = @test_fetch_sources;
     funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_open_source_idx;
     funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_parent_source;
     funcs{end+1} = @test_set_metadata;
@@ -66,6 +67,20 @@ function [] = test_open_source( varargin )
     %-- test open non existing source
     getNonSource = getSource.open_source('I dont exist');
     assert(isempty(getNonSource));
+end
+
+function [] = test_open_source_idx( varargin )
+%% Test Open Source by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    s = b.create_source('testSource', 'nixSource');
+    s1 = s.create_source('testSource1', 'nixSource');
+    s2 = s.create_source('testSource2', 'nixSource');
+    s3 = s.create_source('testSource3', 'nixSource');
+
+    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(0).name, s1.name));
+    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(1).name, s2.name));
+    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(2).name, s3.name));
 end
 
 %% Test: Source count

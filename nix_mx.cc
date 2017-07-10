@@ -119,6 +119,8 @@ void mexFunction(int            nlhs,
             .reg("isOpen", GETTER(bool, nix::File, isOpen));
         methods->add("File::fileMode", nixfile::fileMode);
         methods->add("File::validate", nixfile::validate);
+        methods->add("File::openBlockIdx", nixfile::openBlockIdx);
+        methods->add("File::openSectionIdx", nixfile::openSectionIdx);
 
         classdef<nix::Block>("Block", methods)
             .desc(&nixblock::describe)
@@ -158,6 +160,11 @@ void mexFunction(int            nlhs,
         methods->add("Block::createDataArray", nixblock::createDataArray);
         methods->add("Block::createMultiTag", nixblock::createMultiTag);
         methods->add("Block::createGroup", nixblock::createGroup);
+        methods->add("Block::openGroupIdx", nixblock::openGroupIdx);
+        methods->add("Block::openDataArrayIdx", nixblock::openDataArrayIdx);
+        methods->add("Block::openTagIdx", nixblock::openTagIdx);
+        methods->add("Block::openMultiTagIdx", nixblock::openMultiTagIdx);
+        methods->add("Block::openSourceIdx", nixblock::openSourceIdx);
 
         classdef<nix::Group>("Group", methods)
             .desc(&nixgroup::describe)
@@ -195,6 +202,10 @@ void mexFunction(int            nlhs,
         methods->add("Group::addTags", nixgroup::addTags);
         methods->add("Group::addMultiTag", nixgroup::addMultiTag);
         methods->add("Group::addMultiTags", nixgroup::addMultiTags);
+        methods->add("Group::openDataArrayIdx", nixgroup::openDataArrayIdx);
+        methods->add("Group::openTagIdx", nixgroup::openTagIdx);
+        methods->add("Group::openMultiTagIdx", nixgroup::openMultiTagIdx);
+        methods->add("Group::openSourceIdx", nixgroup::openSourceIdx);
 
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)
@@ -235,6 +246,8 @@ void mexFunction(int            nlhs,
         methods->add("DataArray::setPolynomCoefficients", nixdataarray::polynomCoefficients);
         methods->add("DataArray::dataType", nixdataarray::dataType);
         methods->add("DataArray::setDataExtent", nixdataarray::setDataExtent);
+        methods->add("DataArray::openSourceIdx", nixdataarray::openSourceIdx);
+        methods->add("DataArray::openDimensionIdx", nixdataarray::openDimensionIdx);
 
         classdef<nix::Source>("Source", methods)
             .desc(&nixsource::describe)
@@ -254,6 +267,7 @@ void mexFunction(int            nlhs,
             .reg("referringDataArrays", GETTER(std::vector<nix::DataArray>, nix::Source, referringDataArrays))
             .reg("referringTags", GETTER(std::vector<nix::Tag>, nix::Source, referringTags))
             .reg("referringMultiTags", GETTER(std::vector<nix::MultiTag>, nix::Source, referringMultiTags));
+        methods->add("Source::openSourceIdx", nixsource::openSourceIdx);
 
         classdef<nix::Tag>("Tag", methods)
             .desc(&nixtag::describe)
@@ -290,6 +304,9 @@ void mexFunction(int            nlhs,
         methods->add("Tag::addSource", nixtag::addSource);
         methods->add("Tag::addSources", nixtag::addSources);
         methods->add("Tag::createFeature", nixtag::createFeature);
+        methods->add("Tag::openReferenceIdx", nixtag::openReferenceIdx);
+        methods->add("Tag::openFeatureIdx", nixtag::openFeatureIdx);
+        methods->add("Tag::openSourceIdx", nixtag::openSourceIdx);
 
         classdef<nix::MultiTag>("MultiTag", methods)
             .desc(&nixmultitag::describe)
@@ -329,6 +346,9 @@ void mexFunction(int            nlhs,
         methods->add("MultiTag::addSources", nixmultitag::addSources);
         methods->add("MultiTag::createFeature", nixmultitag::createFeature);
         methods->add("MultiTag::addPositions", nixmultitag::addPositions);
+        methods->add("MultiTag::openReferenceIdx", nixmultitag::openReferenceIdx);
+        methods->add("MultiTag::openFeatureIdx", nixmultitag::openFeatureIdx);
+        methods->add("MultiTag::openSourceIdx", nixmultitag::openSourceIdx);
 
         classdef<nix::Section>("Section", methods)
             .desc(&nixsection::describe)
@@ -366,6 +386,8 @@ void mexFunction(int            nlhs,
         methods->add("Section::referringBlockTags", nixsection::referringBlockTags);
         methods->add("Section::referringBlockMultiTags", nixsection::referringBlockMultiTags);
         methods->add("Section::referringBlockDataArrays", nixsection::referringBlockDataArrays);
+        methods->add("Section::openSectionIdx", nixsection::openSectionIdx);
+        methods->add("Section::openPropertyIdx", nixsection::openPropertyIdx);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)

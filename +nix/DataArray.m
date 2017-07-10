@@ -73,6 +73,21 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             dim = nix.RangeDimension(nix_mx(func_name, obj.nix_handle));
         end
         
+        function dim = open_dimension_idx(obj, idx)
+        % Getting the dimension by index starts with 1
+        % instead of 0 compared to all other index functions.
+            func_name = strcat(obj.alias, '::openDimensionIdx');
+            ret = nix_mx(func_name, obj.nix_handle, idx);
+            switch(ret.dimension_type)
+                case 'set'
+                    dim = nix.SetDimension(ret.handle);
+                case 'sampled'
+                    dim = nix.SampledDimension(ret.handle);
+                case 'range'
+                    dim = nix.RangeDimension(ret.handle);
+            end;
+        end
+
         function delCheck = delete_dimensions(obj)
             func_name = strcat(obj.alias, '::deleteDimensions');
             delCheck = nix_mx(func_name, obj.nix_handle);

@@ -15,6 +15,8 @@ namespace nixsource {
 
     mxArray *describe(const nix::Source &source);
 
+    void openSourceIdx(const extractor &input, infusor &output);
+
 } // namespace nixsource
 
 #endif

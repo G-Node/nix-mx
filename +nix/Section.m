@@ -88,6 +88,11 @@ classdef Section < nix.NamedEntity
             retObj = nix.Utils.open_entity(obj, ...
                 'Section::openSection', id_or_name, @nix.Section);
         end;
+
+        function retObj = open_section_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Section::openSectionIdx', idx, @nix.Section);
+        end;
         
         function hs = has_section(obj, id_or_name)
             hs = nix_mx('Section::hasSection', obj.nix_handle, id_or_name);
@@ -132,6 +137,11 @@ classdef Section < nix.NamedEntity
         function retObj = open_property(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'Section::openProperty', id_or_name, @nix.Property);
+        end;
+
+        function retObj = open_property_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Section::openPropertyIdx', idx, @nix.Property);
         end;
 
         function props = get.allProperties(obj)

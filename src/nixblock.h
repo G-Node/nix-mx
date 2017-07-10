@@ -21,6 +21,16 @@ namespace nixblock {
 
     void createGroup(const extractor &input, infusor &output);
 
+    void openGroupIdx(const extractor &input, infusor &output);
+
+    void openDataArrayIdx(const extractor &input, infusor &output);
+
+    void openTagIdx(const extractor &input, infusor &output);
+
+    void openMultiTagIdx(const extractor &input, infusor &output);
+
+    void openSourceIdx(const extractor &input, infusor &output);
+
 } // namespace nixblock
 
 #endif

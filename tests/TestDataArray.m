@@ -23,10 +23,12 @@ function funcs = TestDataArray
     funcs{end+1} = @test_add_source;
     funcs{end+1} = @test_add_sources;
     funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_open_source_idx;
     funcs{end+1} = @test_remove_source;
     funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_dimensions;
+    funcs{end+1} = @test_open_dimension_idx;
     funcs{end+1} = @test_dimension_count;
     funcs{end+1} = @test_datatype;
     funcs{end+1} = @test_set_data_extent;
@@ -368,6 +370,23 @@ function [] = test_open_source( varargin )
     assert(isempty(d.open_source('I do not exist')));
 end
 
+function [] = test_open_source_idx( varargin )
+%% Test Open Source by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
+    s1 = b.create_source('testSource1', 'nixSource');
+    s2 = b.create_source('testSource2', 'nixSource');
+    s3 = b.create_source('testSource3', 'nixSource');
+    d.add_source(s1);
+    d.add_source(s2);
+    d.add_source(s3);
+
+    assert(strcmp(f.blocks{1}.dataArrays{1}.open_source_idx(0).name, s1.name));
+    assert(strcmp(f.blocks{1}.dataArrays{1}.open_source_idx(1).name, s2.name));
+    assert(strcmp(f.blocks{1}.dataArrays{1}.open_source_idx(2).name, s3.name));
+end
+
 %% Test: Remove sources by entity and id
 function [] = test_remove_source ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
@@ -490,6 +509,24 @@ function [] = test_dimensions( varargin )
     daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest3', ...
         'nix.DataArray', [1 2 3; 2 4 5; 3 6 7]);
     assert(isequal(daAliasWa.dataExtent, [3 3]));
+end
+
+function [] = test_open_dimension_idx( varargin )
+%% Test: Open dimension by index
+    fileName = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(fileName, nix.FileMode.Overwrite);
+    b = f.create_block('daTestBlock', 'test nixBlock');
+    da = b.create_data_array('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
+    
+    da.append_set_dimension();
+    da.append_sampled_dimension(200);
+    da.append_range_dimension([1, 2, 3, 4]);
+
+    % for some weird reason getting the dimension by index starts with 1
+    % instead of 0 compared to all other index functions.
+    assert(strcmp(da.open_dimension_idx(1).dimensionType, 'set'));
+    assert(strcmp(da.open_dimension_idx(2).dimensionType, 'sample'));
+    assert(strcmp(da.open_dimension_idx(3).dimensionType, 'range'));
 end
 
 %% Test: Dimension count

@@ -24,7 +24,9 @@ function funcs = TestFile
     funcs{end+1} = @test_fetch_block;
     funcs{end+1} = @test_fetch_section;
     funcs{end+1} = @test_open_section;
+    funcs{end+1} = @test_open_section_idx;
     funcs{end+1} = @test_open_block;
+    funcs{end+1} = @test_open_block_idx;
     funcs{end+1} = @test_delete_block;
     funcs{end+1} = @test_delete_section;
     funcs{end+1} = @test_has_block;
@@ -223,6 +225,18 @@ function [] = test_open_section( varargin )
     assert(isempty(getSection));
 end
 
+function [] = test_open_section_idx( varargin )
+%% Test Open Section by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    s1 = f.create_section('testSection1', 'nixSection');
+    s2 = f.create_section('testSection2', 'nixSection');
+    s3 = f.create_section('testSection3', 'nixSection');
+
+    assert(strcmp(f.open_section_idx(0).name, s1.name));
+    assert(strcmp(f.open_section_idx(1).name, s2.name));
+    assert(strcmp(f.open_section_idx(2).name, s3.name));
+end
+
 function [] = test_open_block( varargin )
 %% Test Open Block by ID or name
     test_file = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
@@ -236,6 +250,18 @@ function [] = test_open_block( varargin )
     %-- test open non existing block
     getBlock = test_file.open_block('I dont exist');
     assert(isempty(getBlock));
+end
+
+function [] = test_open_block_idx( varargin )
+%% Test Open Block by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b1 = f.create_block('testBlock1', 'nixBlock');
+    b2 = f.create_block('testBlock2', 'nixBlock');
+    b3 = f.create_block('testBlock3', 'nixBlock');
+
+    assert(strcmp(f.open_block_idx(0).name, b1.name));
+    assert(strcmp(f.open_block_idx(1).name, b2.name));
+    assert(strcmp(f.open_block_idx(2).name, b3.name));
 end
 
 %% Test: nix.File has nix.Block by ID or name

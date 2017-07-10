@@ -56,7 +56,12 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             retObj = nix.Utils.open_entity(obj, ...
                 'MultiTag::openReferences', id_or_name, @nix.DataArray);
         end;
-        
+
+        function retObj = open_reference_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'MultiTag::openReferenceIdx', idx, @nix.DataArray);
+        end;
+
         function data = retrieve_data(obj, pos_index, ref_index)
             % convert Matlab-like to C-like index
             assert(pos_index > 0, 'Position index must be positive');
@@ -99,6 +104,11 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function retObj = open_feature(obj, id_or_name)
             retObj = nix.Utils.open_entity(obj, ...
                 'MultiTag::openFeature', id_or_name, @nix.Feature);
+        end;
+
+        function retObj = open_feature_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'MultiTag::openFeatureIdx', idx, @nix.Feature);
         end;
 
         function data = retrieve_feature_data(obj, pos_index, fea_index)

@@ -27,4 +27,10 @@ namespace nixsource {
         return sb.array();
     }
 
+    void openSourceIdx(const extractor &input, infusor &output) {
+        nix::Source currObj = input.entity<nix::Source>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getSource(idx));
+    }
+
 } // namespace nixsource

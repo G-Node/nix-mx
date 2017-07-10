@@ -15,6 +15,7 @@ function funcs = TestSection
     funcs{end+1} = @test_delete_section;
     funcs{end+1} = @test_list_subsections;
     funcs{end+1} = @test_open_section;
+    funcs{end+1} = @test_open_section_idx;
     funcs{end+1} = @test_parent;
     funcs{end+1} = @test_has_section;
     funcs{end+1} = @test_section_count;
@@ -24,6 +25,7 @@ function funcs = TestSection
     funcs{end+1} = @test_create_property_with_value;
     funcs{end+1} = @test_delete_property;
     funcs{end+1} = @test_open_property;
+    funcs{end+1} = @test_open_property_idx;
     funcs{end+1} = @test_property_count;
     funcs{end+1} = @test_link;
     funcs{end+1} = @test_inherited_properties;
@@ -88,6 +90,19 @@ function [] = test_open_section( varargin )
     %-- test open non existing section
     getSection = s1.open_section('I dont exist');
     assert(isempty(getSection));
+end
+
+function [] = test_open_section_idx( varargin )
+%% Test Open Section by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    s = f.create_section('testSection', 'nixSection');
+    s1 = s.create_section('testSection1', 'nixSection');
+    s2 = s.create_section('testSection2', 'nixSection');
+    s3 = s.create_section('testSection3', 'nixSection');
+
+    assert(strcmp(f.sections{1}.open_section_idx(0).name, s1.name));
+    assert(strcmp(f.sections{1}.open_section_idx(1).name, s2.name));
+    assert(strcmp(f.sections{1}.open_section_idx(2).name, s3.name));
 end
 
 function [] = test_parent( varargin )
@@ -276,6 +291,19 @@ function [] = test_open_property( varargin )
 
     assert(~isempty(trial.open_property(trial.allProperties{1}.id)));
     assert(~isempty(trial.open_property(trial.allProperties{1}.name)));
+end
+
+function [] = test_open_property_idx( varargin )
+%% Test Open Propery by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    s = f.create_section('testSection', 'nixSection');
+    p1 = s.create_property('testProperty1', nix.DataType.Double);
+    p2 = s.create_property('testProperty2', nix.DataType.Bool);
+    p3 = s.create_property('testProperty3', nix.DataType.String);
+
+    assert(strcmp(f.sections{1}.open_property_idx(0).name, p1.name));
+    assert(strcmp(f.sections{1}.open_property_idx(1).name, p2.name));
+    assert(strcmp(f.sections{1}.open_property_idx(2).name, p3.name));
 end
 
 %% Test: Property count

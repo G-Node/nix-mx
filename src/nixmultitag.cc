@@ -83,4 +83,22 @@ namespace nixmultitag {
         currObj.positions(input.str(2));
     }
 
+    void openReferenceIdx(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getReference(idx));
+    }
+
+    void openFeatureIdx(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getFeature(idx));
+    }
+
+    void openSourceIdx(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getSource(idx));
+    }
+
 } // namespace nixmultitag

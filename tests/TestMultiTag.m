@@ -25,10 +25,13 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_fetch_sources;
     funcs{end+1} = @test_fetch_features;
     funcs{end+1} = @test_open_source;
+    funcs{end+1} = @test_open_source_idx;
     funcs{end+1} = @test_has_source;
     funcs{end+1} = @test_source_count;
     funcs{end+1} = @test_open_feature;
+    funcs{end+1} = @test_open_feature_idx;
     funcs{end+1} = @test_open_reference;
+    funcs{end+1} = @test_open_reference_idx;
     funcs{end+1} = @test_feature_count;
     funcs{end+1} = @test_reference_count;
     funcs{end+1} = @test_add_positions;
@@ -338,6 +341,24 @@ function [] = test_open_source( varargin )
     assert(isempty(getSource));
 end
 
+function [] = test_open_source_idx( varargin )
+%% Test Open Source by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
+    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d);
+    s1 = b.create_source('testSource1', 'nixSource');
+    s2 = b.create_source('testSource2', 'nixSource');
+    s3 = b.create_source('testSource3', 'nixSource');
+    t.add_source(s1);
+    t.add_source(s2);
+    t.add_source(s3);
+
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_source_idx(0).name, s1.name));
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_source_idx(1).name, s2.name));
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_source_idx(2).name, s3.name));
+end
+
 %% Test: has nix.Source by ID or entity
 function [] = test_has_source( varargin )
     fileName = 'testRW.h5';
@@ -391,6 +412,24 @@ function [] = test_open_feature( varargin )
     assert(isempty(getFeat));
 end
 
+function [] = test_open_feature_idx( varargin )
+%% Test Open feature by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
+    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d);
+    f1 = b.create_data_array('testFeature1', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    f2 = b.create_data_array('testFeature2', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    f3 = b.create_data_array('testFeature3', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    t.add_feature(f1, nix.LinkType.Tagged);
+    t.add_feature(f2, nix.LinkType.Untagged);
+    t.add_feature(f3, nix.LinkType.Indexed);
+
+    assert(f.blocks{1}.multiTags{1}.open_feature_idx(0).linkType == nix.LinkType.Tagged);
+    assert(f.blocks{1}.multiTags{1}.open_feature_idx(1).linkType == nix.LinkType.Untagged);
+    assert(f.blocks{1}.multiTags{1}.open_feature_idx(2).linkType == nix.LinkType.Indexed);
+end
+
 %% Test: Open reference by ID or name
 function [] = test_open_reference( varargin )
     test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
@@ -410,6 +449,24 @@ function [] = test_open_reference( varargin )
     %-- test open non existing reference
     getRef = getMTag.open_reference('I do not exist');
     assert(isempty(getRef));
+end
+
+function [] = test_open_reference_idx( varargin )
+%% Test Open feature by index
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
+    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d);
+    r1 = b.create_data_array('testReference1', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    r2 = b.create_data_array('testReference2', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    r3 = b.create_data_array('testReference3', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    t.add_reference(r1);
+    t.add_reference(r2);
+    t.add_reference(r3);
+
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_reference_idx(0).name, r1.name));
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_reference_idx(1).name, r2.name));
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_reference_idx(2).name, r3.name));
 end
 
 %% Test: Feature count

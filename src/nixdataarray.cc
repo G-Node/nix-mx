@@ -7,6 +7,7 @@
 // LICENSE file in the root of the Project.
 
 #include "nixdataarray.h"
+#include "nixdimensions.h"
 #include "mkarray.h"
 #include "mex.h"
 
@@ -134,6 +135,39 @@ namespace nixdataarray {
         nix::DataArray da = input.entity<nix::DataArray>(1);
         nix::NDSize size = input.ndsize(2);
         da.dataExtent(size);
+    }
+
+    void openSourceIdx(const extractor &input, infusor &output) {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+        output.set(0, currObj.getSource(idx));
+    }
+
+    void openDimensionIdx(const extractor &input, infusor &output) {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+
+        nix::Dimension d = currObj.getDimension(idx);
+
+        struct_builder sb({ 1 }, { "dimension_type", "handle" });
+
+        switch (d.dimensionType()) {
+        case nix::DimensionType::Set:
+            sb.set("set");
+            sb.set(d.asSetDimension());
+            break;
+        case nix::DimensionType::Sample:
+            sb.set("sampled");
+            sb.set(d.asSampledDimension());
+            break;
+        case nix::DimensionType::Range:
+            sb.set("range");
+            sb.set(d.asRangeDimension());
+            break;
+        default: throw std::invalid_argument("unkown dimension type");
+        }
+
+        output.set(0, sb.array());
     }
 
 } // namespace nixdataarray

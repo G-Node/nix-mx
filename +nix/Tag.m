@@ -58,6 +58,11 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'Tag::openReferenceDataArray', id_or_name, @nix.DataArray);
         end;
 
+        function retObj = open_reference_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Tag::openReferenceIdx', idx, @nix.DataArray);
+        end;
+
         function data = retrieve_data(obj, index)
             % convert Matlab-like to C-like index
             assert(index > 0, 'Subscript indices must be positive');
@@ -99,7 +104,12 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             retObj = nix.Utils.open_entity(obj, ...
                 'Tag::openFeature', id_or_name, @nix.Feature);
         end;
-        
+
+        function retObj = open_feature_idx(obj, idx)
+            retObj = nix.Utils.open_entity(obj, ...
+                'Tag::openFeatureIdx', idx, @nix.Feature);
+        end;
+
         function data = retrieve_feature_data(obj, index)
             % convert Matlab-like to C-like index
             assert(index > 0, 'Subscript indices must be positive');
