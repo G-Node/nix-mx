@@ -15,8 +15,6 @@ namespace nixsection {
 
     mxArray *describe(const nix::Section &section);
 
-    void propertiesMap(const extractor &input, infusor &output);
-
     void createProperty(const extractor &input, infusor &output);
 
     void createPropertyWithValue(const extractor &input, infusor &output);
