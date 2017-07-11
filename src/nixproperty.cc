@@ -41,14 +41,10 @@ namespace nixproperty {
 
             nix::Value pr = vals[i];
 
-            struct_builder sb({ 1 }, { "value", "uncertainty", "checksum", "encoder", "filename", "reference" });
+            struct_builder sb({ 1 }, { "value", "uncertainty" });
 
             sb.set(make_mx_array(pr));
             sb.set(pr.uncertainty);
-            sb.set(pr.checksum);
-            sb.set(pr.checksum);
-            sb.set(pr.filename);
-            sb.set(pr.reference);
 
             mxSetCell(lst, i, sb.array());
         }
