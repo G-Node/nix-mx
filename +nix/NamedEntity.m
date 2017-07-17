@@ -20,6 +20,16 @@ classdef NamedEntity < nix.Entity
             nix.Dynamic.add_dyn_attr(obj, 'type', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'definition', 'rw');
         end
+
+        function res = compare(obj, entity)
+        % Compares first name and second id, return > 0 if the entity 
+        % is larger than the other, 0 if both are equal, and < 0 otherwise.
+            if(~strcmp(class(obj), class(entity)))
+                error('Only entities of the same class can be compared.');
+            end;
+            res = nix_mx(strcat(obj.alias, '::compare'), ...
+                obj.nix_handle, entity.nix_handle);
+        end;
     end
     
 end

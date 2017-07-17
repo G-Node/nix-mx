@@ -90,4 +90,10 @@ namespace nixblock {
         output.set(0, currObj.getSource(idx));
     }
 
+    void compare(const extractor &input, infusor &output) {
+        nix::Block currObj = input.entity<nix::Block>(1);
+        nix::Block other = input.entity<nix::Block>(2);
+        output.set(0, currObj.compare(other));
+    }
+
 } // namespace nixblock

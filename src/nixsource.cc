@@ -33,4 +33,10 @@ namespace nixsource {
         output.set(0, currObj.getSource(idx));
     }
 
+    void compare(const extractor &input, infusor &output) {
+        nix::Source currObj = input.entity<nix::Source>(1);
+        nix::Source other = input.entity<nix::Source>(2);
+        output.set(0, currObj.compare(other));
+    }
+
 } // namespace nixsource

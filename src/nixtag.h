@@ -35,6 +35,8 @@ namespace nixtag {
 
     void openSourceIdx(const extractor &input, infusor &output);
 
+    void compare(const extractor &input, infusor &output);
+
 } // namespace nixtag
 
 #endif

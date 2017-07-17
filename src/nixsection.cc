@@ -117,4 +117,10 @@ namespace nixsection {
         output.set(0, currObj.getProperty(idx));
     }
 
+    void compare(const extractor &input, infusor &output) {
+        nix::Section currObj = input.entity<nix::Section>(1);
+        nix::Section other = input.entity<nix::Section>(2);
+        output.set(0, currObj.compare(other));
+    }
+
 } // namespace nixsection

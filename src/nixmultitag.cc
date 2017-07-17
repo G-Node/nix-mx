@@ -101,4 +101,10 @@ namespace nixmultitag {
         output.set(0, currObj.getSource(idx));
     }
 
+    void compare(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        nix::MultiTag other = input.entity<nix::MultiTag>(2);
+        output.set(0, currObj.compare(other));
+    }
+
 } // namespace nixmultitag
