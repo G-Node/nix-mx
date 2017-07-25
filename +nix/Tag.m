@@ -63,10 +63,8 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'Tag::openReferenceIdx', idx, @nix.DataArray);
         end;
 
-        function data = retrieve_data(obj, index)
-            % convert Matlab-like to C-like index
-            assert(index > 0, 'Subscript indices must be positive');
-            tmp = nix_mx('Tag::retrieveData', obj.nix_handle, index - 1);
+        function data = retrieve_data_idx(obj, idx)
+            tmp = nix_mx('Tag::retrieveDataIdx', obj.nix_handle, idx);
             
             % data must agree with file & dimensions
             % see mkarray.cc(42)

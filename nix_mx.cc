@@ -317,7 +317,6 @@ void mexFunction(int            nlhs,
             .reg("sourceCount", GETTER(nix::ndsize_t, nix::Tag, sourceCount))
             .reg("referenceCount", GETTER(nix::ndsize_t, nix::Tag, referenceCount))
             .reg("featureCount", GETTER(nix::ndsize_t, nix::Tag, featureCount));
-        methods->add("Tag::retrieveData", nixtag::retrieveData);
         methods->add("Tag::featureRetrieveData", nixtag::retrieveFeatureData);
         methods->add("Tag::addReference", nixtag::addReference);
         methods->add("Tag::addReferences", nixtag::addReferences);
@@ -331,6 +330,7 @@ void mexFunction(int            nlhs,
         methods->add("Tag::sourcesFiltered", nixtag::sourcesFiltered);
         methods->add("Tag::referencesFiltered", nixtag::referencesFiltered);
         methods->add("Tag::featuresFiltered", nixtag::featuresFiltered);
+        methods->add("Tag::retrieveDataIdx", nixtag::retrieveDataIdx);
 
         classdef<nix::MultiTag>("MultiTag", methods)
             .desc(&nixmultitag::describe)

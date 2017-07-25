@@ -34,7 +34,7 @@ function funcs = TestTag
     funcs{end+1} = @test_open_reference_idx;
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
-    funcs{end+1} = @test_retrieve_data;
+    funcs{end+1} = @test_retrieve_data_idx;
     funcs{end+1} = @test_retrieve_feature_data;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_has_feature;
@@ -524,14 +524,28 @@ function [] = test_open_metadata( varargin )
     assert(strcmp(t.open_metadata.name, 'testSection'));
 end
 
-%% Test: Retrieve data
-function [] = test_retrieve_data( varargin )
-    f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    b = f.blocks{1};
-    tag = b.open_tag('Arm movement epoch Trial 001');
-    
-    data = tag.retrieve_data(1);
-    assert(~isempty(data));
+%% Test: Retrieve referenced data by index
+function [] = test_retrieve_data_idx( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    raw = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    d = b.create_data_array_from_data('testDataArray', 'nixDataArray', raw);
+    d.append_sampled_dimension(1);
+    % tag positon is used like an index, therfore starts with 0!
+    tagStartPos = [3];
+    t = b.create_tag('testTag', 'nixTag', tagStartPos);
+    t.extent = [3];
+    t.add_reference(d);
+
+    try
+        t.retrieve_data_idx(12);
+    catch ME
+        assert(~isempty(strfind(ME.message, 'out of bounds')), 'Invalid index failed');
+    end
+
+    retData = t.retrieve_data_idx(0);
+    assert(size(retData, 2) == t.extent, 'Extent check failed');
+    assert(retData(1) == raw(t.position + 1), 'Position check failed');
 end
 
 %% Test: Retrieve feature data
