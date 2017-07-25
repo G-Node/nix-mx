@@ -34,6 +34,7 @@ function funcs = TestTag
     funcs{end+1} = @test_open_reference_idx;
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
+    funcs{end+1} = @test_retrieve_data;
     funcs{end+1} = @test_retrieve_data_idx;
     funcs{end+1} = @test_retrieve_feature_data_idx;
     funcs{end+1} = @test_attrs;
@@ -522,6 +523,43 @@ function [] = test_open_metadata( varargin )
 
     t.set_metadata(f.sections{1});
     assert(strcmp(t.open_metadata.name, 'testSection'));
+end
+
+%% Test: Retrieve referenced data by name and id
+function [] = test_retrieve_data( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    tagStartPos = [3];
+    t = b.create_tag('testTag', 'nixTag', tagStartPos);
+    t.extent = [3];
+
+    rawName = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    rawID = [11, 12, 13, 14, 15, 16, 17];
+    d = b.create_data_array_from_data('testDataArrayName', 'nixDataArray', rawName);
+    d.append_sampled_dimension(1);
+    t.add_reference(d);
+
+    d = b.create_data_array_from_data('testDataArrayID', 'nixDataArray', rawID);
+    d.append_sampled_dimension(1);
+    t.add_reference(d);
+
+    % test get non existent
+    try
+        retData = t.retrieve_data('I do not exist, dont hate me!');
+    catch ME
+        assert(~isempty(strfind(ME.message, 'no DataArray with the specified name')), ...
+            'Non existent check fail');
+    end
+
+    % test get referenced data by name
+    retData = t.retrieve_data('testDataArrayName');
+    assert(size(retData, 2) == t.extent, 'Get by name extent check fail');
+    assert(retData(1) == rawName(t.position + 1), 'Get by name position check fail');
+
+    % test get referenced data by id
+    retData = t.retrieve_data(d.id);
+    assert(size(retData, 2) == t.extent, 'Get by id extent check fail');
+    assert(retData(1) == rawID(t.position + 1), 'Get by id position check fail');
 end
 
 %% Test: Retrieve referenced data by index

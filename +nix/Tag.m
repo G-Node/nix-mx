@@ -63,6 +63,14 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'Tag::openReferenceIdx', idx, @nix.DataArray);
         end;
 
+        function data = retrieve_data(obj, id_or_name)
+            tmp = nix_mx('Tag::retrieveData', obj.nix_handle, id_or_name);
+
+            % data must agree with file & dimensions
+            % see mkarray.cc(42)
+            data = permute(tmp, length(size(tmp)):-1:1);
+        end;
+
         function data = retrieve_data_idx(obj, idx)
             tmp = nix_mx('Tag::retrieveDataIdx', obj.nix_handle, idx);
             

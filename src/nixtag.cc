@@ -114,6 +114,14 @@ namespace nixtag {
         output.set(0, res);
     }
 
+    void retrieveData(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        std::string name_id = input.str(2);
+
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveData(name_id));
+        output.set(0, data);
+    }
+
     void retrieveDataIdx(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
