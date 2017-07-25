@@ -50,31 +50,31 @@ struct entity_to_id<nix::Source> {
 template<>
 struct entity_to_id<nix::Feature> {
     static const bool is_valid = true;
-    static const int value = 5;
+    static const int value = 6;
 };
 
 template<>
 struct entity_to_id<nix::MultiTag> {
     static const bool is_valid = true;
-    static const int value = 6;
+    static const int value = 7;
 };
 
 template<>
 struct entity_to_id<nix::Section> {
     static const bool is_valid = true;
-    static const int value = 7;
+    static const int value = 8;
 };
 
 template<>
 struct entity_to_id<nix::Property> {
     static const bool is_valid = true;
-    static const int value = 8;
+    static const int value = 9;
 };
 
 template<>
 struct entity_to_id<nix::Group> {
     static const bool is_valid = true;
-    static const int value = 9;
+    static const int value = 10;
 };
 
 /*
