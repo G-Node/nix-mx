@@ -35,7 +35,7 @@ function funcs = TestTag
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data_idx;
-    funcs{end+1} = @test_retrieve_feature_data;
+    funcs{end+1} = @test_retrieve_feature_data_idx;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_has_feature;
     funcs{end+1} = @test_has_reference;
@@ -548,10 +548,47 @@ function [] = test_retrieve_data_idx( varargin )
     assert(retData(1) == raw(t.position + 1), 'Position check failed');
 end
 
-%% Test: Retrieve feature data
-function [] = test_retrieve_feature_data( varargin )
-    % TODO
-    disp('Test Tag: retrieve feature ... TODO (proper testfile)');
+%% Test: Retrieve feature data by index
+function [] = test_retrieve_feature_data_idx( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    raw = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    d = b.create_data_array_from_data('testDataArray', 'nixDataArray', raw);
+    d.append_sampled_dimension(1);
+    tagStartPos = [3];
+    t = b.create_tag('testTag', 'nixTag', tagStartPos);
+    t.extent = [3];
+    t.add_reference(d);
+
+    rawFeature = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+
+    % test retrieve untagged feature data 
+    df = b.create_data_array_from_data('testUntagged', 'nixDataArray', rawFeature);
+    df.append_sampled_dimension(1);
+    t.add_feature(df, nix.LinkType.Untagged);
+    retData = t.retrieve_feature_data_idx(0);
+    assert(size(retData, 2) == size(rawFeature, 2), 'Untagged size check fail');
+
+    % test retrieve tagged feature data 
+    df = b.create_data_array_from_data('testTagged', 'nixDataArray', rawFeature);
+    df.append_sampled_dimension(1);
+    t.add_feature(df, nix.LinkType.Tagged);
+    retData = t.retrieve_feature_data_idx(1);
+    assert(size(retData, 2) == t.extent, 'Tagged Extent check fail');
+    assert(retData(1) == rawFeature(t.position + 1), 'Tagged Position check fail');
+
+    % test retrieve indexed feature data
+    df = b.create_data_array_from_data('testIndexed', 'nixDataArray', rawFeature);
+    df.append_sampled_dimension(1);
+    t.add_feature(df, nix.LinkType.Indexed);
+    retData = t.retrieve_feature_data_idx(2);
+    assert(size(retData, 2) == size(rawFeature, 2), 'Indexed size check fail');
+
+    try
+        t.retrieve_feature_data_idx(12);
+    catch ME
+        assert(~isempty(strfind(ME.message, 'out of bounds')), 'Invalid index check fail');
+    end
 end
 
 %% Test: Read and write nix.Tag attributes

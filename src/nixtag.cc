@@ -63,14 +63,6 @@ namespace nixtag {
         output.set(0, handle(newFeat));
     }
 
-    void retrieveFeatureData(const extractor &input, infusor &output) {
-        nix::Tag currObj = input.entity<nix::Tag>(1);
-        double index = input.num<double>(2);
-
-        mxArray *data = make_mx_array_from_ds(currObj.retrieveFeatureData(index));
-        output.set(0, data);
-    }
-
     void openReferenceIdx(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
@@ -127,6 +119,14 @@ namespace nixtag {
         nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
 
         mxArray *data = make_mx_array_from_ds(currObj.retrieveData(idx));
+        output.set(0, data);
+    }
+
+    void retrieveFeatureDataIdx(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveFeatureData(idx));
         output.set(0, data);
     }
 
