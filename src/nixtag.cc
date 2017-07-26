@@ -130,6 +130,14 @@ namespace nixtag {
         output.set(0, data);
     }
 
+    void retrieveFeatureData(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        std::string name_id = input.str(2);
+
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveFeatureData(name_id));
+        output.set(0, data);
+    }
+
     void retrieveFeatureDataIdx(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);

@@ -121,6 +121,14 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'Tag::openFeatureIdx', idx, @nix.Feature);
         end;
 
+        function data = retrieve_feature_data(obj, id_or_name)
+            tmp = nix_mx('Tag::featureRetrieveData', obj.nix_handle, id_or_name);
+
+            % data must agree with file & dimensions
+            % see mkarray.cc(42)
+            data = permute(tmp, length(size(tmp)):-1:1);
+        end
+
         function data = retrieve_feature_data_idx(obj, idx)
             tmp = nix_mx('Tag::featureRetrieveDataIdx', obj.nix_handle, idx);
             
