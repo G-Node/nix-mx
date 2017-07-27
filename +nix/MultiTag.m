@@ -62,15 +62,10 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'MultiTag::openReferenceIdx', idx, @nix.DataArray);
         end;
 
-        function data = retrieve_data(obj, pos_index, ref_index)
-            % convert Matlab-like to C-like index
-            assert(pos_index > 0, 'Position index must be positive');
-            assert(ref_index > 0, 'Reference index must be positive');
-            tmp = nix_mx('MultiTag::retrieveData', obj.nix_handle, ...
-                pos_index - 1, ref_index - 1);
+        function data = retrieve_data_idx(obj, pos_idx, ref_idx)
+            tmp = nix_mx('MultiTag::retrieveDataIdx', obj.nix_handle, pos_idx, ref_idx);
             
-            % data must agree with file & dimensions
-            % see mkarray.cc(42)
+            % data must agree with file & dimensions see mkarray.cc(42)
             data = permute(tmp, length(size(tmp)):-1:1);
         end;
 

@@ -40,7 +40,7 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_set_open_extents;
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
-    funcs{end+1} = @test_retrieve_data;
+    funcs{end+1} = @test_retrieve_data_idx;
     funcs{end+1} = @test_retrieve_feature_data;
     funcs{end+1} = @test_set_units;
     funcs{end+1} = @test_attrs;
@@ -644,14 +644,63 @@ function [] = test_open_metadata( varargin )
     assert(strcmp(t.open_metadata.name, 'testSection'));
 end
 
-%% Test: Retrieve data
-function [] = test_retrieve_data( varargin )
-    f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    b = f.blocks{1};
-    tag = b.multiTags{1};
+%% Test: Retrieve reference data by index
+function [] = test_retrieve_data_idx( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+
+    pos(1,:) = [0, 0]; ext(1,:) = [0, 0]; % result 111
+    pos(2,:) = [1, 1]; ext(2,:) = [0, 3]; % result 122 123 124
+    pos(3,:) = [0, 2]; ext(3,:) = [2, 4]; % result 113 114 115 116
+                                          %        123 124 125 126
+
+	d_pos = b.create_data_array_from_data('positionsDA', 'nixDataArray', pos);
+    d_pos.append_sampled_dimension(0);
+    d_pos.append_sampled_dimension(0);
+
+    d_ext = b.create_data_array_from_data('extentsDA', 'nixDataArray', ext);
+    d_ext.append_sampled_dimension(0);
+    d_ext.append_sampled_dimension(0);
+
+    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d_pos);
+    t.set_extents(d_ext);
+
+    % create 2D reference data_arrays
+    raw1 = [111, 112, 113, 114, 115, 116, 117, 118; ...
+                121, 122, 123, 124, 125, 126, 127, 128];
+    d1 = b.create_data_array_from_data('reference1', 'nixDataArray', raw1);
+    d1.append_sampled_dimension(1);
+    d1.append_sampled_dimension(1);
+
+    raw2 = [211, 212, 213, 214, 215, 216, 217, 218; ...
+                221, 222, 223, 224, 225, 226, 227, 228];
+    d2 = b.create_data_array_from_data('reference2', 'nixDataArray', raw2);
+    d2.append_sampled_dimension(1);
+    d2.append_sampled_dimension(1);
+
+    % add data_arrays as references to multi tag
+    t.add_reference(d1);
+    t.add_reference(d2);
+
+    % test invalid position idx
+    try
+        t.retrieve_data_idx(100, 0);
+    catch ME
+        assert(~isempty(strfind(ME.message, 'ounds of positions or extents')), ...
+            'Invalid position index failed');
+    end
+
+    % test invalid reference idx
+    try
+        t.retrieve_data_idx(0, 100);
+    catch ME
+        assert(~isempty(strfind(ME.message, 'out of bounds')), ...
+            'Invalid reference index failed');
+    end
     
-    data = tag.retrieve_data(1, 1);
-    assert(~isempty(data));
+    assert(isequal(t.retrieve_data_idx(0, 0), raw1(1:1)), 'Retrieve pos 1, ref 1 fail');
+    assert(isequal(t.retrieve_data_idx(1, 0), raw1(2, 2:4)), 'Retrieve pos 2, ref 1 fail');
+    assert(isequal(t.retrieve_data_idx(2, 1), raw2(1:2, 3:6)), 'Retrieve pos 3, ref 2 fail');
 end
 
 %% Test: Retrieve feature data
