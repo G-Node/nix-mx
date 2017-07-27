@@ -59,6 +59,10 @@ classdef SourcesMixIn < handle
                 strcat(obj.alias, '::openSourceIdx'), idx, @nix.Source);
         end
 
+        function filtered = filter_sources(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                strcat(obj.alias, '::sourcesFiltered'), @nix.Source);
+        end
     end
 
 end

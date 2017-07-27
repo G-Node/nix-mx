@@ -33,6 +33,7 @@ function funcs = TestDataArray
     funcs{end+1} = @test_datatype;
     funcs{end+1} = @test_set_data_extent;
     funcs{end+1} = @test_compare;
+    funcs{end+1} = @test_filter_source;
 end
 
 function [] = test_attrs( varargin )
@@ -595,4 +596,79 @@ function [] = test_compare( varargin )
     assert(d1.compare(d1) == 0);
     assert(d2.compare(d1) > 0);
     assert(d1.compare(d3) ~= 0);
+end
+
+%% Test: filter sources
+function [] = test_filter_source( varargin )
+    filterName = 'filterMe';
+    filterType = 'filterType';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [3 2 3]);
+    s = b.create_source(filterName, 'nixSource');
+    d.add_source(s);
+    filterID = s.id;
+	s = b.create_source('testSource1', filterType);
+    d.add_source(s);
+    filterIDs = {filterID, s.id};
+    s = b.create_source('testSource2', filterType);
+    d.add_source(s);
+
+    % test empty id filter
+    assert(isempty(f.blocks{1}.dataArrays{1}.filter_sources(nix.Filter.id, 'IdoNotExist')));
+
+    % test nix.Filter.accept_all
+    filtered = f.blocks{1}.dataArrays{1}.filter_sources(nix.Filter.accept_all, '');
+    assert(size(filtered, 1) == 3);
+
+    % test nix.Filter.id
+    filtered = f.blocks{1}.dataArrays{1}.filter_sources(nix.Filter.id, filterID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.id, filterID));
+
+    % test nix.Filter.ids
+    filtered = f.blocks{1}.dataArrays{1}.filter_sources(nix.Filter.ids, filterIDs);
+    assert(size(filtered, 1) == 2);
+    assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
+    
+    % test nix.Filter.name
+    filtered  = f.blocks{1}.dataArrays{1}.filter_sources(nix.Filter.name, filterName);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, filterName));
+    
+    % test nix.Filter.type
+    filtered = f.blocks{1}.dataArrays{1}.filter_sources(nix.Filter.type, filterType);
+    assert(size(filtered, 1) == 2);
+
+    % test nix.Filter.metadata
+    mainName = 'testSubSection';
+    mainSource = b.create_source(mainName, 'nixSource');
+    d.add_source(mainSource);
+    subName = 'testSubSection1';
+    s = f.create_section(subName, 'nixSection');
+    mainSource.set_metadata(s);
+    subID = s.id;
+
+    assert(isempty(f.blocks{1}.dataArrays{1}.filter_sources(nix.Filter.metadata, 'Do not exist')));
+    filtered = f.blocks{1}.dataArrays{1}.filter_sources(nix.Filter.metadata, subID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, mainName));
+
+    % test nix.Filter.source
+    mainName = 'testSubSource';
+    main = b.create_source(mainName, 'nixSource');
+    d.add_source(main);
+    mainID = main.id;
+    subName = 'testSubSource1';
+    s = main.create_source(subName, 'nixSource');
+    subID = s.id;
+
+    assert(isempty(f.blocks{1}.dataArrays{1}.filter_sources(nix.Filter.source, 'Do not exist')));
+    filtered = f.blocks{1}.dataArrays{1}.filter_sources(nix.Filter.source, subName);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.id, mainID));
+
+    filtered = f.blocks{1}.dataArrays{1}.filter_sources(nix.Filter.source, subID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, mainName));
 end

@@ -7,14 +7,15 @@
 // LICENSE file in the root of the Project.
 
 #include "nixmultitag.h"
-#include "mkarray.h"
 
 #include "mex.h"
 
 #include <nix.hpp>
 
-#include "handle.h"
 #include "arguments.h"
+#include "filters.h"
+#include "handle.h"
+#include "mkarray.h"
 #include "struct.h"
 
 namespace nixmultitag {
@@ -105,6 +106,33 @@ namespace nixmultitag {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
         nix::MultiTag other = input.entity<nix::MultiTag>(2);
         output.set(0, currObj.compare(other));
+    }
+
+    void sourcesFiltered(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        std::vector<nix::Source> res = filterFullEntity<nix::Source>(input,
+                                            [currObj](const nix::util::Filter<nix::Source>::type &filter) {
+            return currObj.sources(filter);
+        });
+        output.set(0, res);
+    }
+
+    void referencesFiltered(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        std::vector<nix::DataArray> res = filterFullEntity<nix::DataArray>(input,
+                                                [currObj](const nix::util::Filter<nix::DataArray>::type &filter) {
+            return currObj.references(filter);
+        });
+        output.set(0, res);
+    }
+
+    void featuresFiltered(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        std::vector<nix::Feature> res = filterEntity<nix::Feature>(input,
+                                            [currObj](const nix::util::Filter<nix::Feature>::type &filter) {
+            return currObj.features(filter);
+        });
+        output.set(0, res);
     }
 
 } // namespace nixmultitag

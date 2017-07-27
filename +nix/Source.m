@@ -73,5 +73,10 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
             retObj = nix.Utils.fetchObjList('Source::referringMultiTags', ...
                 obj.nix_handle, @nix.MultiTag);
         end
+
+        function filtered = filter_sources(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Source::sourcesFiltered', @nix.Source);
+        end
     end;
 end

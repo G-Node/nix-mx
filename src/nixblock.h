@@ -33,6 +33,16 @@ namespace nixblock {
 
     void compare(const extractor &input, infusor &output);
 
+    void sourcesFiltered(const extractor &input, infusor &output);
+
+    void groupsFiltered(const extractor &input, infusor &output);
+
+    void tagsFiltered(const extractor &input, infusor &output);
+
+    void multiTagsFiltered(const extractor &input, infusor &output);
+
+    void dataArraysFiltered(const extractor &input, infusor &output);
+
 } // namespace nixblock
 
 #endif

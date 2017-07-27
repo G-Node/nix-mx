@@ -7,8 +7,8 @@ classdef Filter < uint8
         ids (2); % requires a cell array
         type (3);
         name (4);
-        metadata (5);
-        source (6);
+        metadata (5); % filters by id
+        source (6); % filters by name or id
     end
     
 end

@@ -12,8 +12,9 @@
 
 #include <nix.hpp>
 
-#include "handle.h"
 #include "arguments.h"
+#include "filters.h"
+#include "handle.h"
 #include "struct.h"
 
 namespace nixgroup {
@@ -101,6 +102,42 @@ namespace nixgroup {
         nix::Group currObj = input.entity<nix::Group>(1);
         nix::Group other = input.entity<nix::Group>(2);
         output.set(0, currObj.compare(other));
+    }
+
+    void sourcesFiltered(const extractor &input, infusor &output) {
+        nix::Group currObj = input.entity<nix::Group>(1);
+        std::vector<nix::Source> res = filterFullEntity<nix::Source>(input,
+                                            [currObj](const nix::util::Filter<nix::Source>::type &filter) {
+            return currObj.sources(filter);
+        });
+        output.set(0, res);
+    }
+
+    void tagsFiltered(const extractor &input, infusor &output) {
+        nix::Group currObj = input.entity<nix::Group>(1);
+        std::vector<nix::Tag> res = filterFullEntity<nix::Tag>(input,
+                                        [currObj](const nix::util::Filter<nix::Tag>::type &filter) {
+            return currObj.tags(filter);
+        });
+        output.set(0, res);
+    }
+
+    void multiTagsFiltered(const extractor &input, infusor &output) {
+        nix::Group currObj = input.entity<nix::Group>(1);
+        std::vector<nix::MultiTag> res = filterFullEntity<nix::MultiTag>(input,
+                                            [currObj](const nix::util::Filter<nix::MultiTag>::type &filter) {
+            return currObj.multiTags(filter);
+        });
+        output.set(0, res);
+    }
+
+    void dataArraysFiltered(const extractor &input, infusor &output) {
+        nix::Group currObj = input.entity<nix::Group>(1);
+        std::vector<nix::DataArray> res = filterFullEntity<nix::DataArray>(input,
+                                            [currObj](const nix::util::Filter<nix::DataArray>::type &filter) {
+            return currObj.dataArrays(filter);
+        });
+        output.set(0, res);
     }
 
 } // namespace nixgroup

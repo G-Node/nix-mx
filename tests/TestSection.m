@@ -39,6 +39,8 @@ function funcs = TestSection
     funcs{end+1} = @test_referring_block_sources;
     funcs{end+1} = @test_referring_blocks;
     funcs{end+1} = @test_compare;
+    funcs{end+1} = @test_filter_section;
+    funcs{end+1} = @test_filter_property;
 end
 
 %% Test: Create Section
@@ -619,4 +621,116 @@ function [] = test_compare( varargin )
     assert(s1.compare(s2) < 0);
     assert(s1.compare(s1) == 0);
     assert(s2.compare(s1) > 0);
+end
+
+%% Test: filter Sections
+function [] = test_filter_section( varargin )
+    filterName = 'filterMe';
+    filterType = 'filterType';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    ms = f.create_section('testSection', 'nixSection');
+    s = ms.create_section(filterName, 'nixSection');
+    filterID = s.id;
+	s = ms.create_section('testSection1', filterType);
+    filterIDs = {filterID, s.id};
+    s = ms.create_section('testSection2', filterType);
+
+    % ToDO add basic filter crash tests
+    
+    % test empty id filter
+    assert(isempty(f.sections{1}.filter_sections(nix.Filter.id, 'IdoNotExist')));
+
+    % test nix.Filter.accept_all
+    filtered = f.sections{1}.filter_sections(nix.Filter.accept_all, '');
+    assert(size(filtered, 1) == 3);
+    
+    % test nix.Filter.id
+    filtered = f.sections{1}.filter_sections(nix.Filter.id, filterID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.id, filterID));
+
+    % test nix.Filter.ids
+    filtered = f.sections{1}.filter_sections(nix.Filter.ids, filterIDs);
+    assert(size(filtered, 1) == 2);
+    assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
+    
+    % test nix.Filter.name
+    filtered  = f.sections{1}.filter_sections(nix.Filter.name, filterName);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, filterName));
+    
+    % test nix.Filter.type
+    filtered = f.sections{1}.filter_sections(nix.Filter.type, filterType);
+    assert(size(filtered, 1) == 2);
+    
+    % test fail on nix.Filter.metadata
+    err = 'unknown or unsupported filter';
+    try
+        f.sections{1}.filter_sections(nix.Filter.metadata, 'someMetadata');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+    
+    % test fail on nix.Filter.source
+    try
+        f.sections{1}.filter_sections(nix.Filter.source, 'someSource');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+end
+
+%% Test: filter properties
+function [] = test_filter_property( varargin )
+    filterName = 'filterMe';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    ms = f.create_section('testSection', 'nixSection');
+    p = ms.create_property(filterName, nix.DataType.Double);
+    filterID = p.id;
+	s = ms.create_property('testProperty', nix.DataType.Bool);
+    filterIDs = {filterID, s.id};
+    
+    % test empty id filter
+    assert(isempty(f.sections{1}.filter_properties(nix.Filter.id, 'IdoNotExist')));
+
+    % test nix.Filter.accept_all
+    filtered = f.sections{1}.filter_properties(nix.Filter.accept_all, '');
+    assert(size(filtered, 1) == 2);
+    
+    % test nix.Filter.id
+    filtered = f.sections{1}.filter_properties(nix.Filter.id, filterID);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.id, filterID));
+
+    % test nix.Filter.ids
+    filtered = f.sections{1}.filter_properties(nix.Filter.ids, filterIDs);
+    assert(size(filtered, 1) == 2);
+    assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
+
+    % test nix.Filter.name
+    filtered  = f.sections{1}.filter_properties(nix.Filter.name, filterName);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, filterName));
+
+    % test fail on nix.Filter.type
+    err = 'unknown or unsupported filter';
+    try
+        f.sections{1}.filter_properties(nix.Filter.type, 'someType');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test fail on nix.Filter.metadata
+    err = 'unknown or unsupported filter';
+    try
+        f.sections{1}.filter_properties(nix.Filter.metadata, 'someMetadata');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test fail on nix.Filter.source
+    try
+        f.sections{1}.filter_properties(nix.Filter.source, 'someSource');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
 end

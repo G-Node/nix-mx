@@ -121,6 +121,8 @@ void mexFunction(int            nlhs,
         methods->add("File::validate", nixfile::validate);
         methods->add("File::openBlockIdx", nixfile::openBlockIdx);
         methods->add("File::openSectionIdx", nixfile::openSectionIdx);
+        methods->add("File::sectionsFiltered", nixfile::sectionsFiltered);
+        methods->add("File::blocksFiltered", nixfile::blocksFiltered);
 
         classdef<nix::Block>("Block", methods)
             .desc(&nixblock::describe)
@@ -166,6 +168,11 @@ void mexFunction(int            nlhs,
         methods->add("Block::openMultiTagIdx", nixblock::openMultiTagIdx);
         methods->add("Block::openSourceIdx", nixblock::openSourceIdx);
         methods->add("Block::compare", nixblock::compare);
+        methods->add("Block::sourcesFiltered", nixblock::sourcesFiltered);
+        methods->add("Block::groupsFiltered", nixblock::groupsFiltered);
+        methods->add("Block::tagsFiltered", nixblock::tagsFiltered);
+        methods->add("Block::multiTagsFiltered", nixblock::multiTagsFiltered);
+        methods->add("Block::dataArraysFiltered", nixblock::dataArraysFiltered);
 
         classdef<nix::Group>("Group", methods)
             .desc(&nixgroup::describe)
@@ -208,6 +215,10 @@ void mexFunction(int            nlhs,
         methods->add("Group::openMultiTagIdx", nixgroup::openMultiTagIdx);
         methods->add("Group::openSourceIdx", nixgroup::openSourceIdx);
         methods->add("Group::compare", nixgroup::compare);
+        methods->add("Group::sourcesFiltered", nixgroup::sourcesFiltered);
+        methods->add("Group::tagsFiltered", nixgroup::tagsFiltered);
+        methods->add("Group::multiTagsFiltered", nixgroup::multiTagsFiltered);
+        methods->add("Group::dataArraysFiltered", nixgroup::dataArraysFiltered);
 
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)
@@ -251,6 +262,7 @@ void mexFunction(int            nlhs,
         methods->add("DataArray::openSourceIdx", nixdataarray::openSourceIdx);
         methods->add("DataArray::openDimensionIdx", nixdataarray::openDimensionIdx);
         methods->add("DataArray::compare", nixdataarray::compare);
+        methods->add("DataArray::sourcesFiltered", nixdataarray::sourcesFiltered);
 
         classdef<nix::Source>("Source", methods)
             .desc(&nixsource::describe)
@@ -272,6 +284,7 @@ void mexFunction(int            nlhs,
             .reg("referringMultiTags", GETTER(std::vector<nix::MultiTag>, nix::Source, referringMultiTags));
         methods->add("Source::openSourceIdx", nixsource::openSourceIdx);
         methods->add("Source::compare", nixsource::compare);
+        methods->add("Source::sourcesFiltered", nixsource::sourcesFiltered);
 
         classdef<nix::Tag>("Tag", methods)
             .desc(&nixtag::describe)
@@ -312,6 +325,9 @@ void mexFunction(int            nlhs,
         methods->add("Tag::openFeatureIdx", nixtag::openFeatureIdx);
         methods->add("Tag::openSourceIdx", nixtag::openSourceIdx);
         methods->add("Tag::compare", nixtag::compare);
+        methods->add("Tag::sourcesFiltered", nixtag::sourcesFiltered);
+        methods->add("Tag::referencesFiltered", nixtag::referencesFiltered);
+        methods->add("Tag::featuresFiltered", nixtag::featuresFiltered);
 
         classdef<nix::MultiTag>("MultiTag", methods)
             .desc(&nixmultitag::describe)
@@ -355,6 +371,9 @@ void mexFunction(int            nlhs,
         methods->add("MultiTag::openFeatureIdx", nixmultitag::openFeatureIdx);
         methods->add("MultiTag::openSourceIdx", nixmultitag::openSourceIdx);
         methods->add("MultiTag::compare", nixmultitag::compare);
+        methods->add("MultiTag::sourcesFiltered", nixmultitag::sourcesFiltered);
+        methods->add("MultiTag::referencesFiltered", nixmultitag::referencesFiltered);
+        methods->add("MultiTag::featuresFiltered", nixmultitag::featuresFiltered);
 
         classdef<nix::Section>("Section", methods)
             .desc(&nixsection::describe)
@@ -395,6 +414,8 @@ void mexFunction(int            nlhs,
         methods->add("Section::openSectionIdx", nixsection::openSectionIdx);
         methods->add("Section::openPropertyIdx", nixsection::openPropertyIdx);
         methods->add("Section::compare", nixsection::compare);
+        methods->add("Section::sectionsFiltered", nixsection::sectionsFiltered);
+        methods->add("Section::propertiesFiltered", nixsection::propertiesFiltered);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)

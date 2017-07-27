@@ -59,6 +59,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Group', 'Block::deleteGroup');
         end;
+
+        function filtered = filter_groups(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Block::groupsFiltered', @nix.Group);
+        end
         
         % -----------------
         % DataArray methods
@@ -137,6 +142,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 del, 'nix.DataArray', 'Block::deleteDataArray');
         end;
 
+        function filtered = filter_data_arrays(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Block::dataArraysFiltered', @nix.DataArray);
+        end
+
         % -----------------
         % Sources methods
         % -----------------
@@ -167,6 +177,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         function retObj = open_source_idx(obj, idx)
             retObj = nix.Utils.open_entity(obj, ...
                 'Block::openSourceIdx', idx, @nix.Source);
+        end
+
+        function filtered = filter_sources(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Block::sourcesFiltered', @nix.Source);
         end
 
         % -----------------
@@ -201,6 +216,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.Tag', 'Block::deleteTag');
         end;
+
+        function filtered = filter_tags(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Block::tagsFiltered', @nix.Tag);
+        end
 
         % -----------------
         % MultiTag methods
@@ -240,6 +260,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             delCheck = nix.Utils.delete_entity(obj, ...
                 del, 'nix.MultiTag', 'Block::deleteMultiTag');
         end;
+
+        function filtered = filter_multi_tags(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Block::multiTagsFiltered', @nix.MultiTag);
+        end
 
     end;
 end

@@ -64,6 +64,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'nix.DataArray', 'Group::removeDataArray');
         end;
 
+        function filtered = filter_data_arrays(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Group::dataArraysFiltered', @nix.DataArray);
+        end
+
         % -----------------
         % Tags methods
         % -----------------
@@ -99,6 +104,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
         function c = tag_count(obj)
             c = nix_mx('Group::tagCount', obj.nix_handle);
+        end
+
+        function filtered = filter_tags(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Group::tagsFiltered', @nix.Tag);
         end
 
         % -----------------
@@ -137,6 +147,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
         function c = multi_tag_count(obj)
             c = nix_mx('Group::multiTagCount', obj.nix_handle);
+        end
+
+        function filtered = filter_multi_tags(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Group::multiTagsFiltered', @nix.MultiTag);
         end
     end;
 

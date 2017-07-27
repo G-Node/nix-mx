@@ -7,14 +7,15 @@
 // LICENSE file in the root of the Project.
 
 #include "nixsection.h"
+
 #include "mex.h"
 #include <nix.hpp>
 
-#include "handle.h"
 #include "arguments.h"
-#include "struct.h"
+#include "filters.h"
+#include "handle.h"
 #include "mknix.h"
-
+#include "struct.h"
 
 namespace nixsection {
 
@@ -121,6 +122,24 @@ namespace nixsection {
         nix::Section currObj = input.entity<nix::Section>(1);
         nix::Section other = input.entity<nix::Section>(2);
         output.set(0, currObj.compare(other));
+    }
+
+    void sectionsFiltered(const extractor &input, infusor &output) {
+        nix::Section currObj = input.entity<nix::Section>(1);
+        std::vector<nix::Section> res = filterNameTypeEntity<nix::Section>(input,
+                                            [currObj](const nix::util::Filter<nix::Section>::type &filter) {
+            return currObj.sections(filter);
+        });
+        output.set(0, res);
+    }
+
+    void propertiesFiltered(const extractor &input, infusor &output) {
+        nix::Section currObj = input.entity<nix::Section>(1);
+        std::vector<nix::Property> res = filterNamedEntity<nix::Property>(input,
+                                            [currObj](const nix::util::Filter<nix::Property>::type &filter) {
+            return currObj.properties(filter);
+        });
+        output.set(0, res);
     }
 
 } // namespace nixsection

@@ -12,8 +12,9 @@
 
 #include <nix.hpp>
 
-#include "handle.h"
 #include "arguments.h"
+#include "filters.h"
+#include "handle.h"
 #include "struct.h"
 
 namespace nixsource {
@@ -37,6 +38,15 @@ namespace nixsource {
         nix::Source currObj = input.entity<nix::Source>(1);
         nix::Source other = input.entity<nix::Source>(2);
         output.set(0, currObj.compare(other));
+    }
+
+    void sourcesFiltered(const extractor &input, infusor &output) {
+        nix::Source currObj = input.entity<nix::Source>(1);
+        std::vector<nix::Source> res = filterFullEntity<nix::Source>(input,
+                                            [currObj](const nix::util::Filter<nix::Source>::type &filter) {
+            return currObj.sources(filter);
+        });
+        output.set(0, res);
     }
 
 } // namespace nixsource
