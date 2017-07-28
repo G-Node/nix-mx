@@ -41,7 +41,7 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
     funcs{end+1} = @test_retrieve_data_idx;
-    funcs{end+1} = @test_retrieve_feature_data;
+    funcs{end+1} = @test_retrieve_feature_data_idx;
     funcs{end+1} = @test_set_units;
     funcs{end+1} = @test_attrs;
     funcs{end+1} = @test_compare;
@@ -704,9 +704,92 @@ function [] = test_retrieve_data_idx( varargin )
 end
 
 %% Test: Retrieve feature data
-function [] = test_retrieve_feature_data( varargin )
-    % TODO
-    disp('Test MultiTag: retrieve feature ... TODO (proper testfile)');
+function [] = test_retrieve_feature_data_idx( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+
+    % create feature data arrays
+    raw_feat1 = [11 12 13 14 15 16 17 18];
+    da_feat1 = b.create_data_array_from_data('feature1', 'nixDataArray', raw_feat1);
+    da_feat1.append_sampled_dimension(1);
+
+    raw_feat2 = [21 22 23 24 25 26 27 28];
+    da_feat2 = b.create_data_array_from_data('feature2', 'nixDataArray', raw_feat2);
+    da_feat2.append_sampled_dimension(1);
+
+    % create referenced data array
+    raw_feat3 = [31 32 33 34 35 36 37 38];
+    da_feat3 = b.create_data_array_from_data('reference', 'nixDataArray', raw_feat3);
+    da_feat3.append_sampled_dimension(1);
+
+    % create position, extents DA and multi tag
+    pos = [0; 3; 5];
+    ext = [1; 1; 3];
+
+    da_pos = b.create_data_array_from_data('positions', 'nixDataArray', pos);
+    da_ext = b.create_data_array_from_data('extents', 'nixDataArray', ext);
+
+    da_pos.append_sampled_dimension(0);
+    da_ext.append_sampled_dimension(0);
+
+    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', da_pos);
+    t.set_extents(da_ext);
+
+    % add feature data_arrays
+    t.add_feature(da_feat1, nix.LinkType.Untagged);
+    t.add_feature(da_feat2, nix.LinkType.Tagged);
+    t.add_feature(da_feat3, nix.LinkType.Indexed);
+
+    % test invalid position idx
+    try
+        t.retrieve_feature_data_idx(100, 1);
+    catch ME
+        assert(isempty(strfind(ME.message, 'ounds of positions or extents')), ...
+            'Invalid position index failed');
+    end
+    assert(exist('ME') == 1, 'Invalid position index fail, error not raised');
+    clear ME;
+
+    % test invalid feature idx
+    try
+        t.retrieve_feature_data_idx(0, 100);
+    catch ME
+        assert(~isempty(strfind(ME.message, 'out of bounds')), ...
+            'Invalid reference index failed');
+    end
+    assert(exist('ME') == 1, 'Invalid reference index fail, error not raised');
+    clear ME;
+
+    % test untagged ignores position and returns full data
+    retData = t.retrieve_feature_data_idx(100, 0);
+    assert(isequal(raw_feat1, retData), 'Untagged fail');
+
+    % test tagged properly applies position and extents
+    retData = t.retrieve_feature_data_idx(0, 1);
+    assert(isequal(retData, [21]), 'Tagged pos 1 fail');
+
+    retData = t.retrieve_feature_data_idx(1, 1);
+    assert(isequal(retData, [24]), 'Tagged pos 2 fail');
+
+    retData = t.retrieve_feature_data_idx(2, 1);
+    assert(isequal(retData, [26, 27, 28]), 'Tagged pos 3 fail');
+
+    % test indexed returns first and last index value
+    retData = t.retrieve_feature_data_idx(0, 2);
+    assert(isequal(retData, raw_feat3(1)), 'Indexed first pos fail');
+    
+    retData = t.retrieve_feature_data_idx(7, 2);
+    assert(isequal(retData, raw_feat3(end)), 'Indexed last pos fail');
+    
+    % test indexed fail when accessing position > length of referenced array
+    try
+        t.retrieve_feature_data_idx(size(raw_feat3, 2) + 1, 2);
+    catch ME
+        assert(~isempty(strfind(ME.message, 'than the data stored in the feature')), ...
+            'Indexed out of length fail');
+    end
+    assert(exist('ME') == 1, 'Indexed out of length fail, error not raised');
+    clear ME;
 end
 
 %% Test: nix.MultiTag has feature by ID
