@@ -67,17 +67,13 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function r = retrieve_data(obj, id_or_name)
             fname = strcat(obj.alias, '::retrieveData');
             data = nix_mx(fname, obj.nix_handle, id_or_name);
-
-            % data must agree with file & dimensions; see mkarray.cc(42)
-            r = permute(data, length(size(data)):-1:1);
+            r = nix.Utils.transpose_array(data);
         end
 
         function r = retrieve_data_idx(obj, idx)
             fname = strcat(obj.alias, '::retrieveDataIdx');
             data = nix_mx(fname, obj.nix_handle, idx);
-            
-            % data must agree with file & dimensions; see mkarray.cc(42)
-            r = permute(data, length(size(data)):-1:1);
+            r = nix.Utils.transpose_array(data);
         end
 
         function r = reference_count(obj)
@@ -129,17 +125,13 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function r = retrieve_feature_data(obj, id_or_name)
             fname = strcat(obj.alias, '::featureRetrieveData');
             data = nix_mx(fname, obj.nix_handle, id_or_name);
-
-            % data must agree with file & dimensions; see mkarray.cc(42)
-            r = permute(data, length(size(data)):-1:1);
+            r = nix.Utils.transpose_array(data);
         end
 
         function r = retrieve_feature_data_idx(obj, idx)
             fname = strcat(obj.alias, '::featureRetrieveDataIdx');
             data = nix_mx(fname, obj.nix_handle, idx);
-
-            % data must agree with file & dimensions; see mkarray.cc(42)
-            r = permute(data, length(size(data)):-1:1);
+            r = nix.Utils.transpose_array(data);
         end
 
         function r = feature_count(obj)

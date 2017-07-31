@@ -110,9 +110,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function r = read_all(obj)
             fname = strcat(obj.alias, '::readAll');
             data = nix_mx(fname, obj.nix_handle);
-
-            % data must agree with file & dimensions; see mkarray.cc(42)
-            r = permute(data, length(size(data)):-1:1);
+            r = nix.Utils.transpose_array(data);
         end
 
         %-- TODO add (optional) offset
@@ -142,9 +140,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 error(errorStruct);
             else
                 fname = strcat(obj.alias, '::writeAll');
-                % data must agree with file & dimensions; see mkarray.cc(42)
-                tmp = permute(data, length(size(data)):-1:1);
-                nix_mx(fname, obj.nix_handle, tmp);
+                nix_mx(fname, obj.nix_handle, nix.Utils.transpose_array(data));
             end
         end
 

@@ -138,6 +138,15 @@ classdef Utils
                 rdata{i} = objConstructor(currList{i});
             end
         end
+
+        % -----------------------------------------------------------
+        % c++ to matlab array functions
+        % -----------------------------------------------------------
+
+        function r = transpose_array(data)
+        % Data must agree with file & dimensions; see mkarray.cc(42)
+            r = permute(data, length(size(data)):-1:1);
+        end
     end
 
 end
