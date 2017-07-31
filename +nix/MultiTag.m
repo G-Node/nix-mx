@@ -118,6 +118,14 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'MultiTag::openFeatureIdx', idx, @nix.Feature);
         end;
 
+        function data = retrieve_feature_data(obj, pos_idx, id_or_name)
+            tmp = nix_mx('MultiTag::featureRetrieveData', ...
+                            obj.nix_handle, pos_idx, id_or_name);
+
+            % data must agree with file & dimensions; see mkarray.cc(42)
+            data = permute(tmp, length(size(tmp)):-1:1);
+        end;
+
         function data = retrieve_feature_data_idx(obj, pos_idx, feat_idx)
             tmp = nix_mx('MultiTag::featureRetrieveDataIdx', ...
                             obj.nix_handle, pos_idx, feat_idx);

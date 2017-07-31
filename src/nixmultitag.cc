@@ -135,6 +135,15 @@ namespace nixmultitag {
         output.set(0, data);
     }
 
+    void retrieveFeatureData(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        size_t pos_idx = (size_t)input.num<double>(2);
+        std::string name_id = input.str(3);
+
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveFeatureData(pos_idx, name_id));
+        output.set(0, data);
+    }
+
     void retrieveFeatureDataIdx(const extractor &input, infusor &output) {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
         size_t pos_idx = (size_t)input.num<double>(2);

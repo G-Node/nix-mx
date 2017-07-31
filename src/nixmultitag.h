@@ -45,6 +45,8 @@ namespace nixmultitag {
 
     void retrieveDataIdx(const extractor &input, infusor &output);
 
+    void retrieveFeatureData(const extractor &input, infusor &output);
+
     void retrieveFeatureDataIdx(const extractor &input, infusor &output);
 
 } // namespace nixmultitag
