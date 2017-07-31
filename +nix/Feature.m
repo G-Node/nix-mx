@@ -29,22 +29,27 @@ classdef Feature < nix.Entity
         end
 
         function r = get.linkType(obj)
-            r = nix_mx('Feature::getLinkType', obj.nix_handle);
+            fname = strcat(obj.alias, '::getLinkType');
+            r = nix_mx(fname, obj.nix_handle);
         end
 
         function [] = set.linkType(obj, linkType)
-            nix_mx('Feature::setLinkType', obj.nix_handle, linkType);
+            fname = strcat(obj.alias, '::setLinkType');
+            nix_mx(fname, obj.nix_handle, linkType);
         end
 
         function r = open_data(obj)
-           r = nix.DataArray(nix_mx('Feature::openData', obj.nix_handle));
+            fname = strcat(obj.alias, '::openData');
+            h = nix_mx(fname, obj.nix_handle);
+            r = nix.DataArray(h);
         end
 
         function [] = set_data(obj, setData)
             if(strcmp(class(setData), 'nix.DataArray'))
                 setData = setData.id;
             end
-            nix_mx('Feature::setData', obj.nix_handle, setData);
+            fname = strcat(obj.alias, '::setData');
+            nix_mx(fname, obj.nix_handle, setData);
         end
     end
 

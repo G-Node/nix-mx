@@ -27,7 +27,8 @@ classdef NamedEntity < nix.Entity
             if(~strcmp(class(obj), class(entity)))
                 error('Only entities of the same class can be compared.');
             end
-            r = nix_mx(strcat(obj.alias, '::compare'), obj.nix_handle, entity.nix_handle);
+            fname = strcat(obj.alias, '::compare');
+            r = nix_mx(fname, obj.nix_handle, entity.nix_handle);
         end
     end
 

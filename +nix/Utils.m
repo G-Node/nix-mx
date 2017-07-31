@@ -33,7 +33,7 @@ classdef Utils
 
         function rcell = fetchObj(nixMxFunc, handle, objConstructor)
             h = nix_mx(nixMxFunc, handle);
-            if h ~= 0
+            if (h ~= 0)
                 rcell = objConstructor(h);
             else
                 rcell = {};
@@ -41,7 +41,7 @@ classdef Utils
         end
 
         function [] = add_entity(obj, add_this, nixEntity, mxMethod)
-            if(strcmp(class(add_this), nixEntity))
+            if (strcmp(class(add_this), nixEntity))
                 addID = add_this.id;
             else
                 addID = add_this;
@@ -50,7 +50,7 @@ classdef Utils
         end
 
         function [] = add_entity_array(obj, add_cell_array, nixEntity, mxMethod)
-            if(~iscell(add_cell_array))
+            if (~iscell(add_cell_array))
                 error('Expected cell array');
             end
             handle_array = cell(1, length(add_cell_array));
@@ -67,7 +67,7 @@ classdef Utils
         % The first actually removes the entity, the latter
         % removes only the reference to the entity.
         function r = delete_entity(obj, del, nixEntity, mxMethod)
-            if(strcmp(class(del), nixEntity))
+            if (strcmp(class(del), nixEntity))
                 delID = del.id;
             else
                 delID = del;
@@ -104,7 +104,7 @@ classdef Utils
 
         function rdata = filter(obj, filter, val, mxMethod, objConstructor)
             valid = nix.Utils.valid_filter(filter, val);
-            if(~isempty(valid))
+            if (~isempty(valid))
                 error(valid);
             end
 
@@ -126,7 +126,7 @@ classdef Utils
             end
 
             valid = nix.Utils.valid_filter(filter, val);
-            if(~isempty(valid))
+            if (~isempty(valid))
                 error(valid);
             end
 

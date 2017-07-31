@@ -28,64 +28,70 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
         % ------------------
 
         function r = source_count(obj)
-            r = nix_mx('Source::sourceCount', obj.nix_handle);
+            fname = strcat(obj.alias, '::sourceCount');
+            r = nix_mx(fname, obj.nix_handle);
         end
 
         function r = create_source(obj, name, type)
-            r = nix.Source(nix_mx('Source::createSource', obj.nix_handle, name, type));
+            fname = strcat(obj.alias, '::createSource');
+            h = nix_mx(fname, obj.nix_handle, name, type);
+            r = nix.Source(h);
         end
 
         function r = has_source(obj, id_or_name)
-            r = nix_mx('Source::hasSource', obj.nix_handle, id_or_name);
+            fname = strcat(obj.alias, '::hasSource');
+            r = nix_mx(fname, obj.nix_handle, id_or_name);
         end
 
         function r = delete_source(obj, del)
-            r = nix.Utils.delete_entity(obj, del, 'nix.Source', 'Source::deleteSource');
+            fname = strcat(obj.alias, '::deleteSource');
+            r = nix.Utils.delete_entity(obj, del, 'nix.Source', fname);
         end
 
         function r = open_source(obj, id_or_name)
-            r = nix.Utils.open_entity(obj, 'Source::openSource', id_or_name, @nix.Source);
+            fname = strcat(obj.alias, '::openSource');
+            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.Source);
         end
 
         function r = open_source_idx(obj, idx)
-            r = nix.Utils.open_entity(obj, 'Source::openSourceIdx', idx, @nix.Source);
+            fname = strcat(obj.alias, '::openSourceIdx');
+            r = nix.Utils.open_entity(obj, fname, idx, @nix.Source);
         end
 
         function r = parent_source(obj)
-            r = nix.Utils.fetchObj('Source::parentSource', obj.nix_handle, @nix.Source);
+            fname = strcat(obj.alias, '::parentSource');
+            r = nix.Utils.fetchObj(fname, obj.nix_handle, @nix.Source);
         end
 
         function r = referring_data_arrays(obj)
-            r = nix.Utils.fetchObjList('Source::referringDataArrays', ...
-                obj.nix_handle, @nix.DataArray);
+            fname = strcat(obj.alias, '::referringDataArrays');
+            r = nix.Utils.fetchObjList(fname, obj.nix_handle, @nix.DataArray);
         end
 
         function r = referring_tags(obj)
-            r = nix.Utils.fetchObjList('Source::referringTags', ...
-                obj.nix_handle, @nix.Tag);
+            fname = strcat(obj.alias, '::referringTags');
+            r = nix.Utils.fetchObjList(fname, obj.nix_handle, @nix.Tag);
         end
 
         function r = referring_multi_tags(obj)
-            r = nix.Utils.fetchObjList('Source::referringMultiTags', ...
-                obj.nix_handle, @nix.MultiTag);
+            fname = strcat(obj.alias, '::referringMultiTags');
+            r = nix.Utils.fetchObjList(fname, obj.nix_handle, @nix.MultiTag);
         end
 
         function r = filter_sources(obj, filter, val)
-            r = nix.Utils.filter(obj, filter, val, ...
-                'Source::sourcesFiltered', @nix.Source);
+            fname = strcat(obj.alias, '::sourcesFiltered');
+            r = nix.Utils.filter(obj, filter, val, fname, @nix.Source);
         end
 
-        % maxdepth is an index where idx = 0 corresponds to the calling
-        % source
+        % maxdepth is an index where idx = 0 corresponds to the calling source
         function r = find_sources(obj, max_depth)
             r = obj.find_filtered_sources(max_depth, nix.Filter.accept_all, '');
         end
 
-        % maxdepth is an index where idx = 0 corresponds to the calling
-        % source
+        % maxdepth is an index where idx = 0 corresponds to the calling source
         function r = find_filtered_sources(obj, max_depth, filter, val)
-            r = nix.Utils.find(obj, ...
-                max_depth, filter, val, 'Source::findSources', @nix.Source);
+            fname = strcat(obj.alias, '::findSources');
+            r = nix.Utils.find(obj, max_depth, filter, val, fname, @nix.Source);
         end
     end
 

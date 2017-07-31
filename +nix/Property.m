@@ -30,7 +30,8 @@ classdef Property < nix.NamedEntity
         end
 
         function r = get.values(obj)
-            r = nix_mx('Property::values', obj.nix_handle);
+            fname = strcat(obj.alias, '::values');
+            r = nix_mx(fname, obj.nix_handle);
         end
 
         function [] = set.values(obj, val)
@@ -51,15 +52,18 @@ classdef Property < nix.NamedEntity
                 end
             end
 
-            nix_mx('Property::updateValues', obj.nix_handle, values);
+            fname = strcat(obj.alias, '::updateValues');
+            nix_mx(fname, obj.nix_handle, values);
         end
 
         function r = value_count(obj)
-            r = nix_mx('Property::valueCount', obj.nix_handle);
+            fname = strcat(obj.alias, '::valueCount');
+            r = nix_mx(fname, obj.nix_handle);
         end
 
         function [] = values_delete(obj)
-            nix_mx('Property::deleteValues', obj.nix_handle);
+            fname = strcat(obj.alias, '::deleteValues');
+            nix_mx(fname, obj.nix_handle);
         end
 
         % return value 0 means name and id of two properties are
@@ -68,7 +72,9 @@ classdef Property < nix.NamedEntity
             if (~strcmp(class(property), class(obj)))
                error('Function only supports comparison of Properties.');
             end
-            r = nix_mx('Property::compare', obj.nix_handle, property.nix_handle);
+
+            fname = strcat(obj.alias, '::compare');
+            r = nix_mx(fname, obj.nix_handle, property.nix_handle);
         end
     end
 

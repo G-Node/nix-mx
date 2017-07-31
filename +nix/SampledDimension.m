@@ -27,16 +27,17 @@ classdef SampledDimension < nix.Entity
         end
 
         function r = index_of(obj, position)
-            func_name = strcat(obj.alias, '::indexOf');
-            r = nix_mx(func_name, obj.nix_handle, position);
+            fname = strcat(obj.alias, '::indexOf');
+            r = nix_mx(fname, obj.nix_handle, position);
         end
 
         function r = position_at(obj, index)
             if index > 0
                 index = index - 1;
             end
-            func_name = strcat(obj.alias, '::positionAt');
-            r = nix_mx(func_name, obj.nix_handle, index);
+
+            fname = strcat(obj.alias, '::positionAt');
+            r = nix_mx(fname, obj.nix_handle, index);
         end
 
         function r = axis(obj, count, startIndex)
@@ -48,8 +49,8 @@ classdef SampledDimension < nix.Entity
                 startIndex = startIndex - 1;
             end
 
-            func_name = strcat(obj.alias, '::axis');
-            r = nix_mx(func_name, obj.nix_handle, count, startIndex);
+            fname = strcat(obj.alias, '::axis');
+            r = nix_mx(fname, obj.nix_handle, count, startIndex);
         end
     end
 
