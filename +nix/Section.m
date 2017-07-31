@@ -30,11 +30,7 @@ classdef Section < nix.NamedEntity
 
         function r = parent(obj)
             fname = strcat(obj.alias, '::parent');
-            h = nix_mx(fname, obj.nix_handle);
-            r = {};
-            if h ~= 0
-                r = nix.Section(h);
-            end
+            r = nix.Utils.fetchObj(fname, obj.nix_handle, @nix.Section);
         end
 
         % ----------------
@@ -59,11 +55,7 @@ classdef Section < nix.NamedEntity
 
         function r = openLink(obj)
             fname = strcat(obj.alias, '::openLink');
-            h = nix_mx(fname, obj.nix_handle);
-            r = {};
-            if h ~= 0
-                r = nix.Section(h);
-            end
+            r = nix.Utils.fetchObj(fname, obj.nix_handle, @nix.Section);
         end
 
         function r = inherited_properties(obj)

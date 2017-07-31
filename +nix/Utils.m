@@ -31,12 +31,11 @@ classdef Utils
             end
         end
 
-        function rcell = fetchObj(nixMxFunc, handle, objConstructor)
+        function r = fetchObj(nixMxFunc, handle, objConstructor)
+            r = {};
             h = nix_mx(nixMxFunc, handle);
             if (h ~= 0)
-                rcell = objConstructor(h);
-            else
-                rcell = {};
+                r = objConstructor(h);
             end
         end
 

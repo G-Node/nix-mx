@@ -151,11 +151,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
         function r = open_positions(obj)
             fname = strcat(obj.alias, '::openPositions');
-            h = nix_mx(fname, obj.nix_handle);
-            r = {};
-            if h ~= 0
-                r = nix.DataArray(h);
-            end
+            r = nix.Utils.fetchObj(fname, obj.nix_handle, @nix.DataArray);
         end
 
         function [] = add_positions(obj, add_this)
@@ -175,11 +171,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
         function r = open_extents(obj)
             fname = strcat(obj.alias, '::openExtents');
-            h = nix_mx(fname, obj.nix_handle);
-            r = {};
-            if h ~= 0
-                r = nix.DataArray(h);
-            end
+            r = nix.Utils.fetchObj(fname, obj.nix_handle, @nix.DataArray);
         end
 
         function [] = set_extents(obj, add_this)
