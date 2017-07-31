@@ -42,14 +42,8 @@ classdef Section < nix.NamedEntity
                 fname = strcat(obj.alias, '::setNoneLink');
                 nix_mx(fname, obj.nix_handle);
             else
-                if(strcmp(class(val), 'nix.Section'))
-                    addID = val.id;
-                else
-                    addID = val;
-                end
-
                 fname = strcat(obj.alias, '::setLink');
-                nix_mx(fname, obj.nix_handle, addID);
+                nix.Utils.add_entity(obj, val, 'nix.Section', fname);
             end
         end
 

@@ -94,8 +94,14 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             else
                 addID = add_this;
             end
+
             fname = strcat(obj.alias, '::createFeature');
-            r = nix.Feature(nix_mx(fname, obj.nix_handle, addID, link_type));
+            h = nix_mx(fname, obj.nix_handle, addID, link_type);
+
+            r = {};
+            if (h ~= 0)
+                r = nix.Feature(h);
+            end
         end
 
         function r = has_feature(obj, id_or_name)
@@ -155,14 +161,8 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function [] = add_positions(obj, add_this)
-            if(strcmp(class(add_this), 'nix.DataArray'))
-                addID = add_this.id;
-            else
-                addID = add_this;
-            end
-
             fname = strcat(obj.alias, '::addPositions');
-            nix_mx(fname, obj.nix_handle, addID)
+            nix.Utils.add_entity(obj, add_this, 'nix.DataArray', fname);
         end
 
         % ------------------
@@ -179,13 +179,8 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 fname = strcat(obj.alias, '::setNoneExtents');
                 nix_mx(fname, obj.nix_handle, 0);
             else
-                if(strcmp(class(add_this), 'nix.DataArray'))
-                    addID = add_this.id;
-                else
-                    addID = add_this;
-                end
                 fname = strcat(obj.alias, '::setExtents');
-                nix_mx(fname, obj.nix_handle, addID);
+                nix.Utils.add_entity(obj, add_this, 'nix.DataArray', fname);
             end
         end
     end
