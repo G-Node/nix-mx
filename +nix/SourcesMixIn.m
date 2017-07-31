@@ -7,7 +7,7 @@
 % LICENSE file in the root of the Project.
 
 classdef SourcesMixIn < handle
-    %SourcesMixIn
+    % SourcesMixIn
     % mixin class for nix entities that can be related with sources
 
     properties (Abstract, Hidden)
@@ -18,19 +18,18 @@ classdef SourcesMixIn < handle
         function obj = SourcesMixIn()
             nix.Dynamic.add_dyn_relation(obj, 'sources', @nix.Source);
         end
-        
-        function c = source_count(obj)
-            c = nix_mx(strcat(obj.alias, '::sourceCount'), obj.nix_handle);
+
+        function r = source_count(obj)
+            r = nix_mx(strcat(obj.alias, '::sourceCount'), obj.nix_handle);
         end
 
         % has_source supports only check by id, not by name
-        function ret = has_source(obj, id_or_entity)
+        function r = has_source(obj, id_or_entity)
             has = id_or_entity;
             if(strcmp(class(has), 'nix.Source'))
             	has = id_or_entity.id;
-            end;
-            ret = nix_mx(strcat(obj.alias, '::hasSource'), ...
-                            obj.nix_handle, has);
+            end
+            r = nix_mx(strcat(obj.alias, '::hasSource'), obj.nix_handle, has);
         end
 
         function [] = add_source(obj, add_this)
@@ -43,24 +42,23 @@ classdef SourcesMixIn < handle
                 'nix.Source', strcat(obj.alias, '::addSources'));
         end
 
-        function delCheck = remove_source(obj, del)
-            delCheck = nix.Utils.delete_entity(obj, del, ...
+        function r = remove_source(obj, del)
+            r = nix.Utils.delete_entity(obj, del, ...
                 'nix.Source', strcat(obj.alias, '::removeSource'));
         end
 
-        function retObj = open_source(obj, id_or_name)
-            retObj = nix.Utils.open_entity(obj, ...
-                strcat(obj.alias, '::openSource'), id_or_name, ...
-                @nix.Source);
+        function r = open_source(obj, id_or_name)
+            r = nix.Utils.open_entity(obj, ...
+                strcat(obj.alias, '::openSource'), id_or_name, @nix.Source);
         end
 
-        function retObj = open_source_idx(obj, idx)
-            retObj = nix.Utils.open_entity(obj, ...
+        function r = open_source_idx(obj, idx)
+            r = nix.Utils.open_entity(obj, ...
                 strcat(obj.alias, '::openSourceIdx'), idx, @nix.Source);
         end
 
-        function filtered = filter_sources(obj, filter, val)
-            filtered = nix.Utils.filter(obj, filter, val, ...
+        function r = filter_sources(obj, filter, val)
+            r = nix.Utils.filter(obj, filter, val, ...
                 strcat(obj.alias, '::sourcesFiltered'), @nix.Source);
         end
     end

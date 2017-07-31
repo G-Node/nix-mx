@@ -7,7 +7,7 @@
 % LICENSE file in the root of the Project.
 
 classdef Dynamic
-    %Dynamic class (with static methods hehe)
+    % Dynamic class (with static methods hehe)
     % implements methods to dynamically assigns properties 
 
     methods (Static)
@@ -15,7 +15,7 @@ classdef Dynamic
             if nargin < 3
                 mode = 'r'; 
             end
-            
+
             % create dynamic property
             p = addprop(obj, prop);
 
@@ -49,7 +49,7 @@ classdef Dynamic
                 val = obj.info.(prop);
             end
         end
-        
+
         function add_dyn_relation(obj, name, constructor)
             dataAttr = strcat(name, 'Data');
             data = addprop(obj, dataAttr);
@@ -59,19 +59,19 @@ classdef Dynamic
             % adds a proxy property
             rel = addprop(obj, name);
             rel.GetMethod = @get_method;
-            
+
             % same property but returns Map 
             rel_map = addprop(obj, strcat(name, 'Map'));
             rel_map.GetMethod = @get_as_map;
             rel_map.Hidden = true;
-            
+
             function val = get_method(obj)
                 obj.(dataAttr) = nix.Utils.fetchObjList(...
                     strcat(obj.alias, '::', name), obj.nix_handle, ...
                     constructor);
                 val = obj.(dataAttr);
             end
-            
+
             function val = get_as_map(obj)
                 val = containers.Map();
                 props = obj.(name);

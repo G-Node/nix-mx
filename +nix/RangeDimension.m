@@ -7,17 +7,17 @@
 % LICENSE file in the root of the Project.
 
 classdef RangeDimension < nix.Entity
-    %RangeDimension nix RangeDimension object
-    
+    % RangeDimension nix RangeDimension object
+
     properties (Hidden)
         % namespace reference for nix-mx functions
         alias = 'RangeDimension'
     end
-    
+
     methods
         function obj = RangeDimension(h)
             obj@nix.Entity(h);
-            
+
             % assign dynamic properties
             nix.Dynamic.add_dyn_attr(obj, 'dimensionType', 'r');
             nix.Dynamic.add_dyn_attr(obj, 'isAlias', 'r');
@@ -26,30 +26,31 @@ classdef RangeDimension < nix.Entity
             nix.Dynamic.add_dyn_attr(obj, 'ticks', 'rw');
         end
 
-        function tickAt = tick_at(obj, index)
+        function r = tick_at(obj, index)
             if index > 0
                 index = index - 1;
             end
             func_name = strcat(obj.alias, '::tickAt');
-            tickAt = nix_mx(func_name, obj.nix_handle, index);
-        end
-        
-        function indexOf = index_of(obj, position)
-            func_name = strcat(obj.alias, '::indexOf');
-            indexOf = nix_mx(func_name, obj.nix_handle, position);
+            r = nix_mx(func_name, obj.nix_handle, index);
         end
 
-        function axis = axis(obj, count, startIndex)
+        function r = index_of(obj, position)
+            func_name = strcat(obj.alias, '::indexOf');
+            r = nix_mx(func_name, obj.nix_handle, position);
+        end
+
+        function r = axis(obj, count, startIndex)
             if nargin < 3
                 startIndex = 0;
             end
+
             if(startIndex > 0)
                 startIndex = startIndex - 1;
             end
-            
-            func_name = strcat(obj.alias, '::axis');
-            axis = nix_mx(func_name, obj.nix_handle, count, startIndex);
-        end
 
+            func_name = strcat(obj.alias, '::axis');
+            r = nix_mx(func_name, obj.nix_handle, count, startIndex);
+        end
     end
+
 end

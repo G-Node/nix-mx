@@ -8,34 +8,34 @@
 
 classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
     %DataArray nix DataArray object
-    
+
     properties (Hidden)
         % namespace reference for nix-mx functions
         alias = 'DataArray'
-    end;
+    end
 
     properties(Dependent)
         dimensions % should not be dynamic due to complex set operation
-    end;
-   
+    end
+
     methods
         function obj = DataArray(h)
             obj@nix.NamedEntity(h);
             obj@nix.MetadataMixIn();
             obj@nix.SourcesMixIn();
-            
+
             % assign dynamic properties
             nix.Dynamic.add_dyn_attr(obj, 'label', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'expansionOrigin', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'polynomCoefficients', 'rw');
             nix.Dynamic.add_dyn_attr(obj, 'dataExtent', 'rw');
-        end;
+        end
 
         % -----------------
         % Dimensions
         % -----------------
-        
+
         function dimensions = get.dimensions(obj)
             dimensions = {};
             currList = nix_mx('DataArray::dimensions', obj.nix_handle);
@@ -49,73 +49,77 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                         dimensions{i} = nix.RangeDimension(currList(i).dimension);
                     otherwise
                        disp('some dimension type is unknown! skip')
-                end;
-            end;
-        end;
-        
-        function dim = append_set_dimension(obj)
+                end
+            end
+        end
+
+        function r = append_set_dimension(obj)
             func_name = strcat(obj.alias, '::appendSetDimension');
-            dim = nix.SetDimension(nix_mx(func_name, obj.nix_handle));
+            h = nix_mx(func_name, obj.nix_handle);
+            r = nix.SetDimension(h);
         end
-        
-        function dim = append_sampled_dimension(obj, interval)
+
+        function r = append_sampled_dimension(obj, interval)
             func_name = strcat(obj.alias, '::appendSampledDimension');
-            dim = nix.SampledDimension(nix_mx(func_name, obj.nix_handle, interval));
+            h = nix_mx(func_name, obj.nix_handle, interval);
+            r = nix.SampledDimension(h);
         end
 
-        function dim = append_range_dimension(obj, ticks)
+        function r = append_range_dimension(obj, ticks)
             func_name = strcat(obj.alias, '::appendRangeDimension');
-            dim = nix.RangeDimension(nix_mx(func_name, obj.nix_handle, ticks));
+            h = nix_mx(func_name, obj.nix_handle, ticks);
+            r = nix.RangeDimension(h);
         end
 
-        function dim = append_alias_range_dimension(obj)
+        function r = append_alias_range_dimension(obj)
             func_name = strcat(obj.alias, '::appendAliasRangeDimension');
-            dim = nix.RangeDimension(nix_mx(func_name, obj.nix_handle));
+            h = nix_mx(func_name, obj.nix_handle);
+            r = nix.RangeDimension(h);
         end
-        
-        function dim = open_dimension_idx(obj, idx)
+
+        function r = open_dimension_idx(obj, idx)
         % Getting the dimension by index starts with 1
         % instead of 0 compared to all other index functions.
             func_name = strcat(obj.alias, '::openDimensionIdx');
-            ret = nix_mx(func_name, obj.nix_handle, idx);
-            switch(ret.dimension_type)
+            dim = nix_mx(func_name, obj.nix_handle, idx);
+            switch(dim.dimension_type)
                 case 'set'
-                    dim = nix.SetDimension(ret.handle);
+                    r = nix.SetDimension(dim.handle);
                 case 'sampled'
-                    dim = nix.SampledDimension(ret.handle);
+                    r = nix.SampledDimension(dim.handle);
                 case 'range'
-                    dim = nix.RangeDimension(ret.handle);
-            end;
+                    r = nix.RangeDimension(dim.handle);
+            end
         end
 
-        function delCheck = delete_dimensions(obj)
+        function r = delete_dimensions(obj)
             func_name = strcat(obj.alias, '::deleteDimensions');
-            delCheck = nix_mx(func_name, obj.nix_handle);
+            r = nix_mx(func_name, obj.nix_handle);
         end
 
-        function c = dimension_count(obj)
-            c = nix_mx('DataArray::dimensionCount', obj.nix_handle);
+        function r = dimension_count(obj)
+            r = nix_mx('DataArray::dimensionCount', obj.nix_handle);
         end
 
         % -----------------
         % Data access methods
         % -----------------
 
-        function data = read_all(obj)
-           tmp = nix_mx('DataArray::readAll', obj.nix_handle);
-           % data must agree with file & dimensions
-           % see mkarray.cc(42)
-           data = permute(tmp, length(size(tmp)):-1:1);
-        end;
-        
+        function r = read_all(obj)
+           data = nix_mx('DataArray::readAll', obj.nix_handle);
+
+           % data must agree with file & dimensions; see mkarray.cc(42)
+           r = permute(data, length(size(data)):-1:1);
+        end
+
         %-- TODO add (optional) offset
         %-- If a DataArray has been created as boolean or numeric,
         %-- provide that only values of the proper DataType can be written.
-        function write_all(obj, data)
+        function [] = write_all(obj, data)
             if(isinteger(obj.read_all) && isfloat(data))
                 disp('Warning: Writing Float data to an Integer DataArray');
-            end;
-            
+            end
+
             errorStruct.identifier = 'DataArray:improperDataType';
             if(islogical(obj.read_all) && ~islogical(data))
                 errorStruct.message = strcat('Trying to write', ...
@@ -134,18 +138,17 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 errorStruct.message = ('Writing char/string DataArrays is not supported as of yet.');
                 error(errorStruct);
             else
-                % data must agree with file & dimensions
-                % see mkarray.cc(42)
+                % data must agree with file & dimensions; see mkarray.cc(42)
                 tmp = permute(data, length(size(data)):-1:1);
                 nix_mx('DataArray::writeAll', obj.nix_handle, tmp);
-            end;
-        end;
-
-        function s = datatype(obj)
-            s = nix_mx('DataArray::dataType', obj.nix_handle);
+            end
         end
-        
-        % set data extent enabels to increase the original size 
+
+        function r = datatype(obj)
+            r = nix_mx('DataArray::dataType', obj.nix_handle);
+        end
+
+        % Set data extent enables to increase the original size 
         % of a data array within the same dimensions.
         % e.g. increase the size of a 2D array [5 10] to another
         % 2D array [5 11]. Changing the dimensions is not possible
@@ -159,5 +162,6 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             % update changed dataExtent in obj.info
             obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
         end
-    end;
+    end
+
 end
