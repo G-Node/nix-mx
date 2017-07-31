@@ -41,6 +41,8 @@ namespace nixmultitag {
 
     void featuresFiltered(const extractor &input, infusor &output);
 
+    void retrieveData(const extractor &input, infusor &output);
+
     void retrieveDataIdx(const extractor &input, infusor &output);
 
     void retrieveFeatureDataIdx(const extractor &input, infusor &output);

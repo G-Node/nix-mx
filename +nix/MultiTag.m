@@ -62,6 +62,13 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 'MultiTag::openReferenceIdx', idx, @nix.DataArray);
         end;
 
+        function data = retrieve_data(obj, pos_idx, id_or_name)
+            tmp = nix_mx('MultiTag::retrieveData', obj.nix_handle, pos_idx, id_or_name);
+            
+            % data must agree with file & dimensions see mkarray.cc(42)
+            data = permute(tmp, length(size(tmp)):-1:1);
+        end;
+
         function data = retrieve_data_idx(obj, pos_idx, ref_idx)
             tmp = nix_mx('MultiTag::retrieveDataIdx', obj.nix_handle, pos_idx, ref_idx);
             

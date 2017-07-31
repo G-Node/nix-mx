@@ -377,6 +377,7 @@ void mexFunction(int            nlhs,
         methods->add("MultiTag::sourcesFiltered", nixmultitag::sourcesFiltered);
         methods->add("MultiTag::referencesFiltered", nixmultitag::referencesFiltered);
         methods->add("MultiTag::featuresFiltered", nixmultitag::featuresFiltered);
+        methods->add("MultiTag::retrieveData", nixmultitag::retrieveData);
         methods->add("MultiTag::retrieveDataIdx", nixmultitag::retrieveDataIdx);
         methods->add("MultiTag::featureRetrieveDataIdx", nixmultitag::retrieveFeatureDataIdx);
 

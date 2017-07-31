@@ -40,6 +40,7 @@ function funcs = TestMultiTag
     funcs{end+1} = @test_set_open_extents;
     funcs{end+1} = @test_set_metadata;
     funcs{end+1} = @test_open_metadata;
+    funcs{end+1} = @test_retrieve_data;
     funcs{end+1} = @test_retrieve_data_idx;
     funcs{end+1} = @test_retrieve_feature_data_idx;
     funcs{end+1} = @test_set_units;
@@ -642,6 +643,69 @@ function [] = test_open_metadata( varargin )
     t.set_metadata(f.sections{1});
 
     assert(strcmp(t.open_metadata.name, 'testSection'));
+end
+
+%% Test: Retrieve reference data by id or name
+function [] = test_retrieve_data( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.create_block('testBlock', 'nixBlock');
+
+    pos(1,:) = [0, 0]; ext(1,:) = [0, 0]; % result 111
+    pos(2,:) = [1, 1]; ext(2,:) = [0, 3]; % result 122 123 124
+    pos(3,:) = [0, 2]; ext(3,:) = [2, 4]; % result 113 114 115 116
+                                          %        123 124 125 126
+
+	d_pos = b.create_data_array_from_data('positionsDA', 'nixDataArray', pos);
+    d_pos.append_sampled_dimension(0);
+    d_pos.append_sampled_dimension(0);
+
+    d_ext = b.create_data_array_from_data('extentsDA', 'nixDataArray', ext);
+    d_ext.append_sampled_dimension(0);
+    d_ext.append_sampled_dimension(0);
+
+    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d_pos);
+    t.set_extents(d_ext);
+
+    % create 2D reference data_arrays
+    raw1 = [111, 112, 113, 114, 115, 116, 117, 118; ...
+                121, 122, 123, 124, 125, 126, 127, 128];
+    d1 = b.create_data_array_from_data('reference1', 'nixDataArray', raw1);
+    d1.append_sampled_dimension(1);
+    d1.append_sampled_dimension(1);
+
+    raw2 = [211, 212, 213, 214, 215, 216, 217, 218; ...
+                221, 222, 223, 224, 225, 226, 227, 228];
+    d2 = b.create_data_array_from_data('reference2', 'nixDataArray', raw2);
+    d2.append_sampled_dimension(1);
+    d2.append_sampled_dimension(1);
+
+    % add data_arrays as references to multi tag
+    t.add_reference(d1);
+    t.add_reference(d2);
+
+    % test invalid position idx
+    try
+        t.retrieve_data(100, 'reference1');
+    catch ME
+        assert(~isempty(strfind(ME.message, 'ounds of positions or extents')), ...
+            'Invalid position index failed');
+    end
+    assert(exist('ME') == 1, 'Invalid position index fail, error not raised');
+    clear ME;
+
+    % test invalid reference name
+    try
+        t.retrieve_data(0, 'I do not exist');
+    catch ME
+        assert(~isempty(strfind(ME.message, 'no DataArray with the specified name or id')), ...
+            'Invalid reference name failed');
+    end
+    assert(exist('ME') == 1, 'Invalid reference name fail, error not raised');
+    clear ME;
+ 
+    assert(isequal(t.retrieve_data(0, d1.name), raw1(1:1)), 'Retrieve pos 1, ref 1 fail');
+    assert(isequal(t.retrieve_data(1, d1.id), raw1(2, 2:4)), 'Retrieve pos 2, ref 1 fail');
+    assert(isequal(t.retrieve_data(2, d2.id), raw2(1:2, 3:6)), 'Retrieve pos 3, ref 2 fail');
 end
 
 %% Test: Retrieve reference data by index
