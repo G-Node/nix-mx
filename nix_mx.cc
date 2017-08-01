@@ -104,6 +104,13 @@ void mexFunction(int            nlhs,
         classdef<nix::File>("File", methods)
             .desc(&nixfile::describe)
             .add("open", nixfile::open)
+            .add("fileMode", nixfile::fileMode)
+            .add("validate", nixfile::validate)
+            .add("openBlockIdx", nixfile::openBlockIdx)
+            .add("openSectionIdx", nixfile::openSectionIdx)
+            .add("sectionsFiltered", nixfile::sectionsFiltered)
+            .add("blocksFiltered", nixfile::blocksFiltered)
+            .add("findSections", nixfile::findSections)
             .reg("blocks", GETTER(std::vector<nix::Block>, nix::File, blocks))
             .reg("sections", GETTER(std::vector<nix::Section>, nix::File, sections))
             .reg("hasBlock", GETBYSTR(bool, nix::File, hasBlock))
@@ -117,16 +124,24 @@ void mexFunction(int            nlhs,
             .reg("blockCount", GETTER(nix::ndsize_t, nix::File, blockCount))
             .reg("sectionCount", GETTER(nix::ndsize_t, nix::File, sectionCount))
             .reg("isOpen", GETTER(bool, nix::File, isOpen));
-        methods->add("File::fileMode", nixfile::fileMode);
-        methods->add("File::validate", nixfile::validate);
-        methods->add("File::openBlockIdx", nixfile::openBlockIdx);
-        methods->add("File::openSectionIdx", nixfile::openSectionIdx);
-        methods->add("File::sectionsFiltered", nixfile::sectionsFiltered);
-        methods->add("File::blocksFiltered", nixfile::blocksFiltered);
-        methods->add("File::findSections", nixfile::findSections);
 
         classdef<nix::Block>("Block", methods)
             .desc(&nixblock::describe)
+            .add("createDataArray", nixblock::createDataArray)
+            .add("createMultiTag", nixblock::createMultiTag)
+            .add("createGroup", nixblock::createGroup)
+            .add("openGroupIdx", nixblock::openGroupIdx)
+            .add("openDataArrayIdx", nixblock::openDataArrayIdx)
+            .add("openTagIdx", nixblock::openTagIdx)
+            .add("openMultiTagIdx", nixblock::openMultiTagIdx)
+            .add("openSourceIdx", nixblock::openSourceIdx)
+            .add("compare", nixblock::compare)
+            .add("sourcesFiltered", nixblock::sourcesFiltered)
+            .add("groupsFiltered", nixblock::groupsFiltered)
+            .add("tagsFiltered", nixblock::tagsFiltered)
+            .add("multiTagsFiltered", nixblock::multiTagsFiltered)
+            .add("dataArraysFiltered", nixblock::dataArraysFiltered)
+            .add("findSources", nixblock::findSources)
             .reg("createSource", &nix::Block::createSource)
             .reg("createTag", &nix::Block::createTag)
             .reg("dataArrays", &nix::Block::dataArrays)
@@ -160,24 +175,26 @@ void mexFunction(int            nlhs,
             .reg("tagCount", GETTER(nix::ndsize_t, nix::Block, tagCount))
             .reg("multiTagCount", GETTER(nix::ndsize_t, nix::Block, multiTagCount))
             .reg("groupCount", GETTER(nix::ndsize_t, nix::Block, groupCount));
-        methods->add("Block::createDataArray", nixblock::createDataArray);
-        methods->add("Block::createMultiTag", nixblock::createMultiTag);
-        methods->add("Block::createGroup", nixblock::createGroup);
-        methods->add("Block::openGroupIdx", nixblock::openGroupIdx);
-        methods->add("Block::openDataArrayIdx", nixblock::openDataArrayIdx);
-        methods->add("Block::openTagIdx", nixblock::openTagIdx);
-        methods->add("Block::openMultiTagIdx", nixblock::openMultiTagIdx);
-        methods->add("Block::openSourceIdx", nixblock::openSourceIdx);
-        methods->add("Block::compare", nixblock::compare);
-        methods->add("Block::sourcesFiltered", nixblock::sourcesFiltered);
-        methods->add("Block::groupsFiltered", nixblock::groupsFiltered);
-        methods->add("Block::tagsFiltered", nixblock::tagsFiltered);
-        methods->add("Block::multiTagsFiltered", nixblock::multiTagsFiltered);
-        methods->add("Block::dataArraysFiltered", nixblock::dataArraysFiltered);
-        methods->add("Block::findSources", nixblock::findSources);
 
         classdef<nix::Group>("Group", methods)
             .desc(&nixgroup::describe)
+            .add("addDataArray", nixgroup::addDataArray)
+            .add("addDataArrays", nixgroup::addDataArrays)
+            .add("addSource", nixgroup::addSource)
+            .add("addSources", nixgroup::addSources)
+            .add("addTag", nixgroup::addTag)
+            .add("addTags", nixgroup::addTags)
+            .add("addMultiTag", nixgroup::addMultiTag)
+            .add("addMultiTags", nixgroup::addMultiTags)
+            .add("openDataArrayIdx", nixgroup::openDataArrayIdx)
+            .add("openTagIdx", nixgroup::openTagIdx)
+            .add("openMultiTagIdx", nixgroup::openMultiTagIdx)
+            .add("openSourceIdx", nixgroup::openSourceIdx)
+            .add("compare", nixgroup::compare)
+            .add("sourcesFiltered", nixgroup::sourcesFiltered)
+            .add("tagsFiltered", nixgroup::tagsFiltered)
+            .add("multiTagsFiltered", nixgroup::multiTagsFiltered)
+            .add("dataArraysFiltered", nixgroup::dataArraysFiltered)
             .reg("dataArrays", FILTER(std::vector<nix::DataArray>, nix::Group, , dataArrays))
             .reg("sources", FILTER(std::vector<nix::Source>, nix::Group, std::function<bool(const nix::Source &)>, sources))
             .reg("tags", FILTER(std::vector<nix::Tag>, nix::Group, , tags))
@@ -204,26 +221,27 @@ void mexFunction(int            nlhs,
             .reg("dataArrayCount", GETTER(nix::ndsize_t, nix::Group, dataArrayCount))
             .reg("tagCount", GETTER(nix::ndsize_t, nix::Group, tagCount))
             .reg("multiTagCount", GETTER(nix::ndsize_t, nix::Group, multiTagCount));
-        methods->add("Group::addDataArray", nixgroup::addDataArray);
-        methods->add("Group::addDataArrays", nixgroup::addDataArrays);
-        methods->add("Group::addSource", nixgroup::addSource);
-        methods->add("Group::addSources", nixgroup::addSources);
-        methods->add("Group::addTag", nixgroup::addTag);
-        methods->add("Group::addTags", nixgroup::addTags);
-        methods->add("Group::addMultiTag", nixgroup::addMultiTag);
-        methods->add("Group::addMultiTags", nixgroup::addMultiTags);
-        methods->add("Group::openDataArrayIdx", nixgroup::openDataArrayIdx);
-        methods->add("Group::openTagIdx", nixgroup::openTagIdx);
-        methods->add("Group::openMultiTagIdx", nixgroup::openMultiTagIdx);
-        methods->add("Group::openSourceIdx", nixgroup::openSourceIdx);
-        methods->add("Group::compare", nixgroup::compare);
-        methods->add("Group::sourcesFiltered", nixgroup::sourcesFiltered);
-        methods->add("Group::tagsFiltered", nixgroup::tagsFiltered);
-        methods->add("Group::multiTagsFiltered", nixgroup::multiTagsFiltered);
-        methods->add("Group::dataArraysFiltered", nixgroup::dataArraysFiltered);
 
+        // REMOVER for DataArray.removeSource leads to an error, therefore use .add() for now
         classdef<nix::DataArray>("DataArray", methods)
             .desc(&nixdataarray::describe)
+            .add("deleteDimensions", nixdataarray::deleteDimensions)
+            .add("readAll", nixdataarray::readAll)
+            .add("writeAll", nixdataarray::writeAll)
+            .add("addSource", nixdataarray::addSource)
+            .add("addSources", nixdataarray::addSources)
+            .add("removeSource", nixdataarray::removeSource)
+            .add("openSource", nixdataarray::getSource)
+            .add("hasSource", nixdataarray::hasSource)
+            .add("sourceCount", nixdataarray::sourceCount)
+            .add("dimensionCount", nixdataarray::dimensionCount)
+            .add("setPolynomCoefficients", nixdataarray::polynomCoefficients)
+            .add("dataType", nixdataarray::dataType)
+            .add("setDataExtent", nixdataarray::setDataExtent)
+            .add("openSourceIdx", nixdataarray::openSourceIdx)
+            .add("openDimensionIdx", nixdataarray::openDimensionIdx)
+            .add("compare", nixdataarray::compare)
+            .add("sourcesFiltered", nixdataarray::sourcesFiltered)
             .reg("sources", IDATAARRAY(std::vector<nix::Source>, EntityWithSources, std::function<bool(const nix::Source &)>, sources, const))
             .reg("openMetadataSection", IDATAARRAY(nix::Section, EntityWithMetadata, , metadata, const))
             .reg("setMetadata", IDATAARRAY(void, EntityWithMetadata, const std::string&, metadata, ))
@@ -247,27 +265,13 @@ void mexFunction(int            nlhs,
             .reg("createRangeDimension", &nix::DataArray::createRangeDimension)
             .reg("createAliasRangeDimension", &nix::DataArray::createAliasRangeDimension)
             .reg("createSampledDimension", &nix::DataArray::createSampledDimension);
-        methods->add("DataArray::deleteDimensions", nixdataarray::deleteDimensions);
-        methods->add("DataArray::readAll", nixdataarray::readAll);
-        methods->add("DataArray::writeAll", nixdataarray::writeAll);
-        methods->add("DataArray::addSource", nixdataarray::addSource);
-        methods->add("DataArray::addSources", nixdataarray::addSources);
-        // REMOVER for DataArray.removeSource leads to an error, therefore use method->add for now
-        methods->add("DataArray::removeSource", nixdataarray::removeSource);
-        methods->add("DataArray::openSource", nixdataarray::getSource);
-        methods->add("DataArray::hasSource", nixdataarray::hasSource);
-        methods->add("DataArray::sourceCount", nixdataarray::sourceCount);
-        methods->add("DataArray::dimensionCount", nixdataarray::dimensionCount);
-        methods->add("DataArray::setPolynomCoefficients", nixdataarray::polynomCoefficients);
-        methods->add("DataArray::dataType", nixdataarray::dataType);
-        methods->add("DataArray::setDataExtent", nixdataarray::setDataExtent);
-        methods->add("DataArray::openSourceIdx", nixdataarray::openSourceIdx);
-        methods->add("DataArray::openDimensionIdx", nixdataarray::openDimensionIdx);
-        methods->add("DataArray::compare", nixdataarray::compare);
-        methods->add("DataArray::sourcesFiltered", nixdataarray::sourcesFiltered);
 
         classdef<nix::Source>("Source", methods)
             .desc(&nixsource::describe)
+            .add("openSourceIdx", nixsource::openSourceIdx)
+            .add("compare", nixsource::compare)
+            .add("sourcesFiltered", nixsource::sourcesFiltered)
+            .add("findSources", nixsource::findSources)
             .reg("createSource", &nix::Source::createSource)
             .reg("deleteSource", REMOVER(nix::Source, nix::Source, deleteSource))
             .reg("sources", &nix::Source::sources)
@@ -284,13 +288,25 @@ void mexFunction(int            nlhs,
             .reg("referringDataArrays", GETTER(std::vector<nix::DataArray>, nix::Source, referringDataArrays))
             .reg("referringTags", GETTER(std::vector<nix::Tag>, nix::Source, referringTags))
             .reg("referringMultiTags", GETTER(std::vector<nix::MultiTag>, nix::Source, referringMultiTags));
-        methods->add("Source::openSourceIdx", nixsource::openSourceIdx);
-        methods->add("Source::compare", nixsource::compare);
-        methods->add("Source::sourcesFiltered", nixsource::sourcesFiltered);
-        methods->add("Source::findSources", nixsource::findSources);
 
         classdef<nix::Tag>("Tag", methods)
             .desc(&nixtag::describe)
+            .add("addReference", nixtag::addReference)
+            .add("addReferences", nixtag::addReferences)
+            .add("addSource", nixtag::addSource)
+            .add("addSources", nixtag::addSources)
+            .add("createFeature", nixtag::createFeature)
+            .add("openReferenceIdx", nixtag::openReferenceIdx)
+            .add("openFeatureIdx", nixtag::openFeatureIdx)
+            .add("openSourceIdx", nixtag::openSourceIdx)
+            .add("compare", nixtag::compare)
+            .add("sourcesFiltered", nixtag::sourcesFiltered)
+            .add("referencesFiltered", nixtag::referencesFiltered)
+            .add("featuresFiltered", nixtag::featuresFiltered)
+            .add("retrieveData", nixtag::retrieveData)
+            .add("retrieveDataIdx", nixtag::retrieveDataIdx)
+            .add("featureRetrieveData", nixtag::retrieveFeatureData)
+            .add("featureRetrieveDataIdx", nixtag::retrieveFeatureDataIdx)
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::Tag, references))
             .reg("features", &nix::Tag::features)
             .reg("sources", FILTER(std::vector<nix::Source>, nix::Tag, std::function<bool(const nix::Source &)>, sources))
@@ -317,25 +333,26 @@ void mexFunction(int            nlhs,
             .reg("sourceCount", GETTER(nix::ndsize_t, nix::Tag, sourceCount))
             .reg("referenceCount", GETTER(nix::ndsize_t, nix::Tag, referenceCount))
             .reg("featureCount", GETTER(nix::ndsize_t, nix::Tag, featureCount));
-        methods->add("Tag::addReference", nixtag::addReference);
-        methods->add("Tag::addReferences", nixtag::addReferences);
-        methods->add("Tag::addSource", nixtag::addSource);
-        methods->add("Tag::addSources", nixtag::addSources);
-        methods->add("Tag::createFeature", nixtag::createFeature);
-        methods->add("Tag::openReferenceIdx", nixtag::openReferenceIdx);
-        methods->add("Tag::openFeatureIdx", nixtag::openFeatureIdx);
-        methods->add("Tag::openSourceIdx", nixtag::openSourceIdx);
-        methods->add("Tag::compare", nixtag::compare);
-        methods->add("Tag::sourcesFiltered", nixtag::sourcesFiltered);
-        methods->add("Tag::referencesFiltered", nixtag::referencesFiltered);
-        methods->add("Tag::featuresFiltered", nixtag::featuresFiltered);
-        methods->add("Tag::retrieveData", nixtag::retrieveData);
-        methods->add("Tag::retrieveDataIdx", nixtag::retrieveDataIdx);
-        methods->add("Tag::featureRetrieveData", nixtag::retrieveFeatureData);
-        methods->add("Tag::featureRetrieveDataIdx", nixtag::retrieveFeatureDataIdx);
 
         classdef<nix::MultiTag>("MultiTag", methods)
             .desc(&nixmultitag::describe)
+            .add("addReference", nixmultitag::addReference)
+            .add("addReferences", nixmultitag::addReferences)
+            .add("addSource", nixmultitag::addSource)
+            .add("addSources", nixmultitag::addSources)
+            .add("createFeature", nixmultitag::createFeature)
+            .add("addPositions", nixmultitag::addPositions)
+            .add("openReferenceIdx", nixmultitag::openReferenceIdx)
+            .add("openFeatureIdx", nixmultitag::openFeatureIdx)
+            .add("openSourceIdx", nixmultitag::openSourceIdx)
+            .add("compare", nixmultitag::compare)
+            .add("sourcesFiltered", nixmultitag::sourcesFiltered)
+            .add("referencesFiltered", nixmultitag::referencesFiltered)
+            .add("featuresFiltered", nixmultitag::featuresFiltered)
+            .add("retrieveData", nixmultitag::retrieveData)
+            .add("retrieveDataIdx", nixmultitag::retrieveDataIdx)
+            .add("featureRetrieveData", nixmultitag::retrieveFeatureData)
+            .add("featureRetrieveDataIdx", nixmultitag::retrieveFeatureDataIdx)
             .reg("references", GETTER(std::vector<nix::DataArray>, nix::MultiTag, references))
             .reg("features", &nix::MultiTag::features)
             .reg("sources", FILTER(std::vector<nix::Source>, nix::MultiTag, std::function<bool(const nix::Source &)>, sources))
@@ -364,26 +381,22 @@ void mexFunction(int            nlhs,
             .reg("sourceCount", GETTER(nix::ndsize_t, nix::MultiTag, sourceCount))
             .reg("referenceCount", GETTER(nix::ndsize_t, nix::MultiTag, referenceCount))
             .reg("featureCount", GETTER(nix::ndsize_t, nix::MultiTag, featureCount));
-        methods->add("MultiTag::addReference", nixmultitag::addReference);
-        methods->add("MultiTag::addReferences", nixmultitag::addReferences);
-        methods->add("MultiTag::addSource", nixmultitag::addSource);
-        methods->add("MultiTag::addSources", nixmultitag::addSources);
-        methods->add("MultiTag::createFeature", nixmultitag::createFeature);
-        methods->add("MultiTag::addPositions", nixmultitag::addPositions);
-        methods->add("MultiTag::openReferenceIdx", nixmultitag::openReferenceIdx);
-        methods->add("MultiTag::openFeatureIdx", nixmultitag::openFeatureIdx);
-        methods->add("MultiTag::openSourceIdx", nixmultitag::openSourceIdx);
-        methods->add("MultiTag::compare", nixmultitag::compare);
-        methods->add("MultiTag::sourcesFiltered", nixmultitag::sourcesFiltered);
-        methods->add("MultiTag::referencesFiltered", nixmultitag::referencesFiltered);
-        methods->add("MultiTag::featuresFiltered", nixmultitag::featuresFiltered);
-        methods->add("MultiTag::retrieveData", nixmultitag::retrieveData);
-        methods->add("MultiTag::retrieveDataIdx", nixmultitag::retrieveDataIdx);
-        methods->add("MultiTag::featureRetrieveData", nixmultitag::retrieveFeatureData);
-        methods->add("MultiTag::featureRetrieveDataIdx", nixmultitag::retrieveFeatureDataIdx);
 
         classdef<nix::Section>("Section", methods)
             .desc(&nixsection::describe)
+            .add("createProperty", nixsection::createProperty)
+            .add("createPropertyWithValue", nixsection::createPropertyWithValue)
+            .add("referringBlockSources", nixsection::referringBlockSources)
+            .add("referringBlockTags", nixsection::referringBlockTags)
+            .add("referringBlockMultiTags", nixsection::referringBlockMultiTags)
+            .add("referringBlockDataArrays", nixsection::referringBlockDataArrays)
+            .add("openSectionIdx", nixsection::openSectionIdx)
+            .add("openPropertyIdx", nixsection::openPropertyIdx)
+            .add("compare", nixsection::compare)
+            .add("sectionsFiltered", nixsection::sectionsFiltered)
+            .add("propertiesFiltered", nixsection::propertiesFiltered)
+            .add("findSections", nixsection::findSections)
+            .add("findRelated", nixsection::findRelated)
             .reg("sections", &nix::Section::sections)
             .reg("properties", &nix::Section::properties)
             .reg("openSection", GETBYSTR(nix::Section, nix::Section, getSection))
@@ -412,29 +425,20 @@ void mexFunction(int            nlhs,
             .reg("referringMultiTags", GETTER(std::vector<nix::MultiTag>, nix::Section, referringMultiTags))
             .reg("referringSources", GETTER(std::vector<nix::Source>, nix::Section, referringSources))
             .reg("referringBlocks", GETTER(std::vector<nix::Block>, nix::Section, referringBlocks));
-        methods->add("Section::createProperty", nixsection::createProperty);
-        methods->add("Section::createPropertyWithValue", nixsection::createPropertyWithValue);
-        methods->add("Section::referringBlockSources", nixsection::referringBlockSources);
-        methods->add("Section::referringBlockTags", nixsection::referringBlockTags);
-        methods->add("Section::referringBlockMultiTags", nixsection::referringBlockMultiTags);
-        methods->add("Section::referringBlockDataArrays", nixsection::referringBlockDataArrays);
-        methods->add("Section::openSectionIdx", nixsection::openSectionIdx);
-        methods->add("Section::openPropertyIdx", nixsection::openPropertyIdx);
-        methods->add("Section::compare", nixsection::compare);
-        methods->add("Section::sectionsFiltered", nixsection::sectionsFiltered);
-        methods->add("Section::propertiesFiltered", nixsection::propertiesFiltered);
-        methods->add("Section::findSections", nixsection::findSections);
-        methods->add("Section::findRelated", nixsection::findRelated);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)
+            .add("setLinkType", nixfeature::setLinkType)
             .reg("openData", GETCONTENT(nix::DataArray, nix::Feature, data))
             .reg("setData", SETTER(const std::string&, nix::Feature, data))
             .reg("getLinkType", GETCONTENT(nix::LinkType, nix::Feature, linkType));
-        methods->add("Feature::setLinkType", nixfeature::setLinkType);
 
         classdef<nix::Property>("Property", methods)
             .desc(&nixproperty::describe)
+            .add("values", nixproperty::values)
+            .add("updateValues", nixproperty::updateValues)
+            .add("deleteValues", nixproperty::deleteValues)
+            .add("compare", nixproperty::compare)
             .reg("setDefinition", SETTER(const std::string&, nix::Property, definition))
             .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Property, definition))
             .reg("setUnit", SETTER(const std::string&, nix::Property, unit))
@@ -443,10 +447,6 @@ void mexFunction(int            nlhs,
             .reg("setNoneMapping", SETTER(const boost::none_t, nix::Property, mapping))
             .reg("valueCount", GETTER(nix::ndsize_t, nix::Property, valueCount))
             .reg("setNoneValue", SETTER(const boost::none_t, nix::Property, values));
-        methods->add("Property::values", nixproperty::values);
-        methods->add("Property::updateValues", nixproperty::updateValues);
-        methods->add("Property::deleteValues", nixproperty::deleteValues);
-        methods->add("Property::compare", nixproperty::compare);
 
         classdef<nix::SetDimension>("SetDimension", methods)
             .desc(&nixdimensions::describe)
@@ -455,6 +455,8 @@ void mexFunction(int            nlhs,
 
         classdef<nix::SampledDimension>("SampledDimension", methods)
             .desc(&nixdimensions::describe)
+            .add("positionAt", nixdimensions::sampledPositionAt)
+            .add("axis", nixdimensions::sampledAxis)
             .reg("setLabel", SETTER(const std::string&, nix::SampledDimension, label))
             .reg("setNoneLabel", SETTER(const boost::none_t, nix::SampledDimension, label))
             .reg("setUnit", SETTER(const std::string&, nix::SampledDimension, unit))
@@ -463,19 +465,17 @@ void mexFunction(int            nlhs,
             .reg("setOffset", SETTER(double, nix::SampledDimension, offset))
             .reg("setNoneOffset", SETTER(const boost::none_t, nix::SampledDimension, offset))
             .reg("indexOf", &nix::SampledDimension::indexOf);
-        methods->add("SampledDimension::positionAt", nixdimensions::sampledPositionAt);
-        methods->add("SampledDimension::axis", nixdimensions::sampledAxis);
 
         classdef<nix::RangeDimension>("RangeDimension", methods)
             .desc(&nixdimensions::describe)
+            .add("tickAt", nixdimensions::rangeTickAt)
+            .add("axis", nixdimensions::rangeAxis)
             .reg("setLabel", SETTER(const std::string&, nix::RangeDimension, label))
             .reg("setNoneLabel", SETTER(const boost::none_t, nix::RangeDimension, label))
             .reg("setUnit", SETTER(const std::string&, nix::RangeDimension, unit))
             .reg("setNoneUnit", SETTER(const boost::none_t, nix::RangeDimension, unit))
             .reg("setTicks", SETTER(const std::vector<double>&, nix::RangeDimension, ticks))
             .reg("indexOf", &nix::RangeDimension::indexOf);
-        methods->add("RangeDimension::tickAt", nixdimensions::rangeTickAt);
-        methods->add("RangeDimension::axis", nixdimensions::rangeAxis);
 
         mexAtExit(on_exit);
     });
