@@ -25,8 +25,6 @@ classdef File < nix.Entity
             % assign relations
             nix.Dynamic.add_dyn_relation(obj, 'blocks', @nix.Block);
             nix.Dynamic.add_dyn_relation(obj, 'sections', @nix.Section);
-
-            obj.info = nix_mx('File::describe', obj.nix_handle);
         end
 
         % braindead...

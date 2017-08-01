@@ -44,7 +44,6 @@ classdef Dynamic
                     fname = strcat(obj.alias, '::set', upper(prop(1)), prop(2:end));
                     nix_mx(fname, obj.nix_handle, val);
                 end
-                obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
             end
 
             function val = get_method(obj)

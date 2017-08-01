@@ -160,8 +160,6 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function [] = set_data_extent(obj, extent)
             fname = strcat(obj.alias, '::setDataExtent');
             nix_mx(fname, obj.nix_handle, extent);
-            % update changed dataExtent in obj.info
-            obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
         end
     end
 
