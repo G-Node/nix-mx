@@ -10,6 +10,13 @@ classdef Utils
 
     methods(Static)
 
+        function r = createEntity(handle, objConstructor)
+            r = {};
+            if (handle ~= 0)
+                r = objConstructor(handle);
+            end
+        end
+
         function r = createEntityArray(list, objConstructor)
             r = cell(length(list), 1);
             for i = 1:length(list)
@@ -33,11 +40,8 @@ classdef Utils
         end
 
         function r = fetchObj(nixMxFunc, handle, objConstructor)
-            r = {};
             h = nix_mx(nixMxFunc, handle);
-            if (h ~= 0)
-                r = objConstructor(h);
-            end
+            r = nix.Utils.createEntity(h, objConstructor);
         end
 
         function [] = add_entity(obj, add_this, nixEntity, mxMethod)
@@ -76,11 +80,8 @@ classdef Utils
         end
 
         function r = open_entity(obj, mxMethod, id_or_name, objConstructor)
-            handle = nix_mx(mxMethod, obj.nix_handle, id_or_name);
-            r = {};
-            if (handle ~= 0)
-                r = objConstructor(handle);
-            end
+            h = nix_mx(mxMethod, obj.nix_handle, id_or_name);
+            r = nix.Utils.createEntity(h, objConstructor);
         end
 
         % -----------------------------------------------------------

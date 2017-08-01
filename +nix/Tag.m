@@ -99,11 +99,7 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
             fname = strcat(obj.alias, '::createFeature');
             h = nix_mx(fname, obj.nix_handle, addID, link_type);
-
-            r = {};
-            if (h ~= 0)
-                r = nix.Feature(h);
-            end
+            r = nix.Utils.createEntity(h, @nix.Feature);
         end
 
         function r = has_feature(obj, id_or_name)
