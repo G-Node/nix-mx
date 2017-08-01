@@ -27,7 +27,7 @@ classdef SourcesMixIn < handle
         % has_source supports only check by id, not by name
         function r = has_source(obj, id_or_entity)
             has = id_or_entity;
-            if (strcmp(class(has), 'nix.Source'))
+            if (isa(has, 'nix.Source'))
             	has = id_or_entity.id;
             end
 

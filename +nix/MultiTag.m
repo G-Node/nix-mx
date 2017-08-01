@@ -89,7 +89,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % ------------------
 
         function r = add_feature(obj, add_this, link_type)
-            if (strcmp(class(add_this), 'nix.DataArray'))
+            if (isa(add_this, 'nix.DataArray'))
                 addID = add_this.id;
             else
                 addID = add_this;

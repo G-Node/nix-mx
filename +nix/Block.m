@@ -267,7 +267,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
 
         %-- Creating a multitag requires an already existing data array
         function r = create_multi_tag(obj, name, type, add_data_array)
-            if (strcmp(class(add_data_array), 'nix.DataArray'))
+            if (isa(add_data_array, 'nix.DataArray'))
                 addID = add_data_array.id;
             else
                 addID = add_data_array;

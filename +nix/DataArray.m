@@ -14,7 +14,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         alias = 'DataArray'
     end
 
-    properties(Dependent)
+    properties (Dependent)
         dimensions % should not be dynamic due to complex set operation
     end
 

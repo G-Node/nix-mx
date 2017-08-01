@@ -10,12 +10,12 @@ classdef Property < nix.NamedEntity
     % PROPERTY Metadata Property class
     %   NIX metadata property
 
-    properties(Hidden)
+    properties (Hidden)
         % namespace reference for nix-mx functions
         alias = 'Property'
     end
 
-    properties(Dependent)
+    properties (Dependent)
         values
     end
 
@@ -69,7 +69,7 @@ classdef Property < nix.NamedEntity
         % return value 0 means name and id of two properties are
         % identical, any other value means either name or id differ.
         function r = compare(obj, property)
-            if (~strcmp(class(property), class(obj)))
+            if (~isa(property, class(obj)))
                error('Function only supports comparison of Properties.');
             end
 

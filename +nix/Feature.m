@@ -14,7 +14,7 @@ classdef Feature < nix.Entity
         alias = 'Feature'
     end
 
-    properties(Dependent)
+    properties (Dependent)
         id
         linkType
     end
@@ -45,7 +45,7 @@ classdef Feature < nix.Entity
         end
 
         function [] = set_data(obj, setData)
-            if (strcmp(class(setData), 'nix.DataArray'))
+            if (isa(setData, 'nix.DataArray'))
                 setData = setData.id;
             end
             fname = strcat(obj.alias, '::setData');

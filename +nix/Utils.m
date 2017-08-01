@@ -40,7 +40,7 @@ classdef Utils
         end
 
         function [] = add_entity(obj, add_this, nixEntity, mxMethod)
-            if (strcmp(class(add_this), nixEntity))
+            if (isa(add_this, nixEntity))
                 addID = add_this.id;
             else
                 addID = add_this;
@@ -66,7 +66,7 @@ classdef Utils
         % The first actually removes the entity, the latter
         % removes only the reference to the entity.
         function r = delete_entity(obj, del, nixEntity, mxMethod)
-            if (strcmp(class(del), nixEntity))
+            if (isa(del, nixEntity))
                 delID = del.id;
             else
                 delID = del;

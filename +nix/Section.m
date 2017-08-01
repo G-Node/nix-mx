@@ -10,7 +10,7 @@ classdef Section < nix.NamedEntity
     % SECTION Metadata Section class
     %   NIX metadata section
 
-    properties(Hidden)
+    properties (Hidden)
         % namespace reference for nix-mx functions
         alias = 'Section'
     end
@@ -143,7 +143,7 @@ classdef Section < nix.NamedEntity
         function r = delete_property(obj, del)
             if (isstruct(del) && isfield(del, 'id'))
                 delID = del.id;
-            elseif (strcmp(class(del), 'nix.Property'))
+            elseif (isa(del, 'nix.Property'))
                 delID = del.id;
             else
                 delID = del;
@@ -203,7 +203,7 @@ classdef Section < nix.NamedEntity
     % Referring utility method
     % ----------------
 
-    methods(Access=protected)
+    methods (Access=protected)
         % referring_util receives a nix entityConstructor, part of a function
         % name and varargin to provide abstract access to nix.Section
         % referringXXX and referringXXX(Block) methods.
@@ -211,8 +211,7 @@ classdef Section < nix.NamedEntity
             if (isempty(varargin))
                 fname = strcat(obj.alias, '::referring', fsuffix);
                 r = nix.Utils.fetchObjList(fname, obj.nix_handle, entityConstructor);
-            elseif ((size(varargin, 2) > 1) || ...
-                    (~strcmp(class(varargin{1}), 'nix.Block')))
+            elseif ((size(varargin, 2) > 1) || (~isa(varargin{1}, 'nix.Block')))
                 error('Provide either empty arguments or a single Block entity');
             else
                 fname = strcat(obj.alias, '::referringBlock', fsuffix);
