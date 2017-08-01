@@ -10,25 +10,26 @@ classdef Utils
 
     methods(Static)
 
-        function rdata = fetchObjList(nixMxFunc, handle, objConstructor)
-            currList = nix_mx(nixMxFunc, handle);
-            rdata = cell(length(currList), 1);
-            for i = 1:length(currList)
-                rdata{i} = objConstructor(currList{i});
+        function r = createEntityArray(list, objConstructor)
+            r = cell(length(list), 1);
+            for i = 1:length(list)
+                r{i} = objConstructor(list{i});
             end
+        end
+
+        function r = fetchObjList(nixMxFunc, handle, objConstructor)
+            list = nix_mx(nixMxFunc, handle);
+            r = nix.Utils.createEntityArray(list, objConstructor);
         end
 
         % This method calls the nix-mx function specified by 'nixMxFunc', handing 
         % over 'handle' as the main nix entity handle and 'related_handle' as a 
         % second nix entity handle related to the first one.
-        % 'objConstrucor' requires the Matlab entity constructor of the expected 
+        % 'objConstructor' requires the Matlab entity constructor of the expected 
         % returned nix Entities.
-        function rdata = fetchObjListByEntity(nixMxFunc, handle, related_handle, objConstructor)
-            currList = nix_mx(nixMxFunc, handle, related_handle);
-            rdata = cell(length(currList), 1);
-            for i = 1:length(currList)
-                rdata{i} = objConstructor(currList{i});
-            end
+        function r = fetchObjListByEntity(nixMxFunc, handle, related_handle, objConstructor)
+            list = nix_mx(nixMxFunc, handle, related_handle);
+            r = nix.Utils.createEntityArray(list, objConstructor);
         end
 
         function r = fetchObj(nixMxFunc, handle, objConstructor)
@@ -101,25 +102,21 @@ classdef Utils
             end
         end
 
-        function rdata = filter(obj, filter, val, mxMethod, objConstructor)
+        function r = filter(obj, filter, val, mxMethod, objConstructor)
             valid = nix.Utils.valid_filter(filter, val);
             if (~isempty(valid))
                 error(valid);
             end
 
-            currList = nix_mx(mxMethod, obj.nix_handle, uint8(filter), val);
-            rdata = cell(length(currList), 1);
-            for i = 1:length(currList)
-                rdata{i} = objConstructor(currList{i});
-            end
+            list = nix_mx(mxMethod, obj.nix_handle, uint8(filter), val);
+            r = nix.Utils.createEntityArray(list, objConstructor);
         end
 
         % -----------------------------------------------------------
         % findXXX helper functions
         % -----------------------------------------------------------
 
-        function rdata = find(obj, max_depth, filter, val, ...
-                                                mxMethod, objConstructor)
+        function r = find(obj, max_depth, filter, val, mxMethod, objConstructor)
             if (~isnumeric(max_depth))
                 error('Provide a valid search depth');
             end
@@ -129,13 +126,8 @@ classdef Utils
                 error(valid);
             end
 
-            currList = nix_mx(mxMethod, ...
-                            obj.nix_handle, max_depth, uint8(filter), val);
-
-            rdata = cell(length(currList), 1);
-            for i = 1:length(currList)
-                rdata{i} = objConstructor(currList{i});
-            end
+            list = nix_mx(mxMethod, obj.nix_handle, max_depth, uint8(filter), val);
+            r = nix.Utils.createEntityArray(list, objConstructor);
         end
 
         % -----------------------------------------------------------
