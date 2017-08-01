@@ -65,17 +65,6 @@ classdef Property < nix.NamedEntity
             fname = strcat(obj.alias, '::deleteValues');
             nix_mx(fname, obj.nix_handle);
         end
-
-        % return value 0 means name and id of two properties are
-        % identical, any other value means either name or id differ.
-        function r = compare(obj, property)
-            if (~isa(property, class(obj)))
-               error('Function only supports comparison of Properties.');
-            end
-
-            fname = strcat(obj.alias, '::compare');
-            r = nix_mx(fname, obj.nix_handle, property.nix_handle);
-        end
     end
 
 end
