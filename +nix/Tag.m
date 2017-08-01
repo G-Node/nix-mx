@@ -91,14 +91,9 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % ------------------
 
         function r = add_feature(obj, add_this, link_type)
-            if (isa(add_this, 'nix.DataArray'))
-                addID = add_this.id;
-            else
-                addID = add_this;
-            end
-
+            id = nix.Utils.parseEntityId(add_this, 'nix.DataArray');
             fname = strcat(obj.alias, '::createFeature');
-            h = nix_mx(fname, obj.nix_handle, addID, link_type);
+            h = nix_mx(fname, obj.nix_handle, id, link_type);
             r = nix.Utils.createEntity(h, @nix.Feature);
         end
 

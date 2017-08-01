@@ -10,6 +10,18 @@ classdef Utils
 
     methods(Static)
 
+        function r = parseEntityId(id_or_entity, nixEntity)
+            if (isa(id_or_entity, nixEntity))
+                r = id_or_entity.id;
+            elseif (isa(id_or_entity, 'char'))
+                r = id_or_entity;
+            else
+                err.identifier = 'NIXMX:InvalidArgument';
+                err.message = sprintf('Expected an id, name or %s entity', nixEntity);
+                error(err);
+            end
+        end
+
         function r = createEntity(handle, objConstructor)
             r = {};
             if (handle ~= 0)
@@ -44,13 +56,9 @@ classdef Utils
             r = nix.Utils.createEntity(h, objConstructor);
         end
 
-        function [] = add_entity(obj, add_this, nixEntity, mxMethod)
-            if (isa(add_this, nixEntity))
-                addID = add_this.id;
-            else
-                addID = add_this;
-            end
-            nix_mx(mxMethod, obj.nix_handle, addID);
+        function [] = add_entity(obj, idNameEntity, nixEntity, mxMethod)
+            id = nix.Utils.parseEntityId(idNameEntity, nixEntity);
+            nix_mx(mxMethod, obj.nix_handle, id);
         end
 
         function [] = add_entity_array(obj, add_cell_array, nixEntity, mxMethod)
@@ -70,13 +78,9 @@ classdef Utils
         % Function can be used for both nix delete and remove methods.
         % The first actually removes the entity, the latter
         % removes only the reference to the entity.
-        function r = delete_entity(obj, del, nixEntity, mxMethod)
-            if (isa(del, nixEntity))
-                delID = del.id;
-            else
-                delID = del;
-            end
-            r = nix_mx(mxMethod, obj.nix_handle, delID);
+        function r = delete_entity(obj, idNameEntity, nixEntity, mxMethod)
+            id = nix.Utils.parseEntityId(idNameEntity, nixEntity);
+            r = nix_mx(mxMethod, obj.nix_handle, id);
         end
 
         function r = open_entity(obj, mxMethod, id_or_name, objConstructor)

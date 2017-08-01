@@ -142,15 +142,13 @@ classdef Section < nix.NamedEntity
 
         function r = delete_property(obj, del)
             if (isstruct(del) && isfield(del, 'id'))
-                delID = del.id;
-            elseif (isa(del, 'nix.Property'))
-                delID = del.id;
+                id = del.id;
             else
-                delID = del;
+                id = nix.Utils.parseEntityId(del, 'nix.Property');
             end
 
             fname = strcat(obj.alias, '::deleteProperty');
-            r = nix_mx(fname, obj.nix_handle, delID);
+            r = nix_mx(fname, obj.nix_handle, id);
         end
 
         function r = open_property(obj, id_or_name)

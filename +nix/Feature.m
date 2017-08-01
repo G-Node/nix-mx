@@ -45,11 +45,9 @@ classdef Feature < nix.Entity
         end
 
         function [] = set_data(obj, setData)
-            if (isa(setData, 'nix.DataArray'))
-                setData = setData.id;
-            end
+            id = nix.Utils.parseEntityId(setData, 'nix.DataArray');
             fname = strcat(obj.alias, '::setData');
-            nix_mx(fname, obj.nix_handle, setData);
+            nix_mx(fname, obj.nix_handle, id);
         end
     end
 
