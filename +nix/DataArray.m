@@ -83,7 +83,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % instead of 0 compared to all other index functions.
             fname = strcat(obj.alias, '::openDimensionIdx');
             dim = nix_mx(fname, obj.nix_handle, idx);
-            switch(dim.dimension_type)
+            switch (dim.dimension_type)
                 case 'set'
                     r = nix.SetDimension(dim.handle);
                 case 'sampled'
@@ -117,21 +117,21 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         %-- If a DataArray has been created as boolean or numeric,
         %-- provide that only values of the proper DataType can be written.
         function [] = write_all(obj, data)
-            if(isinteger(obj.read_all) && isfloat(data))
+            if (isinteger(obj.read_all) && isfloat(data))
                 disp('Warning: Writing Float data to an Integer DataArray');
             end
 
             errorStruct.identifier = 'DataArray:improperDataType';
-            if(islogical(obj.read_all) && ~islogical(data))
+            if (islogical(obj.read_all) && ~islogical(data))
                 errorStruct.message = strcat('Trying to write', ...
                     32, class(data), ' to a logical DataArray.');
                 error(errorStruct);
-            elseif(isnumeric(obj.read_all) && ~isnumeric(data))
+            elseif (isnumeric(obj.read_all) && ~isnumeric(data))
                 errorStruct.message = strcat('Trying to write', ...
                     32, class(data), ' to a ', 32, class(obj.read_all), ...
                     ' DataArray.');
                 error(errorStruct);
-            elseif(ischar(data))
+            elseif (ischar(data))
                 %-- Should actually not be reachable at the moment, 
                 %-- since writing Strings to DataArrays is not supported,
                 %-- but safety first.

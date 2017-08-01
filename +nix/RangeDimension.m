@@ -27,7 +27,7 @@ classdef RangeDimension < nix.Entity
         end
 
         function r = tick_at(obj, index)
-            if index > 0
+            if (index > 0)
                 index = index - 1;
             end
             fname = strcat(obj.alias, '::tickAt');
@@ -40,11 +40,11 @@ classdef RangeDimension < nix.Entity
         end
 
         function r = axis(obj, count, startIndex)
-            if nargin < 3
+            if (nargin < 3)
                 startIndex = 0;
             end
 
-            if(startIndex > 0)
+            if (startIndex > 0)
                 startIndex = startIndex - 1;
             end
 

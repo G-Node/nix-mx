@@ -12,7 +12,7 @@ classdef Dynamic
 
     methods (Static)
         function add_dyn_attr(obj, prop, mode)
-            if nargin < 3
+            if (nargin < 3)
                 mode = 'r'; 
             end
 
@@ -24,7 +24,7 @@ classdef Dynamic
             p.SetMethod = @set_method;
 
             function set_method(obj, val)
-                if strcmp(mode, 'r')
+                if (strcmp(mode, 'r'))
                     ME = MException('MATLAB:class:SetProhibited', sprintf(...
                       'You cannot set the read-only property ''%s'' of %s', ...
                       prop, class(obj)));
@@ -34,7 +34,7 @@ classdef Dynamic
                 if (isempty(val))
                     fname = strcat(obj.alias, '::setNone', upper(prop(1)), prop(2:end));
                     nix_mx(fname, obj.nix_handle, 0);
-                elseif((strcmp(prop, 'units') || strcmp(prop, 'labels')) && (~iscell(val)))
+                elseif ((strcmp(prop, 'units') || strcmp(prop, 'labels')) && (~iscell(val)))
                 %-- BUGFIX: Matlab crashes, if units in Tags and MultiTags
                 %-- or labels of SetDimension are set using anything else than a cell.
                     ME = MException('MATLAB:class:SetProhibited', sprintf(...
@@ -78,7 +78,7 @@ classdef Dynamic
                 val = containers.Map();
                 props = obj.(name);
 
-                for i=1:length(props)
+                for i = 1:length(props)
                     val(props{i}.name) = cell2mat(props{i}.values);
                 end
             end

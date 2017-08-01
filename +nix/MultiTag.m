@@ -89,7 +89,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % ------------------
 
         function r = add_feature(obj, add_this, link_type)
-            if(strcmp(class(add_this), 'nix.DataArray'))
+            if (strcmp(class(add_this), 'nix.DataArray'))
                 addID = add_this.id;
             else
                 addID = add_this;
@@ -175,7 +175,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function [] = set_extents(obj, add_this)
-            if(isempty(add_this))
+            if (isempty(add_this))
                 fname = strcat(obj.alias, '::setNoneExtents');
                 nix_mx(fname, obj.nix_handle, 0);
             else

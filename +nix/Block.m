@@ -91,15 +91,15 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             %-- 1D data arrays created with this function.
             %-- e.g. size([1 2 3]) returns shape [1 3], which would not
             %-- be accepted when trying to add an alias range dimension.
-            if(shape(1) == 1)
+            if (shape(1) == 1)
                 shape(2:size(shape, 2));
             end
 
             errorStruct.identifier = 'Block:unsupportedDataType';
-            if(~isa(datatype, 'nix.DataType'))
+            if (~isa(datatype, 'nix.DataType'))
                 errorStruct.message = 'Please provide a valid nix.DataType';
                 error(errorStruct);
-            elseif(isequal(datatype, nix.DataType.String))
+            elseif (isequal(datatype, nix.DataType.String))
                 errorStruct.message = 'Writing Strings to DataArrays is not supported as of yet.';
                 error(errorStruct);
             else
@@ -115,17 +115,17 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             %-- 1D data arrays created with this function.
             %-- e.g. size([1 2 3]) returns shape [1 3], which would not
             %-- be accepted when trying to add an alias range dimension.
-            if(shape(1) == 1)
+            if (shape(1) == 1)
                 shape = size(data, 2);
             end
 
             errorStruct.identifier = 'Block:unsupportedDataType';
-            if(ischar(data))
+            if (ischar(data))
                 errorStruct.message = 'Writing Strings to DataArrays is not supported as of yet.';
                 error(errorStruct);
-            elseif(islogical(data))
+            elseif (islogical(data))
                 dtype = nix.DataType.Bool;
-            elseif(isnumeric(data))
+            elseif (isnumeric(data))
                 dtype = nix.DataType.Double;
             else
                 errorStruct.message = 'DataType of provided data is not supported.';
@@ -267,7 +267,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
 
         %-- Creating a multitag requires an already existing data array
         function r = create_multi_tag(obj, name, type, add_data_array)
-            if(strcmp(class(add_data_array), 'nix.DataArray'))
+            if (strcmp(class(add_data_array), 'nix.DataArray'))
                 addID = add_data_array.id;
             else
                 addID = add_data_array;

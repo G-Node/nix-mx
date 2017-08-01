@@ -77,7 +77,7 @@ classdef Utils
         function r = open_entity(obj, mxMethod, id_or_name, objConstructor)
             handle = nix_mx(mxMethod, obj.nix_handle, id_or_name);
             r = {};
-            if handle ~= 0
+            if (handle ~= 0)
                 r = objConstructor(handle);
             end
         end

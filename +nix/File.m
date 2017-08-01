@@ -16,7 +16,7 @@ classdef File < nix.Entity
 
     methods
         function obj = File(path, mode)
-            if ~exist('mode', 'var')
+            if (~exist('mode', 'var'))
                 mode = nix.FileMode.ReadWrite; %default to ReadWrite
             end
             h = nix_mx('File::open', path, mode); 
