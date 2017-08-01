@@ -95,13 +95,13 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 shape(2:size(shape, 2));
             end
 
-            errorStruct.identifier = 'Block:unsupportedDataType';
+            err.identifier = 'Block:unsupportedDataType';
             if (~isa(datatype, 'nix.DataType'))
-                errorStruct.message = 'Please provide a valid nix.DataType';
-                error(errorStruct);
+                err.message = 'Please provide a valid nix.DataType';
+                error(err);
             elseif (isequal(datatype, nix.DataType.String))
-                errorStruct.message = 'Writing Strings to DataArrays is not supported as of yet.';
-                error(errorStruct);
+                err.message = 'Writing char/string DataArrays is currently not supported.';
+                error(err);
             else
                 fname = strcat(obj.alias, '::createDataArray');
                 h = nix_mx(fname, obj.nix_handle, name, nixtype, lower(datatype.char), shape);
@@ -119,17 +119,17 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 shape = size(data, 2);
             end
 
-            errorStruct.identifier = 'Block:unsupportedDataType';
+            err.identifier = 'Block:unsupportedDataType';
             if (ischar(data))
-                errorStruct.message = 'Writing Strings to DataArrays is not supported as of yet.';
-                error(errorStruct);
+                err.message = 'Writing char/string DataArrays is currently not supported.';
+                error(err);
             elseif (islogical(data))
                 dtype = nix.DataType.Bool;
             elseif (isnumeric(data))
                 dtype = nix.DataType.Double;
             else
-                errorStruct.message = 'DataType of provided data is not supported.';
-                error(errorStruct);
+                err.message = 'DataType of provided data is not supported.';
+                error(err);
             end
 
             r = obj.create_data_array(name, nixtype, dtype, shape);

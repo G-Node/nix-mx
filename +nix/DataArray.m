@@ -121,27 +121,26 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 disp('Warning: Writing Float data to an Integer DataArray');
             end
 
-            errorStruct.identifier = 'DataArray:improperDataType';
+            err.identifier = 'DataArray:improperDataType';
             if (islogical(obj.read_all) && ~islogical(data))
-                errorStruct.message = strcat('Trying to write', ...
-                    32, class(data), ' to a logical DataArray.');
-                error(errorStruct);
+                m = sprintf('Trying to write %s to a logical DataArray', class(data));
+                err.message = m;
+                error(err);
             elseif (isnumeric(obj.read_all) && ~isnumeric(data))
-                errorStruct.message = strcat('Trying to write', ...
-                    32, class(data), ' to a ', 32, class(obj.read_all), ...
-                    ' DataArray.');
-                error(errorStruct);
+                m = sprintf('Trying to write %s to a %s DataArray', class(data), class(obj.read_all));
+                err.message = m;
+                error(err);
             elseif (ischar(data))
                 %-- Should actually not be reachable at the moment, 
                 %-- since writing Strings to DataArrays is not supported,
                 %-- but safety first.
-                errorStruct.identifier = 'DataArray:unsupportedDataType';
-                errorStruct.message = ('Writing char/string DataArrays is not supported as of yet.');
-                error(errorStruct);
-            else
-                fname = strcat(obj.alias, '::writeAll');
-                nix_mx(fname, obj.nix_handle, nix.Utils.transpose_array(data));
+                err.identifier = 'DataArray:unsupportedDataType';
+                err.message = 'Writing char/string DataArrays is currently not supported.';
+                error(err);
             end
+
+            fname = strcat(obj.alias, '::writeAll');
+            nix_mx(fname, obj.nix_handle, nix.Utils.transpose_array(data));
         end
 
         function r = datatype(obj)
