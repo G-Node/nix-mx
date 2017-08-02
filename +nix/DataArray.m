@@ -43,11 +43,14 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             for i = 1:length(currList)
                 switch currList(i).dtype
                     case 'set'
-                        dimensions{i} = nix.SetDimension(currList(i).dimension);
+                        dimensions{i} = nix.Utils.createEntity(currList(i).dimension, ...
+                            @nix.SetDimension);
                     case 'sample'
-                        dimensions{i} = nix.SampledDimension(currList(i).dimension);
+                        dimensions{i} = nix.Utils.createEntity(currList(i).dimension, ...
+                            @nix.SampledDimension);
                     case 'range'
-                        dimensions{i} = nix.RangeDimension(currList(i).dimension);
+                        dimensions{i} = nix.Utils.createEntity(currList(i).dimension, ...
+                            @nix.RangeDimension);
                     otherwise
                        disp('some dimension type is unknown! skip')
                 end
@@ -57,25 +60,25 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function r = append_set_dimension(obj)
             fname = strcat(obj.alias, '::appendSetDimension');
             h = nix_mx(fname, obj.nix_handle);
-            r = nix.SetDimension(h);
+            r = nix.Utils.createEntity(h, @nix.SetDimension);
         end
 
         function r = append_sampled_dimension(obj, interval)
             fname = strcat(obj.alias, '::appendSampledDimension');
             h = nix_mx(fname, obj.nix_handle, interval);
-            r = nix.SampledDimension(h);
+            r = nix.Utils.createEntity(h, @nix.SampledDimension);
         end
 
         function r = append_range_dimension(obj, ticks)
             fname = strcat(obj.alias, '::appendRangeDimension');
             h = nix_mx(fname, obj.nix_handle, ticks);
-            r = nix.RangeDimension(h);
+            r = nix.Utils.createEntity(h, @nix.RangeDimension);
         end
 
         function r = append_alias_range_dimension(obj)
             fname = strcat(obj.alias, '::appendAliasRangeDimension');
             h = nix_mx(fname, obj.nix_handle);
-            r = nix.RangeDimension(h);
+            r = nix.Utils.createEntity(h, @nix.RangeDimension);
         end
 
         function r = open_dimension_idx(obj, idx)
@@ -85,11 +88,11 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             dim = nix_mx(fname, obj.nix_handle, idx);
             switch (dim.dimension_type)
                 case 'set'
-                    r = nix.SetDimension(dim.handle);
+                    r = nix.Utils.createEntity(dim.handle, @nix.SetDimension);
                 case 'sampled'
-                    r = nix.SampledDimension(dim.handle);
+                    r = nix.Utils.createEntity(dim.handle, @nix.SampledDimension);
                 case 'range'
-                    r = nix.RangeDimension(dim.handle);
+                    r = nix.Utils.createEntity(dim.handle, @nix.RangeDimension);
             end
         end
 

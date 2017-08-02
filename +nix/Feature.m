@@ -41,7 +41,7 @@ classdef Feature < nix.Entity
         function r = open_data(obj)
             fname = strcat(obj.alias, '::openData');
             h = nix_mx(fname, obj.nix_handle);
-            r = nix.DataArray(h);
+            r = nix.Utils.createEntity(h, @nix.DataArray);
         end
 
         function [] = set_data(obj, setData)

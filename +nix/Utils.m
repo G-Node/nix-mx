@@ -32,7 +32,7 @@ classdef Utils
         function r = createEntityArray(list, objConstructor)
             r = cell(length(list), 1);
             for i = 1:length(list)
-                r{i} = objConstructor(list{i});
+                r{i} = nix.Utils.createEntity(list{i}, objConstructor);
             end
         end
 

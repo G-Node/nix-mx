@@ -50,7 +50,7 @@ classdef File < nix.Entity
         function r = create_block(obj, name, type)
             fname = strcat(obj.alias, '::createBlock');
             h = nix_mx(fname, obj.nix_handle, name, type);
-            r = nix.Block(h);
+            r = nix.Utils.createEntity(h, @nix.Block);
         end
 
         function r = block_count(obj)
@@ -90,7 +90,7 @@ classdef File < nix.Entity
         function r = create_section(obj, name, type)
             fname = strcat(obj.alias, '::createSection');
             h = nix_mx(fname, obj.nix_handle, name, type);
-            r = nix.Section(h);
+            r = nix.Utils.createEntity(h, @nix.Section);
         end
 
         function r = section_count(obj)

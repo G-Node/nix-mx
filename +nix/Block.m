@@ -39,7 +39,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         function r = create_group(obj, name, nixtype)
             fname = strcat(obj.alias, '::createGroup');
             h = nix_mx(fname, obj.nix_handle, name, nixtype);
-            r = nix.Group(h);
+            r = nix.Utils.createEntity(h, @nix.Group);
         end
 
         function r = has_group(obj, id_or_name)
@@ -105,7 +105,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             else
                 fname = strcat(obj.alias, '::createDataArray');
                 h = nix_mx(fname, obj.nix_handle, name, nixtype, lower(datatype.char), shape);
-                r = nix.DataArray(h);
+                r = nix.Utils.createEntity(h, @nix.DataArray);
             end
         end
 
@@ -228,7 +228,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         function r = create_tag(obj, name, type, position)
             fname = strcat(obj.alias, '::createTag');
             h = nix_mx(fname, obj.nix_handle, name, type, position);
-            r = nix.Tag(h);
+            r = nix.Utils.createEntity(h, @nix.Tag);
         end
 
         function r = delete_tag(obj, del)

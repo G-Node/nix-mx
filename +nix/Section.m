@@ -64,7 +64,7 @@ classdef Section < nix.NamedEntity
         function r = create_section(obj, name, type)
             fname = strcat(obj.alias, '::createSection');
             h = nix_mx(fname, obj.nix_handle, name, type);
-            r = nix.Section(h);
+            r = nix.Utils.createEntity(h, @nix.Section);
         end
 
         function r = delete_section(obj, del)
@@ -127,7 +127,7 @@ classdef Section < nix.NamedEntity
             else
                 fname = strcat(obj.alias, '::createProperty');
                 h = nix_mx(fname, obj.nix_handle, name, lower(datatype.char));
-                r = nix.Property(h);
+                r = nix.Utils.createEntity(h, @nix.Property);
             end
         end
 
@@ -137,7 +137,7 @@ classdef Section < nix.NamedEntity
             end
             fname = strcat(obj.alias, '::createPropertyWithValue');
             h = nix_mx(fname, obj.nix_handle, name, val);
-            r = nix.Property(h);
+            r = nix.Utils.createEntity(h, @nix.Property);
         end
 
         function r = delete_property(obj, del)
