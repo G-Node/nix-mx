@@ -38,8 +38,7 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = has_source(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasSource');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasSource', id_or_name);
         end
 
         function r = delete_source(obj, del)

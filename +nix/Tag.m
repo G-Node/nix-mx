@@ -43,8 +43,7 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = has_reference(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasReference');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasReference', id_or_name);
         end
 
         function r = remove_reference(obj, del)
@@ -91,8 +90,7 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = has_feature(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasFeature');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasFeature', id_or_name);
         end
 
         function r = remove_feature(obj, del)

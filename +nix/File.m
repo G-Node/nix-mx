@@ -58,8 +58,7 @@ classdef File < nix.Entity
         end
 
         function r = has_block(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasBlock');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasBlock', id_or_name);
         end
 
         function r = open_block(obj, id_or_name)
@@ -93,8 +92,7 @@ classdef File < nix.Entity
         end
 
         function r = has_section(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasSection');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasSection', id_or_name);
         end
 
         function r = open_section(obj, id_or_name)

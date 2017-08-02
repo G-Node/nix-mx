@@ -35,8 +35,7 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = has_data_array(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasDataArray');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasDataArray', id_or_name);
         end
 
         function r = get_data_array(obj, id_or_name)
@@ -76,8 +75,7 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = has_tag(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasTag');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasTag', id_or_name);
         end
 
         function r = get_tag(obj, id_or_name)
@@ -113,8 +111,7 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = has_multi_tag(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasMultiTag');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasMultiTag', id_or_name);
         end
 
         function r = get_multi_tag(obj, id_or_name)

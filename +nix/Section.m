@@ -76,8 +76,7 @@ classdef Section < nix.NamedEntity
         end
 
         function r = has_section(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasSection');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasSection', id_or_name);
         end
 
         function r = section_count(obj)

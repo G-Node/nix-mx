@@ -41,6 +41,11 @@ classdef Utils
             r = nix_mx(mxMethod, obj.nix_handle);
         end
 
+        function r = fetchHasEntity(obj, mxMethodName, identifier)
+            mxMethod = strcat(obj.alias, '::', mxMethodName);
+            r = nix_mx(mxMethod, obj.nix_handle, identifier);
+        end
+
         function r = fetchObjList(obj, mxMethodName, objConstructor)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             list = nix_mx(mxMethod, obj.nix_handle);

@@ -42,8 +42,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = has_group(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasGroup');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasGroup', id_or_name);
         end
 
         function r = get_group(obj, id_or_name)
@@ -129,8 +128,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = has_data_array(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasDataArray');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasDataArray', id_or_name);
         end
 
         function r = delete_data_array(obj, del)
@@ -156,8 +154,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = has_source(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasSource');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasSource', id_or_name);
         end
 
         function r = delete_source(obj, del)
@@ -195,8 +192,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = has_tag(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasTag');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasTag', id_or_name);
         end
 
         function r = open_tag(obj, id_or_name)
@@ -230,8 +226,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = has_multi_tag(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasMultiTag');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasMultiTag', id_or_name);
         end
 
         function r = open_multi_tag(obj, id_or_name)

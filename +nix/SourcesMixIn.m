@@ -26,8 +26,7 @@ classdef SourcesMixIn < handle
         % has_source supports only check by id, not by name
         function r = has_source(obj, id_or_entity)
             has = nix.Utils.parseEntityId(id_or_entity, 'nix.Source');
-            fname = strcat(obj.alias, '::hasSource');
-            r = nix_mx(fname, obj.nix_handle, has);
+            r = nix.Utils.fetchHasEntity(obj, 'hasSource', has);
         end
 
         function [] = add_source(obj, add_this)
