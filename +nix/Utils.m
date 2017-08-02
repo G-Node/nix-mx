@@ -36,8 +36,9 @@ classdef Utils
             end
         end
 
-        function r = fetchObjList(nixMxFunc, handle, objConstructor)
-            list = nix_mx(nixMxFunc, handle);
+        function r = fetchObjList(obj, mxMethodName, objConstructor)
+            mxMethod = strcat(obj.alias, '::', mxMethodName);
+            list = nix_mx(mxMethod, obj.nix_handle);
             r = nix.Utils.createEntityArray(list, objConstructor);
         end
 
@@ -46,22 +47,25 @@ classdef Utils
         % second nix entity handle related to the first one.
         % 'objConstructor' requires the Matlab entity constructor of the expected 
         % returned nix Entities.
-        function r = fetchObjListByEntity(nixMxFunc, handle, related_handle, objConstructor)
-            list = nix_mx(nixMxFunc, handle, related_handle);
+        function r = fetchObjListByEntity(obj, mxMethodName, related_handle, objConstructor)
+            mxMethod = strcat(obj.alias, '::', mxMethodName);
+            list = nix_mx(mxMethod, obj.nix_handle, related_handle);
             r = nix.Utils.createEntityArray(list, objConstructor);
         end
 
-        function r = fetchObj(nixMxFunc, handle, objConstructor)
-            h = nix_mx(nixMxFunc, handle);
+        function r = fetchObj(obj, mxMethodName, objConstructor)
+            mxMethod = strcat(obj.alias, '::', mxMethodName);
+            h = nix_mx(mxMethod, obj.nix_handle);
             r = nix.Utils.createEntity(h, objConstructor);
         end
 
-        function [] = add_entity(obj, idNameEntity, nixEntity, mxMethod)
+        function [] = add_entity(obj, mxMethodName, idNameEntity, nixEntity)
+            mxMethod = strcat(obj.alias, '::', mxMethodName);
             id = nix.Utils.parseEntityId(idNameEntity, nixEntity);
             nix_mx(mxMethod, obj.nix_handle, id);
         end
 
-        function [] = add_entity_array(obj, add_cell_array, nixEntity, mxMethod)
+        function [] = add_entity_array(obj, mxMethodName, add_cell_array, nixEntity)
             if (~iscell(add_cell_array))
                 error('Expected cell array');
             end
@@ -72,18 +76,21 @@ classdef Utils
                 end
                 handle_array{i} = add_cell_array{i}.nix_handle;
             end
+            mxMethod = strcat(obj.alias, '::', mxMethodName);
             nix_mx(mxMethod, obj.nix_handle, handle_array);
         end
 
         % Function can be used for both nix delete and remove methods.
         % The first actually removes the entity, the latter
         % removes only the reference to the entity.
-        function r = delete_entity(obj, idNameEntity, nixEntity, mxMethod)
+        function r = delete_entity(obj, mxMethodName, idNameEntity, nixEntity)
+            mxMethod = strcat(obj.alias, '::', mxMethodName);
             id = nix.Utils.parseEntityId(idNameEntity, nixEntity);
             r = nix_mx(mxMethod, obj.nix_handle, id);
         end
 
-        function r = open_entity(obj, mxMethod, id_or_name, objConstructor)
+        function r = open_entity(obj, mxMethodName, id_or_name, objConstructor)
+            mxMethod = strcat(obj.alias, '::', mxMethodName);
             h = nix_mx(mxMethod, obj.nix_handle, id_or_name);
             r = nix.Utils.createEntity(h, objConstructor);
         end
@@ -107,12 +114,13 @@ classdef Utils
             end
         end
 
-        function r = filter(obj, filter, val, mxMethod, objConstructor)
+        function r = filter(obj, mxMethodName, filter, val, objConstructor)
             valid = nix.Utils.valid_filter(filter, val);
             if (~isempty(valid))
                 error(valid);
             end
 
+            mxMethod = strcat(obj.alias, '::', mxMethodName);
             list = nix_mx(mxMethod, obj.nix_handle, uint8(filter), val);
             r = nix.Utils.createEntityArray(list, objConstructor);
         end
@@ -121,7 +129,7 @@ classdef Utils
         % findXXX helper functions
         % -----------------------------------------------------------
 
-        function r = find(obj, max_depth, filter, val, mxMethod, objConstructor)
+        function r = find(obj, mxMethodName, max_depth, filter, val, objConstructor)
             if (~isnumeric(max_depth))
                 error('Provide a valid search depth');
             end
@@ -131,6 +139,7 @@ classdef Utils
                 error(valid);
             end
 
+            mxMethod = strcat(obj.alias, '::', mxMethodName);
             list = nix_mx(mxMethod, obj.nix_handle, max_depth, uint8(filter), val);
             r = nix.Utils.createEntityArray(list, objConstructor);
         end

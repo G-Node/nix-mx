@@ -18,8 +18,7 @@ classdef MetadataMixIn < handle
 
     methods
         function r = open_metadata(obj)
-            fname = strcat(obj.alias, '::openMetadataSection');
-            r = nix.Utils.fetchObj(fname, obj.nix_handle, @nix.Section);
+            r = nix.Utils.fetchObj(obj, 'openMetadataSection', @nix.Section);
         end
 
         function [] = set_metadata(obj, val)
@@ -27,8 +26,7 @@ classdef MetadataMixIn < handle
                 fname = strcat(obj.alias, '::setNoneMetadata');
                 nix_mx(fname, obj.nix_handle, val);
             else
-                fname = strcat(obj.alias, '::setMetadata');
-                nix.Utils.add_entity(obj, val, 'nix.Section', fname);
+                nix.Utils.add_entity(obj, 'setMetadata', val, 'nix.Section');
             end
         end
     end

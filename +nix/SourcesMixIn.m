@@ -32,33 +32,27 @@ classdef SourcesMixIn < handle
         end
 
         function [] = add_source(obj, add_this)
-            fname = strcat(obj.alias, '::addSource');
-            nix.Utils.add_entity(obj, add_this, 'nix.Source', fname);
+            nix.Utils.add_entity(obj, 'addSource', add_this, 'nix.Source');
         end
 
         function [] = add_sources(obj, add_cell_array)
-            fname = strcat(obj.alias, '::addSources');
-            nix.Utils.add_entity_array(obj, add_cell_array, 'nix.Source', fname);
+            nix.Utils.add_entity_array(obj, 'addSources', add_cell_array, 'nix.Source');
         end
 
         function r = remove_source(obj, del)
-            fname = strcat(obj.alias, '::removeSource');
-            r = nix.Utils.delete_entity(obj, del, 'nix.Source', fname);
+            r = nix.Utils.delete_entity(obj, 'removeSource', del, 'nix.Source');
         end
 
         function r = open_source(obj, id_or_name)
-            fname = strcat(obj.alias, '::openSource');
-            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.Source);
+            r = nix.Utils.open_entity(obj, 'openSource', id_or_name, @nix.Source);
         end
 
         function r = open_source_idx(obj, idx)
-            fname = strcat(obj.alias, '::openSourceIdx');
-            r = nix.Utils.open_entity(obj, fname, idx, @nix.Source);
+            r = nix.Utils.open_entity(obj, 'openSourceIdx', idx, @nix.Source);
         end
 
         function r = filter_sources(obj, filter, val)
-            fname = strcat(obj.alias, '::sourcesFiltered');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.Source);
+            r = nix.Utils.filter(obj, 'sourcesFiltered', filter, val, @nix.Source);
         end
     end
 

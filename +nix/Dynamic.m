@@ -67,9 +67,7 @@ classdef Dynamic
             rel_map.Hidden = true;
 
             function val = get_method(obj)
-                obj.(dataAttr) = nix.Utils.fetchObjList(...
-                    strcat(obj.alias, '::', name), obj.nix_handle, ...
-                    constructor);
+                obj.(dataAttr) = nix.Utils.fetchObjList(obj, name, constructor);
                 val = obj.(dataAttr);
             end
 
