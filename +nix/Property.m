@@ -48,7 +48,9 @@ classdef Property < nix.NamedEntity
                 end
 
                 if (~strcmpi(class(curr), obj.datatype))
-                    error('Values do not match property data type!');
+                    err.identifier = 'NIXMX:InvalidArgument';
+                    err.message = sprintf('Value #%d does not match property data type', i);
+                    error(err);
                 end
             end
 
