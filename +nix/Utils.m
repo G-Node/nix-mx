@@ -77,15 +77,21 @@ classdef Utils
 
         function [] = add_entity_array(obj, mxMethodName, add_cell_array, nixEntity)
             if (~iscell(add_cell_array))
-                error('Expected cell array');
+                err.identifier = 'NIXMX:InvalidArgument';
+                err.message = 'Expected cell array';
+                error(err);
             end
+
             handle_array = cell(1, length(add_cell_array));
             for i = 1:length(add_cell_array)
                 if (~strcmpi(class(add_cell_array{i}), nixEntity))
-                    error(sprintf('Element #%s is not a %s.', num2str(i), nixEntity));
+                    err.identifier = 'NIXMX:InvalidArgument';
+                    err.message = sprintf('Element #%s is not a %s.', num2str(i), nixEntity);
+                    error(err);
                 end
                 handle_array{i} = add_cell_array{i}.nix_handle;
             end
+
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             nix_mx(mxMethod, obj.nix_handle, handle_array);
         end
