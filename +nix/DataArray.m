@@ -123,7 +123,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 disp('Warning: Writing Float data to an Integer DataArray');
             end
 
-            err.identifier = 'DataArray:improperDataType';
+            err.identifier = 'NIXMX:improperDataType';
             if (islogical(obj.read_all) && ~islogical(data))
                 m = sprintf('Trying to write %s to a logical DataArray', class(data));
                 err.message = m;
@@ -136,7 +136,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                 %-- Should actually not be reachable at the moment, 
                 %-- since writing Strings to DataArrays is not supported,
                 %-- but safety first.
-                err.identifier = 'DataArray:unsupportedDataType';
+                err.identifier = 'NIXMX:unsupportedDataType';
                 err.message = 'Writing char/string DataArrays is currently not supported.';
                 error(err);
             end
