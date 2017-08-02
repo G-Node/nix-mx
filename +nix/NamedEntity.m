@@ -25,7 +25,9 @@ classdef NamedEntity < nix.Entity
         % Compares first name and second id, return > 0 if the entity 
         % is larger than the other, 0 if both are equal, and < 0 otherwise.
             if (~isa(obj, class(entity)))
-                error('Only entities of the same class can be compared.');
+                err.identifier = 'NIXMX:InvalidArgument';
+                err.message = 'Only entities of the same class can be compared.';
+                error(err);
             end
             fname = strcat(obj.alias, '::compare');
             r = nix_mx(fname, obj.nix_handle, entity.nix_handle);
