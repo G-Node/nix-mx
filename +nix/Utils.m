@@ -109,26 +109,24 @@ classdef Utils
         % nix.Filter helper functions
         % -----------------------------------------------------------
 
-        function err = valid_filter(filter, val)
-            err = '';
+        function [] = valid_filter(filter, val)
             if (~isa(filter, 'nix.Filter'))
-                err = 'Valid nix.Filter required';
-                return
+                err.identifier = 'NIXMX:InvalidArgument';
+                err.message = 'Valid nix.Filter required';
+                error(err);
             end
 
             % Currently matlab will crash, if anything other than
             % a cell array is handed over to a nix.Filter.ids.
             if (filter == nix.Filter.ids && ~iscell(val))
-                err = 'nix.Filter.ids requires a cell array';
-                return
+                err.identifier = 'NIXMX:InvalidArgument';
+                err.message = 'nix.Filter.ids requires a cell array';
+                error(err)
             end
         end
 
         function r = filter(obj, mxMethodName, filter, val, objConstructor)
-            valid = nix.Utils.valid_filter(filter, val);
-            if (~isempty(valid))
-                error(valid);
-            end
+            nix.Utils.valid_filter(filter, val);
 
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             list = nix_mx(mxMethod, obj.nix_handle, uint8(filter), val);
@@ -141,13 +139,12 @@ classdef Utils
 
         function r = find(obj, mxMethodName, max_depth, filter, val, objConstructor)
             if (~isnumeric(max_depth))
-                error('Provide a valid search depth');
+                err.identifier = 'NIXMX:InvalidArgument';
+                err.message = 'Provide a valid search depth';
+                error(err);
             end
 
-            valid = nix.Utils.valid_filter(filter, val);
-            if (~isempty(valid))
-                error(valid);
-            end
+            nix.Utils.valid_filter(filter, val);
 
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             list = nix_mx(mxMethod, obj.nix_handle, max_depth, uint8(filter), val);
