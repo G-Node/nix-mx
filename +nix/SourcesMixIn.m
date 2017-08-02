@@ -20,8 +20,7 @@ classdef SourcesMixIn < handle
         end
 
         function r = source_count(obj)
-            fname = strcat(obj.alias, '::sourceCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'sourceCount');
         end
 
         % has_source supports only check by id, not by name

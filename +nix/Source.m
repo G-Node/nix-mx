@@ -28,8 +28,7 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
         % ------------------
 
         function r = source_count(obj)
-            fname = strcat(obj.alias, '::sourceCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'sourceCount');
         end
 
         function r = create_source(obj, name, type)

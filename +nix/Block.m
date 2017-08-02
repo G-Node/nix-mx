@@ -32,8 +32,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % -----------------
 
         function r = group_count(obj)
-            fname = strcat(obj.alias, '::groupCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'groupCount');
         end
 
         function r = create_group(obj, name, nixtype)
@@ -68,8 +67,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % -----------------
 
         function r = data_array_count(obj)
-            fname = strcat(obj.alias, '::dataArrayCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'dataArrayCount');
         end
 
         function r = data_array(obj, id_or_name)
@@ -148,8 +146,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % -----------------
 
         function r = source_count(obj)
-            fname = strcat(obj.alias, '::sourceCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'sourceCount');
         end
 
         function r = create_source(obj, name, type)
@@ -194,8 +191,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % -----------------
 
         function r = tag_count(obj)
-            fname = strcat(obj.alias, '::tagCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'tagCount');
         end
 
         function r = has_tag(obj, id_or_name)
@@ -230,8 +226,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % -----------------
 
         function r = multi_tag_count(obj)
-            fname = strcat(obj.alias, '::multiTagCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'multiTagCount');
         end
 
         function r = has_multi_tag(obj, id_or_name)

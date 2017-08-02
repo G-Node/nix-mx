@@ -31,8 +31,7 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % -----------------
 
         function r = data_array_count(obj)
-            fname = strcat(obj.alias, '::dataArrayCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'dataArrayCount');
         end
 
         function r = has_data_array(obj, id_or_name)
@@ -94,8 +93,7 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = tag_count(obj)
-            fname = strcat(obj.alias, '::tagCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'tagCount');
         end
 
         function r = filter_tags(obj, filter, val)
@@ -132,8 +130,7 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = multi_tag_count(obj)
-            fname = strcat(obj.alias, '::multiTagCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'multiTagCount');
         end
 
         function r = filter_multi_tags(obj, filter, val)

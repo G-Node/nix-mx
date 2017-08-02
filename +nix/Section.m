@@ -81,8 +81,7 @@ classdef Section < nix.NamedEntity
         end
 
         function r = section_count(obj)
-            fname = strcat(obj.alias, '::sectionCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'sectionCount');
         end
 
         function r = filter_sections(obj, filter, val)
@@ -150,8 +149,7 @@ classdef Section < nix.NamedEntity
         end
 
         function r = property_count(obj)
-            fname = strcat(obj.alias, '::propertyCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'propertyCount');
         end
 
         function r = filter_properties(obj, filter, val)

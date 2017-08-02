@@ -102,8 +102,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = dimension_count(obj)
-            fname = strcat(obj.alias, '::dimensionCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'dimensionCount');
         end
 
         % -----------------

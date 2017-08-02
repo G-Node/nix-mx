@@ -36,6 +36,11 @@ classdef Utils
             end
         end
 
+        function r = fetchEntityCount(obj, mxMethodName)
+            mxMethod = strcat(obj.alias, '::', mxMethodName);
+            r = nix_mx(mxMethod, obj.nix_handle);
+        end
+
         function r = fetchObjList(obj, mxMethodName, objConstructor)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             list = nix_mx(mxMethod, obj.nix_handle);

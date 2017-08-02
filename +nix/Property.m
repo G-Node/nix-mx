@@ -57,8 +57,7 @@ classdef Property < nix.NamedEntity
         end
 
         function r = value_count(obj)
-            fname = strcat(obj.alias, '::valueCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'valueCount');
         end
 
         function [] = values_delete(obj)

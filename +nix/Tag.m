@@ -72,8 +72,7 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = reference_count(obj)
-            fname = strcat(obj.alias, '::referenceCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'referenceCount');
         end
 
         function r = filter_references(obj, filter, val)
@@ -121,8 +120,7 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = feature_count(obj)
-            fname = strcat(obj.alias, '::featureCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'featureCount');
         end
 
         function r = filter_features(obj, filter, val)

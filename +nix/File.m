@@ -54,8 +54,7 @@ classdef File < nix.Entity
         end
 
         function r = block_count(obj)
-            fname = strcat(obj.alias, '::blockCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'blockCount');
         end
 
         function r = has_block(obj, id_or_name)
@@ -90,8 +89,7 @@ classdef File < nix.Entity
         end
 
         function r = section_count(obj)
-            fname = strcat(obj.alias, '::sectionCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'sectionCount');
         end
 
         function r = has_section(obj, id_or_name)
