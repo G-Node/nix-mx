@@ -111,7 +111,9 @@ classdef Section < nix.NamedEntity
 
         function r = create_property(obj, name, datatype)
             if (~isa(datatype, 'nix.DataType'))
-                error('Please provide a valid nix.DataType');
+                err.identifier = 'NIXMX:InvalidArgument';
+                err.message = 'Please provide a valid nix.DataType';
+                error(err);
             else
                 fname = strcat(obj.alias, '::createProperty');
                 h = nix_mx(fname, obj.nix_handle, name, lower(datatype.char));
@@ -193,7 +195,9 @@ classdef Section < nix.NamedEntity
                 fname = strcat('referring', fsuffix);
                 r = nix.Utils.fetchObjList(obj, fname, entityConstructor);
             elseif ((size(varargin, 2) > 1) || (~isa(varargin{1}, 'nix.Block')))
-                error('Provide either empty arguments or a single Block entity');
+                err.identifier = 'NIXMX:InvalidArgument';
+                err.message = 'Provide either empty arguments or a single Block entity';
+                error(err);
             else
                 fname = strcat('referringBlock', fsuffix);
                 r = nix.Utils.fetchObjListByEntity(obj, fname, ...
