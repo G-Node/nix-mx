@@ -25,9 +25,8 @@ classdef Dynamic
 
             function set_method(obj, val)
                 if (strcmp(mode, 'r'))
-                    ME = MException('MATLAB:class:SetProhibited', sprintf(...
-                      'You cannot set the read-only property ''%s'' of %s', ...
-                      prop, class(obj)));
+                    msg = 'You cannot set the read-only property ''%s'' of %s';
+                    ME = MException('MATLAB:class:SetProhibited', msg, prop, class(obj));
                     throwAsCaller(ME);
                 end
 
@@ -37,8 +36,8 @@ classdef Dynamic
                 elseif ((strcmp(prop, 'units') || strcmp(prop, 'labels')) && (~iscell(val)))
                 %-- BUGFIX: Matlab crashes, if units in Tags and MultiTags
                 %-- or labels of SetDimension are set using anything else than a cell.
-                    ME = MException('MATLAB:class:SetProhibited', sprintf(...
-                      'This value only supports cells.'));
+                    msg = 'This value only supports cells.';
+                    ME = MException('MATLAB:class:SetProhibited', msg);
                     throwAsCaller(ME);
                 else
                     fname = strcat(obj.alias, '::set', upper(prop(1)), prop(2:end));
