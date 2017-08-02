@@ -86,7 +86,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 shape(2:size(shape, 2));
             end
 
-            err.identifier = 'Block:unsupportedDataType';
+            err.identifier = 'NIXMX:UnsupportedDataType';
             if (~isa(datatype, 'nix.DataType'))
                 err.message = 'Please provide a valid nix.DataType';
                 error(err);
@@ -110,7 +110,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 shape = size(data, 2);
             end
 
-            err.identifier = 'Block:unsupportedDataType';
+            err.identifier = 'NIXMX:UnsupportedDataType';
             if (ischar(data))
                 err.message = 'Writing char/string DataArrays is currently not supported.';
                 error(err);
