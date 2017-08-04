@@ -65,7 +65,7 @@ function [] = test_sample_dimension( varargin )
     assert(d1.samplingInterval == 200);
     assert(isempty(d1.offset));
 
-    axis = d1.axis(10, 0);
+    axis = d1.axis(10, 1);
     assert(axis(1) == 0);
     assert(length(axis) == 10);
     assert(axis(end) == (length(axis) - 1) * d1.samplingInterval);
@@ -80,12 +80,12 @@ function [] = test_sample_dimension( varargin )
     assert(d1.samplingInterval == 325);
     assert(d1.offset == 500);
     
-    axis = d1.axis(10, 0);
+    axis = d1.axis(10, 1);
     assert(axis(1) == d1.offset);
     assert(length(axis) == 10);
     assert(axis(end) == (length(axis) - 1) * d1.samplingInterval + d1.offset);
     
-    assert(d1.position_at(0) == d1.offset);
+    assert(d1.position_at(1) == d1.offset);
     assert(d1.position_at(10) == d1.offset + 9 * d1.samplingInterval);
 
     d1.label = '';
@@ -97,11 +97,11 @@ function [] = test_sample_dimension( varargin )
     assert(d1.samplingInterval == 325);
     assert(d1.offset == 0);
 
-    axis = d1.axis(10, 0);
+    axis = d1.axis(10, 1);
     assert(axis(1) == 0);
     assert(axis(end) == (length(axis) - 1) * d1.samplingInterval + d1.offset);
     
-    assert(d1.position_at(0) == d1.offset);
+    assert(d1.position_at(1) == d1.offset);
     assert(d1.position_at(10) == d1.offset + 9 * d1.samplingInterval);
 end
 
@@ -119,12 +119,12 @@ function [] = test_range_dimension( varargin )
     assert(isempty(d1.unit));
     assert(isequal(d1.ticks, ticks));
 
-    axis = d1.axis(3, 0);
+    axis = d1.axis(3, 1);
     assert(axis(1) == ticks(1));
     assert(length(axis) == 3);
     assert(axis(end) == ticks(length(axis)));
 
-    assert(d1.tick_at(0) == ticks(1));
+    assert(d1.tick_at(1) == ticks(1));
     assert(d1.tick_at(3) == ticks(3));
 
     new_ticks = [5 6 7 8];
