@@ -431,9 +431,9 @@ function [] = test_open_feature_idx( varargin )
     t.add_feature(f2, nix.LinkType.Untagged);
     t.add_feature(f3, nix.LinkType.Indexed);
 
-    assert(f.blocks{1}.multiTags{1}.open_feature_idx(0).linkType == nix.LinkType.Tagged);
-    assert(f.blocks{1}.multiTags{1}.open_feature_idx(1).linkType == nix.LinkType.Untagged);
-    assert(f.blocks{1}.multiTags{1}.open_feature_idx(2).linkType == nix.LinkType.Indexed);
+    assert(f.blocks{1}.multiTags{1}.open_feature_idx(1).linkType == nix.LinkType.Tagged);
+    assert(f.blocks{1}.multiTags{1}.open_feature_idx(2).linkType == nix.LinkType.Untagged);
+    assert(f.blocks{1}.multiTags{1}.open_feature_idx(3).linkType == nix.LinkType.Indexed);
 end
 
 %% Test: Open reference by ID or name
@@ -470,9 +470,9 @@ function [] = test_open_reference_idx( varargin )
     t.add_reference(r2);
     t.add_reference(r3);
 
-    assert(strcmp(f.blocks{1}.multiTags{1}.open_reference_idx(0).name, r1.name));
-    assert(strcmp(f.blocks{1}.multiTags{1}.open_reference_idx(1).name, r2.name));
-    assert(strcmp(f.blocks{1}.multiTags{1}.open_reference_idx(2).name, r3.name));
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_reference_idx(1).name, r1.name));
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_reference_idx(2).name, r2.name));
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_reference_idx(3).name, r3.name));
 end
 
 %% Test: Feature count
@@ -696,7 +696,7 @@ function [] = test_retrieve_data( varargin )
 
     % test invalid reference name
     try
-        t.retrieve_data(0, 'I do not exist');
+        t.retrieve_data(1, 'I do not exist');
     catch ME
         assert(~isempty(strfind(ME.message, 'no DataArray with the specified name or id')), ...
             'Invalid reference name failed');
@@ -704,9 +704,9 @@ function [] = test_retrieve_data( varargin )
     assert(exist('ME') == 1, 'Invalid reference name fail, error not raised');
     clear ME;
  
-    assert(isequal(t.retrieve_data(0, d1.name), raw1(1:1)), 'Retrieve pos 1, ref 1 fail');
-    assert(isequal(t.retrieve_data(1, d1.id), raw1(2, 2:4)), 'Retrieve pos 2, ref 1 fail');
-    assert(isequal(t.retrieve_data(2, d2.id), raw2(1:2, 3:6)), 'Retrieve pos 3, ref 2 fail');
+    assert(isequal(t.retrieve_data(1, d1.name), raw1(1:1)), 'Retrieve pos 1, ref 1 fail');
+    assert(isequal(t.retrieve_data(2, d1.id), raw1(2, 2:4)), 'Retrieve pos 2, ref 1 fail');
+    assert(isequal(t.retrieve_data(3, d2.id), raw2(1:2, 3:6)), 'Retrieve pos 3, ref 2 fail');
 end
 
 %% Test: Retrieve reference data by index
@@ -749,7 +749,7 @@ function [] = test_retrieve_data_idx( varargin )
 
     % test invalid position idx
     try
-        t.retrieve_data_idx(100, 0);
+        t.retrieve_data_idx(100, 1);
     catch ME
         assert(~isempty(strfind(ME.message, 'ounds of positions or extents')), ...
             'Invalid position index failed');
@@ -757,15 +757,15 @@ function [] = test_retrieve_data_idx( varargin )
 
     % test invalid reference idx
     try
-        t.retrieve_data_idx(0, 100);
+        t.retrieve_data_idx(1, 100);
     catch ME
         assert(~isempty(strfind(ME.message, 'out of bounds')), ...
             'Invalid reference index failed');
     end
     
-    assert(isequal(t.retrieve_data_idx(0, 0), raw1(1:1)), 'Retrieve pos 1, ref 1 fail');
-    assert(isequal(t.retrieve_data_idx(1, 0), raw1(2, 2:4)), 'Retrieve pos 2, ref 1 fail');
-    assert(isequal(t.retrieve_data_idx(2, 1), raw2(1:2, 3:6)), 'Retrieve pos 3, ref 2 fail');
+    assert(isequal(t.retrieve_data_idx(1, 1), raw1(1:1)), 'Retrieve pos 1, ref 1 fail');
+    assert(isequal(t.retrieve_data_idx(2, 1), raw1(2, 2:4)), 'Retrieve pos 2, ref 1 fail');
+    assert(isequal(t.retrieve_data_idx(3, 2), raw2(1:2, 3:6)), 'Retrieve pos 3, ref 2 fail');
 end
 
 %% Test: Retrieve feature data by id or name
@@ -817,7 +817,7 @@ function [] = test_retrieve_feature_data( varargin )
 
     % test invalid name or id
     try
-        t.retrieve_feature_data(0, 'I do not exist');
+        t.retrieve_feature_data(1, 'I do not exist');
     catch ME
         assert(~isempty(strfind(ME.message, 'no Feature with the specified name or id')), ...
             'Invalid reference name failed');
@@ -830,25 +830,25 @@ function [] = test_retrieve_feature_data( varargin )
     assert(isequal(raw_feat1, retData), 'Untagged fail');
 
     % test tagged properly applies position and extents
-    retData = t.retrieve_feature_data(0, da_feat2.id);
+    retData = t.retrieve_feature_data(1, da_feat2.id);
     assert(isequal(retData, [21]), 'Tagged pos 1 fail');
 
-    retData = t.retrieve_feature_data(1, da_feat2.name);
+    retData = t.retrieve_feature_data(2, da_feat2.name);
     assert(isequal(retData, [24]), 'Tagged pos 2 fail');
 
-    retData = t.retrieve_feature_data(2, da_feat2.id);
+    retData = t.retrieve_feature_data(3, da_feat2.id);
     assert(isequal(retData, [26, 27, 28]), 'Tagged pos 3 fail');
 
     % test indexed returns first and last index value
-    retData = t.retrieve_feature_data(0, da_feat3.id);
+    retData = t.retrieve_feature_data(1, da_feat3.id);
     assert(isequal(retData, raw_feat3(1)), 'Indexed first pos fail');
     
-    retData = t.retrieve_feature_data(7, da_feat3.name);
+    retData = t.retrieve_feature_data(8, da_feat3.name);
     assert(isequal(retData, raw_feat3(end)), 'Indexed last pos fail');
     
     % test indexed fail when accessing position > length of referenced array
     try
-        t.retrieve_feature_data(size(raw_feat3, 2) + 1, da_feat3.id);
+        t.retrieve_feature_data(size(raw_feat3, 2) + 2, da_feat3.id);
     catch ME
         assert(~isempty(strfind(ME.message, 'than the data stored in the feature')), ...
             'Indexed out of length fail');
@@ -896,9 +896,9 @@ function [] = test_retrieve_feature_data_idx( varargin )
 
     % test invalid position idx
     try
-        t.retrieve_feature_data_idx(100, 1);
+        t.retrieve_feature_data_idx(100, 2);
     catch ME
-        assert(isempty(strfind(ME.message, 'ounds of positions or extents')), ...
+        assert(~isempty(strfind(ME.message, 'ounds of positions')), ...
             'Invalid position index failed');
     end
     assert(exist('ME') == 1, 'Invalid position index fail, error not raised');
@@ -906,7 +906,7 @@ function [] = test_retrieve_feature_data_idx( varargin )
 
     % test invalid feature idx
     try
-        t.retrieve_feature_data_idx(0, 100);
+        t.retrieve_feature_data_idx(1, 100);
     catch ME
         assert(~isempty(strfind(ME.message, 'out of bounds')), ...
             'Invalid reference index failed');
@@ -915,29 +915,29 @@ function [] = test_retrieve_feature_data_idx( varargin )
     clear ME;
 
     % test untagged ignores position and returns full data
-    retData = t.retrieve_feature_data_idx(100, 0);
+    retData = t.retrieve_feature_data_idx(100, 1);
     assert(isequal(raw_feat1, retData), 'Untagged fail');
 
     % test tagged properly applies position and extents
-    retData = t.retrieve_feature_data_idx(0, 1);
+    retData = t.retrieve_feature_data_idx(1, 2);
     assert(isequal(retData, [21]), 'Tagged pos 1 fail');
 
-    retData = t.retrieve_feature_data_idx(1, 1);
+    retData = t.retrieve_feature_data_idx(2, 2);
     assert(isequal(retData, [24]), 'Tagged pos 2 fail');
 
-    retData = t.retrieve_feature_data_idx(2, 1);
+    retData = t.retrieve_feature_data_idx(3, 2);
     assert(isequal(retData, [26, 27, 28]), 'Tagged pos 3 fail');
 
     % test indexed returns first and last index value
-    retData = t.retrieve_feature_data_idx(0, 2);
+    retData = t.retrieve_feature_data_idx(1, 3);
     assert(isequal(retData, raw_feat3(1)), 'Indexed first pos fail');
     
-    retData = t.retrieve_feature_data_idx(7, 2);
+    retData = t.retrieve_feature_data_idx(8, 3);
     assert(isequal(retData, raw_feat3(end)), 'Indexed last pos fail');
     
     % test indexed fail when accessing position > length of referenced array
     try
-        t.retrieve_feature_data_idx(size(raw_feat3, 2) + 1, 2);
+        t.retrieve_feature_data_idx(size(raw_feat3, 2) + 2, 3);
     catch ME
         assert(~isempty(strfind(ME.message, 'than the data stored in the feature')), ...
             'Indexed out of length fail');
