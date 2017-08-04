@@ -82,9 +82,9 @@ function [] = test_open_source_idx( varargin )
     s2 = s.create_source('testSource2', 'nixSource');
     s3 = s.create_source('testSource3', 'nixSource');
 
-    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(0).name, s1.name));
-    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(1).name, s2.name));
-    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(2).name, s3.name));
+    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(1).name, s1.name));
+    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(2).name, s2.name));
+    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(3).name, s3.name));
 end
 
 %% Test: Source count

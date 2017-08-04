@@ -70,7 +70,8 @@ classdef Section < nix.NamedEntity
             r = nix.Utils.open_entity(obj, 'openSection', id_or_name, @nix.Section);
         end
 
-        function r = open_section_idx(obj, idx)
+        function r = open_section_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openSectionIdx', idx, @nix.Section);
         end
 
@@ -144,7 +145,8 @@ classdef Section < nix.NamedEntity
             r = nix.Utils.open_entity(obj, 'openProperty', id_or_name, @nix.Property);
         end
 
-        function r = open_property_idx(obj, idx)
+        function r = open_property_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openPropertyIdx', idx, @nix.Property);
         end
 

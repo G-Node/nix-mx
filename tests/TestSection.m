@@ -106,9 +106,9 @@ function [] = test_open_section_idx( varargin )
     s2 = s.create_section('testSection2', 'nixSection');
     s3 = s.create_section('testSection3', 'nixSection');
 
-    assert(strcmp(f.sections{1}.open_section_idx(0).name, s1.name));
-    assert(strcmp(f.sections{1}.open_section_idx(1).name, s2.name));
-    assert(strcmp(f.sections{1}.open_section_idx(2).name, s3.name));
+    assert(strcmp(f.sections{1}.open_section_idx(1).name, s1.name));
+    assert(strcmp(f.sections{1}.open_section_idx(2).name, s2.name));
+    assert(strcmp(f.sections{1}.open_section_idx(3).name, s3.name));
 end
 
 function [] = test_parent( varargin )
@@ -292,9 +292,9 @@ function [] = test_open_property_idx( varargin )
     p2 = s.create_property('testProperty2', nix.DataType.Bool);
     p3 = s.create_property('testProperty3', nix.DataType.String);
 
-    assert(strcmp(f.sections{1}.open_property_idx(0).name, p1.name));
-    assert(strcmp(f.sections{1}.open_property_idx(1).name, p2.name));
-    assert(strcmp(f.sections{1}.open_property_idx(2).name, p3.name));
+    assert(strcmp(f.sections{1}.open_property_idx(1).name, p1.name));
+    assert(strcmp(f.sections{1}.open_property_idx(2).name, p2.name));
+    assert(strcmp(f.sections{1}.open_property_idx(3).name, p3.name));
 end
 
 %% Test: Property count
