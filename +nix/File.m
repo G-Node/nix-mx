@@ -65,7 +65,8 @@ classdef File < nix.Entity
             r = nix.Utils.open_entity(obj, 'openBlock', id_or_name, @nix.Block);
         end
 
-        function r = open_block_idx(obj, idx)
+        function r = open_block_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openBlockIdx', idx, @nix.Block);
         end
 
@@ -99,7 +100,8 @@ classdef File < nix.Entity
             r = nix.Utils.open_entity(obj, 'openSection', id_or_name, @nix.Section);
         end
 
-        function r = open_section_idx(obj, idx)
+        function r = open_section_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openSectionIdx', idx, @nix.Section);
         end
 
