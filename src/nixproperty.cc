@@ -18,13 +18,12 @@
 namespace nixproperty {
 
     mxArray *describe(const nix::Property &prop) {
-        struct_builder sb({ 1 }, { "id", "name", "definition", "unit", "mapping", "datatype" });
+        struct_builder sb({ 1 }, { "id", "name", "definition", "unit", "datatype" });
 
         sb.set(prop.id());
         sb.set(prop.name());
         sb.set(prop.definition());
         sb.set(prop.unit());
-        sb.set(prop.mapping());
         sb.set(string_nix2mex(prop.dataType()));
 
         return sb.array();

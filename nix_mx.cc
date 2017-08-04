@@ -441,8 +441,6 @@ void mexFunction(int            nlhs,
             .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Property, definition))
             .reg("setUnit", SETTER(const std::string&, nix::Property, unit))
             .reg("setNoneUnit", SETTER(const boost::none_t, nix::Property, unit))
-            .reg("setMapping", SETTER(const std::string&, nix::Property, mapping))
-            .reg("setNoneMapping", SETTER(const boost::none_t, nix::Property, mapping))
             .reg("valueCount", GETTER(nix::ndsize_t, nix::Property, valueCount))
             .reg("setNoneValue", SETTER(const boost::none_t, nix::Property, values));
 
