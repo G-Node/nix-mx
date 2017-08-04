@@ -54,7 +54,8 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             r = nix.Utils.open_entity(obj, 'openReferenceDataArray', id_or_name, @nix.DataArray);
         end
 
-        function r = open_reference_idx(obj, idx)
+        function r = open_reference_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openReferenceIdx', idx, @nix.DataArray);
         end
 
@@ -64,7 +65,8 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             r = nix.Utils.transpose_array(data);
         end
 
-        function r = retrieve_data_idx(obj, idx)
+        function r = retrieve_data_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             fname = strcat(obj.alias, '::retrieveDataIdx');
             data = nix_mx(fname, obj.nix_handle, idx);
             r = nix.Utils.transpose_array(data);
@@ -101,7 +103,8 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             r = nix.Utils.open_entity(obj, 'openFeature', id_or_name, @nix.Feature);
         end
 
-        function r = open_feature_idx(obj, idx)
+        function r = open_feature_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openFeatureIdx', idx, @nix.Feature);
         end
 
@@ -111,7 +114,8 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             r = nix.Utils.transpose_array(data);
         end
 
-        function r = retrieve_feature_data_idx(obj, idx)
+        function r = retrieve_feature_data_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             fname = strcat(obj.alias, '::featureRetrieveDataIdx');
             data = nix_mx(fname, obj.nix_handle, idx);
             r = nix.Utils.transpose_array(data);

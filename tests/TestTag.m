@@ -440,9 +440,9 @@ function [] = test_open_feature_idx( varargin )
     t.add_feature(d2, nix.LinkType.Untagged);
     t.add_feature(d3, nix.LinkType.Indexed);
 
-    assert(f.blocks{1}.tags{1}.open_feature_idx(0).linkType == nix.LinkType.Tagged);
-    assert(f.blocks{1}.tags{1}.open_feature_idx(1).linkType == nix.LinkType.Untagged);
-    assert(f.blocks{1}.tags{1}.open_feature_idx(2).linkType == nix.LinkType.Indexed);
+    assert(f.blocks{1}.tags{1}.open_feature_idx(1).linkType == nix.LinkType.Tagged);
+    assert(f.blocks{1}.tags{1}.open_feature_idx(2).linkType == nix.LinkType.Untagged);
+    assert(f.blocks{1}.tags{1}.open_feature_idx(3).linkType == nix.LinkType.Indexed);
 end
 
 %% Test: Open reference by ID or name
@@ -477,9 +477,9 @@ function [] = test_open_reference_idx( varargin )
     t.add_reference(d2);
     t.add_reference(d3);
 
-    assert(strcmp(f.blocks{1}.tags{1}.open_reference_idx(0).name, d1.name));
-    assert(strcmp(f.blocks{1}.tags{1}.open_reference_idx(1).name, d2.name));
-    assert(strcmp(f.blocks{1}.tags{1}.open_reference_idx(2).name, d3.name));
+    assert(strcmp(f.blocks{1}.tags{1}.open_reference_idx(1).name, d1.name));
+    assert(strcmp(f.blocks{1}.tags{1}.open_reference_idx(2).name, d2.name));
+    assert(strcmp(f.blocks{1}.tags{1}.open_reference_idx(3).name, d3.name));
 end
 
 %% Test: Set metadata
@@ -582,7 +582,7 @@ function [] = test_retrieve_data_idx( varargin )
         assert(~isempty(strfind(ME.message, 'out of bounds')), 'Invalid index failed');
     end
 
-    retData = t.retrieve_data_idx(0);
+    retData = t.retrieve_data_idx(1);
     assert(size(retData, 2) == t.extent, 'Extent check failed');
     assert(retData(1) == raw(t.position + 1), 'Position check failed');
 end
@@ -650,14 +650,14 @@ function [] = test_retrieve_feature_data_idx( varargin )
     df = b.create_data_array_from_data('testUntagged', 'nixDataArray', rawFeature);
     df.append_sampled_dimension(1);
     t.add_feature(df, nix.LinkType.Untagged);
-    retData = t.retrieve_feature_data_idx(0);
+    retData = t.retrieve_feature_data_idx(1);
     assert(size(retData, 2) == size(rawFeature, 2), 'Untagged size check fail');
 
     % test retrieve tagged feature data 
     df = b.create_data_array_from_data('testTagged', 'nixDataArray', rawFeature);
     df.append_sampled_dimension(1);
     t.add_feature(df, nix.LinkType.Tagged);
-    retData = t.retrieve_feature_data_idx(1);
+    retData = t.retrieve_feature_data_idx(2);
     assert(size(retData, 2) == t.extent, 'Tagged Extent check fail');
     assert(retData(1) == rawFeature(t.position + 1), 'Tagged Position check fail');
 
@@ -665,7 +665,7 @@ function [] = test_retrieve_feature_data_idx( varargin )
     df = b.create_data_array_from_data('testIndexed', 'nixDataArray', rawFeature);
     df.append_sampled_dimension(1);
     t.add_feature(df, nix.LinkType.Indexed);
-    retData = t.retrieve_feature_data_idx(2);
+    retData = t.retrieve_feature_data_idx(3);
     assert(size(retData, 2) == size(rawFeature, 2), 'Indexed size check fail');
 
     try
