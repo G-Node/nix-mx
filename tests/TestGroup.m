@@ -802,9 +802,9 @@ function [] = test_open_data_array_idx( varargin )
     g.add_data_array(d2);
     g.add_data_array(d3);
     
-    assert(strcmp(f.blocks{1}.groups{1}.open_data_array_idx(0).name, d1.name));
-    assert(strcmp(f.blocks{1}.groups{1}.open_data_array_idx(1).name, d2.name));
-    assert(strcmp(f.blocks{1}.groups{1}.open_data_array_idx(2).name, d3.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_data_array_idx(1).name, d1.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_data_array_idx(2).name, d2.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_data_array_idx(3).name, d3.name));
 end
 
 function [] = test_open_tag_idx( varargin )
@@ -819,9 +819,9 @@ function [] = test_open_tag_idx( varargin )
     g.add_tag(t2);
     g.add_tag(t3);
 
-    assert(strcmp(f.blocks{1}.groups{1}.open_tag_idx(0).name, t1.name));
-    assert(strcmp(f.blocks{1}.groups{1}.open_tag_idx(1).name, t2.name));
-    assert(strcmp(f.blocks{1}.groups{1}.open_tag_idx(2).name, t3.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_tag_idx(1).name, t1.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_tag_idx(2).name, t2.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_tag_idx(3).name, t3.name));
 end
 
 function [] = test_open_multi_tag_idx( varargin )
@@ -837,9 +837,9 @@ function [] = test_open_multi_tag_idx( varargin )
     g.add_multi_tag(t2);
     g.add_multi_tag(t3);
     
-    assert(strcmp(f.blocks{1}.groups{1}.open_multi_tag_idx(0).name, t1.name));
-    assert(strcmp(f.blocks{1}.groups{1}.open_multi_tag_idx(1).name, t2.name));
-    assert(strcmp(f.blocks{1}.groups{1}.open_multi_tag_idx(2).name, t3.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_multi_tag_idx(1).name, t1.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_multi_tag_idx(2).name, t2.name));
+    assert(strcmp(f.blocks{1}.groups{1}.open_multi_tag_idx(3).name, t3.name));
 end
 
 function [] = test_open_source_idx( varargin )
