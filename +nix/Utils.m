@@ -158,12 +158,25 @@ classdef Utils
         end
 
         % -----------------------------------------------------------
-        % c++ to matlab array functions
+        % c++ vs matlab helper functions
         % -----------------------------------------------------------
 
         function r = transpose_array(data)
         % Data must agree with file & dimensions; see mkarray.cc(42)
             r = permute(data, length(size(data)):-1:1);
+        end
+        
+        function r = handle_index(idx)
+        % Matlab uses 1-based indexing opposed to 0 based indexing in C++.
+        % handle_index transforms a Matlab style index to a C++ style
+        % index and raises the appropriate Matlab error in case of an
+        % invalid subscript.
+            if (idx < 1)
+                err.identifier = 'MATLAB:badsubscript';
+                err.message = 'Subscript indices must either be real positive integers or logicals.';
+                error(err);
+            end
+            r = idx - 1;
         end
     end
 
