@@ -411,8 +411,6 @@ void mexFunction(int            nlhs,
             .reg("setNoneDefinition", SETTER(const boost::none_t, nix::Section, definition))
             .reg("setRepository", SETTER(const std::string&, nix::Section, repository))
             .reg("setNoneRepository", SETTER(const boost::none_t, nix::Section, repository))
-            .reg("setMapping", SETTER(const std::string&, nix::Section, mapping))
-            .reg("setNoneMapping", SETTER(const boost::none_t, nix::Section, mapping))
             .reg("createSection", &nix::Section::createSection)
             .reg("deleteSection", REMOVER(nix::Section, nix::Section, deleteSection))
             .reg("openProperty", GETBYSTR(nix::Property, nix::Section, getProperty))

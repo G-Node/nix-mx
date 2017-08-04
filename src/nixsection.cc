@@ -21,7 +21,7 @@ namespace nixsection {
 
     mxArray *describe(const nix::Section &section) {
         struct_builder sb({ 1 }, { 
-            "name", "id", "type", "definition", "repository", "mapping"
+            "name", "id", "type", "definition", "repository"
         });
 
         sb.set(section.name());
@@ -29,7 +29,6 @@ namespace nixsection {
         sb.set(section.type());
         sb.set(section.definition());
         sb.set(section.repository());
-        sb.set(section.mapping());
 
         return sb.array();
     }

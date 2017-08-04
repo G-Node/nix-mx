@@ -31,7 +31,6 @@ function [] = test_attrs( varargin )
 
     assert(isempty(p.definition));
     assert(isempty(p.unit));
-    assert(isempty(s.mapping));
 
     p.definition = 'property definition';
     p.unit = 'ms';
@@ -49,7 +48,6 @@ function [] = test_attrs( varargin )
     p.mapping = '';
     assert(isempty(p.definition));
     assert(isempty(p.unit));
-    assert(isempty(s.mapping));
 end
 
 %% Test: Access values
