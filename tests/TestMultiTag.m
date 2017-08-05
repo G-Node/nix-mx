@@ -360,9 +360,9 @@ function [] = test_open_source_idx( varargin )
     t.add_source(s2);
     t.add_source(s3);
 
-    assert(strcmp(f.blocks{1}.multiTags{1}.open_source_idx(0).name, s1.name));
-    assert(strcmp(f.blocks{1}.multiTags{1}.open_source_idx(1).name, s2.name));
-    assert(strcmp(f.blocks{1}.multiTags{1}.open_source_idx(2).name, s3.name));
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_source_idx(1).name, s1.name));
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_source_idx(2).name, s2.name));
+    assert(strcmp(f.blocks{1}.multiTags{1}.open_source_idx(3).name, s3.name));
 end
 
 %% Test: has nix.Source by ID or entity

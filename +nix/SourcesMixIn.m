@@ -45,7 +45,8 @@ classdef SourcesMixIn < handle
             r = nix.Utils.open_entity(obj, 'openSource', id_or_name, @nix.Source);
         end
 
-        function r = open_source_idx(obj, idx)
+        function r = open_source_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openSourceIdx', idx, @nix.Source);
         end
 
