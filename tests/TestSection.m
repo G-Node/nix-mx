@@ -753,23 +753,23 @@ function [] = test_find_section
     end
 
     % find all
-    filtered = sl1.find_sections(4);
+    filtered = sl1.find_sections(5);
     assert(size(filtered, 1) == 10);
 
     % find until level 4
-    filtered = sl1.find_sections(3);
+    filtered = sl1.find_sections(4);
     assert(size(filtered, 1) == 10);
 
     % find until level 3
-    filtered = sl1.find_sections(2);
+    filtered = sl1.find_sections(3);
     assert(size(filtered, 1) == 6);
 
     % find until level 2
-    filtered = sl1.find_sections(1);
+    filtered = sl1.find_sections(2);
     assert(size(filtered, 1) == 3);
 
     % find until level 1
-    filtered = sl1.find_sections(0);
+    filtered = sl1.find_sections(1);
     assert(size(filtered, 1) == 1);
 end
 
@@ -797,32 +797,32 @@ function [] = test_find_section_filtered
     side1 = side.create_section(sideName, 'nixSection');
 
     % test find by id
-    filtered = sl1.find_filtered_sections(0, nix.Filter.id, sl41.id);
+    filtered = sl1.find_filtered_sections(1, nix.Filter.id, sl41.id);
     assert(isempty(filtered));
-    filtered = sl1.find_filtered_sections(3, nix.Filter.id, sl41.id);
+    filtered = sl1.find_filtered_sections(4, nix.Filter.id, sl41.id);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, sl41.id));
 
     % test find by ids
     filterids = {sl1.id, sl41.id};
-    filtered = sl1.find_filtered_sections(0, nix.Filter.ids, filterids);
+    filtered = sl1.find_filtered_sections(1, nix.Filter.ids, filterids);
     assert(size(filtered, 1) == 1);
-    filtered = sl1.find_filtered_sections(3, nix.Filter.ids, filterids);
+    filtered = sl1.find_filtered_sections(4, nix.Filter.ids, filterids);
     assert(size(filtered, 1) == 2);
 
     % test find by name
-    filtered = sl1.find_filtered_sections(4, nix.Filter.name, sideName);
+    filtered = sl1.find_filtered_sections(5, nix.Filter.name, sideName);
     assert(isempty(filtered));
-    filtered = sl1.find_filtered_sections(0, nix.Filter.name, sl41.name);
+    filtered = sl1.find_filtered_sections(1, nix.Filter.name, sl41.name);
     assert(isempty(filtered));
-    filtered = sl1.find_filtered_sections(3, nix.Filter.name, sl41.name);
+    filtered = sl1.find_filtered_sections(4, nix.Filter.name, sl41.name);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, sl41.name));
 
     % test find by type
-    filtered = sl1.find_filtered_sections(0, nix.Filter.type, findSection);
+    filtered = sl1.find_filtered_sections(1, nix.Filter.type, findSection);
     assert(isempty(filtered));
-    filtered = sl1.find_filtered_sections(3, nix.Filter.type, findSection);
+    filtered = sl1.find_filtered_sections(4, nix.Filter.type, findSection);
     assert(size(filtered, 1) == 3);
     assert(strcmp(filtered{1}.type, findSection));
 

@@ -95,12 +95,12 @@ classdef Section < nix.NamedEntity
             r = nix.Utils.filter(obj, 'findRelated', filter, val, @nix.Section);
         end
 
-        % maxdepth is an index
+        % maxdepth is handled like an index
         function r = find_sections(obj, max_depth)
             r = obj.find_filtered_sections(max_depth, nix.Filter.accept_all, '');
         end
 
-        % maxdepth is an index
+        % maxdepth is handled like an index
         function r = find_filtered_sections(obj, max_depth, filter, val)
             r = nix.Utils.find(obj, 'findSections', max_depth, filter, val, @nix.Section);
         end

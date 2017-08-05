@@ -152,8 +152,11 @@ classdef Utils
 
             nix.Utils.valid_filter(filter, val);
 
+            % transform matlab to c++ style index
+            md = nix.Utils.handle_index(max_depth);
+
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            list = nix_mx(mxMethod, obj.nix_handle, max_depth, uint8(filter), val);
+            list = nix_mx(mxMethod, obj.nix_handle, md, uint8(filter), val);
             r = nix.Utils.createEntityArray(list, objConstructor);
         end
 
@@ -165,7 +168,7 @@ classdef Utils
         % Data must agree with file & dimensions; see mkarray.cc(42)
             r = permute(data, length(size(data)):-1:1);
         end
-        
+
         function r = handle_index(idx)
         % Matlab uses 1-based indexing opposed to 0 based indexing in C++.
         % handle_index transforms a Matlab style index to a C++ style
