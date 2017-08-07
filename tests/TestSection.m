@@ -41,6 +41,9 @@ function funcs = TestSection
     funcs{end+1} = @test_compare;
     funcs{end+1} = @test_filter_section;
     funcs{end+1} = @test_filter_property;
+    funcs{end+1} = @test_find_section;
+    funcs{end+1} = @test_find_section_filtered;
+    funcs{end+1} = @test_find_related;
 end
 
 %% Test: Create Section
@@ -730,6 +733,188 @@ function [] = test_filter_property( varargin )
     % test fail on nix.Filter.source
     try
         f.sections{1}.filter_properties(nix.Filter.source, 'someSource');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+end
+
+%% Test: Find sections w/o filter
+function [] = test_find_section
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    main = f.create_section('testSection', 'nixSection');
+    sl1 = main.create_section('sectionLvl1', 'nixSection');
+
+    sl21 = sl1.create_section('sectionLvl2_1', 'nixSection');
+    sl22 = sl1.create_section('sectionLvl2_2', 'nixSection');
+
+    sl31 = sl21.create_section('sectionLvl3_1', 'nixSection');
+    sl32 = sl21.create_section('sectionLvl3_2', 'nixSection');
+    sl33 = sl21.create_section('sectionLvl3_3', 'nixSection');
+
+    sl41 = sl31.create_section('sectionLvl4_1', 'nixSection');
+    sl42 = sl31.create_section('sectionLvl4_2', 'nixSection');
+    sl43 = sl31.create_section('sectionLvl4_3', 'nixSection');
+    sl44 = sl31.create_section('sectionLvl4_4', 'nixSection');
+
+    side = f.create_section('sideSection', 'nixSection');
+    side1 = side.create_section('sideSubSection', 'nixSection');
+
+    % Check invalid entry
+    err = 'Provide a valid search depth';
+    try
+        sl1.find_sections('hurra');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % find all
+    filtered = sl1.find_sections(4);
+    assert(size(filtered, 1) == 10);
+
+    % find until level 4
+    filtered = sl1.find_sections(3);
+    assert(size(filtered, 1) == 10);
+
+    % find until level 3
+    filtered = sl1.find_sections(2);
+    assert(size(filtered, 1) == 6);
+
+    % find until level 2
+    filtered = sl1.find_sections(1);
+    assert(size(filtered, 1) == 3);
+
+    % find until level 1
+    filtered = sl1.find_sections(0);
+    assert(size(filtered, 1) == 1);
+end
+
+%% Test: Find sections with filters
+function [] = test_find_section_filtered
+    findSection = 'nixFindSection';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    main = f.create_section('testSection', 'nixSection');
+    sl1 = main.create_section('sectionLvl1', 'nixSection');
+
+    sl21 = sl1.create_section('sectionLvl2_1', 'nixSection');
+    sl22 = sl1.create_section('sectionLvl2_2', findSection);
+
+    sl31 = sl21.create_section('sectionLvl3_1', findSection);
+    sl32 = sl21.create_section('sectionLvl3_2', 'nixSection');
+    sl33 = sl21.create_section('sectionLvl3_3', 'nixSection');
+
+    sl41 = sl31.create_section('sectionLvl4_1', findSection);
+    sl42 = sl31.create_section('sectionLvl4_2', 'nixSection');
+    sl43 = sl31.create_section('sectionLvl4_3', 'nixSection');
+    sl44 = sl31.create_section('sectionLvl4_4', 'nixSection');
+
+    sideName = 'sideSubSection';
+    side = f.create_section('sideSection', 'nixSection');
+    side1 = side.create_section(sideName, 'nixSection');
+
+    % test find by id
+    filtered = sl1.find_filtered_sections(0, nix.Filter.id, sl41.id);
+    assert(isempty(filtered));
+    filtered = sl1.find_filtered_sections(3, nix.Filter.id, sl41.id);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.id, sl41.id));
+
+    % test find by ids
+    filterids = {sl1.id, sl41.id};
+    filtered = sl1.find_filtered_sections(0, nix.Filter.ids, filterids);
+    assert(size(filtered, 1) == 1);
+    filtered = sl1.find_filtered_sections(3, nix.Filter.ids, filterids);
+    assert(size(filtered, 1) == 2);
+
+    % test find by name
+    filtered = sl1.find_filtered_sections(4, nix.Filter.name, sideName);
+    assert(isempty(filtered));
+    filtered = sl1.find_filtered_sections(0, nix.Filter.name, sl41.name);
+    assert(isempty(filtered));
+    filtered = sl1.find_filtered_sections(3, nix.Filter.name, sl41.name);
+    assert(size(filtered, 1) == 1);
+    assert(strcmp(filtered{1}.name, sl41.name));
+
+    % test find by type
+    filtered = sl1.find_filtered_sections(0, nix.Filter.type, findSection);
+    assert(isempty(filtered));
+    filtered = sl1.find_filtered_sections(3, nix.Filter.type, findSection);
+    assert(size(filtered, 1) == 3);
+    assert(strcmp(filtered{1}.type, findSection));
+
+    % test fail on nix.Filter.metadata
+    err = 'unknown or unsupported filter';
+    try
+        sl1.find_filtered_sections(1, nix.Filter.metadata, 'metadata');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test fail on nix.Filter.source
+    try
+        sl1.find_filtered_sections(1, nix.Filter.source, 'source');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+end
+
+%% Test: Find sections related to the current section
+function [] = test_find_related
+    findSectionType = 'nixFindSection';
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    main = f.create_section('testSection', 'nixSection');
+    sl1 = main.create_section('sectionLvl1', 'nixSection');
+
+    sl21 = sl1.create_section('sectionLvl2_1', findSectionType);
+    sl22 = sl1.create_section('sectionLvl2_2', findSectionType);
+
+    sl31 = sl21.create_section('sectionLvl3_1', findSectionType);
+    sl32 = sl21.create_section('sectionLvl3_2', 'nixSection');
+    sl33 = sl21.create_section('sectionLvl3_3', 'nixSection');
+
+    sl41 = sl31.create_section('sectionLvl4_1', findSectionType);
+    sl42 = sl31.create_section('sectionLvl4_2', findSectionType);
+    sl43 = sl31.create_section('sectionLvl4_3', 'nixSection');
+    sl44 = sl31.create_section('sectionLvl4_4', 'nixSection');
+
+    sideName = 'sideSubSection';
+    side = f.create_section('sideSection', 'nixSection');
+    side1 = side.create_section(sideName, 'nixSection');
+
+    % find first downstream by id
+    rel = sl21.find_related(nix.Filter.id, sl44.id);
+    assert(size(rel, 1) == 1);
+
+    % find first updstream by ids
+    rel = sl33.find_related(nix.Filter.ids, {sl21.id, sl1.id});
+    assert(size(rel, 1) == 1);
+
+    % find first downstream by name, one occurrence
+    rel = sl21.find_related(nix.Filter.name, 'sectionLvl4_4');
+    assert(size(rel, 1) == 1);
+
+    % find first downstream by type, one occurrence
+    rel = sl21.find_related(nix.Filter.type, findSectionType);
+    assert(size(rel, 1) == 1);
+
+    % find first downstream by type, multiple occurrences
+    rel = sl31.find_related(nix.Filter.type, findSectionType);
+    assert(size(rel, 1) == 2);
+
+    % find first upstream by name, one occurrence
+    rel = sl31.find_related(nix.Filter.name, 'sectionLvl2_1');
+    assert(size(rel, 1) == 1);
+
+    % test fail on nix.Filter.metadata
+    err = 'unknown or unsupported filter';
+    try
+        sl1.find_related(nix.Filter.metadata, 'metadata');
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
+
+    % test fail on nix.Filter.source
+    try
+        sl1.find_related(nix.Filter.source, 'source');
     catch ME
         assert(strcmp(ME.message, err));
     end

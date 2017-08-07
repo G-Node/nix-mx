@@ -142,4 +142,26 @@ namespace nixsection {
         output.set(0, res);
     }
 
+    void findSections(const extractor &input, infusor &output) {
+        nix::Section currObj = input.entity<nix::Section>(1);
+        size_t max_depth = (size_t)input.num<double>(2);
+        uint8_t filter_id = input.num<uint8_t>(3);
+
+        std::vector<nix::Section> res = filterNameTypeEntity<nix::Section>(input, filter_id, 4, max_depth,
+            [currObj](const nix::util::Filter<nix::Section>::type &filter, size_t &md) {
+                return currObj.findSections(filter, md);
+        });
+
+        output.set(0, res);
+    }
+
+    void findRelated(const extractor &input, infusor &output) {
+        nix::Section currObj = input.entity<nix::Section>(1);
+        std::vector<nix::Section> res = filterNameTypeEntity<nix::Section>(input,
+                                            [currObj](const nix::util::Filter<nix::Section>::type &filter) {
+            return currObj.findRelated(filter);
+        });
+        output.set(0, res);
+    }
+
 } // namespace nixsection

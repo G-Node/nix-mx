@@ -184,6 +184,17 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 'Block::sourcesFiltered', @nix.Source);
         end
 
+        % maxdepth is an index
+        function sec = find_sources(obj, max_depth)
+            sec = obj.find_filtered_sources(max_depth, nix.Filter.accept_all, '');
+        end
+
+        % maxdepth is an index
+        function sec = find_filtered_sources(obj, max_depth, filter, val)
+            sec = nix.Utils.find(obj, ...
+                max_depth, filter, val, 'Block::findSources', @nix.Source);
+        end
+
         % -----------------
         % Tags methods
         % -----------------
@@ -265,6 +276,6 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             filtered = nix.Utils.filter(obj, filter, val, ...
                 'Block::multiTagsFiltered', @nix.MultiTag);
         end
+    end
 
-    end;
 end

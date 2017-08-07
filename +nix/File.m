@@ -112,6 +112,17 @@ classdef File < nix.Entity
             filtered = nix.Utils.filter(obj, filter, val, ...
                 'File::sectionsFiltered', @nix.Section);
         end
+        
+        % maxdepth is an index
+        function sec = find_sections(obj, max_depth)
+            sec = obj.find_filtered_sections(max_depth, nix.Filter.accept_all, '');
+        end
+        
+        % maxdepth is an index
+        function sec = find_filtered_sections(obj, max_depth, filter, val)
+            sec = nix.Utils.find(obj, ...
+                max_depth, filter, val, 'File::findSections', @nix.Section);
+        end
     end
 
 end

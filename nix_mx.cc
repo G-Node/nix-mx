@@ -123,6 +123,7 @@ void mexFunction(int            nlhs,
         methods->add("File::openSectionIdx", nixfile::openSectionIdx);
         methods->add("File::sectionsFiltered", nixfile::sectionsFiltered);
         methods->add("File::blocksFiltered", nixfile::blocksFiltered);
+        methods->add("File::findSections", nixfile::findSections);
 
         classdef<nix::Block>("Block", methods)
             .desc(&nixblock::describe)
@@ -173,6 +174,7 @@ void mexFunction(int            nlhs,
         methods->add("Block::tagsFiltered", nixblock::tagsFiltered);
         methods->add("Block::multiTagsFiltered", nixblock::multiTagsFiltered);
         methods->add("Block::dataArraysFiltered", nixblock::dataArraysFiltered);
+        methods->add("Block::findSources", nixblock::findSources);
 
         classdef<nix::Group>("Group", methods)
             .desc(&nixgroup::describe)
@@ -285,6 +287,7 @@ void mexFunction(int            nlhs,
         methods->add("Source::openSourceIdx", nixsource::openSourceIdx);
         methods->add("Source::compare", nixsource::compare);
         methods->add("Source::sourcesFiltered", nixsource::sourcesFiltered);
+        methods->add("Source::findSources", nixsource::findSources);
 
         classdef<nix::Tag>("Tag", methods)
             .desc(&nixtag::describe)
@@ -416,6 +419,8 @@ void mexFunction(int            nlhs,
         methods->add("Section::compare", nixsection::compare);
         methods->add("Section::sectionsFiltered", nixsection::sectionsFiltered);
         methods->add("Section::propertiesFiltered", nixsection::propertiesFiltered);
+        methods->add("Section::findSections", nixsection::findSections);
+        methods->add("Section::findRelated", nixsection::findRelated);
 
         classdef<nix::Feature>("Feature", methods)
             .desc(&nixfeature::describe)

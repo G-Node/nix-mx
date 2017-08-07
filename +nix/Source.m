@@ -78,5 +78,18 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
             filtered = nix.Utils.filter(obj, filter, val, ...
                 'Source::sourcesFiltered', @nix.Source);
         end
+
+        % maxdepth is an index where idx = 0 corresponds to the calling
+        % source
+        function sec = find_sources(obj, max_depth)
+            sec = obj.find_filtered_sources(max_depth, nix.Filter.accept_all, '');
+        end
+
+        % maxdepth is an index where idx = 0 corresponds to the calling
+        % source
+        function sec = find_filtered_sources(obj, max_depth, filter, val)
+            sec = nix.Utils.find(obj, ...
+                max_depth, filter, val, 'Source::findSources', @nix.Source);
+        end
     end;
 end

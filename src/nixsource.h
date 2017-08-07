@@ -21,6 +21,8 @@ namespace nixsource {
 
     void sourcesFiltered(const extractor &input, infusor &output);
 
+    void findSources(const extractor &input, infusor &output);
+
 } // namespace nixsource
 
 #endif

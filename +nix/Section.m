@@ -106,6 +106,26 @@ classdef Section < nix.NamedEntity
             filtered = nix.Utils.filter(obj, filter, val, ...
                 'Section::sectionsFiltered', @nix.Section);
         end
+        
+        % find_related returns the nearest occurrence downstream of a
+        % nix.Section matching the filter.
+        % If no section can be found downstream, it will look for the
+        % nearest occurrence upstream of a nix.Section matching the filter.
+        function filtered = find_related(obj, filter, val)
+            filtered = nix.Utils.filter(obj, filter, val, ...
+                'Section::findRelated', @nix.Section);
+        end
+
+        % maxdepth is an index
+        function sec = find_sections(obj, max_depth)
+            sec = obj.find_filtered_sections(max_depth, nix.Filter.accept_all, '');
+        end
+
+        % maxdepth is an index
+        function sec = find_filtered_sections(obj, max_depth, filter, val)
+            sec = nix.Utils.find(obj, ...
+                max_depth, filter, val, 'Section::findSections', @nix.Section);
+        end
 
         % ----------------
         % Property methods
