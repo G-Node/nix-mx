@@ -1,7 +1,7 @@
 About NIX-MX
 -------------
 
-The *NIX-MX* project is an extension to [NIX] (https://github.com/G-Node/nix) and provides Matlab bindings for *NIX*.
+The *NIX-MX* project is an extension to [NIX](https://github.com/G-Node/nix) and provides Matlab bindings for *NIX*.
 
 
 Development Status
@@ -15,8 +15,8 @@ Getting Started (Windows 32/64)
 
 **Quick start packages, Beta-Release 1.1.0**
 
-The [quick start packages] (https://github.com/G-Node/nix-mx/releases) are compiled under Windows 32/64 and contain all dlls, binary and Matlab files required to use NIX-MX with the respective Windows OS.
-The included *NIX* dll is a [stable release 1.3.2 build] (https://github.com/G-Node/nix/releases/tag/1.3.2) . To use the packages, unzip them into a folder of your choice and run the `startup.m` script from the root folder. Do not change the file/folder structure.
+The [quick start packages](https://github.com/G-Node/nix-mx/releases) are compiled under Windows 32/64 and contain all dlls, binary and Matlab files required to use NIX-MX with the respective Windows OS.
+The included *NIX* dll is a [stable release 1.3.2 build](https://github.com/G-Node/nix/releases/tag/1.3.2) . To use the packages, unzip them into a folder of your choice and run the `startup.m` script from the root folder. Do not change the file/folder structure.
 
 The Windows 32 package contains:
 - HDF5 dlls (Release 1.8.14)
