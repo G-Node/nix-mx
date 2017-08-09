@@ -14,12 +14,7 @@ classdef Section < nix.NamedEntity
         % namespace reference for nix-mx functions
         alias = 'Section'
     end;
-    
-    properties(Dependent)
-        allProperties
-        allPropertiesMap
-    end;
-    
+
     methods
         function obj = Section(h)
             obj@nix.NamedEntity(h);
@@ -30,6 +25,7 @@ classdef Section < nix.NamedEntity
             
             % assign relations
             nix.Dynamic.add_dyn_relation(obj, 'sections', @nix.Section);
+            nix.Dynamic.add_dyn_relation(obj, 'properties', @nix.Property);
         end;
 
         function section = parent(obj)
@@ -167,19 +163,6 @@ classdef Section < nix.NamedEntity
         function retObj = open_property_idx(obj, idx)
             retObj = nix.Utils.open_entity(obj, ...
                 'Section::openPropertyIdx', idx, @nix.Property);
-        end;
-
-        function props = get.allProperties(obj)
-            props = nix_mx('Section::properties', obj.nix_handle);
-        end;
-        
-        function p_map = get.allPropertiesMap(obj)
-            p_map = containers.Map();
-            props = obj.allProperties;
-
-            for i=1:length(props)
-                p_map(props{i}.name) = cell2mat(props{i}.values);
-            end
         end;
 
         function c = property_count(obj)

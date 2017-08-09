@@ -91,14 +91,14 @@ function [] = test_update_values( varargin )
     assert(updateDouble.values{1}.value == 2.2);
     
     %-- test remove values from property
-    delValues = s.open_property(s.allProperties{3}.id);
+    delValues = s.properties{3};
     assert(size(delValues.values, 1) == 4);
     delValues.values = {};
     assert(size(delValues.values, 1) == 0);
     clear delValues;
     
     %-- test add new values to empty value property
-    newValues = s.open_property(s.allProperties{3}.id);
+    newValues = s.properties{3};
     newValues.values = [1,2,3,4,5];
     assert(newValues.values{5}.value == 5);
     newValues.values = {};
@@ -110,7 +110,7 @@ function [] = test_update_values( varargin )
     val2 = newValues.values{2};
     updateNewDouble = s.create_property('doubleProperty2', nix.DataType.Double);
     updateNewDouble.values = {val1, val2};
-    assert(s.open_property(s.allProperties{end}.id).values{2}.value == val2.value);
+    assert(s.properties{end}.values{2}.value == val2.value);
 end
 
 %% Test: Value count
@@ -127,7 +127,7 @@ function [] = test_value_count( varargin )
 
     clear p s f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
-    pid = f.sections{1}.allProperties{1}.id;
+    pid = f.sections{1}.properties{1}.id;
     assert(f.sections{1}.open_property(pid).value_count() == 1);
 end
 
@@ -144,7 +144,7 @@ function [] = test_values_delete( varargin )
 
     clear p s f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
-    assert(isempty(f.sections{1}.allProperties{1}.values));
+    assert(isempty(f.sections{1}.properties{1}.values));
 end
 
 %% Test: Compare properties
