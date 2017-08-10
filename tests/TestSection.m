@@ -49,7 +49,7 @@ end
 %% Test: Create Section
 function [] = test_create_section( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.create_section('mainSection', 'nixSection');
+    s = f.createSection('mainSection', 'nixSection');
 
     assert(isempty(s.sections));
     tmp = s.create_section('testSection1', 'nixSection');
@@ -60,7 +60,7 @@ end
 %% Test: Delete Section by entity or ID
 function [] = test_delete_section( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.create_section('mainSection', 'nixSection');
+    s = f.createSection('mainSection', 'nixSection');
     tmp = s.create_section('testSection1', 'nixSection');
     tmp = s.create_section('testSection2', 'nixSection');
 
@@ -101,7 +101,7 @@ end
 function [] = test_open_section_idx( varargin )
 %% Test Open Section by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    s = f.create_section('testSection', 'nixSection');
+    s = f.createSection('testSection', 'nixSection');
     s1 = s.create_section('testSection1', 'nixSection');
     s2 = s.create_section('testSection2', 'nixSection');
     s3 = s.create_section('testSection3', 'nixSection');
@@ -136,7 +136,7 @@ end
 function [] = test_section_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    s = f.create_section('mainSection', 'nixSection');
+    s = f.createSection('mainSection', 'nixSection');
 
     assert(s.section_count() == 0);
     tmp = s.create_section('testSection1', 'nixSection');
@@ -152,7 +152,7 @@ end
 function [] = test_attrs( varargin )
 %% Test: Access Attributes / Links
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    s = f.create_section('foo', 'bar');
+    s = f.createSection('foo', 'bar');
 
     assert(~isempty(s.id));
 
@@ -187,7 +187,7 @@ end
 %% Test: Create property by data type
 function [] = test_create_property( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.create_section('mainSection', 'nixSection');
+    s = f.createSection('mainSection', 'nixSection');
 
     s.create_property('newProperty1', nix.DataType.Double);
     s.create_property('newProperty2', nix.DataType.Bool);
@@ -199,7 +199,7 @@ end
 %% Test: Create property with value
 function [] = test_create_property_with_value( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.create_section('mainSection', 'nixSection');
+    s = f.createSection('mainSection', 'nixSection');
 
     % test create by array
     s.create_property_with_value('doubleProperty1', [5, 6, 7, 8]);
@@ -260,7 +260,7 @@ end
 %% Test: Delete property by entity, propertyStruct, ID and name
 function [] = test_delete_property( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.create_section('mainSection', 'nixSection');
+    s = f.createSection('mainSection', 'nixSection');
     s.create_property('newProperty1', nix.DataType.Double);
     s.create_property('newProperty2', nix.DataType.Bool);
     s.create_property('newProperty3', nix.DataType.String);
@@ -287,7 +287,7 @@ end
 function [] = test_open_property_idx( varargin )
 %% Test Open Propery by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    s = f.create_section('testSection', 'nixSection');
+    s = f.createSection('testSection', 'nixSection');
     p1 = s.create_property('testProperty1', nix.DataType.Double);
     p2 = s.create_property('testProperty2', nix.DataType.Bool);
     p3 = s.create_property('testProperty3', nix.DataType.String);
@@ -301,7 +301,7 @@ end
 function [] = test_property_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    s = f.create_section('mainSection', 'nixSection');
+    s = f.createSection('mainSection', 'nixSection');
 
     assert(s.property_count() == 0);
     tmp = s.create_property('newProperty1', nix.DataType.Double);
@@ -316,9 +316,9 @@ end
 %% Test: set, open and remove section link
 function [] = test_link( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    mainSec = f.create_section('mainSection', 'nixSection');
-    tmp = f.create_section('linkSection1', 'nixSection');
-    tmp = f.create_section('linkSection2', 'nixSection');
+    mainSec = f.createSection('mainSection', 'nixSection');
+    tmp = f.createSection('linkSection1', 'nixSection');
+    tmp = f.createSection('linkSection2', 'nixSection');
     
     assert(isempty(mainSec.openLink));
     mainSec.set_link(f.sections{3}.id);
@@ -333,8 +333,8 @@ end
 %% Test: inherited properties
 function [] = test_inherited_properties( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    s = f.create_section('mainSection', 'nixSection');
-    ls = f.create_section('linkSection', 'nixSection');
+    s = f.createSection('mainSection', 'nixSection');
+    ls = f.createSection('linkSection', 'nixSection');
     
     assert(isempty(s.inherited_properties));
 
@@ -352,11 +352,11 @@ end
 %% Test: referring data arrays
 function [] = test_referring_data_arrays( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b1 = f.create_block('testBlock1', 'nixBlock');
+    b1 = f.createBlock('testBlock1', 'nixBlock');
     d1 = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    b2 = f.create_block('testBlock2', 'nixBlock');
+    b2 = f.createBlock('testBlock2', 'nixBlock');
     d2 = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
-    s = f.create_section('testSection', 'nixSection');
+    s = f.createSection('testSection', 'nixSection');
     
     assert(isempty(s.referring_data_arrays));
 
@@ -377,11 +377,11 @@ function [] = test_referring_block_data_arrays( varargin )
     testName = 'testDataArray1';
 
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b1 = f.create_block('testBlock1', 'nixBlock');
+    b1 = f.createBlock('testBlock1', 'nixBlock');
     d1 = b1.create_data_array(testName, 'nixDataArray', nix.DataType.Double, [1 2]);
-    b2 = f.create_block('testBlock2', 'nixBlock');
+    b2 = f.createBlock('testBlock2', 'nixBlock');
     d2 = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
-    s = f.create_section('testSection', 'nixSection');
+    s = f.createSection('testSection', 'nixSection');
     
     d1.set_metadata(s);
     d2.set_metadata(s);
@@ -409,11 +409,11 @@ end
 %% Test: referring tags
 function [] = test_referring_tags( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b1 = f.create_block('testBlock1', 'nixBlock');
+    b1 = f.createBlock('testBlock1', 'nixBlock');
     t1 = b1.create_tag('testTag1', 'nixTag', [1, 2]);
-    b2 = f.create_block('testBlock2', 'nixBlock');
+    b2 = f.createBlock('testBlock2', 'nixBlock');
     t2 = b2.create_tag('testTag2', 'nixTag', [3, 4]);
-    s = f.create_section('testSection', 'nixSection');
+    s = f.createSection('testSection', 'nixSection');
     
     assert(isempty(s.referring_tags));
 
@@ -434,11 +434,11 @@ function [] = test_referring_block_tags( varargin )
     testName = 'testTag1';
 
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b1 = f.create_block('testBlock1', 'nixBlock');
+    b1 = f.createBlock('testBlock1', 'nixBlock');
     t1 = b1.create_tag(testName, 'nixTag', [1, 2]);
-    b2 = f.create_block('testBlock2', 'nixBlock');
+    b2 = f.createBlock('testBlock2', 'nixBlock');
     t2 = b2.create_tag('testTag2', 'nixTag', [3, 4]);
-    s = f.create_section('testSection', 'nixSection');
+    s = f.createSection('testSection', 'nixSection');
 
     t1.set_metadata(s);
     t2.set_metadata(s);
@@ -466,13 +466,13 @@ end
 %% Test: referring multi tags
 function [] = test_referring_multi_tags( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b1 = f.create_block('testBlock1', 'nixBlock');
+    b1 = f.createBlock('testBlock1', 'nixBlock');
     d = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
     t1 = b1.create_multi_tag('testMultiTag1', 'nixMultiTag', d);
-    b2 = f.create_block('testBlock2', 'nixBlock');
+    b2 = f.createBlock('testBlock2', 'nixBlock');
     d = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
     t2 = b2.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
-    s = f.create_section('testSection', 'nixSection');
+    s = f.createSection('testSection', 'nixSection');
     
     assert(isempty(s.referring_multi_tags));
 
@@ -493,13 +493,13 @@ function [] = test_referring_block_multi_tags( varargin )
     testName = 'testMultiTag1';
 
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b1 = f.create_block('testBlock1', 'nixBlock');
+    b1 = f.createBlock('testBlock1', 'nixBlock');
     d = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
     t1 = b1.create_multi_tag(testName, 'nixMultiTag', d);
-    b2 = f.create_block('testBlock2', 'nixBlock');
+    b2 = f.createBlock('testBlock2', 'nixBlock');
     d = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
     t2 = b2.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
-    s = f.create_section('testSection', 'nixSection');
+    s = f.createSection('testSection', 'nixSection');
 
     t1.set_metadata(s);
     t2.set_metadata(s);
@@ -527,11 +527,11 @@ end
 %% Test: referring sources
 function [] = test_referring_sources( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b1 = f.create_block('testBlock1', 'nixBlock');
+    b1 = f.createBlock('testBlock1', 'nixBlock');
     s1 = b1.create_source('testSource1', 'nixSource');
-    b2 = f.create_block('testBlock2', 'nixBlock');
+    b2 = f.createBlock('testBlock2', 'nixBlock');
     s2 = b2.create_source('testSource2', 'nixSource');
-    s = f.create_section('testSection', 'nixSection');
+    s = f.createSection('testSection', 'nixSection');
     
     assert(isempty(s.referring_sources));
 
@@ -552,11 +552,11 @@ function [] = test_referring_block_sources( varargin )
     testName = 'testSource1';
 
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b1 = f.create_block('testBlock1', 'nixBlock');
+    b1 = f.createBlock('testBlock1', 'nixBlock');
     s1 = b1.create_source(testName, 'nixSource');
-    b2 = f.create_block('testBlock2', 'nixBlock');
+    b2 = f.createBlock('testBlock2', 'nixBlock');
     s2 = b2.create_source('testSource2', 'nixSource');
-    s = f.create_section('testSection', 'nixSection');
+    s = f.createSection('testSection', 'nixSection');
 
     s1.set_metadata(s);
     s2.set_metadata(s);
@@ -584,9 +584,9 @@ end
 %% Test: referring blocks
 function [] = test_referring_blocks( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b1 = f.create_block('testBlock1', 'nixBlock');
-    b2 = f.create_block('testBlock2', 'nixBlock');
-    s = f.create_section('testSection', 'nixSection');
+    b1 = f.createBlock('testBlock1', 'nixBlock');
+    b2 = f.createBlock('testBlock2', 'nixBlock');
+    s = f.createSection('testSection', 'nixSection');
     
     assert(isempty(s.referring_blocks));
 
@@ -603,8 +603,8 @@ end
 function [] = test_compare( varargin )
 %% Test: Compare group entities
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    s1 = f.create_section('testSection1', 'nixSection');
-    s2 = f.create_section('testSection2', 'nixSection');
+    s1 = f.createSection('testSection1', 'nixSection');
+    s2 = f.createSection('testSection2', 'nixSection');
 
     assert(s1.compare(s2) < 0);
     assert(s1.compare(s1) == 0);
@@ -616,7 +616,7 @@ function [] = test_filter_section( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    ms = f.create_section('testSection', 'nixSection');
+    ms = f.createSection('testSection', 'nixSection');
     s = ms.create_section(filterName, 'nixSection');
     filterID = s.id;
 	s = ms.create_section('testSection1', filterType);
@@ -671,7 +671,7 @@ end
 function [] = test_filter_property( varargin )
     filterName = 'filterMe';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    ms = f.create_section('testSection', 'nixSection');
+    ms = f.createSection('testSection', 'nixSection');
     p = ms.create_property(filterName, nix.DataType.Double);
     filterID = p.id;
 	s = ms.create_property('testProperty', nix.DataType.Bool);
@@ -726,7 +726,7 @@ end
 %% Test: Find sections w/o filter
 function [] = test_find_section
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    main = f.create_section('testSection', 'nixSection');
+    main = f.createSection('testSection', 'nixSection');
     sl1 = main.create_section('sectionLvl1', 'nixSection');
 
     sl21 = sl1.create_section('sectionLvl2_1', 'nixSection');
@@ -741,7 +741,7 @@ function [] = test_find_section
     sl43 = sl31.create_section('sectionLvl4_3', 'nixSection');
     sl44 = sl31.create_section('sectionLvl4_4', 'nixSection');
 
-    side = f.create_section('sideSection', 'nixSection');
+    side = f.createSection('sideSection', 'nixSection');
     side1 = side.create_section('sideSubSection', 'nixSection');
 
     % Check invalid entry
@@ -777,7 +777,7 @@ end
 function [] = test_find_section_filtered
     findSection = 'nixFindSection';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    main = f.create_section('testSection', 'nixSection');
+    main = f.createSection('testSection', 'nixSection');
     sl1 = main.create_section('sectionLvl1', 'nixSection');
 
     sl21 = sl1.create_section('sectionLvl2_1', 'nixSection');
@@ -793,7 +793,7 @@ function [] = test_find_section_filtered
     sl44 = sl31.create_section('sectionLvl4_4', 'nixSection');
 
     sideName = 'sideSubSection';
-    side = f.create_section('sideSection', 'nixSection');
+    side = f.createSection('sideSection', 'nixSection');
     side1 = side.create_section(sideName, 'nixSection');
 
     % test find by id
@@ -846,7 +846,7 @@ end
 function [] = test_find_related
     findSectionType = 'nixFindSection';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    main = f.create_section('testSection', 'nixSection');
+    main = f.createSection('testSection', 'nixSection');
     sl1 = main.create_section('sectionLvl1', 'nixSection');
 
     sl21 = sl1.create_section('sectionLvl2_1', findSectionType);
@@ -862,7 +862,7 @@ function [] = test_find_related
     sl44 = sl31.create_section('sectionLvl4_4', 'nixSection');
 
     sideName = 'sideSubSection';
-    side = f.create_section('sideSection', 'nixSection');
+    side = f.createSection('sideSection', 'nixSection');
     side1 = side.create_section(sideName, 'nixSection');
 
     % find first downstream by id

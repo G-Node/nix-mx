@@ -19,7 +19,7 @@ end
 %% Test: Open data from feature
 function [] = test_open_data ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('featureTest', 'nixBlock');
+    b = f.createBlock('featureTest', 'nixBlock');
     tmp = b.create_data_array('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
     getTag = b.create_tag('featureTest', 'nixTag', [1, 2]);
     tmp = getTag.add_feature(b.dataArrays{1}, nix.LinkType.Tagged);
@@ -32,7 +32,7 @@ end
 function [] = test_get_set_link_type ( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.create_block('featureTest', 'nixBlock');
+    b = f.createBlock('featureTest', 'nixBlock');
     da = b.create_data_array('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
     t = b.create_tag('featureTest', 'nixTag', [1, 2]);
     feat = t.add_feature(b.dataArrays{1}, nix.LinkType.Tagged);
@@ -74,7 +74,7 @@ function [] = test_set_data ( varargin )
     daType = 'nixDataArray';
     daData = [1 2 3 4 5 6];
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.create_block('featureTest', 'nixBlock');
+    b = f.createBlock('featureTest', 'nixBlock');
     da1 = b.create_data_array(daName1, daType, nix.DataType.Double, daData);
     da2 = b.create_data_array(daName2, daType, nix.DataType.Double, daData);
     da3 = b.create_data_array(daName3, daType, nix.DataType.Double, daData);

@@ -51,7 +51,7 @@ end
 function [] = test_add_source ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('sourceTest', 'nixBlock');
+    b = f.createBlock('sourceTest', 'nixBlock');
     s = b.create_source('sourceTest', 'nixSource');
     tmp = s.create_source('nestedSource1', 'nixSource');
     tmp = s.create_source('nestedSource2', 'nixSource');
@@ -74,7 +74,7 @@ end
 function [] = test_add_sources ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [1 2]);
     tmp = b.create_source('testSource1', 'nixSource');
     tmp = b.create_source('testSource2', 'nixSource');
@@ -106,13 +106,13 @@ end
 
 %% Test: Remove sources by entity and id
 function [] = test_remove_source ( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.create_block('test', 'nixBlock');
-    getSource = getBlock.create_source('test', 'nixSource');
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('test', 'nixBlock');
+    getSource = b.create_source('test', 'nixSource');
     tmp = getSource.create_source('nestedSource1', 'nixSource');
     tmp = getSource.create_source('nestedSource2', 'nixSource');
     position = [1.0 1.2 1.3 15.9];
-    getTag = getBlock.create_tag('sourcetest', 'nixTag', position);
+    getTag = b.create_tag('sourcetest', 'nixTag', position);
     getTag.add_source(getSource.sources{1}.id);
     getTag.add_source(getSource.sources{2});
 
@@ -129,7 +129,7 @@ end
 function [] = test_add_reference ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('referenceTest', 'nixBlock');
+    b = f.createBlock('referenceTest', 'nixBlock');
     tmp = b.create_data_array('referenceTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
     tmp = b.create_data_array('referenceTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
     
@@ -153,7 +153,7 @@ end
 function [] = test_add_references ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [1 2]);
     tmp = b.create_data_array('referenceTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
     tmp = b.create_data_array('referenceTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
@@ -185,30 +185,30 @@ end
 
 %% Test: Remove references by entity and id
 function [] = test_remove_reference ( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.create_block('referenceTest', 'nixBlock');
-    getRefDA1 = getBlock.create_data_array('referenceTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    getRefDA2 = getBlock.create_data_array('referenceTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('referenceTest', 'nixBlock');
+    getRefDA1 = b.create_data_array('referenceTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    getRefDA2 = b.create_data_array('referenceTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
     
     position = [1.0 1.2 1.3 15.9];
-    getTag = getBlock.create_tag('referenceTest', 'nixTag', position);
-    getTag.add_reference(getBlock.dataArrays{1}.id);
-    getTag.add_reference(getBlock.dataArrays{2});
+    getTag = b.create_tag('referenceTest', 'nixTag', position);
+    getTag.add_reference(b.dataArrays{1}.id);
+    getTag.add_reference(b.dataArrays{2});
     assert(size(getTag.references, 1) == 2);
 
-    getTag.remove_reference(getBlock.dataArrays{2});
+    getTag.remove_reference(b.dataArrays{2});
     assert(size(getTag.references, 1) == 1);
-    getTag.remove_reference(getBlock.dataArrays{1}.id);
+    getTag.remove_reference(b.dataArrays{1}.id);
     assert(isempty(getTag.references));
     assert(~getTag.remove_reference('I do not exist'));
-    assert(size(getBlock.dataArrays, 1) == 2);
+    assert(size(b.dataArrays, 1) == 2);
 end
 
 %% Test: Add features by entity and id
 function [] = test_add_feature ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('featureTest', 'nixBlock');
+    b = f.createBlock('featureTest', 'nixBlock');
     tmp = b.create_data_array('featureTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
     tmp = b.create_data_array('featureTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
     tmp = b.create_data_array('featureTestDataArray3', 'nixDataArray', nix.DataType.Double, [5 6]);
@@ -237,7 +237,7 @@ end
 %% Test: Remove features by entity and id
 function [] = test_remove_feature ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('featureTest', 'nixBlock');
+    b = f.createBlock('featureTest', 'nixBlock');
     tmp = b.create_data_array('featureTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
     tmp = b.create_data_array('featureTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
     position = [1.0 1.2 1.3 15.9];
@@ -255,17 +255,17 @@ end
 
 %% Test: fetch references
 function [] = test_fetch_references( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.create_block('referenceTest', 'nixBlock');
-    tmp = getBlock.create_data_array('referenceTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    tmp = getBlock.create_data_array('referenceTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
-    tmp = getBlock.create_data_array('referenceTest3', 'nixDataArray', nix.DataType.Double, [5 6]);
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('referenceTest', 'nixBlock');
+    tmp = b.create_data_array('referenceTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.create_data_array('referenceTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
+    tmp = b.create_data_array('referenceTest3', 'nixDataArray', nix.DataType.Double, [5 6]);
     position = [1.0 1.2 1.3 15.9];
-    getTag = getBlock.create_tag('referenceTest', 'nixTag', position);
+    getTag = b.create_tag('referenceTest', 'nixTag', position);
     
-    getTag.add_reference(getBlock.dataArrays{1});
-    getTag.add_reference(getBlock.dataArrays{2});
-    getTag.add_reference(getBlock.dataArrays{3});
+    getTag.add_reference(b.dataArrays{1});
+    getTag.add_reference(b.dataArrays{2});
+    getTag.add_reference(b.dataArrays{3});
     assert(size(getTag.references, 1) == 3);
 end
 
@@ -273,7 +273,7 @@ end
 function [] = test_reference_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [1 2]);
 
     assert(t.reference_count() == 0);
@@ -288,14 +288,14 @@ end
 
 %% Test: fetch sources
 function [] = test_fetch_sources( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.create_block('test', 'nixBlock');
-    getSource = getBlock.create_source('test','nixSource');
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('test', 'nixBlock');
+    getSource = b.create_source('test','nixSource');
     tmp = getSource.create_source('nestedsource1', 'nixSource');
     tmp = getSource.create_source('nestedsource2', 'nixSource');
     tmp = getSource.create_source('nestedsource3', 'nixSource');
     position = [1.0 1.2 1.3 15.9];
-    getTag = getBlock.create_tag('tagtest', 'nixTag', position);
+    getTag = b.create_tag('tagtest', 'nixTag', position);
     
     getTag.add_source(getSource.sources{1});
     getTag.add_source(getSource.sources{2});
@@ -306,7 +306,7 @@ end
 %% Test: fetch features
 function [] = test_fetch_features( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('featureTest', 'nixBlock');
+    b = f.createBlock('featureTest', 'nixBlock');
     tmp = b.create_data_array('featureTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
     tmp = b.create_data_array('featureTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
     position = [1.0 1.2 1.3 15.9];
@@ -322,7 +322,7 @@ end
 function [] = test_feature_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [1 2]);
 
     assert(t.feature_count() == 0);
@@ -339,13 +339,13 @@ end
 
 %% Test: Open source by ID or name
 function [] = test_open_source( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.create_block('test', 'nixBlock');
-    getSource = getBlock.create_source('test', 'nixSource');
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('test', 'nixBlock');
+    getSource = b.create_source('test', 'nixSource');
     sourceName = 'nestedsource';
     createSource = getSource.create_source(sourceName, 'nixSource');
     position = [1.0 1.2 1.3 15.9];
-    getTag = getBlock.create_tag('tagtest', 'nixTag', position);
+    getTag = b.create_tag('tagtest', 'nixTag', position);
     getTag.add_source(getSource.sources{1});
 
     getSourceByID = getTag.open_source(createSource.id);
@@ -362,7 +362,7 @@ end
 function [] = test_open_source_idx( varargin )
 %% Test Open Source by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [2 9]);
     s1 = b.create_source('testSource1', 'nixSource');
     s2 = b.create_source('testSource2', 'nixSource');
@@ -380,7 +380,7 @@ end
 function [] = test_has_source( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.create_block('testblock', 'nixBlock');
+    b = f.createBlock('testblock', 'nixBlock');
     s = b.create_source('sourceTest1', 'nixSource');
     sID = s.id;
     position = [1.0 1.2 1.3 15.9];
@@ -399,7 +399,7 @@ end
 function [] = test_source_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [1.0 1.2]);
 
     assert(t.source_count() == 0);
@@ -415,7 +415,7 @@ end
 %% Test: Open feature by ID
 function [] = test_open_feature( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('featureTest', 'nixBlock');
+    b = f.createBlock('featureTest', 'nixBlock');
     tmp = b.create_data_array('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     position = [1.0 1.2 1.3 15.9];
     getTag = b.create_tag('featureTest', 'nixTag', position);
@@ -431,7 +431,7 @@ end
 function [] = test_open_feature_idx( varargin )
 %% Test Open feature by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [2 9]);
     d1 = b.create_data_array('testFeature1', 'nixDataArray', nix.DataType.Double, [1 2]);
     d2 = b.create_data_array('testFeature2', 'nixDataArray', nix.DataType.Double, [3 2]);
@@ -447,12 +447,12 @@ end
 
 %% Test: Open reference by ID or name
 function [] = test_open_reference( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.create_block('referenceTest', 'nixBlock');
-    tmp = getBlock.create_data_array('referenceTest', 'nixDataArray', nix.DataType.Double, [1 2]);
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('referenceTest', 'nixBlock');
+    tmp = b.create_data_array('referenceTest', 'nixDataArray', nix.DataType.Double, [1 2]);
     position = [1.0 1.2 1.3 15.9];
-    getTag = getBlock.create_tag('referenceTest', 'nixTag', position);
-    getTag.add_reference(getBlock.dataArrays{1});
+    getTag = b.create_tag('referenceTest', 'nixTag', position);
+    getTag.add_reference(b.dataArrays{1});
 
     getRefByID = getTag.open_reference(getTag.references{1,1}.id);
     assert(~isempty(getRefByID));
@@ -468,7 +468,7 @@ end
 function [] = test_open_reference_idx( varargin )
 %% Test Open reference by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [2 9]);
     d1 = b.create_data_array('testReference1', 'nixDataArray', nix.DataType.Double, [1 2]);
     d2 = b.create_data_array('testReference2', 'nixDataArray', nix.DataType.Double, [3 2]);
@@ -488,10 +488,10 @@ function [] = test_set_metadata ( varargin )
     secName1 = 'testSection1';
     secName2 = 'testSection2';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    tmp = f.create_section(secName1, 'nixSection');
-    tmp = f.create_section(secName2, 'nixSection');
+    tmp = f.createSection(secName1, 'nixSection');
+    tmp = f.createSection(secName2, 'nixSection');
 
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [1, 2, 3, 4]);
 
     assert(isempty(t.open_metadata));
@@ -518,8 +518,8 @@ end
 %% Test: Open metadata
 function [] = test_open_metadata( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    tmp = f.create_section('testSection', 'nixSection');
-    b = f.create_block('testBlock', 'nixBlock');
+    tmp = f.createSection('testSection', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [1, 2, 3, 4]);
 
     t.set_metadata(f.sections{1});
@@ -529,7 +529,7 @@ end
 %% Test: Retrieve referenced data by name and id
 function [] = test_retrieve_data( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     tagStartPos = [3];
     t = b.create_tag('testTag', 'nixTag', tagStartPos);
     t.extent = [3];
@@ -566,7 +566,7 @@ end
 %% Test: Retrieve referenced data by index
 function [] = test_retrieve_data_idx( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     raw = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     d = b.create_data_array_from_data('testDataArray', 'nixDataArray', raw);
     d.append_sampled_dimension(1);
@@ -590,7 +590,7 @@ end
 %% Test: Retrieve feature data by name and id
 function [] = test_retrieve_feature_data( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     raw = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     d = b.create_data_array_from_data('testDataArray', 'nixDataArray', raw);
     d.append_sampled_dimension(1);
@@ -635,7 +635,7 @@ end
 %% Test: Retrieve feature data by index
 function [] = test_retrieve_feature_data_idx( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     raw = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     d = b.create_data_array_from_data('testDataArray', 'nixDataArray', raw);
     d.append_sampled_dimension(1);
@@ -679,7 +679,7 @@ end
 function [] = test_attrs( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     pos = [1, 2, 3, 4];
     t1 = b.create_tag('testTag', 'nixTag', pos);
 
@@ -744,7 +744,7 @@ end
 function [] = test_has_feature( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.create_block('featureTest', 'nixBlock');
+    b = f.createBlock('featureTest', 'nixBlock');
     da = b.create_data_array('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     t = b.create_tag('featureTest', 'nixTag', [1.0 1.2 1.3 15.9]);
     feature = t.add_feature(b.dataArrays{1}, nix.LinkType.Tagged);
@@ -763,7 +763,7 @@ function [] = test_has_reference( varargin )
     fileName = 'testRW.h5';
     daName = 'referenceTest';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.create_block('referenceTest', 'nixBlock');
+    b = f.createBlock('referenceTest', 'nixBlock');
     da = b.create_data_array(daName, 'nixDataArray', nix.DataType.Double, [1 2]);
     t = b.create_tag('referenceTest', 'nixTag', [1.0 1.2 1.3 15.9]);
     t.add_reference(b.dataArrays{1});
@@ -779,8 +779,8 @@ end
 function [] = test_compare( varargin )
 %% Test: Compare Tag entities
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b1 = f.create_block('testBlock1', 'nixBlock');
-    b2 = f.create_block('testBlock2', 'nixBlock');
+    b1 = f.createBlock('testBlock1', 'nixBlock');
+    b2 = f.createBlock('testBlock2', 'nixBlock');
     t1 = b1.create_tag('testTag1', 'nixTag', [1 2 3]);
     t2 = b1.create_tag('testTag2', 'nixTag', [1 2 3]);
     t3 = b2.create_tag('testTag1', 'nixTag', [1 2 3]);
@@ -796,7 +796,7 @@ function [] = test_filter_source( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [1 2 3]);
     s = b.create_source(filterName, 'nixSource');
     t.add_source(s);
@@ -838,7 +838,7 @@ function [] = test_filter_source( varargin )
     mainSource = b.create_source(mainName, 'nixSource');
     t.add_source(mainSource);
     subName = 'testSubSection1';
-    s = f.create_section(subName, 'nixSection');
+    s = f.createSection(subName, 'nixSection');
     mainSource.set_metadata(s);
     subID = s.id;
 
@@ -871,7 +871,7 @@ function [] = test_filter_reference( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [1 2 3]);
     d = b.create_data_array(filterName, 'nixDataArray', nix.DataType.Double, [1 2]);
     t.add_reference(d);
@@ -913,7 +913,7 @@ function [] = test_filter_reference( varargin )
     main = b.create_data_array(mainName, 'nixDataArray', nix.DataType.Bool, [2 2]);
     t.add_reference(main);
     subName = 'testSubSection1';
-    s = f.create_section(subName, 'nixSection');
+    s = f.createSection(subName, 'nixSection');
     main.set_metadata(s);
     subID = s.id;
 
@@ -943,7 +943,7 @@ end
 %% Test: filter features
 function [] = test_filter_feature( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     t = b.create_tag('testTag', 'nixTag', [1 2 3]);
     d = b.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
     feat = t.add_feature(d, nix.LinkType.Tagged);

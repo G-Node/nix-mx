@@ -22,7 +22,7 @@ end
 %% Test: Access Attributes
 function [] = test_attrs( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    s = f.create_section('testSectionProperty', 'nixSection');
+    s = f.createSection('testSectionProperty', 'nixSection');
     p = s.create_property('testProperty1', nix.DataType.String);
 
     assert(~isempty(p.id));
@@ -49,7 +49,7 @@ end
 %% Test: Access values
 function [] = test_values( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.create_section('mainSection', 'nixSection');
+    s = f.createSection('mainSection', 'nixSection');
     currProp = s.create_property_with_value('booleanProperty', {true, false, true});
 
     assert(size(currProp.values, 1) == 3);
@@ -60,7 +60,7 @@ end
 %% Test: Update values and uncertainty
 function [] = test_update_values( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
-    s = f.create_section('mainSection', 'nixSection');
+    s = f.createSection('mainSection', 'nixSection');
 
     %-- test update boolean
     updateBool = s.create_property_with_value('booleanProperty', {true, false, true});
@@ -112,7 +112,7 @@ end
 function [] = test_value_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    s = f.create_section('testSection', 'nixSection');
+    s = f.createSection('testSection', 'nixSection');
     p = s.create_property_with_value('booleanProperty', {true, false, true});
 
     assert(p.value_count() == 3);
@@ -129,7 +129,7 @@ end
 function [] = test_values_delete( varargin )
     testFile = fullfile(pwd,'tests','testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    s = f.create_section('testSection', 'nixSection');
+    s = f.createSection('testSection', 'nixSection');
 
     p = s.create_property_with_value('property1', {true, false, true});
     assert(~isempty(p.values));
@@ -145,8 +145,8 @@ end
 function [] = test_property_compare( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    s1 = f.create_section('testSection1', 'nixSection');
-    s2 = f.create_section('testSection2', 'nixSection');
+    s1 = f.createSection('testSection1', 'nixSection');
+    s2 = f.createSection('testSection2', 'nixSection');
 
     p = s1.create_property_with_value('property', {true, false, true});
 

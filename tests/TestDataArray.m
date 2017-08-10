@@ -39,7 +39,7 @@ end
 function [] = test_attrs( varargin )
 %% Test: Access Attributes
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('daTestBlock', 'test nixBlock');
+    b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.create_data_array('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
 
     assert(~isempty(da.id));
@@ -91,7 +91,7 @@ function [] = test_open_data( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     daType = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nix.Block');
+    b = f.createBlock('testBlock', 'nix.Block');
 
     da = b.create_data_array('logicalArray', daType, nix.DataType.Bool, [3 3]);
     assert(islogical(da.read_all));
@@ -123,10 +123,10 @@ function [] = test_set_metadata ( varargin )
     secName1 = 'testSection1';
     secName2 = 'testSection2';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    tmp = f.create_section(secName1, 'nixSection');
-    tmp = f.create_section(secName2, 'nixSection');
+    tmp = f.createSection(secName1, 'nixSection');
+    tmp = f.createSection(secName2, 'nixSection');
 
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
 
     assert(isempty(da.open_metadata));
@@ -153,8 +153,8 @@ end
 %% Test: Open metadata
 function [] = test_open_metadata( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    tmp = f.create_section('testSection', 'nixSection');
-    b = f.create_block('testBlock', 'nixBlock');
+    tmp = f.createSection('testSection', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
     da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     da.set_metadata(f.sections{1});
 
@@ -176,7 +176,7 @@ function [] = test_write_data_double( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('testDataArray', 'nixblock');
+    b = f.createBlock('testDataArray', 'nixblock');
 
     numData = [1 2 3 4 5];
     logData = logical([1 0 1 0 1]);
@@ -213,7 +213,7 @@ function [] = test_write_data_logical( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('testDataArray', 'nixblock');
+    b = f.createBlock('testDataArray', 'nixblock');
 
     logData = logical([1 0 1 0 1]);
     numData = [1 2 3 4 5];
@@ -243,7 +243,7 @@ function [] = test_write_data_float( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('testDataArray', 'nixblock');
+    b = f.createBlock('testDataArray', 'nixblock');
 
     numData = [1.3 2.4143 3.9878 4.1239 5];
     
@@ -261,7 +261,7 @@ function [] = test_write_data_integer( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('testDataArray', 'nixblock');
+    b = f.createBlock('testDataArray', 'nixblock');
 
     numData = [1 2 3; 4 5 6; 7 8 9];
     
@@ -305,7 +305,7 @@ end
 %% Test: Add sources by entity and id
 function [] = test_add_source ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('sourceTest', 'nixBlock');
+    b = f.createBlock('sourceTest', 'nixBlock');
     getSource = b.create_source('sourceTest', 'nixSource');
     tmp = getSource.create_source('nestedSource1', 'nixSource');
     tmp = getSource.create_source('nestedSource2', 'nixSource');
@@ -321,7 +321,7 @@ end
 function [] = test_add_sources ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     tmp = b.create_source('testSource1', 'nixSource');
     tmp = b.create_source('testSource2', 'nixSource');
@@ -353,8 +353,8 @@ end
 
 %% Test: Open source by ID or name
 function [] = test_open_source( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = test_file.create_block('test', 'nixBlock');
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('test', 'nixBlock');
     s = b.create_source('test', 'nixSource');
     sourceName = 'nestedSource';
     nSource = s.create_source(sourceName, 'nixSource');
@@ -375,7 +375,7 @@ end
 function [] = test_open_source_idx( varargin )
 %% Test Open Source by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
     s1 = b.create_source('testSource1', 'nixSource');
     s2 = b.create_source('testSource2', 'nixSource');
@@ -392,7 +392,7 @@ end
 %% Test: Remove sources by entity and id
 function [] = test_remove_source ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('sourceTest', 'nixBlock');
+    b = f.createBlock('sourceTest', 'nixBlock');
     getSource = b.create_source('sourceTest', 'nixSource');
     tmp = getSource.create_source('nestedSource1', 'nixSource');
     tmp = getSource.create_source('nestedSource2', 'nixSource');
@@ -413,7 +413,7 @@ end
 function [] = test_has_source( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.create_block('testblock', 'nixBlock');
+    b = f.createBlock('testblock', 'nixBlock');
     s = b.create_source('sourceTest1', 'nixSource');
     sID = s.id;
     d = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
@@ -431,7 +431,7 @@ end
 function [] = test_source_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     
     assert(d.source_count() == 0);
@@ -448,7 +448,7 @@ end
 function [] = test_dimensions( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('daTestBlock', 'test nixBlock');
+    b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.create_data_array('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
     
     assert(isempty(da.dimensions));
@@ -517,7 +517,7 @@ function [] = test_open_dimension_idx( varargin )
 %% Test: Open dimension by index
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('daTestBlock', 'test nixBlock');
+    b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.create_data_array('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
     
     da.append_set_dimension();
@@ -535,7 +535,7 @@ end
 function [] = test_dimension_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     
     assert(da.dimension_count == 0);
@@ -561,7 +561,7 @@ function [] = test_datatype( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixblock');
+    b = f.createBlock('testBlock', 'nixblock');
 
     da = b.create_data_array_from_data('testDataArray1', typeDA, [1 2 3]);
     assert(strcmp(da.datatype, 'double'));
@@ -575,7 +575,7 @@ end
 function [] = test_set_data_extent( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixblock');
+    b = f.createBlock('testBlock', 'nixblock');
 
     da = b.create_data_array_from_data('testDataArray1', 'nix.DataArray', [1 2 3; 4 5 6]);
     extent = [4 6];
@@ -586,8 +586,8 @@ end
 function [] = test_compare( varargin )
 %% Test: Compare DataArray entities
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b1 = f.create_block('testBlock1', 'nixBlock');
-    b2 = f.create_block('testBlock2', 'nixBlock');
+    b1 = f.createBlock('testBlock1', 'nixBlock');
+    b2 = f.createBlock('testBlock2', 'nixBlock');
     d1 = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Bool, [2 9]);
     d2 = b1.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Bool, [2 9]);
     d3 = b2.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Bool, [2 9]);
@@ -603,7 +603,7 @@ function [] = test_filter_source( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
     d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [3 2 3]);
     s = b.create_source(filterName, 'nixSource');
     d.add_source(s);
@@ -645,7 +645,7 @@ function [] = test_filter_source( varargin )
     mainSource = b.create_source(mainName, 'nixSource');
     d.add_source(mainSource);
     subName = 'testSubSection1';
-    s = f.create_section(subName, 'nixSection');
+    s = f.createSection(subName, 'nixSection');
     mainSource.set_metadata(s);
     subID = s.id;
 
