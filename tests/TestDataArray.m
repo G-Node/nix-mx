@@ -40,7 +40,7 @@ function [] = test_attrs( varargin )
 %% Test: Access Attributes
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
-    da = b.create_data_array('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
+    da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
 
     assert(~isempty(da.id));
     assert(strcmp(da.name, 'daTest'));
@@ -93,27 +93,27 @@ function [] = test_open_data( varargin )
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nix.Block');
 
-    da = b.create_data_array('logicalArray', daType, nix.DataType.Bool, [3 3]);
+    da = b.createDataArray('logicalArray', daType, nix.DataType.Bool, [3 3]);
     assert(islogical(da.read_all));
-    da = b.create_data_array('doubleDataArray', daType, nix.DataType.Double, [3 3]);
+    da = b.createDataArray('doubleDataArray', daType, nix.DataType.Double, [3 3]);
     assert(isa(da.read_all, 'double'));
-    da = b.create_data_array('floatDataArray', daType, nix.DataType.Float, [3 3]);
+    da = b.createDataArray('floatDataArray', daType, nix.DataType.Float, [3 3]);
     assert(isfloat(da.read_all));
-    da = b.create_data_array('Int8DataArray', daType, nix.DataType.Int8, [3 3]);
+    da = b.createDataArray('Int8DataArray', daType, nix.DataType.Int8, [3 3]);
     assert(isa(da.read_all, 'int8'));
-    da = b.create_data_array('Int16DataArray', daType, nix.DataType.Int16, [3 3]);
+    da = b.createDataArray('Int16DataArray', daType, nix.DataType.Int16, [3 3]);
     assert(isa(da.read_all, 'int16'));
-    da = b.create_data_array('Int32DataArray', daType, nix.DataType.Int32, [3 3]);
+    da = b.createDataArray('Int32DataArray', daType, nix.DataType.Int32, [3 3]);
     assert(isa(da.read_all, 'int32'));
-    da = b.create_data_array('Int64DataArray', daType, nix.DataType.Int64, [3 3]);
+    da = b.createDataArray('Int64DataArray', daType, nix.DataType.Int64, [3 3]);
     assert(isa(da.read_all, 'int64'));
-    da = b.create_data_array('UInt8DataArray', daType, nix.DataType.UInt8, [3 3]);
+    da = b.createDataArray('UInt8DataArray', daType, nix.DataType.UInt8, [3 3]);
     assert(isa(da.read_all, 'uint8'));
-    da = b.create_data_array('UInt16DataArray', daType, nix.DataType.UInt16, [3 3]);
+    da = b.createDataArray('UInt16DataArray', daType, nix.DataType.UInt16, [3 3]);
     assert(isa(da.read_all, 'uint16'));
-    da = b.create_data_array('UInt32DataArray', daType, nix.DataType.UInt32, [3 3]);
+    da = b.createDataArray('UInt32DataArray', daType, nix.DataType.UInt32, [3 3]);
     assert(isa(da.read_all, 'uint32'));
-    da = b.create_data_array('UInt64DataArray', daType, nix.DataType.UInt64, [3 3]);
+    da = b.createDataArray('UInt64DataArray', daType, nix.DataType.UInt64, [3 3]);
     assert(isa(da.read_all, 'uint64'));
 end
 
@@ -127,7 +127,7 @@ function [] = test_set_metadata ( varargin )
     tmp = f.createSection(secName2, 'nixSection');
 
     b = f.createBlock('testBlock', 'nixBlock');
-    da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    da = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
 
     assert(isempty(da.open_metadata));
     assert(isempty(f.blocks{1}.dataArrays{1}.open_metadata));
@@ -155,7 +155,7 @@ function [] = test_open_metadata( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     tmp = f.createSection('testSection', 'nixSection');
     b = f.createBlock('testBlock', 'nixBlock');
-    da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    da = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     da.set_metadata(f.sections{1});
 
     assert(strcmp(da.open_metadata.name, 'testSection'));
@@ -183,7 +183,7 @@ function [] = test_write_data_double( varargin )
     charData = ['a' 'b' 'c' 'd' 'e'];
     cellData = {1 2 3 4 5};
     
-    da = b.create_data_array('numericArray', typeDA, nix.DataType.Double, 5);
+    da = b.createDataArray('numericArray', typeDA, nix.DataType.Double, 5);
     da.write_all(numData);
     assert(isequal(da.read_all(), numData));
 
@@ -219,7 +219,7 @@ function [] = test_write_data_logical( varargin )
     numData = [1 2 3 4 5];
     charData = ['a' 'b' 'c' 'd' 'e'];
     
-    da = b.create_data_array('logicalArray', typeDA, nix.DataType.Bool, 5);
+    da = b.createDataArray('logicalArray', typeDA, nix.DataType.Bool, 5);
     da.write_all(logData);
     assert(isequal(da.read_all, logData));
     try
@@ -247,7 +247,7 @@ function [] = test_write_data_float( varargin )
 
     numData = [1.3 2.4143 3.9878 4.1239 5];
     
-    da = b.create_data_array('floatArray', typeDA, nix.DataType.Float, 5);
+    da = b.createDataArray('floatArray', typeDA, nix.DataType.Float, 5);
     da.write_all(numData);
     assert(isequal(da.read_all, single(numData)));
 
@@ -265,28 +265,28 @@ function [] = test_write_data_integer( varargin )
 
     numData = [1 2 3; 4 5 6; 7 8 9];
     
-    da = b.create_data_array('Int8DataArray', typeDA, nix.DataType.Int8, [3 3]);
+    da = b.createDataArray('Int8DataArray', typeDA, nix.DataType.Int8, [3 3]);
     da.write_all(numData);
     assert(isequal(da.read_all, numData));
-    da = b.create_data_array('Int16DataArray', typeDA, nix.DataType.Int16, [3 3]);
+    da = b.createDataArray('Int16DataArray', typeDA, nix.DataType.Int16, [3 3]);
     da.write_all(numData);
     assert(isequal(da.read_all, numData));
-    da = b.create_data_array('Int32DataArray', typeDA, nix.DataType.Int32, [3 3]);
+    da = b.createDataArray('Int32DataArray', typeDA, nix.DataType.Int32, [3 3]);
     da.write_all(numData);
     assert(isequal(da.read_all, numData));
-    da = b.create_data_array('Int64DataArray', typeDA, nix.DataType.Int64, [3 3]);
+    da = b.createDataArray('Int64DataArray', typeDA, nix.DataType.Int64, [3 3]);
     da.write_all(numData);
     assert(isequal(da.read_all, numData));
-    da = b.create_data_array('UInt8DataArray', typeDA, nix.DataType.UInt8, [3 3]);
+    da = b.createDataArray('UInt8DataArray', typeDA, nix.DataType.UInt8, [3 3]);
     da.write_all(numData);
     assert(isequal(da.read_all, numData));
-    da = b.create_data_array('UInt16DataArray', typeDA, nix.DataType.UInt16, [3 3]);
+    da = b.createDataArray('UInt16DataArray', typeDA, nix.DataType.UInt16, [3 3]);
     da.write_all(numData);
     assert(isequal(da.read_all, numData));
-    da = b.create_data_array('UInt32DataArray', typeDA, nix.DataType.UInt32, [3 3]);
+    da = b.createDataArray('UInt32DataArray', typeDA, nix.DataType.UInt32, [3 3]);
     da.write_all(numData);
     assert(isequal(da.read_all, numData));
-    da = b.create_data_array('UInt64DataArray', typeDA, nix.DataType.UInt64, [3 3]);
+    da = b.createDataArray('UInt64DataArray', typeDA, nix.DataType.UInt64, [3 3]);
     da.write_all(numData);
     assert(isequal(da.read_all, numData));
 
@@ -306,14 +306,14 @@ end
 function [] = test_add_source ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourceTest', 'nixBlock');
-    getSource = b.create_source('sourceTest', 'nixSource');
-    tmp = getSource.create_source('nestedSource1', 'nixSource');
-    tmp = getSource.create_source('nestedSource2', 'nixSource');
-    getDataArray = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    s = b.createSource('sourceTest', 'nixSource');
+    tmp = s.create_source('nestedSource1', 'nixSource');
+    tmp = s.create_source('nestedSource2', 'nixSource');
+    getDataArray = b.createDataArray('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
 
     assert(isempty(getDataArray.sources));
-    getDataArray.add_source(getSource.sources{1}.id);
-    getDataArray.add_source(getSource.sources{2});
+    getDataArray.add_source(s.sources{1}.id);
+    getDataArray.add_source(s.sources{2});
     assert(size(getDataArray.sources, 1) == 2);
 end
 
@@ -322,10 +322,10 @@ function [] = test_add_sources ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    tmp = b.create_source('testSource1', 'nixSource');
-    tmp = b.create_source('testSource2', 'nixSource');
-    tmp = b.create_source('testSource3', 'nixSource');
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.createSource('testSource1', 'nixSource');
+    tmp = b.createSource('testSource2', 'nixSource');
+    tmp = b.createSource('testSource3', 'nixSource');
 
     assert(isempty(d.sources));
 
@@ -355,11 +355,11 @@ end
 function [] = test_open_source( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
-    s = b.create_source('test', 'nixSource');
+    s = b.createSource('test', 'nixSource');
     sourceName = 'nestedSource';
     nSource = s.create_source(sourceName, 'nixSource');
 
-    d = b.create_data_array('sourceTest', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d = b.createDataArray('sourceTest', 'nixDataArray', nix.DataType.Double, [1 2]);
     d.add_source(nSource);
 
     % -- test get source by ID
@@ -376,10 +376,10 @@ function [] = test_open_source_idx( varargin )
 %% Test Open Source by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
-    s1 = b.create_source('testSource1', 'nixSource');
-    s2 = b.create_source('testSource2', 'nixSource');
-    s3 = b.create_source('testSource3', 'nixSource');
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
+    s1 = b.createSource('testSource1', 'nixSource');
+    s2 = b.createSource('testSource2', 'nixSource');
+    s3 = b.createSource('testSource3', 'nixSource');
     d.add_source(s1);
     d.add_source(s2);
     d.add_source(s3);
@@ -393,20 +393,20 @@ end
 function [] = test_remove_source ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourceTest', 'nixBlock');
-    getSource = b.create_source('sourceTest', 'nixSource');
-    tmp = getSource.create_source('nestedSource1', 'nixSource');
-    tmp = getSource.create_source('nestedSource2', 'nixSource');
-    getDataArray = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    s = b.createSource('sourceTest', 'nixSource');
+    tmp = s.create_source('nestedSource1', 'nixSource');
+    tmp = s.create_source('nestedSource2', 'nixSource');
+    getDataArray = b.createDataArray('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
 
-    getDataArray.add_source(getSource.sources{1}.id);
-    getDataArray.add_source(getSource.sources{2});
+    getDataArray.add_source(s.sources{1}.id);
+    getDataArray.add_source(s.sources{2});
 
-    assert(getDataArray.remove_source(getSource.sources{2}));
-    assert(getDataArray.remove_source(getSource.sources{1}.id));
+    assert(getDataArray.remove_source(s.sources{2}));
+    assert(getDataArray.remove_source(s.sources{1}.id));
     assert(isempty(getDataArray.sources));
 
     assert(getDataArray.remove_source('I do not exist'));
-    assert(size(getSource.sources, 1) == 2);
+    assert(size(s.sources, 1) == 2);
 end
 
 %% Test: has nix.Source by ID or entity
@@ -414,9 +414,9 @@ function [] = test_has_source( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('testblock', 'nixBlock');
-    s = b.create_source('sourceTest1', 'nixSource');
+    s = b.createSource('sourceTest1', 'nixSource');
     sID = s.id;
-    d = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d = b.createDataArray('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     d.add_source(b.sources{1});
 
     assert(~d.has_source('I do not exist'));
@@ -432,12 +432,12 @@ function [] = test_source_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     
     assert(d.source_count() == 0);
-    d.add_source(b.create_source('testSource1', 'nixSource'));
+    d.add_source(b.createSource('testSource1', 'nixSource'));
     assert(d.source_count() == 1);
-    d.add_source(b.create_source('testSource2', 'nixSource'));
+    d.add_source(b.createSource('testSource2', 'nixSource'));
     
     clear d b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
@@ -449,7 +449,7 @@ function [] = test_dimensions( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
-    da = b.create_data_array('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
+    da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
     
     assert(isempty(da.dimensions));
     assert(isempty(f.blocks{1}.dataArrays{1}.dimensions));
@@ -489,7 +489,7 @@ function [] = test_dimensions( varargin )
         assert(strcmp(ME.identifier, 'nix:arg:inval'));
     end;
     
-    daAlias = b.create_data_array('aliasDimTest', 'nix.DataArray', ...
+    daAlias = b.createDataArray('aliasDimTest', 'nix.DataArray', ...
         nix.DataType.Double, 25);
     daAlias.append_alias_range_dimension();
     assert(f.blocks{1}.dataArrays{2}.dimensions{1}.isAlias);
@@ -499,16 +499,16 @@ function [] = test_dimensions( varargin )
     assert(f.blocks{1}.dataArrays{2}.dimensions{1}.isAlias);
     
     %-- Test for the alias dimension shape work around
-    daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWTest1', ...
+    daAliasWa = f.blocks{1}.createDataArrayFromData('aliasDimWTest1', ...
         'nix.DataArray', [1 2 3]);
     daAliasWa.append_alias_range_dimension();
     assert(daAliasWa.dimensions{1}.isAlias);
     
-    daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest2', ...
+    daAliasWa = f.blocks{1}.createDataArrayFromData('aliasDimWATest2', ...
         'nix.DataArray', [1; 2; 3]);
     assert(isequal(daAliasWa.dataExtent, [3 1]));
     
-    daAliasWa = f.blocks{1}.create_data_array_from_data('aliasDimWATest3', ...
+    daAliasWa = f.blocks{1}.createDataArrayFromData('aliasDimWATest3', ...
         'nix.DataArray', [1 2 3; 2 4 5; 3 6 7]);
     assert(isequal(daAliasWa.dataExtent, [3 3]));
 end
@@ -518,7 +518,7 @@ function [] = test_open_dimension_idx( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
-    da = b.create_data_array('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
+    da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
     
     da.append_set_dimension();
     da.append_sampled_dimension(200);
@@ -536,7 +536,7 @@ function [] = test_dimension_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    da = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     
     assert(da.dimension_count == 0);
 
@@ -563,10 +563,10 @@ function [] = test_datatype( varargin )
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixblock');
 
-    da = b.create_data_array_from_data('testDataArray1', typeDA, [1 2 3]);
+    da = b.createDataArrayFromData('testDataArray1', typeDA, [1 2 3]);
     assert(strcmp(da.datatype, 'double'));
     
-    da = b.create_data_array('testDataArray2', typeDA, nix.DataType.Bool, 5);
+    da = b.createDataArray('testDataArray2', typeDA, nix.DataType.Bool, 5);
     da.write_all(logical([1 0 1 1 1]));
     assert(strcmp(da.datatype, 'logical'));
 end
@@ -577,7 +577,7 @@ function [] = test_set_data_extent( varargin )
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixblock');
 
-    da = b.create_data_array_from_data('testDataArray1', 'nix.DataArray', [1 2 3; 4 5 6]);
+    da = b.createDataArrayFromData('testDataArray1', 'nix.DataArray', [1 2 3; 4 5 6]);
     extent = [4 6];
     da.set_data_extent(extent);
     assert(da.dataExtent(1) == extent(1) && size(da.read_all, 2) == extent(2));
@@ -588,9 +588,9 @@ function [] = test_compare( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
     b2 = f.createBlock('testBlock2', 'nixBlock');
-    d1 = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Bool, [2 9]);
-    d2 = b1.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Bool, [2 9]);
-    d3 = b2.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Bool, [2 9]);
+    d1 = b1.createDataArray('testDataArray1', 'nixDataArray', nix.DataType.Bool, [2 9]);
+    d2 = b1.createDataArray('testDataArray2', 'nixDataArray', nix.DataType.Bool, [2 9]);
+    d3 = b2.createDataArray('testDataArray1', 'nixDataArray', nix.DataType.Bool, [2 9]);
 
     assert(d1.compare(d2) < 0);
     assert(d1.compare(d1) == 0);
@@ -604,14 +604,14 @@ function [] = test_filter_source( varargin )
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [3 2 3]);
-    s = b.create_source(filterName, 'nixSource');
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [3 2 3]);
+    s = b.createSource(filterName, 'nixSource');
     d.add_source(s);
     filterID = s.id;
-	s = b.create_source('testSource1', filterType);
+	s = b.createSource('testSource1', filterType);
     d.add_source(s);
     filterIDs = {filterID, s.id};
-    s = b.create_source('testSource2', filterType);
+    s = b.createSource('testSource2', filterType);
     d.add_source(s);
 
     % test empty id filter
@@ -642,7 +642,7 @@ function [] = test_filter_source( varargin )
 
     % test nix.Filter.metadata
     mainName = 'testSubSection';
-    mainSource = b.create_source(mainName, 'nixSource');
+    mainSource = b.createSource(mainName, 'nixSource');
     d.add_source(mainSource);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
@@ -656,7 +656,7 @@ function [] = test_filter_source( varargin )
 
     % test nix.Filter.source
     mainName = 'testSubSource';
-    main = b.create_source(mainName, 'nixSource');
+    main = b.createSource(mainName, 'nixSource');
     d.add_source(main);
     mainID = main.id;
     subName = 'testSubSource1';

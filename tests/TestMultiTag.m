@@ -57,11 +57,11 @@ function [] = test_add_source ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('sourceTest', 'nixBlock');
-    tmp = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    s = b.create_source('sourceTest', 'nixSource');
+    tmp = b.createDataArray('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    s = b.createSource('sourceTest', 'nixSource');
     tmp = s.create_source('nestedSource1', 'nixSource');
     tmp = s.create_source('nestedSource2', 'nixSource');
-    mTag = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
+    mTag = b.createMultiTag('sourcetest', 'nixMultiTag', b.dataArrays{1});
 
     assert(isempty(mTag.sources));
     assert(isempty(f.blocks{1}.multiTags{1}.sources));
@@ -84,11 +84,11 @@ function [] = test_add_sources ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    tmp = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', b.dataArrays{1});
-    tmp = b.create_source('testSource1', 'nixSource');
-    tmp = b.create_source('testSource2', 'nixSource');
-    tmp = b.create_source('testSource3', 'nixSource');
+    tmp = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createSource('testSource1', 'nixSource');
+    tmp = b.createSource('testSource2', 'nixSource');
+    tmp = b.createSource('testSource3', 'nixSource');
 
     assert(isempty(t.sources));
 
@@ -118,22 +118,22 @@ end
 function [] = test_remove_source ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourceTest', 'nixBlock');
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    getSource = b.create_source('sourceTest', 'nixSource');
-    tmp = getSource.create_source('nestedSource1', 'nixSource');
-    tmp = getSource.create_source('nestedSource2', 'nixSource');
-    getMTag = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
+    s = b.createSource('sourceTest', 'nixSource');
+    tmp = s.create_source('nestedSource1', 'nixSource');
+    tmp = s.create_source('nestedSource2', 'nixSource');
+    t = b.createMultiTag('sourcetest', 'nixMultiTag', b.dataArrays{1});
 
-    getMTag.add_source(getSource.sources{1}.id);
-    getMTag.add_source(getSource.sources{2});
+    t.add_source(s.sources{1}.id);
+    t.add_source(s.sources{2});
 
-    getMTag.remove_source(getSource.sources{2});
-    assert(size(getMTag.sources,1) == 1);
-    getMTag.remove_source(getSource.sources{1}.id);
-    assert(isempty(getMTag.sources));
-    assert(getMTag.remove_source('I do not exist'));
-    assert(size(getSource.sources,1) == 2);
+    t.remove_source(s.sources{2});
+    assert(size(t.sources,1) == 1);
+    t.remove_source(s.sources{1}.id);
+    assert(isempty(t.sources));
+    assert(t.remove_source('I do not exist'));
+    assert(size(s.sources,1) == 2);
 end
 
 %% Test: Add references by entity and id
@@ -141,12 +141,12 @@ function [] = test_add_reference ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('referenceTest', 'nixBlock');
-    tmp = b.create_data_array('referenceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    mTag = b.create_multi_tag('referencetest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('referenceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    mTag = b.createMultiTag('referencetest', 'nixMultiTag', b.dataArrays{1});
     
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'referenceTest1', 'nixDataArray', nix.DataType.Double, [3 4]);
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'referenceTest2', 'nixDataArray', nix.DataType.Double, [5 6]);
 
     assert(isempty(mTag.references));
@@ -170,10 +170,10 @@ function [] = test_add_references ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    tmp = b.create_data_array('referenceTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    t = b.create_multi_tag('referencetest', 'nixMultiTag', b.dataArrays{1});
-    tmp = b.create_data_array('referenceTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
-    tmp = b.create_data_array('referenceTest3', 'nixDataArray', nix.DataType.Double, [3 4]);
+    tmp = b.createDataArray('referenceTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('referencetest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('referenceTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
+    tmp = b.createDataArray('referenceTest3', 'nixDataArray', nix.DataType.Double, [3 4]);
 
     assert(isempty(t.references));
 
@@ -203,22 +203,22 @@ end
 function [] = test_remove_reference ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('referenceTest', 'nixBlock');
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'referenceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    getMTag = b.create_multi_tag('referencetest', 'nixMultiTag', b.dataArrays{1});
+    t = b.createMultiTag('referencetest', 'nixMultiTag', b.dataArrays{1});
     
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'referenceTest1', 'nixDataArray', nix.DataType.Double, [3 4]);
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'referenceTest2', 'nixDataArray', nix.DataType.Double, [5 6]);
-    getMTag.add_reference(b.dataArrays{2}.id);
-    getMTag.add_reference(b.dataArrays{3});
+    t.add_reference(b.dataArrays{2}.id);
+    t.add_reference(b.dataArrays{3});
 
-    assert(getMTag.remove_reference(b.dataArrays{3}));
-    assert(getMTag.remove_reference(b.dataArrays{2}.id));
-    assert(isempty(getMTag.references));
+    assert(t.remove_reference(b.dataArrays{3}));
+    assert(t.remove_reference(b.dataArrays{2}.id));
+    assert(isempty(t.references));
 
-    assert(~getMTag.remove_reference('I do not exist'));
+    assert(~t.remove_reference('I do not exist'));
     assert(size(b.dataArrays, 1) == 3);
 end
 
@@ -227,20 +227,20 @@ function [] = test_add_feature ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
-    tmp = b.create_data_array('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    mTag = b.create_multi_tag('featuretest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    mTag = b.createMultiTag('featuretest', 'nixMultiTag', b.dataArrays{1});
 
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'featTestDA1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'featTestDA2', 'nixDataArray', nix.DataType.Double, [3 4]);
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'featTestDA3', 'nixDataArray', nix.DataType.Double, [5 6]);
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'featTestDA4', 'nixDataArray', nix.DataType.Double, [7 8]);
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'featTestDA5', 'nixDataArray', nix.DataType.Double, [9 10]);
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'featTestDA6', 'nixDataArray', nix.DataType.Double, [11 12]);
 
     assert(isempty(mTag.features));
@@ -263,23 +263,23 @@ end
 function [] = test_remove_feature ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
-	tmp = b.create_data_array(...
+	tmp = b.createDataArray(...
         'featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    getMTag = b.create_multi_tag('featuretest', 'nixMultiTag', b.dataArrays{1});
+    t = b.createMultiTag('featuretest', 'nixMultiTag', b.dataArrays{1});
 
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'featTestDA1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    tmp = b.create_data_array(...
+    tmp = b.createDataArray(...
         'featTestDA2', 'nixDataArray', nix.DataType.Double, [3 4]);
 
-    tmp = getMTag.add_feature(b.dataArrays{2}.id, nix.LinkType.Tagged);
-    tmp = getMTag.add_feature(b.dataArrays{3}, nix.LinkType.Tagged);
+    tmp = t.add_feature(b.dataArrays{2}.id, nix.LinkType.Tagged);
+    tmp = t.add_feature(b.dataArrays{3}, nix.LinkType.Tagged);
 
-    assert(getMTag.remove_feature(getMTag.features{2}.id));
-    assert(getMTag.remove_feature(getMTag.features{1}));
-    assert(isempty(getMTag.features));
+    assert(t.remove_feature(t.features{2}.id));
+    assert(t.remove_feature(t.features{1}));
+    assert(isempty(t.features));
 
-    assert(~getMTag.remove_feature('I do not exist'));
+    assert(~t.remove_feature('I do not exist'));
     assert(size(b.dataArrays, 1) == 3);
 end
 
@@ -287,75 +287,75 @@ end
 function [] = test_fetch_references( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('referenceTest', 'nixBlock');
-    tmp = b.create_data_array('referenceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    getMTag = b.create_multi_tag('referencetest', 'nixMultiTag', b.dataArrays{1});
-    tmp = b.create_data_array('referenceTest1', 'nixDataArray', nix.DataType.Double, [3 4]);
-    tmp = b.create_data_array('referenceTest2', 'nixDataArray', nix.DataType.Double, [5 6]);
-    getMTag.add_reference(b.dataArrays{2}.id);
-    getMTag.add_reference(b.dataArrays{3});
+    tmp = b.createDataArray('referenceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('referencetest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('referenceTest1', 'nixDataArray', nix.DataType.Double, [3 4]);
+    tmp = b.createDataArray('referenceTest2', 'nixDataArray', nix.DataType.Double, [5 6]);
+    t.add_reference(b.dataArrays{2}.id);
+    t.add_reference(b.dataArrays{3});
 
-    assert(size(getMTag.references, 1) == 2);
+    assert(size(t.references, 1) == 2);
 end
 
 %% Test: fetch sources
 function [] = test_fetch_sources( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourceTest', 'nixBlock');
-    tmp = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    getSource = b.create_source('sourceTest', 'nixSource');
-    tmp = getSource.create_source('nestedSource1', 'nixSource');
-    tmp = getSource.create_source('nestedSource2', 'nixSource');
-    getMTag = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
-    getMTag.add_source(getSource.sources{1}.id);
-    getMTag.add_source(getSource.sources{2});
+    tmp = b.createDataArray('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    s = b.createSource('sourceTest', 'nixSource');
+    tmp = s.create_source('nestedSource1', 'nixSource');
+    tmp = s.create_source('nestedSource2', 'nixSource');
+    t = b.createMultiTag('sourcetest', 'nixMultiTag', b.dataArrays{1});
+    t.add_source(s.sources{1}.id);
+    t.add_source(s.sources{2});
 
-    assert(size(getMTag.sources, 1) == 2);
+    assert(size(t.sources, 1) == 2);
 end
 
 %% Test: fetch features
 function [] = test_fetch_features( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
-    tmp = b.create_data_array('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    getMTag = b.create_multi_tag('featuretest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('featuretest', 'nixMultiTag', b.dataArrays{1});
 
-    assert(isempty(getMTag.features));
-    tmp = b.create_data_array('featTestDA', 'nixDataArray', nix.DataType.Double, [1 2]);
-    tmp = getMTag.add_feature(b.dataArrays{2}, nix.LinkType.Tagged);
-    assert(size(getMTag.features, 1) == 1);
+    assert(isempty(t.features));
+    tmp = b.createDataArray('featTestDA', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = t.add_feature(b.dataArrays{2}, nix.LinkType.Tagged);
+    assert(size(t.features, 1) == 1);
 end
 
 %% Test: Open source by ID or name
 function [] = test_open_source( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourceTest', 'nixBlock');
-    tmp = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    getSource = b.create_source('sourceTest', 'nixSource');
+    tmp = b.createDataArray('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    s = b.createSource('sourceTest', 'nixSource');
     sName = 'nestedSource';
-    tmp = getSource.create_source(sName, 'nixSource');
-    getMTag = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
-    getMTag.add_source(getSource.sources{1});
+    tmp = s.create_source(sName, 'nixSource');
+    t = b.createMultiTag('sourcetest', 'nixMultiTag', b.dataArrays{1});
+    t.add_source(s.sources{1});
 
-    getSourceByID = getMTag.open_source(getMTag.sources{1,1}.id);
+    getSourceByID = t.open_source(t.sources{1,1}.id);
     assert(~isempty(getSourceByID));
 
-    getSourceByName = getMTag.open_source(sName);
+    getSourceByName = t.open_source(sName);
     assert(~isempty(getSourceByName));
     
     %-- test open non existing source
-    getSource = getMTag.open_source('I do not exist');
-    assert(isempty(getSource));
+    s = t.open_source('I do not exist');
+    assert(isempty(s));
 end
 
 function [] = test_open_source_idx( varargin )
 %% Test Open Source by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d);
-    s1 = b.create_source('testSource1', 'nixSource');
-    s2 = b.create_source('testSource2', 'nixSource');
-    s3 = b.create_source('testSource3', 'nixSource');
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', d);
+    s1 = b.createSource('testSource1', 'nixSource');
+    s2 = b.createSource('testSource2', 'nixSource');
+    s3 = b.createSource('testSource3', 'nixSource');
     t.add_source(s1);
     t.add_source(s2);
     t.add_source(s3);
@@ -370,10 +370,10 @@ function [] = test_has_source( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('testblock', 'nixBlock');
-    s = b.create_source('sourceTest1', 'nixSource');
+    s = b.createSource('sourceTest1', 'nixSource');
     sID = s.id;
-    tmp = b.create_data_array('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    t = b.create_multi_tag('sourcetest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('sourcetest', 'nixMultiTag', b.dataArrays{1});
     t.add_source(b.sources{1});
 
     assert(~t.has_source('I do not exist'));
@@ -389,13 +389,13 @@ function [] = test_source_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', b.dataArrays{1});
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', b.dataArrays{1});
 
     assert(t.source_count() == 0);
-    t.add_source(b.create_source('testSource1', 'nixSource'));
+    t.add_source(b.createSource('testSource1', 'nixSource'));
     assert(t.source_count() == 1);
-    t.add_source(b.create_source('testSource2', 'nixSource'));
+    t.add_source(b.createSource('testSource2', 'nixSource'));
 
     clear t d b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
@@ -406,15 +406,15 @@ end
 function [] = test_open_feature( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
-    tmp = b.create_data_array('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    getMTag = b.create_multi_tag('featuretest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('featuretest', 'nixMultiTag', b.dataArrays{1});
 
-    tmp = b.create_data_array('featTestDA', 'nixDataArray', nix.DataType.Double, [1 2]);
-    tmp = getMTag.add_feature(b.dataArrays{2}, nix.LinkType.Tagged);
-    assert(~isempty(getMTag.open_feature(getMTag.features{1}.id)));
+    tmp = b.createDataArray('featTestDA', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = t.add_feature(b.dataArrays{2}, nix.LinkType.Tagged);
+    assert(~isempty(t.open_feature(t.features{1}.id)));
 
     %-- test open non existing feature
-    getFeat = getMTag.open_feature('I do not exist');
+    getFeat = t.open_feature('I do not exist');
     assert(isempty(getFeat));
 end
 
@@ -422,11 +422,11 @@ function [] = test_open_feature_idx( varargin )
 %% Test Open feature by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d);
-    f1 = b.create_data_array('testFeature1', 'nixDataArray', nix.DataType.Bool, [2 2]);
-    f2 = b.create_data_array('testFeature2', 'nixDataArray', nix.DataType.Bool, [2 2]);
-    f3 = b.create_data_array('testFeature3', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', d);
+    f1 = b.createDataArray('testFeature1', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    f2 = b.createDataArray('testFeature2', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    f3 = b.createDataArray('testFeature3', 'nixDataArray', nix.DataType.Bool, [2 2]);
     t.add_feature(f1, nix.LinkType.Tagged);
     t.add_feature(f2, nix.LinkType.Untagged);
     t.add_feature(f3, nix.LinkType.Indexed);
@@ -440,20 +440,20 @@ end
 function [] = test_open_reference( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('referenceTest', 'nixBlock');
-    tmp = b.create_data_array('referenceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    getMTag = b.create_multi_tag('referencetest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('referenceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('referencetest', 'nixMultiTag', b.dataArrays{1});
     refName = 'referenceTest';
-    tmp = b.create_data_array(refName, 'nixDataArray', nix.DataType.Double, [3 4]);
-    getMTag.add_reference(b.dataArrays{2}.id);
+    tmp = b.createDataArray(refName, 'nixDataArray', nix.DataType.Double, [3 4]);
+    t.add_reference(b.dataArrays{2}.id);
 
-    getRefByID = getMTag.open_reference(getMTag.references{1,1}.id);
+    getRefByID = t.open_reference(t.references{1,1}.id);
     assert(~isempty(getRefByID));
 
-    getRefByName = getMTag.open_reference(refName);
+    getRefByName = t.open_reference(refName);
     assert(~isempty(getRefByName));
 
     %-- test open non existing reference
-    getRef = getMTag.open_reference('I do not exist');
+    getRef = t.open_reference('I do not exist');
     assert(isempty(getRef));
 end
 
@@ -461,11 +461,11 @@ function [] = test_open_reference_idx( varargin )
 %% Test Open feature by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d);
-    r1 = b.create_data_array('testReference1', 'nixDataArray', nix.DataType.Bool, [2 2]);
-    r2 = b.create_data_array('testReference2', 'nixDataArray', nix.DataType.Bool, [2 2]);
-    r3 = b.create_data_array('testReference3', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [2 9]);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', d);
+    r1 = b.createDataArray('testReference1', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    r2 = b.createDataArray('testReference2', 'nixDataArray', nix.DataType.Bool, [2 2]);
+    r3 = b.createDataArray('testReference3', 'nixDataArray', nix.DataType.Bool, [2 2]);
     t.add_reference(r1);
     t.add_reference(r2);
     t.add_reference(r3);
@@ -480,14 +480,14 @@ function [] = test_feature_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', da);
+    da = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', da);
 
     assert(t.feature_count() == 0);
-    t.add_feature(b.create_data_array('testDataArray1', 'nixDataArray', ...
+    t.add_feature(b.createDataArray('testDataArray1', 'nixDataArray', ...
         nix.DataType.Double, [1 2]), nix.LinkType.Tagged);
     assert(t.feature_count() == 1);
-    t.add_feature(b.create_data_array('testDataArray2', 'nixDataArray', ...
+    t.add_feature(b.createDataArray('testDataArray2', 'nixDataArray', ...
         nix.DataType.Double, [3 4]), nix.LinkType.Tagged);
 
     clear t da b f;
@@ -500,13 +500,13 @@ function [] = test_reference_count( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    da = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', da);
+    da = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', da);
 
     assert(t.reference_count() == 0);
-    t.add_reference(b.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]));
+    t.add_reference(b.createDataArray('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]));
     assert(t.reference_count() == 1);
-    t.add_reference(b.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]));
+    t.add_reference(b.createDataArray('testDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]));
     
     clear t da b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
@@ -521,21 +521,21 @@ function [] = test_add_positions ( varargin )
     
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('positionsTest', 'nixBlock');
-    tmp = b.create_data_array('positionsTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
-    mTag = b.create_multi_tag('positionstest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('positionsTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
+    t = b.createMultiTag('positionstest', 'nixMultiTag', b.dataArrays{1});
 
-    tmp = b.create_data_array(posName1, 'nixDataArray', nix.DataType.Double, [0 1]);
-    tmp = b.create_data_array(posName2, 'nixDataArray', nix.DataType.Double, [2 4]);
+    tmp = b.createDataArray(posName1, 'nixDataArray', nix.DataType.Double, [0 1]);
+    tmp = b.createDataArray(posName2, 'nixDataArray', nix.DataType.Double, [2 4]);
 
-    mTag.add_positions(b.dataArrays{2}.id);
-    assert(strcmp(mTag.open_positions.name, posName1));
+    t.add_positions(b.dataArrays{2}.id);
+    assert(strcmp(t.open_positions.name, posName1));
     assert(strcmp(f.blocks{1}.multiTags{1}.open_positions.name, posName1));
 
-    mTag.add_positions(b.dataArrays{3});
-    assert(strcmp(mTag.open_positions.name, posName2));
+    t.add_positions(b.dataArrays{3});
+    assert(strcmp(t.open_positions.name, posName2));
     assert(strcmp(f.blocks{1}.multiTags{1}.open_positions.name, posName2));
     
-    clear tmp mTag b f;
+    clear tmp t b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
     assert(strcmp(f.blocks{1}.multiTags{1}.open_positions.name, posName2));
 end
@@ -544,24 +544,24 @@ end
 function [] = test_has_positions( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('positionsTest', 'nixBlock');
-    tmp = b.create_data_array('positionsTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
-    getMTag = b.create_multi_tag('positionstest', 'nixMultiTag', b.dataArrays{1});
-    tmp = b.create_data_array('positionsTest1', 'nixDataArray', nix.DataType.Double, [0 1]);
+    tmp = b.createDataArray('positionsTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
+    t = b.createMultiTag('positionstest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('positionsTest1', 'nixDataArray', nix.DataType.Double, [0 1]);
 
-    getMTag.add_positions(b.dataArrays{2}.id);
-    assert(getMTag.has_positions);
+    t.add_positions(b.dataArrays{2}.id);
+    assert(t.has_positions);
 end
 
 %% Test: Open positions
 function [] = test_open_positions( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('positionsTest', 'nixBlock');
-    tmp = b.create_data_array('positionsTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
-    getMTag = b.create_multi_tag('positionstest', 'nixMultiTag', b.dataArrays{1});
-    tmp = b.create_data_array('positionsTest1', 'nixDataArray', nix.DataType.Double, [0 1]);
+    tmp = b.createDataArray('positionsTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
+    t = b.createMultiTag('positionstest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('positionsTest1', 'nixDataArray', nix.DataType.Double, [0 1]);
 
-    getMTag.add_positions(b.dataArrays{2}.id);
-    assert(~isempty(getMTag.open_positions));
+    t.add_positions(b.dataArrays{2}.id);
+    assert(~isempty(t.open_positions));
 end
 
 %% Test: Set extents by entity and ID, open and reset extents
@@ -569,33 +569,33 @@ function [] = test_set_open_extents ( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('extentsTest', 'nixBlock');
-    da = b.create_data_array('extentsTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6; 1 2 3 4 5 6]);
-    getMTag = b.create_multi_tag('extentstest', 'nixMultiTag', da);
+    da = b.createDataArray('extentsTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6; 1 2 3 4 5 6]);
+    t = b.createMultiTag('extentstest', 'nixMultiTag', da);
 
-    tmp = b.create_data_array('positionsTest1', 'nixDataArray', nix.DataType.Double, [1, 1]);
-    tmp = b.create_data_array('positionsTest2', 'nixDataArray', nix.DataType.Double, [1, 3]);
+    tmp = b.createDataArray('positionsTest1', 'nixDataArray', nix.DataType.Double, [1, 1]);
+    tmp = b.createDataArray('positionsTest2', 'nixDataArray', nix.DataType.Double, [1, 3]);
 
     extName1 = 'extentsTest1';
     extName2 = 'extentsTest2';
-    tmp = b.create_data_array(extName1, 'nixDataArray', nix.DataType.Double, [1, 1]);
-    tmp = b.create_data_array(extName2, 'nixDataArray', nix.DataType.Double, [1, 3]);
+    tmp = b.createDataArray(extName1, 'nixDataArray', nix.DataType.Double, [1, 1]);
+    tmp = b.createDataArray(extName2, 'nixDataArray', nix.DataType.Double, [1, 3]);
 
-    assert(isempty(getMTag.open_extents));
+    assert(isempty(t.open_extents));
     assert(isempty(f.blocks{1}.multiTags{1}.open_extents));
     
-    getMTag.add_positions(b.dataArrays{2});
-    getMTag.set_extents(b.dataArrays{4}.id);
-    assert(strcmp(getMTag.open_extents.name, extName1));
+    t.add_positions(b.dataArrays{2});
+    t.set_extents(b.dataArrays{4}.id);
+    assert(strcmp(t.open_extents.name, extName1));
     assert(strcmp(f.blocks{1}.multiTags{1}.open_extents.name, extName1));
 
-    getMTag.set_extents('');
-    assert(isempty(getMTag.open_extents));
+    t.set_extents('');
+    assert(isempty(t.open_extents));
     assert(isempty(f.blocks{1}.multiTags{1}.open_extents));
     
-    getMTag.add_positions(b.dataArrays{3});
-    getMTag.set_extents(b.dataArrays{5});
+    t.add_positions(b.dataArrays{3});
+    t.set_extents(b.dataArrays{5});
     
-    clear tmp getMTag da b f;
+    clear tmp t da b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(strcmp(f.blocks{1}.multiTags{1}.open_extents.name, extName2));
 end
@@ -610,8 +610,8 @@ function [] = test_set_metadata ( varargin )
     tmp = f.createSection(secName2, 'nixSection');
 
     b = f.createBlock('testBlock', 'nixBlock');
-    tmp = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
-    t = b.create_multi_tag('metadataTest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
+    t = b.createMultiTag('metadataTest', 'nixMultiTag', b.dataArrays{1});
 
     assert(isempty(t.open_metadata));
     assert(isempty(f.blocks{1}.multiTags{1}.open_metadata));
@@ -639,8 +639,8 @@ function [] = test_open_metadata( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     tmp = f.createSection('testSection', 'nixSection');
     b = f.createBlock('testBlock', 'nixBlock');
-    tmp = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
-    t = b.create_multi_tag('metadataTest', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
+    t = b.createMultiTag('metadataTest', 'nixMultiTag', b.dataArrays{1});
     t.set_metadata(f.sections{1});
 
     assert(strcmp(t.open_metadata.name, 'testSection'));
@@ -656,27 +656,27 @@ function [] = test_retrieve_data( varargin )
     pos(3,:) = [0, 2]; ext(3,:) = [2, 4]; % result 113 114 115 116
                                           %        123 124 125 126
 
-	d_pos = b.create_data_array_from_data('positionsDA', 'nixDataArray', pos);
+	d_pos = b.createDataArrayFromData('positionsDA', 'nixDataArray', pos);
     d_pos.append_sampled_dimension(0);
     d_pos.append_sampled_dimension(0);
 
-    d_ext = b.create_data_array_from_data('extentsDA', 'nixDataArray', ext);
+    d_ext = b.createDataArrayFromData('extentsDA', 'nixDataArray', ext);
     d_ext.append_sampled_dimension(0);
     d_ext.append_sampled_dimension(0);
 
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d_pos);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', d_pos);
     t.set_extents(d_ext);
 
     % create 2D reference data_arrays
     raw1 = [111, 112, 113, 114, 115, 116, 117, 118; ...
                 121, 122, 123, 124, 125, 126, 127, 128];
-    d1 = b.create_data_array_from_data('reference1', 'nixDataArray', raw1);
+    d1 = b.createDataArrayFromData('reference1', 'nixDataArray', raw1);
     d1.append_sampled_dimension(1);
     d1.append_sampled_dimension(1);
 
     raw2 = [211, 212, 213, 214, 215, 216, 217, 218; ...
                 221, 222, 223, 224, 225, 226, 227, 228];
-    d2 = b.create_data_array_from_data('reference2', 'nixDataArray', raw2);
+    d2 = b.createDataArrayFromData('reference2', 'nixDataArray', raw2);
     d2.append_sampled_dimension(1);
     d2.append_sampled_dimension(1);
 
@@ -719,27 +719,27 @@ function [] = test_retrieve_data_idx( varargin )
     pos(3,:) = [0, 2]; ext(3,:) = [2, 4]; % result 113 114 115 116
                                           %        123 124 125 126
 
-	d_pos = b.create_data_array_from_data('positionsDA', 'nixDataArray', pos);
+	d_pos = b.createDataArrayFromData('positionsDA', 'nixDataArray', pos);
     d_pos.append_sampled_dimension(0);
     d_pos.append_sampled_dimension(0);
 
-    d_ext = b.create_data_array_from_data('extentsDA', 'nixDataArray', ext);
+    d_ext = b.createDataArrayFromData('extentsDA', 'nixDataArray', ext);
     d_ext.append_sampled_dimension(0);
     d_ext.append_sampled_dimension(0);
 
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d_pos);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', d_pos);
     t.set_extents(d_ext);
 
     % create 2D reference data_arrays
     raw1 = [111, 112, 113, 114, 115, 116, 117, 118; ...
                 121, 122, 123, 124, 125, 126, 127, 128];
-    d1 = b.create_data_array_from_data('reference1', 'nixDataArray', raw1);
+    d1 = b.createDataArrayFromData('reference1', 'nixDataArray', raw1);
     d1.append_sampled_dimension(1);
     d1.append_sampled_dimension(1);
 
     raw2 = [211, 212, 213, 214, 215, 216, 217, 218; ...
                 221, 222, 223, 224, 225, 226, 227, 228];
-    d2 = b.create_data_array_from_data('reference2', 'nixDataArray', raw2);
+    d2 = b.createDataArrayFromData('reference2', 'nixDataArray', raw2);
     d2.append_sampled_dimension(1);
     d2.append_sampled_dimension(1);
 
@@ -775,29 +775,29 @@ function [] = test_retrieve_feature_data( varargin )
 
     % create feature data arrays
     raw_feat1 = [11 12 13 14 15 16 17 18];
-    da_feat1 = b.create_data_array_from_data('feature1', 'nixDataArray', raw_feat1);
+    da_feat1 = b.createDataArrayFromData('feature1', 'nixDataArray', raw_feat1);
     da_feat1.append_sampled_dimension(1);
 
     raw_feat2 = [21 22 23 24 25 26 27 28];
-    da_feat2 = b.create_data_array_from_data('feature2', 'nixDataArray', raw_feat2);
+    da_feat2 = b.createDataArrayFromData('feature2', 'nixDataArray', raw_feat2);
     da_feat2.append_sampled_dimension(1);
 
     % create referenced data array
     raw_feat3 = [31 32 33 34 35 36 37 38];
-    da_feat3 = b.create_data_array_from_data('reference', 'nixDataArray', raw_feat3);
+    da_feat3 = b.createDataArrayFromData('reference', 'nixDataArray', raw_feat3);
     da_feat3.append_sampled_dimension(1);
 
     % create position, extents DA and multi tag
     pos = [0; 3; 5];
     ext = [1; 1; 3];
 
-    da_pos = b.create_data_array_from_data('positions', 'nixDataArray', pos);
-    da_ext = b.create_data_array_from_data('extents', 'nixDataArray', ext);
+    da_pos = b.createDataArrayFromData('positions', 'nixDataArray', pos);
+    da_ext = b.createDataArrayFromData('extents', 'nixDataArray', ext);
 
     da_pos.append_sampled_dimension(0);
     da_ext.append_sampled_dimension(0);
 
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', da_pos);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', da_pos);
     t.set_extents(da_ext);
 
     % add feature data_arrays
@@ -864,29 +864,29 @@ function [] = test_retrieve_feature_data_idx( varargin )
 
     % create feature data arrays
     raw_feat1 = [11 12 13 14 15 16 17 18];
-    da_feat1 = b.create_data_array_from_data('feature1', 'nixDataArray', raw_feat1);
+    da_feat1 = b.createDataArrayFromData('feature1', 'nixDataArray', raw_feat1);
     da_feat1.append_sampled_dimension(1);
 
     raw_feat2 = [21 22 23 24 25 26 27 28];
-    da_feat2 = b.create_data_array_from_data('feature2', 'nixDataArray', raw_feat2);
+    da_feat2 = b.createDataArrayFromData('feature2', 'nixDataArray', raw_feat2);
     da_feat2.append_sampled_dimension(1);
 
     % create referenced data array
     raw_feat3 = [31 32 33 34 35 36 37 38];
-    da_feat3 = b.create_data_array_from_data('reference', 'nixDataArray', raw_feat3);
+    da_feat3 = b.createDataArrayFromData('reference', 'nixDataArray', raw_feat3);
     da_feat3.append_sampled_dimension(1);
 
     % create position, extents DA and multi tag
     pos = [0; 3; 5];
     ext = [1; 1; 3];
 
-    da_pos = b.create_data_array_from_data('positions', 'nixDataArray', pos);
-    da_ext = b.create_data_array_from_data('extents', 'nixDataArray', ext);
+    da_pos = b.createDataArrayFromData('positions', 'nixDataArray', pos);
+    da_ext = b.createDataArrayFromData('extents', 'nixDataArray', ext);
 
     da_pos.append_sampled_dimension(0);
     da_ext.append_sampled_dimension(0);
 
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', da_pos);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', da_pos);
     t.set_extents(da_ext);
 
     % add feature data_arrays
@@ -951,9 +951,9 @@ function [] = test_has_feature( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
-    da = b.create_data_array('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    t = b.create_multi_tag('featureTest', 'nixMultiTag', da);
-    daf = b.create_data_array('featTestDA', 'nixDataArray', nix.DataType.Double, [1 2]);
+    da = b.createDataArray('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('featureTest', 'nixMultiTag', da);
+    daf = b.createDataArray('featTestDA', 'nixDataArray', nix.DataType.Double, [1 2]);
     feature = t.add_feature(daf, nix.LinkType.Tagged);
     featureID = feature.id;
 
@@ -971,10 +971,10 @@ function [] = test_has_reference( varargin )
     daName = 'refTestDataArray';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('referenceTestBlock', 'nixBlock');
-    da = b.create_data_array(daName, 'nixDataArray', nix.DataType.Double, [1 2]);
-    t = b.create_multi_tag('referenceTest', 'nixMultiTag', da);
+    da = b.createDataArray(daName, 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('referenceTest', 'nixMultiTag', da);
     refName = 'referenceTest';
-    daRef = b.create_data_array(refName, 'nixDataArray', nix.DataType.Double, [3 4]);
+    daRef = b.createDataArray(refName, 'nixDataArray', nix.DataType.Double, [3 4]);
     t.add_reference(daRef.id);
 
     assert(~t.has_reference('I do not exist'));
@@ -991,8 +991,8 @@ function [] = test_set_units( varargin )
     daName = 'testDataArray';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    da = b.create_data_array(daName, 'nixDataArray', nix.DataType.Double, [1 2]);
-    t = b.create_multi_tag('unitsTest', 'nixMultiTag', da);
+    da = b.createDataArray(daName, 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('unitsTest', 'nixMultiTag', da);
 
     assert(isempty(t.units));
     try
@@ -1024,8 +1024,8 @@ function [] = test_attrs( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    tmp = b.create_data_array('attributeTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createDataArray('attributeTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', b.dataArrays{1});
 
     testType = 'setType';
     testDefinition = 'definition';
@@ -1057,11 +1057,11 @@ function [] = test_compare( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
     b2 = f.createBlock('testBlock2', 'nixBlock');
-    d = b1.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 2]);
-    t1 = b1.create_multi_tag('testMultiTag1', 'nixMultiTag', d);
-    t2 = b1.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
-    d = b2.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 2]);
-    t3 = b2.create_multi_tag('testMultiTag1', 'nixMultiTag', d);
+    d = b1.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [2 2]);
+    t1 = b1.createMultiTag('testMultiTag1', 'nixMultiTag', d);
+    t2 = b1.createMultiTag('testMultiTag2', 'nixMultiTag', d);
+    d = b2.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [2 2]);
+    t3 = b2.createMultiTag('testMultiTag1', 'nixMultiTag', d);
 
     assert(t1.compare(t2) < 0);
     assert(t1.compare(t1) == 0);
@@ -1075,15 +1075,15 @@ function [] = test_filter_source( varargin )
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 3]);
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d);
-    s = b.create_source(filterName, 'nixSource');
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [2 3]);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', d);
+    s = b.createSource(filterName, 'nixSource');
     t.add_source(s);
     filterID = s.id;
-	s = b.create_source('testSource1', filterType);
+	s = b.createSource('testSource1', filterType);
     t.add_source(s);
     filterIDs = {filterID, s.id};
-    s = b.create_source('testSource2', filterType);
+    s = b.createSource('testSource2', filterType);
     t.add_source(s);
 
     % test empty id filter
@@ -1114,7 +1114,7 @@ function [] = test_filter_source( varargin )
 
     % test nix.Filter.metadata
     mainName = 'testSubSection';
-    mainSource = b.create_source(mainName, 'nixSource');
+    mainSource = b.createSource(mainName, 'nixSource');
     t.add_source(mainSource);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
@@ -1128,7 +1128,7 @@ function [] = test_filter_source( varargin )
 
     % test nix.Filter.source
     mainName = 'testSubSource';
-    main = b.create_source(mainName, 'nixSource');
+    main = b.createSource(mainName, 'nixSource');
     t.add_source(main);
     mainID = main.id;
     subName = 'testSubSource1';
@@ -1151,15 +1151,15 @@ function [] = test_filter_reference( varargin )
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 7]);
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d);
-    d = b.create_data_array(filterName, 'nixDataArray', nix.DataType.Double, [1 2]);
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [2 7]);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', d);
+    d = b.createDataArray(filterName, 'nixDataArray', nix.DataType.Double, [1 2]);
     t.add_reference(d);
     filterID = d.id;
-	d = b.create_data_array('testDataArray1', filterType, nix.DataType.Double, [1 2]);
+	d = b.createDataArray('testDataArray1', filterType, nix.DataType.Double, [1 2]);
     t.add_reference(d);
     filterIDs = {filterID, d.id};
-    d = b.create_data_array('testDataArray2', filterType, nix.DataType.Double, [1 2]);
+    d = b.createDataArray('testDataArray2', filterType, nix.DataType.Double, [1 2]);
     t.add_reference(d);
 
     % test empty id filter
@@ -1190,7 +1190,7 @@ function [] = test_filter_reference( varargin )
 
     % test nix.Filter.metadata
     mainName = 'testSubSection';
-    main = b.create_data_array(mainName, 'nixDataArray', nix.DataType.Bool, [2 2]);
+    main = b.createDataArray(mainName, 'nixDataArray', nix.DataType.Bool, [2 2]);
     t.add_reference(main);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
@@ -1204,11 +1204,11 @@ function [] = test_filter_reference( varargin )
 
     % test nix.Filter.source
     mainName = 'testSubSource';
-    main = b.create_data_array(mainName, 'nixDataArray', nix.DataType.Bool, [2 2]);
+    main = b.createDataArray(mainName, 'nixDataArray', nix.DataType.Bool, [2 2]);
     t.add_reference(main);
     mainID = main.id;
     subName = 'testSubSource1';
-    s = b.create_source(subName, 'nixSource');
+    s = b.createSource(subName, 'nixSource');
     main.add_source(s);
     subID = s.id;
 
@@ -1224,12 +1224,12 @@ end
 function [] = test_filter_feature( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [2 7]);
-    t = b.create_multi_tag('testMultiTag', 'nixMultiTag', d);
-    d = b.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [2 7]);
+    t = b.createMultiTag('testMultiTag', 'nixMultiTag', d);
+    d = b.createDataArray('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
     feat = t.add_feature(d, nix.LinkType.Tagged);
     filterID = feat.id;
-	d = b.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+	d = b.createDataArray('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
     feat = t.add_feature(d, nix.LinkType.Tagged);
     filterIDs = {filterID, feat.id};
 

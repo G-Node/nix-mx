@@ -353,9 +353,9 @@ end
 function [] = test_referring_data_arrays( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
-    d1 = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d1 = b1.createDataArray('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
     b2 = f.createBlock('testBlock2', 'nixBlock');
-    d2 = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d2 = b2.createDataArray('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
     s = f.createSection('testSection', 'nixSection');
     
     assert(isempty(s.referring_data_arrays));
@@ -366,7 +366,7 @@ function [] = test_referring_data_arrays( varargin )
     d2.set_metadata(s);
     assert(size(s.referring_data_arrays, 1) == 2);
     
-    b2.delete_data_array(d2);
+    b2.deleteDataArray(d2);
     d1.set_metadata('');
     assert(isempty(s.referring_data_arrays));
 end
@@ -378,9 +378,9 @@ function [] = test_referring_block_data_arrays( varargin )
 
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
-    d1 = b1.create_data_array(testName, 'nixDataArray', nix.DataType.Double, [1 2]);
+    d1 = b1.createDataArray(testName, 'nixDataArray', nix.DataType.Double, [1 2]);
     b2 = f.createBlock('testBlock2', 'nixBlock');
-    d2 = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    d2 = b2.createDataArray('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
     s = f.createSection('testSection', 'nixSection');
     
     d1.set_metadata(s);
@@ -410,9 +410,9 @@ end
 function [] = test_referring_tags( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
-    t1 = b1.create_tag('testTag1', 'nixTag', [1, 2]);
+    t1 = b1.createTag('testTag1', 'nixTag', [1, 2]);
     b2 = f.createBlock('testBlock2', 'nixBlock');
-    t2 = b2.create_tag('testTag2', 'nixTag', [3, 4]);
+    t2 = b2.createTag('testTag2', 'nixTag', [3, 4]);
     s = f.createSection('testSection', 'nixSection');
     
     assert(isempty(s.referring_tags));
@@ -423,7 +423,7 @@ function [] = test_referring_tags( varargin )
     t2.set_metadata(s);
     assert(size(s.referring_tags, 1) == 2);
     
-    b2.delete_tag(t2);
+    b2.deleteTag(t2);
     t1.set_metadata('');
     assert(isempty(s.referring_tags));
 end
@@ -435,9 +435,9 @@ function [] = test_referring_block_tags( varargin )
 
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
-    t1 = b1.create_tag(testName, 'nixTag', [1, 2]);
+    t1 = b1.createTag(testName, 'nixTag', [1, 2]);
     b2 = f.createBlock('testBlock2', 'nixBlock');
-    t2 = b2.create_tag('testTag2', 'nixTag', [3, 4]);
+    t2 = b2.createTag('testTag2', 'nixTag', [3, 4]);
     s = f.createSection('testSection', 'nixSection');
 
     t1.set_metadata(s);
@@ -467,11 +467,11 @@ end
 function [] = test_referring_multi_tags( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
-    d = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    t1 = b1.create_multi_tag('testMultiTag1', 'nixMultiTag', d);
+    d = b1.createDataArray('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t1 = b1.createMultiTag('testMultiTag1', 'nixMultiTag', d);
     b2 = f.createBlock('testBlock2', 'nixBlock');
-    d = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
-    t2 = b2.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
+    d = b2.createDataArray('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t2 = b2.createMultiTag('testMultiTag2', 'nixMultiTag', d);
     s = f.createSection('testSection', 'nixSection');
     
     assert(isempty(s.referring_multi_tags));
@@ -482,7 +482,7 @@ function [] = test_referring_multi_tags( varargin )
     t2.set_metadata(s);
     assert(size(s.referring_multi_tags, 1) == 2);
     
-    b2.delete_multi_tag(t2);
+    b2.deleteMultiTag(t2);
     t1.set_metadata('');
     assert(isempty(s.referring_multi_tags));
 end
@@ -494,11 +494,11 @@ function [] = test_referring_block_multi_tags( varargin )
 
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
-    d = b1.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    t1 = b1.create_multi_tag(testName, 'nixMultiTag', d);
+    d = b1.createDataArray('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t1 = b1.createMultiTag(testName, 'nixMultiTag', d);
     b2 = f.createBlock('testBlock2', 'nixBlock');
-    d = b2.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
-    t2 = b2.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
+    d = b2.createDataArray('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    t2 = b2.createMultiTag('testMultiTag2', 'nixMultiTag', d);
     s = f.createSection('testSection', 'nixSection');
 
     t1.set_metadata(s);
@@ -528,9 +528,9 @@ end
 function [] = test_referring_sources( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
-    s1 = b1.create_source('testSource1', 'nixSource');
+    s1 = b1.createSource('testSource1', 'nixSource');
     b2 = f.createBlock('testBlock2', 'nixBlock');
-    s2 = b2.create_source('testSource2', 'nixSource');
+    s2 = b2.createSource('testSource2', 'nixSource');
     s = f.createSection('testSection', 'nixSection');
     
     assert(isempty(s.referring_sources));
@@ -541,7 +541,7 @@ function [] = test_referring_sources( varargin )
     s2.set_metadata(s);
     assert(size(s.referring_sources, 1) == 2);
     
-    b2.delete_source(s2);
+    b2.deleteSource(s2);
     s1.set_metadata('');
     assert(isempty(s.referring_sources));
 end
@@ -553,9 +553,9 @@ function [] = test_referring_block_sources( varargin )
 
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
-    s1 = b1.create_source(testName, 'nixSource');
+    s1 = b1.createSource(testName, 'nixSource');
     b2 = f.createBlock('testBlock2', 'nixBlock');
-    s2 = b2.create_source('testSource2', 'nixSource');
+    s2 = b2.createSource('testSource2', 'nixSource');
     s = f.createSection('testSection', 'nixSection');
 
     s1.set_metadata(s);
