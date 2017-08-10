@@ -126,7 +126,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             end
 
             r = obj.createDataArray(name, nixtype, dtype, shape);
-            r.write_all(data);
+            r.writeAllData(data);
         end
 
         function r = hasDataArray(obj, idName)

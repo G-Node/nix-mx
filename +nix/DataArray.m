@@ -57,31 +57,31 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             end
         end
 
-        function r = append_set_dimension(obj)
+        function r = appendSetDimension(obj)
             fname = strcat(obj.alias, '::appendSetDimension');
             h = nix_mx(fname, obj.nix_handle);
             r = nix.Utils.createEntity(h, @nix.SetDimension);
         end
 
-        function r = append_sampled_dimension(obj, interval)
+        function r = appendSampledDimension(obj, interval)
             fname = strcat(obj.alias, '::appendSampledDimension');
             h = nix_mx(fname, obj.nix_handle, interval);
             r = nix.Utils.createEntity(h, @nix.SampledDimension);
         end
 
-        function r = append_range_dimension(obj, ticks)
+        function r = appendRangeDimension(obj, ticks)
             fname = strcat(obj.alias, '::appendRangeDimension');
             h = nix_mx(fname, obj.nix_handle, ticks);
             r = nix.Utils.createEntity(h, @nix.RangeDimension);
         end
 
-        function r = append_alias_range_dimension(obj)
+        function r = appendAliasRangeDimension(obj)
             fname = strcat(obj.alias, '::appendAliasRangeDimension');
             h = nix_mx(fname, obj.nix_handle);
             r = nix.Utils.createEntity(h, @nix.RangeDimension);
         end
 
-        function r = open_dimension_idx(obj, idx)
+        function r = openDimensionIdx(obj, idx)
         % Getting the dimension by index starts with 1
         % instead of 0 compared to all other index functions.
             fname = strcat(obj.alias, '::openDimensionIdx');
@@ -96,12 +96,12 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             end
         end
 
-        function r = delete_dimensions(obj)
+        function r = deleteDimensions(obj)
             fname = strcat(obj.alias, '::deleteDimensions');
             r = nix_mx(fname, obj.nix_handle);
         end
 
-        function r = dimension_count(obj)
+        function r = dimensionCount(obj)
             r = nix.Utils.fetchEntityCount(obj, 'dimensionCount');
         end
 
@@ -109,7 +109,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % Data access methods
         % -----------------
 
-        function r = read_all(obj)
+        function r = readAllData(obj)
             fname = strcat(obj.alias, '::readAll');
             data = nix_mx(fname, obj.nix_handle);
             r = nix.Utils.transpose_array(data);
@@ -118,18 +118,19 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         %-- TODO add (optional) offset
         %-- If a DataArray has been created as boolean or numeric,
         %-- provide that only values of the proper DataType can be written.
-        function [] = write_all(obj, data)
-            if (isinteger(obj.read_all) && isfloat(data))
+        function [] = writeAllData(obj, data)
+            if (isinteger(obj.readAllData) && isfloat(data))
                 disp('Warning: Writing Float data to an Integer DataArray');
             end
 
             err.identifier = 'NIXMX:improperDataType';
-            if (islogical(obj.read_all) && ~islogical(data))
+            if (islogical(obj.readAllData) && ~islogical(data))
                 m = sprintf('Trying to write %s to a logical DataArray', class(data));
                 err.message = m;
                 error(err);
-            elseif (isnumeric(obj.read_all) && ~isnumeric(data))
-                m = sprintf('Trying to write %s to a %s DataArray', class(data), class(obj.read_all));
+            elseif (isnumeric(obj.readAllData) && ~isnumeric(data))
+                m = sprintf('Trying to write %s to a %s DataArray', ...
+                    class(data), class(obj.readAllData));
                 err.message = m;
                 error(err);
             elseif (ischar(data))
@@ -159,7 +160,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % or remodels the size of an array to a completely different
         % shape, existing data that does not fit into the new shape
         % will be lost!
-        function [] = set_data_extent(obj, extent)
+        function [] = setDataExtent(obj, extent)
             fname = strcat(obj.alias, '::setDataExtent');
             nix_mx(fname, obj.nix_handle, extent);
         end

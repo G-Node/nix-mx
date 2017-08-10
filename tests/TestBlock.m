@@ -92,7 +92,7 @@ function [] = testCreateDataArray( varargin )
     da = b.createDataArray(doubleName, dtype, nix.DataType.Double, [2 3]);
     assert(strcmp(da.name, doubleName));
     assert(strcmp(da.type, dtype));
-    tmp = da.read_all();
+    tmp = da.readAllData();
     assert(all(tmp(:) == 0));
 
     try
@@ -138,7 +138,7 @@ function [] = testCreateDataArrayFromData( varargin )
     assert(strcmp(da.name, numName));
     assert(strcmp(da.type, daType));
     
-    tmp = da.read_all();
+    tmp = da.readAllData();
     assert(strcmp(class(tmp), class(numData)));
     assert(isequal(size(tmp), size(numData)));
     assert(isequal(tmp, numData));
@@ -146,9 +146,9 @@ function [] = testCreateDataArrayFromData( varargin )
     logName = 'logicalDataArray';
     logData = logical([1 0 1; 0 1 0; 1 0 1]);
     da = b.createDataArrayFromData(logName, daType, logData);
-    assert(islogical(da.read_all));
-    assert(isequal(size(da.read_all), size(logData)));
-    assert(isequal(da.read_all, logData));
+    assert(islogical(da.readAllData));
+    assert(isequal(size(da.readAllData), size(logData)));
+    assert(isequal(da.readAllData, logData));
     
     try
         b.createDataArrayFromData('stringDataArray', daType, ['a' 'b']);

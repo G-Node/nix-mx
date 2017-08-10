@@ -11,32 +11,32 @@ function funcs = TestDataArray
 %   Detailed explanation goes here
 
     funcs = {};
-    funcs{end+1} = @test_attrs;
-    funcs{end+1} = @test_open_data;
-    funcs{end+1} = @test_set_metadata;
-    funcs{end+1} = @test_open_metadata;
-    funcs{end+1} = @test_list_sources;
-    funcs{end+1} = @test_write_data_double;
-    funcs{end+1} = @test_write_data_logical;
-    funcs{end+1} = @test_write_data_float;
-    funcs{end+1} = @test_write_data_integer;
-    funcs{end+1} = @test_add_source;
-    funcs{end+1} = @test_add_sources;
-    funcs{end+1} = @test_open_source;
-    funcs{end+1} = @test_open_source_idx;
-    funcs{end+1} = @test_remove_source;
-    funcs{end+1} = @test_has_source;
-    funcs{end+1} = @test_source_count;
-    funcs{end+1} = @test_dimensions;
-    funcs{end+1} = @test_open_dimension_idx;
-    funcs{end+1} = @test_dimension_count;
-    funcs{end+1} = @test_datatype;
-    funcs{end+1} = @test_set_data_extent;
-    funcs{end+1} = @test_compare;
-    funcs{end+1} = @test_filter_source;
+    funcs{end+1} = @testAttributes;
+    funcs{end+1} = @testOpenData;
+    funcs{end+1} = @testSetMetadata;
+    funcs{end+1} = @testOpenMetadata;
+    funcs{end+1} = @testListSources;
+    funcs{end+1} = @testWriteDataDouble;
+    funcs{end+1} = @testWriteDataLogical;
+    funcs{end+1} = @testWriteDataFloat;
+    funcs{end+1} = @testWriteDataInteger;
+    funcs{end+1} = @testAddSource;
+    funcs{end+1} = @testAddSources;
+    funcs{end+1} = @testOpenSource;
+    funcs{end+1} = @testOpenSourceIdx;
+    funcs{end+1} = @testRemoveSource;
+    funcs{end+1} = @testHasSource;
+    funcs{end+1} = @testSourceCount;
+    funcs{end+1} = @testDimensions;
+    funcs{end+1} = @testOpenDimensionIdx;
+    funcs{end+1} = @testDimensionCount;
+    funcs{end+1} = @testDatatype;
+    funcs{end+1} = @testSetDataExtent;
+    funcs{end+1} = @testCompare;
+    funcs{end+1} = @testFilterSource;
 end
 
-function [] = test_attrs( varargin )
+function [] = testAttributes( varargin )
 %% Test: Access Attributes
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
@@ -87,38 +87,38 @@ function [] = test_attrs( varargin )
 end
 
 %% Test: Read all data from DataArray
-function [] = test_open_data( varargin )
+function [] = testOpenData( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     daType = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nix.Block');
 
     da = b.createDataArray('logicalArray', daType, nix.DataType.Bool, [3 3]);
-    assert(islogical(da.read_all));
+    assert(islogical(da.readAllData));
     da = b.createDataArray('doubleDataArray', daType, nix.DataType.Double, [3 3]);
-    assert(isa(da.read_all, 'double'));
+    assert(isa(da.readAllData, 'double'));
     da = b.createDataArray('floatDataArray', daType, nix.DataType.Float, [3 3]);
-    assert(isfloat(da.read_all));
+    assert(isfloat(da.readAllData));
     da = b.createDataArray('Int8DataArray', daType, nix.DataType.Int8, [3 3]);
-    assert(isa(da.read_all, 'int8'));
+    assert(isa(da.readAllData, 'int8'));
     da = b.createDataArray('Int16DataArray', daType, nix.DataType.Int16, [3 3]);
-    assert(isa(da.read_all, 'int16'));
+    assert(isa(da.readAllData, 'int16'));
     da = b.createDataArray('Int32DataArray', daType, nix.DataType.Int32, [3 3]);
-    assert(isa(da.read_all, 'int32'));
+    assert(isa(da.readAllData, 'int32'));
     da = b.createDataArray('Int64DataArray', daType, nix.DataType.Int64, [3 3]);
-    assert(isa(da.read_all, 'int64'));
+    assert(isa(da.readAllData, 'int64'));
     da = b.createDataArray('UInt8DataArray', daType, nix.DataType.UInt8, [3 3]);
-    assert(isa(da.read_all, 'uint8'));
+    assert(isa(da.readAllData, 'uint8'));
     da = b.createDataArray('UInt16DataArray', daType, nix.DataType.UInt16, [3 3]);
-    assert(isa(da.read_all, 'uint16'));
+    assert(isa(da.readAllData, 'uint16'));
     da = b.createDataArray('UInt32DataArray', daType, nix.DataType.UInt32, [3 3]);
-    assert(isa(da.read_all, 'uint32'));
+    assert(isa(da.readAllData, 'uint32'));
     da = b.createDataArray('UInt64DataArray', daType, nix.DataType.UInt64, [3 3]);
-    assert(isa(da.read_all, 'uint64'));
+    assert(isa(da.readAllData, 'uint64'));
 end
 
 %% Test: Set metadata
-function [] = test_set_metadata ( varargin )
+function [] = testSetMetadata ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     secName1 = 'testSection1';
     secName2 = 'testSection2';
@@ -151,7 +151,7 @@ function [] = test_set_metadata ( varargin )
 end
 
 %% Test: Open metadata
-function [] = test_open_metadata( varargin )
+function [] = testOpenMetadata( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     tmp = f.createSection('testSection', 'nixSection');
     b = f.createBlock('testBlock', 'nixBlock');
@@ -162,7 +162,7 @@ function [] = test_open_metadata( varargin )
 end
 
 %% Test: List sources
-function [] = test_list_sources( varargin )
+function [] = testListSources( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     b = f.blocks{1};
     d1 = b.dataArrays{1};
@@ -172,7 +172,7 @@ function [] = test_list_sources( varargin )
 end
 
 %% Test: Write Data double
-function [] = test_write_data_double( varargin )
+function [] = testWriteDataDouble( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
@@ -184,32 +184,32 @@ function [] = test_write_data_double( varargin )
     cellData = {1 2 3 4 5};
     
     da = b.createDataArray('numericArray', typeDA, nix.DataType.Double, 5);
-    da.write_all(numData);
-    assert(isequal(da.read_all(), numData));
+    da.writeAllData(numData);
+    assert(isequal(da.readAllData(), numData));
 
     try
-        da.write_all(logData);
+        da.writeAllData(logData);
     catch ME
         assert(strcmp(ME.identifier, 'NIXMX:improperDataType'));
     end
     try
-        da.write_all(charData);
+        da.writeAllData(charData);
     catch ME
         assert(strcmp(ME.identifier, 'NIXMX:improperDataType'));
     end
     try
-        da.write_all(cellData);
+        da.writeAllData(cellData);
     catch ME
         assert(strcmp(ME.identifier, 'NIXMX:improperDataType'));
     end
 
     clear da b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
-    assert(isequal(f.blocks{1}.dataArrays{1}.read_all, numData));
+    assert(isequal(f.blocks{1}.dataArrays{1}.readAllData, numData));
 end
 
 %% Test: Write Data logical
-function [] = test_write_data_logical( varargin )
+function [] = testWriteDataLogical( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
@@ -220,26 +220,26 @@ function [] = test_write_data_logical( varargin )
     charData = ['a' 'b' 'c' 'd' 'e'];
     
     da = b.createDataArray('logicalArray', typeDA, nix.DataType.Bool, 5);
-    da.write_all(logData);
-    assert(isequal(da.read_all, logData));
+    da.writeAllData(logData);
+    assert(isequal(da.readAllData, logData));
     try
-        da.write_all(numData);
+        da.writeAllData(numData);
     catch ME
         assert(strcmp(ME.identifier, 'NIXMX:improperDataType'));
     end
     try
-        da.write_all(charData);
+        da.writeAllData(charData);
     catch ME
         assert(strcmp(ME.identifier, 'NIXMX:improperDataType'));
     end
 
     clear da b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
-    assert(isequal(f.blocks{1}.dataArrays{1}.read_all, logData));
+    assert(isequal(f.blocks{1}.dataArrays{1}.readAllData, logData));
 end
 
 %% Test: Write Data float
-function [] = test_write_data_float( varargin )
+function [] = testWriteDataFloat( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
@@ -248,16 +248,16 @@ function [] = test_write_data_float( varargin )
     numData = [1.3 2.4143 3.9878 4.1239 5];
     
     da = b.createDataArray('floatArray', typeDA, nix.DataType.Float, 5);
-    da.write_all(numData);
-    assert(isequal(da.read_all, single(numData)));
+    da.writeAllData(numData);
+    assert(isequal(da.readAllData, single(numData)));
 
     clear da b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
-    assert(isequal(f.blocks{1}.dataArrays{1}.read_all, single(numData)));
+    assert(isequal(f.blocks{1}.dataArrays{1}.readAllData, single(numData)));
 end
 
 %% Test: Write Data integer
-function [] = test_write_data_integer( varargin )
+function [] = testWriteDataInteger( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
@@ -266,44 +266,44 @@ function [] = test_write_data_integer( varargin )
     numData = [1 2 3; 4 5 6; 7 8 9];
     
     da = b.createDataArray('Int8DataArray', typeDA, nix.DataType.Int8, [3 3]);
-    da.write_all(numData);
-    assert(isequal(da.read_all, numData));
+    da.writeAllData(numData);
+    assert(isequal(da.readAllData, numData));
     da = b.createDataArray('Int16DataArray', typeDA, nix.DataType.Int16, [3 3]);
-    da.write_all(numData);
-    assert(isequal(da.read_all, numData));
+    da.writeAllData(numData);
+    assert(isequal(da.readAllData, numData));
     da = b.createDataArray('Int32DataArray', typeDA, nix.DataType.Int32, [3 3]);
-    da.write_all(numData);
-    assert(isequal(da.read_all, numData));
+    da.writeAllData(numData);
+    assert(isequal(da.readAllData, numData));
     da = b.createDataArray('Int64DataArray', typeDA, nix.DataType.Int64, [3 3]);
-    da.write_all(numData);
-    assert(isequal(da.read_all, numData));
+    da.writeAllData(numData);
+    assert(isequal(da.readAllData, numData));
     da = b.createDataArray('UInt8DataArray', typeDA, nix.DataType.UInt8, [3 3]);
-    da.write_all(numData);
-    assert(isequal(da.read_all, numData));
+    da.writeAllData(numData);
+    assert(isequal(da.readAllData, numData));
     da = b.createDataArray('UInt16DataArray', typeDA, nix.DataType.UInt16, [3 3]);
-    da.write_all(numData);
-    assert(isequal(da.read_all, numData));
+    da.writeAllData(numData);
+    assert(isequal(da.readAllData, numData));
     da = b.createDataArray('UInt32DataArray', typeDA, nix.DataType.UInt32, [3 3]);
-    da.write_all(numData);
-    assert(isequal(da.read_all, numData));
+    da.writeAllData(numData);
+    assert(isequal(da.readAllData, numData));
     da = b.createDataArray('UInt64DataArray', typeDA, nix.DataType.UInt64, [3 3]);
-    da.write_all(numData);
-    assert(isequal(da.read_all, numData));
+    da.writeAllData(numData);
+    assert(isequal(da.readAllData, numData));
 
     clear da b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
-    assert(isequal(f.blocks{1}.dataArrays{1}.read_all, numData));
-    assert(isequal(f.blocks{1}.dataArrays{2}.read_all, numData));
-    assert(isequal(f.blocks{1}.dataArrays{3}.read_all, numData));
-    assert(isequal(f.blocks{1}.dataArrays{4}.read_all, numData));
-    assert(isequal(f.blocks{1}.dataArrays{5}.read_all, numData));
-    assert(isequal(f.blocks{1}.dataArrays{6}.read_all, numData));
-    assert(isequal(f.blocks{1}.dataArrays{7}.read_all, numData));
-    assert(isequal(f.blocks{1}.dataArrays{8}.read_all, numData));
+    assert(isequal(f.blocks{1}.dataArrays{1}.readAllData, numData));
+    assert(isequal(f.blocks{1}.dataArrays{2}.readAllData, numData));
+    assert(isequal(f.blocks{1}.dataArrays{3}.readAllData, numData));
+    assert(isequal(f.blocks{1}.dataArrays{4}.readAllData, numData));
+    assert(isequal(f.blocks{1}.dataArrays{5}.readAllData, numData));
+    assert(isequal(f.blocks{1}.dataArrays{6}.readAllData, numData));
+    assert(isequal(f.blocks{1}.dataArrays{7}.readAllData, numData));
+    assert(isequal(f.blocks{1}.dataArrays{8}.readAllData, numData));
 end
 
 %% Test: Add sources by entity and id
-function [] = test_add_source ( varargin )
+function [] = testAddSource ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourceTest', 'nixBlock');
     s = b.createSource('sourceTest', 'nixSource');
@@ -318,7 +318,7 @@ function [] = test_add_source ( varargin )
 end
 
 %% Test: Add sources by entity cell array
-function [] = test_add_sources ( varargin )
+function [] = testAddSources ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
@@ -352,7 +352,7 @@ function [] = test_add_sources ( varargin )
 end
 
 %% Test: Open source by ID or name
-function [] = test_open_source( varargin )
+function [] = testOpenSource( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
     s = b.createSource('test', 'nixSource');
@@ -372,7 +372,7 @@ function [] = test_open_source( varargin )
     assert(isempty(d.open_source('I do not exist')));
 end
 
-function [] = test_open_source_idx( varargin )
+function [] = testOpenSourceIdx( varargin )
 %% Test Open Source by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
@@ -390,7 +390,7 @@ function [] = test_open_source_idx( varargin )
 end
 
 %% Test: Remove sources by entity and id
-function [] = test_remove_source ( varargin )
+function [] = testRemoveSource ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourceTest', 'nixBlock');
     s = b.createSource('sourceTest', 'nixSource');
@@ -410,7 +410,7 @@ function [] = test_remove_source ( varargin )
 end
 
 %% Test: has nix.Source by ID or entity
-function [] = test_has_source( varargin )
+function [] = testHasSource( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('testblock', 'nixBlock');
@@ -428,7 +428,7 @@ function [] = test_has_source( varargin )
 end
 
 %% Test: Source count
-function [] = test_source_count( varargin )
+function [] = testSourceCount( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
@@ -445,7 +445,7 @@ function [] = test_source_count( varargin )
 end
 
 %% Test: Dimensions
-function [] = test_dimensions( varargin )
+function [] = testDimensions( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
@@ -454,44 +454,44 @@ function [] = test_dimensions( varargin )
     assert(isempty(da.dimensions));
     assert(isempty(f.blocks{1}.dataArrays{1}.dimensions));
     
-    da.append_set_dimension();
+    da.appendSetDimension();
     assert(length(da.dimensions) == 1);
     assert(strcmp(da.dimensions{1}.dimensionType, 'set'));
     assert(strcmp(f.blocks{1}.dataArrays{1}.dimensions{1}.dimensionType, 'set'));
     
-    da.append_sampled_dimension(200);
+    da.appendSampledDimension(200);
     assert(length(da.dimensions) == 2);
     assert(strcmp(da.dimensions{2}.dimensionType, 'sample'));
     assert(da.dimensions{2}.samplingInterval == 200);
     assert(f.blocks{1}.dataArrays{1}.dimensions{2}.samplingInterval == 200);
     
     ticks = [1, 2, 3, 4];
-    da.append_range_dimension(ticks);
+    da.appendRangeDimension(ticks);
     assert(length(da.dimensions) == 3);
     assert(strcmp(da.dimensions{3}.dimensionType, 'range'));
     assert(isequal(da.dimensions{3}.ticks, ticks));
     assert(isequal(f.blocks{1}.dataArrays{1}.dimensions{3}.ticks, ticks));
     assert(~da.dimensions{3}.isAlias);
 
-    da.delete_dimensions();
+    da.deleteDimensions();
     assert(isempty(da.dimensions));
    
     try
-        da.append_alias_range_dimension;
+        da.appendAliasRangeDimension;
     catch ME
         assert(strcmp(ME.identifier, 'nix:arg:inval'));
     end;
     
-    da.append_set_dimension();
+    da.appendSetDimension();
     try
-        da.append_alias_range_dimension();
+        da.appendAliasRangeDimension();
     catch ME
         assert(strcmp(ME.identifier, 'nix:arg:inval'));
     end;
     
     daAlias = b.createDataArray('aliasDimTest', 'nix.DataArray', ...
         nix.DataType.Double, 25);
-    daAlias.append_alias_range_dimension();
+    daAlias.appendAliasRangeDimension();
     assert(f.blocks{1}.dataArrays{2}.dimensions{1}.isAlias);
     
     clear daAlias da b f;
@@ -501,7 +501,7 @@ function [] = test_dimensions( varargin )
     %-- Test for the alias dimension shape work around
     daAliasWa = f.blocks{1}.createDataArrayFromData('aliasDimWTest1', ...
         'nix.DataArray', [1 2 3]);
-    daAliasWa.append_alias_range_dimension();
+    daAliasWa.appendAliasRangeDimension();
     assert(daAliasWa.dimensions{1}.isAlias);
     
     daAliasWa = f.blocks{1}.createDataArrayFromData('aliasDimWATest2', ...
@@ -513,51 +513,51 @@ function [] = test_dimensions( varargin )
     assert(isequal(daAliasWa.dataExtent, [3 3]));
 end
 
-function [] = test_open_dimension_idx( varargin )
+function [] = testOpenDimensionIdx( varargin )
 %% Test: Open dimension by index
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
     
-    da.append_set_dimension();
-    da.append_sampled_dimension(200);
-    da.append_range_dimension([1, 2, 3, 4]);
+    da.appendSetDimension();
+    da.appendSampledDimension(200);
+    da.appendRangeDimension([1, 2, 3, 4]);
 
     % for some weird reason getting the dimension by index starts with 1
     % instead of 0 compared to all other index functions.
-    assert(strcmp(da.open_dimension_idx(1).dimensionType, 'set'));
-    assert(strcmp(da.open_dimension_idx(2).dimensionType, 'sample'));
-    assert(strcmp(da.open_dimension_idx(3).dimensionType, 'range'));
+    assert(strcmp(da.openDimensionIdx(1).dimensionType, 'set'));
+    assert(strcmp(da.openDimensionIdx(2).dimensionType, 'sample'));
+    assert(strcmp(da.openDimensionIdx(3).dimensionType, 'range'));
 end
 
 %% Test: Dimension count
-function [] = test_dimension_count( varargin )
+function [] = testDimensionCount( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
     da = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     
-    assert(da.dimension_count == 0);
+    assert(da.dimensionCount == 0);
 
-    da.append_set_dimension();
-    assert(da.dimension_count == 1);
+    da.appendSetDimension();
+    assert(da.dimensionCount == 1);
 
-    da.append_sampled_dimension(200);
-    assert(da.dimension_count == 2);
+    da.appendSampledDimension(200);
+    assert(da.dimensionCount == 2);
 
-    da.delete_dimensions();
-    assert(da.dimension_count == 0);
+    da.deleteDimensions();
+    assert(da.dimensionCount == 0);
 
-    da.append_range_dimension([1, 2, 3, 4]);
+    da.appendRangeDimension([1, 2, 3, 4]);
 
     clear da b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
-    assert(f.blocks{1}.dataArrays{1}.dimension_count() == 1);
+    assert(f.blocks{1}.dataArrays{1}.dimensionCount() == 1);
 end
 
 %% Test: Datatype
-function [] = test_datatype( varargin )
+function [] = testDatatype( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     typeDA = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
@@ -567,23 +567,23 @@ function [] = test_datatype( varargin )
     assert(strcmp(da.datatype, 'double'));
     
     da = b.createDataArray('testDataArray2', typeDA, nix.DataType.Bool, 5);
-    da.write_all(logical([1 0 1 1 1]));
+    da.writeAllData(logical([1 0 1 1 1]));
     assert(strcmp(da.datatype, 'logical'));
 end
 
 %% Test: Set extent
-function [] = test_set_data_extent( varargin )
+function [] = testSetDataExtent( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixblock');
 
     da = b.createDataArrayFromData('testDataArray1', 'nix.DataArray', [1 2 3; 4 5 6]);
     extent = [4 6];
-    da.set_data_extent(extent);
-    assert(da.dataExtent(1) == extent(1) && size(da.read_all, 2) == extent(2));
+    da.setDataExtent(extent);
+    assert(da.dataExtent(1) == extent(1) && size(da.readAllData, 2) == extent(2));
 end
 
-function [] = test_compare( varargin )
+function [] = testCompare( varargin )
 %% Test: Compare DataArray entities
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
@@ -599,7 +599,7 @@ function [] = test_compare( varargin )
 end
 
 %% Test: filter sources
-function [] = test_filter_source( varargin )
+function [] = testFilterSource( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);

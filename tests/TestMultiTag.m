@@ -657,12 +657,12 @@ function [] = test_retrieve_data( varargin )
                                           %        123 124 125 126
 
 	d_pos = b.createDataArrayFromData('positionsDA', 'nixDataArray', pos);
-    d_pos.append_sampled_dimension(0);
-    d_pos.append_sampled_dimension(0);
+    d_pos.appendSampledDimension(0);
+    d_pos.appendSampledDimension(0);
 
     d_ext = b.createDataArrayFromData('extentsDA', 'nixDataArray', ext);
-    d_ext.append_sampled_dimension(0);
-    d_ext.append_sampled_dimension(0);
+    d_ext.appendSampledDimension(0);
+    d_ext.appendSampledDimension(0);
 
     t = b.createMultiTag('testMultiTag', 'nixMultiTag', d_pos);
     t.set_extents(d_ext);
@@ -671,14 +671,14 @@ function [] = test_retrieve_data( varargin )
     raw1 = [111, 112, 113, 114, 115, 116, 117, 118; ...
                 121, 122, 123, 124, 125, 126, 127, 128];
     d1 = b.createDataArrayFromData('reference1', 'nixDataArray', raw1);
-    d1.append_sampled_dimension(1);
-    d1.append_sampled_dimension(1);
+    d1.appendSampledDimension(1);
+    d1.appendSampledDimension(1);
 
     raw2 = [211, 212, 213, 214, 215, 216, 217, 218; ...
                 221, 222, 223, 224, 225, 226, 227, 228];
     d2 = b.createDataArrayFromData('reference2', 'nixDataArray', raw2);
-    d2.append_sampled_dimension(1);
-    d2.append_sampled_dimension(1);
+    d2.appendSampledDimension(1);
+    d2.appendSampledDimension(1);
 
     % add data_arrays as references to multi tag
     t.add_reference(d1);
@@ -720,12 +720,12 @@ function [] = test_retrieve_data_idx( varargin )
                                           %        123 124 125 126
 
 	d_pos = b.createDataArrayFromData('positionsDA', 'nixDataArray', pos);
-    d_pos.append_sampled_dimension(0);
-    d_pos.append_sampled_dimension(0);
+    d_pos.appendSampledDimension(0);
+    d_pos.appendSampledDimension(0);
 
     d_ext = b.createDataArrayFromData('extentsDA', 'nixDataArray', ext);
-    d_ext.append_sampled_dimension(0);
-    d_ext.append_sampled_dimension(0);
+    d_ext.appendSampledDimension(0);
+    d_ext.appendSampledDimension(0);
 
     t = b.createMultiTag('testMultiTag', 'nixMultiTag', d_pos);
     t.set_extents(d_ext);
@@ -734,14 +734,14 @@ function [] = test_retrieve_data_idx( varargin )
     raw1 = [111, 112, 113, 114, 115, 116, 117, 118; ...
                 121, 122, 123, 124, 125, 126, 127, 128];
     d1 = b.createDataArrayFromData('reference1', 'nixDataArray', raw1);
-    d1.append_sampled_dimension(1);
-    d1.append_sampled_dimension(1);
+    d1.appendSampledDimension(1);
+    d1.appendSampledDimension(1);
 
     raw2 = [211, 212, 213, 214, 215, 216, 217, 218; ...
                 221, 222, 223, 224, 225, 226, 227, 228];
     d2 = b.createDataArrayFromData('reference2', 'nixDataArray', raw2);
-    d2.append_sampled_dimension(1);
-    d2.append_sampled_dimension(1);
+    d2.appendSampledDimension(1);
+    d2.appendSampledDimension(1);
 
     % add data_arrays as references to multi tag
     t.add_reference(d1);
@@ -776,16 +776,16 @@ function [] = test_retrieve_feature_data( varargin )
     % create feature data arrays
     raw_feat1 = [11 12 13 14 15 16 17 18];
     da_feat1 = b.createDataArrayFromData('feature1', 'nixDataArray', raw_feat1);
-    da_feat1.append_sampled_dimension(1);
+    da_feat1.appendSampledDimension(1);
 
     raw_feat2 = [21 22 23 24 25 26 27 28];
     da_feat2 = b.createDataArrayFromData('feature2', 'nixDataArray', raw_feat2);
-    da_feat2.append_sampled_dimension(1);
+    da_feat2.appendSampledDimension(1);
 
     % create referenced data array
     raw_feat3 = [31 32 33 34 35 36 37 38];
     da_feat3 = b.createDataArrayFromData('reference', 'nixDataArray', raw_feat3);
-    da_feat3.append_sampled_dimension(1);
+    da_feat3.appendSampledDimension(1);
 
     % create position, extents DA and multi tag
     pos = [0; 3; 5];
@@ -794,8 +794,8 @@ function [] = test_retrieve_feature_data( varargin )
     da_pos = b.createDataArrayFromData('positions', 'nixDataArray', pos);
     da_ext = b.createDataArrayFromData('extents', 'nixDataArray', ext);
 
-    da_pos.append_sampled_dimension(0);
-    da_ext.append_sampled_dimension(0);
+    da_pos.appendSampledDimension(0);
+    da_ext.appendSampledDimension(0);
 
     t = b.createMultiTag('testMultiTag', 'nixMultiTag', da_pos);
     t.set_extents(da_ext);
@@ -865,16 +865,16 @@ function [] = test_retrieve_feature_data_idx( varargin )
     % create feature data arrays
     raw_feat1 = [11 12 13 14 15 16 17 18];
     da_feat1 = b.createDataArrayFromData('feature1', 'nixDataArray', raw_feat1);
-    da_feat1.append_sampled_dimension(1);
+    da_feat1.appendSampledDimension(1);
 
     raw_feat2 = [21 22 23 24 25 26 27 28];
     da_feat2 = b.createDataArrayFromData('feature2', 'nixDataArray', raw_feat2);
-    da_feat2.append_sampled_dimension(1);
+    da_feat2.appendSampledDimension(1);
 
     % create referenced data array
     raw_feat3 = [31 32 33 34 35 36 37 38];
     da_feat3 = b.createDataArrayFromData('reference', 'nixDataArray', raw_feat3);
-    da_feat3.append_sampled_dimension(1);
+    da_feat3.appendSampledDimension(1);
 
     % create position, extents DA and multi tag
     pos = [0; 3; 5];
@@ -883,8 +883,8 @@ function [] = test_retrieve_feature_data_idx( varargin )
     da_pos = b.createDataArrayFromData('positions', 'nixDataArray', pos);
     da_ext = b.createDataArrayFromData('extents', 'nixDataArray', ext);
 
-    da_pos.append_sampled_dimension(0);
-    da_ext.append_sampled_dimension(0);
+    da_pos.appendSampledDimension(0);
+    da_ext.appendSampledDimension(0);
 
     t = b.createMultiTag('testMultiTag', 'nixMultiTag', da_pos);
     t.set_extents(da_ext);

@@ -21,7 +21,7 @@ function [] = test_set_dimension( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
-    d1 = da.append_set_dimension();
+    d1 = da.appendSetDimension();
 
     assert(strcmp(d1.dimensionType, 'set'));
     assert(isempty(d1.labels));
@@ -55,7 +55,7 @@ function [] = test_sample_dimension( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
-    d1 = da.append_sampled_dimension(200);
+    d1 = da.appendSampledDimension(200);
 
     assert(strcmp(d1.dimensionType, 'sample'));
     assert(isempty(d1.label));
@@ -109,7 +109,7 @@ function [] = test_range_dimension( varargin )
     b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
     ticks = [1 2 3 4];
-    d1 = da.append_range_dimension(ticks);
+    d1 = da.appendRangeDimension(ticks);
 
     assert(strcmp(d1.dimensionType, 'range'));
     assert(isempty(d1.label));

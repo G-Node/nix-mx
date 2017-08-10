@@ -537,11 +537,11 @@ function [] = test_retrieve_data( varargin )
     rawName = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     rawID = [11, 12, 13, 14, 15, 16, 17];
     d = b.createDataArrayFromData('testDataArrayName', 'nixDataArray', rawName);
-    d.append_sampled_dimension(1);
+    d.appendSampledDimension(1);
     t.add_reference(d);
 
     d = b.createDataArrayFromData('testDataArrayID', 'nixDataArray', rawID);
-    d.append_sampled_dimension(1);
+    d.appendSampledDimension(1);
     t.add_reference(d);
 
     % test get non existent
@@ -569,7 +569,7 @@ function [] = test_retrieve_data_idx( varargin )
     b = f.createBlock('testBlock', 'nixBlock');
     raw = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     d = b.createDataArrayFromData('testDataArray', 'nixDataArray', raw);
-    d.append_sampled_dimension(1);
+    d.appendSampledDimension(1);
     % tag positon is used like an index, therfore starts with 0!
     tagStartPos = [3];
     t = b.createTag('testTag', 'nixTag', tagStartPos);
@@ -593,7 +593,7 @@ function [] = test_retrieve_feature_data( varargin )
     b = f.createBlock('testBlock', 'nixBlock');
     raw = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     d = b.createDataArrayFromData('testDataArray', 'nixDataArray', raw);
-    d.append_sampled_dimension(1);
+    d.appendSampledDimension(1);
     tagStartPos = [3];
     t = b.createTag('testTag', 'nixTag', tagStartPos);
     t.extent = [3];
@@ -611,14 +611,14 @@ function [] = test_retrieve_feature_data( varargin )
 
     % test retrieve untagged feature data by name
     df = b.createDataArrayFromData('testUntagged', 'nixDataArray', rawFeature);
-    df.append_sampled_dimension(1);
+    df.appendSampledDimension(1);
     t.add_feature(df, nix.LinkType.Untagged);
     retData = t.retrieve_feature_data('testUntagged');
     assert(size(retData, 2) == size(rawFeature, 2), 'Untagged size check fail');
 
     % test retrieve tagged feature data by id
     df = b.createDataArrayFromData('testTagged', 'nixDataArray', rawFeature);
-    df.append_sampled_dimension(1);
+    df.appendSampledDimension(1);
     t.add_feature(df, nix.LinkType.Tagged);
     retData = t.retrieve_feature_data(df.id);
     assert(size(retData, 2) == t.extent, 'Tagged Extent check fail');
@@ -626,7 +626,7 @@ function [] = test_retrieve_feature_data( varargin )
 
     % test retrieve indexed feature data by id
     df = b.createDataArrayFromData('testIndexed', 'nixDataArray', rawFeature);
-    df.append_sampled_dimension(1);
+    df.appendSampledDimension(1);
     t.add_feature(df, nix.LinkType.Indexed);
     retData = t.retrieve_feature_data(df.id);
     assert(size(retData, 2) == size(rawFeature, 2), 'Indexed size check fail');
@@ -638,7 +638,7 @@ function [] = test_retrieve_feature_data_idx( varargin )
     b = f.createBlock('testBlock', 'nixBlock');
     raw = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     d = b.createDataArrayFromData('testDataArray', 'nixDataArray', raw);
-    d.append_sampled_dimension(1);
+    d.appendSampledDimension(1);
     tagStartPos = [3];
     t = b.createTag('testTag', 'nixTag', tagStartPos);
     t.extent = [3];
@@ -648,14 +648,14 @@ function [] = test_retrieve_feature_data_idx( varargin )
 
     % test retrieve untagged feature data 
     df = b.createDataArrayFromData('testUntagged', 'nixDataArray', rawFeature);
-    df.append_sampled_dimension(1);
+    df.appendSampledDimension(1);
     t.add_feature(df, nix.LinkType.Untagged);
     retData = t.retrieve_feature_data_idx(1);
     assert(size(retData, 2) == size(rawFeature, 2), 'Untagged size check fail');
 
     % test retrieve tagged feature data 
     df = b.createDataArrayFromData('testTagged', 'nixDataArray', rawFeature);
-    df.append_sampled_dimension(1);
+    df.appendSampledDimension(1);
     t.add_feature(df, nix.LinkType.Tagged);
     retData = t.retrieve_feature_data_idx(2);
     assert(size(retData, 2) == t.extent, 'Tagged Extent check fail');
@@ -663,7 +663,7 @@ function [] = test_retrieve_feature_data_idx( varargin )
 
     % test retrieve indexed feature data
     df = b.createDataArrayFromData('testIndexed', 'nixDataArray', rawFeature);
-    df.append_sampled_dimension(1);
+    df.appendSampledDimension(1);
     t.add_feature(df, nix.LinkType.Indexed);
     retData = t.retrieve_feature_data_idx(3);
     assert(size(retData, 2) == size(rawFeature, 2), 'Indexed size check fail');
