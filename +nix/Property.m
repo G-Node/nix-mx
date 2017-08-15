@@ -52,10 +52,6 @@ classdef Property < nix.NamedEntity
             end
             
             nix_mx('Property::updateValues', obj.nix_handle, values);
-
-            dispStr = 'Note: nix only supports updating the actual value at the moment.';
-            dispStr = [dispStr, char(10), 'Attributes like uncertainty or checksum cannot be set at the moment.'];
-            disp(dispStr);
         end
         
         function c = value_count(obj)

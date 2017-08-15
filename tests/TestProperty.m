@@ -61,13 +61,9 @@ function [] = test_values( varargin )
     assert(size(currProp.values, 1) == 3);
     assert(currProp.values{1}.value);
     assert(currProp.values{1}.uncertainty == 0);
-    assert(isempty(currProp.values{1}.checksum));
-    assert(isempty(currProp.values{1}.encoder));
-    assert(isempty(currProp.values{1}.filename));
-    assert(isempty(currProp.values{1}.reference));
 end
 
-%% Test: Update values
+%% Test: Update values and uncertainty
 function [] = test_update_values( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.create_section('mainSection', 'nixSection');
@@ -84,12 +80,17 @@ function [] = test_update_values( varargin )
     updateString.values{3}.value = 'more strings';
     assert(strcmp(updateString.values{3}.value, 'more strings'));
 
-    %-- test update double
+    %-- test update double / test set uncertainty
     updateDouble = s.create_property_with_value('doubleProperty', {2, 3, 4, 5});
     assert(updateDouble.values{1}.value == 2);
     updateDouble.values{1}.value = 2.2;
     assert(updateDouble.values{1}.value == 2.2);
-    
+
+    assert(updateDouble.values{1}.uncertainty == 0);
+    updateDouble.values{1}.uncertainty = 0.5;
+    assert(f.sections{1}.properties{end}.values{1}.uncertainty == 0.5);
+    assert(f.sections{1}.properties{1}.values{1}.uncertainty == 0);
+
     %-- test remove values from property
     delValues = s.properties{3};
     assert(size(delValues.values, 1) == 4);
@@ -127,8 +128,7 @@ function [] = test_value_count( varargin )
 
     clear p s f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
-    pid = f.sections{1}.properties{1}.id;
-    assert(f.sections{1}.open_property(pid).value_count() == 1);
+    assert(f.sections{1}.properties{1}.value_count() == 1);
 end
 
 %% Test: Delete values
