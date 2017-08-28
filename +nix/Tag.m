@@ -34,49 +34,49 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % References methods
         % ------------------
 
-        function [] = add_reference(obj, add_this)
-            nix.Utils.add_entity(obj, 'addReference', add_this, 'nix.DataArray');
+        function [] = addReference(obj, entity)
+            nix.Utils.add_entity(obj, 'addReference', entity, 'nix.DataArray');
         end
 
-        function [] = add_references(obj, add_cell_array)
-            nix.Utils.add_entity_array(obj, 'addReferences', add_cell_array, 'nix.DataArray');
+        function [] = addReferences(obj, entityArray)
+            nix.Utils.add_entity_array(obj, 'addReferences', entityArray, 'nix.DataArray');
         end
 
-        function r = has_reference(obj, id_or_name)
-            r = nix.Utils.fetchHasEntity(obj, 'hasReference', id_or_name);
+        function r = hasReference(obj, idName)
+            r = nix.Utils.fetchHasEntity(obj, 'hasReference', idName);
         end
 
-        function r = remove_reference(obj, del)
+        function r = removeReference(obj, del)
             r = nix.Utils.delete_entity(obj, 'removeReference', del, 'nix.DataArray');
         end
 
-        function r = open_reference(obj, id_or_name)
-            r = nix.Utils.open_entity(obj, 'openReferenceDataArray', id_or_name, @nix.DataArray);
+        function r = openReference(obj, idName)
+            r = nix.Utils.open_entity(obj, 'openReferenceDataArray', idName, @nix.DataArray);
         end
 
-        function r = open_reference_idx(obj, index)
+        function r = openReferenceIdx(obj, index)
             idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openReferenceIdx', idx, @nix.DataArray);
         end
 
-        function r = retrieve_data(obj, id_or_name)
+        function r = retrieveData(obj, idName)
             fname = strcat(obj.alias, '::retrieveData');
-            data = nix_mx(fname, obj.nix_handle, id_or_name);
+            data = nix_mx(fname, obj.nix_handle, idName);
             r = nix.Utils.transpose_array(data);
         end
 
-        function r = retrieve_data_idx(obj, index)
+        function r = retrieveDataIdx(obj, index)
             idx = nix.Utils.handle_index(index);
             fname = strcat(obj.alias, '::retrieveDataIdx');
             data = nix_mx(fname, obj.nix_handle, idx);
             r = nix.Utils.transpose_array(data);
         end
 
-        function r = reference_count(obj)
+        function r = referenceCount(obj)
             r = nix.Utils.fetchEntityCount(obj, 'referenceCount');
         end
 
-        function r = filter_references(obj, filter, val)
+        function r = filterReferences(obj, filter, val)
             r = nix.Utils.filter(obj, 'referencesFiltered', filter, val, @nix.DataArray);
         end
 
@@ -84,48 +84,48 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % Features methods
         % ------------------
 
-        function r = add_feature(obj, add_this, link_type)
-            id = nix.Utils.parseEntityId(add_this, 'nix.DataArray');
+        function r = addFeature(obj, entity, linkType)
+            id = nix.Utils.parseEntityId(entity, 'nix.DataArray');
             fname = strcat(obj.alias, '::createFeature');
-            h = nix_mx(fname, obj.nix_handle, id, link_type);
+            h = nix_mx(fname, obj.nix_handle, id, linkType);
             r = nix.Utils.createEntity(h, @nix.Feature);
         end
 
-        function r = has_feature(obj, id_or_name)
-            r = nix.Utils.fetchHasEntity(obj, 'hasFeature', id_or_name);
+        function r = hasFeature(obj, idName)
+            r = nix.Utils.fetchHasEntity(obj, 'hasFeature', idName);
         end
 
-        function r = remove_feature(obj, del)
+        function r = removeFeature(obj, del)
             r = nix.Utils.delete_entity(obj, 'deleteFeature', del, 'nix.Feature');
         end
 
-        function r = open_feature(obj, id_or_name)
-            r = nix.Utils.open_entity(obj, 'openFeature', id_or_name, @nix.Feature);
+        function r = openFeature(obj, idName)
+            r = nix.Utils.open_entity(obj, 'openFeature', idName, @nix.Feature);
         end
 
-        function r = open_feature_idx(obj, index)
+        function r = openFeatureIdx(obj, index)
             idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openFeatureIdx', idx, @nix.Feature);
         end
 
-        function r = retrieve_feature_data(obj, id_or_name)
+        function r = retrieveFeatureData(obj, idName)
             fname = strcat(obj.alias, '::featureRetrieveData');
-            data = nix_mx(fname, obj.nix_handle, id_or_name);
+            data = nix_mx(fname, obj.nix_handle, idName);
             r = nix.Utils.transpose_array(data);
         end
 
-        function r = retrieve_feature_data_idx(obj, index)
+        function r = retrieveFeatureDataIdx(obj, index)
             idx = nix.Utils.handle_index(index);
             fname = strcat(obj.alias, '::featureRetrieveDataIdx');
             data = nix_mx(fname, obj.nix_handle, idx);
             r = nix.Utils.transpose_array(data);
         end
 
-        function r = feature_count(obj)
+        function r = featureCount(obj)
             r = nix.Utils.fetchEntityCount(obj, 'featureCount');
         end
 
-        function r = filter_features(obj, filter, val)
+        function r = filterFeatures(obj, filter, val)
             r = nix.Utils.filter(obj, 'featuresFiltered', filter, val, @nix.Feature);
         end
     end

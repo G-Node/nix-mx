@@ -22,7 +22,7 @@ function [] = test_open_data ( varargin )
     b = f.createBlock('featureTest', 'nixBlock');
     tmp = b.createDataArray('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
     t = b.createTag('featureTest', 'nixTag', [1, 2]);
-    tmp = t.add_feature(b.dataArrays{1}, nix.LinkType.Tagged);
+    tmp = t.addFeature(b.dataArrays{1}, nix.LinkType.Tagged);
     
     getFeature = t.features{1};
     assert(~isempty(getFeature.open_data));
@@ -35,7 +35,7 @@ function [] = test_get_set_link_type ( varargin )
     b = f.createBlock('featureTest', 'nixBlock');
     da = b.createDataArray('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
     t = b.createTag('featureTest', 'nixTag', [1, 2]);
-    feat = t.add_feature(b.dataArrays{1}, nix.LinkType.Tagged);
+    feat = t.addFeature(b.dataArrays{1}, nix.LinkType.Tagged);
     
     try
         feat.linkType = '';
@@ -80,7 +80,7 @@ function [] = test_set_data ( varargin )
     da3 = b.createDataArray(daName3, daType, nix.DataType.Double, daData);
     da4 = b.createDataArray(daName4, daType, nix.DataType.Double, daData);
     t = b.createTag('featureTest', 'nixTag', [1, 2]);
-    feat = t.add_feature(b.dataArrays{1}, nix.LinkType.Tagged);
+    feat = t.addFeature(b.dataArrays{1}, nix.LinkType.Tagged);
     
     assert(strcmp(feat.open_data.name, daName1));
     feat.set_data(da2);
