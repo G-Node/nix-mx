@@ -61,24 +61,6 @@ namespace nixmultitag {
         output.set(0, handle(newFeat));
     }
 
-    void retrieveData(const extractor &input, infusor &output) {
-        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
-        double p_index = input.num<double>(2);
-        double f_index = input.num<double>(3);
-
-        mxArray *data = make_mx_array_from_ds(currObj.retrieveData(p_index, f_index));
-        output.set(0, data);
-    }
-
-    void retrieveFeatureData(const extractor &input, infusor &output) {
-        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
-        double p_index = input.num<double>(2);
-        double f_index = input.num<double>(3);
-
-        mxArray *data = make_mx_array_from_ds(currObj.retrieveFeatureData(p_index, f_index));
-        output.set(0, data);
-    }
-
     void addPositions(const extractor &input, infusor &output) {
         nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
         currObj.positions(input.str(2));
@@ -133,6 +115,42 @@ namespace nixmultitag {
             return currObj.features(filter);
         });
         output.set(0, res);
+    }
+
+    void retrieveData(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        size_t pos_idx = (size_t)input.num<double>(2);
+        std::string name_id = input.str(3);
+
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveData(pos_idx, name_id));
+        output.set(0, data);
+    }
+
+    void retrieveDataIdx(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        size_t pos_idx = (size_t)input.num<double>(2);
+        size_t ref_idx = (size_t)input.num<double>(3);
+
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveData(pos_idx, ref_idx));
+        output.set(0, data);
+    }
+
+    void retrieveFeatureData(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        size_t pos_idx = (size_t)input.num<double>(2);
+        std::string name_id = input.str(3);
+
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveFeatureData(pos_idx, name_id));
+        output.set(0, data);
+    }
+
+    void retrieveFeatureDataIdx(const extractor &input, infusor &output) {
+        nix::MultiTag currObj = input.entity<nix::MultiTag>(1);
+        size_t pos_idx = (size_t)input.num<double>(2);
+        size_t ref_idx = (size_t)input.num<double>(3);
+
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveFeatureData(pos_idx, ref_idx));
+        output.set(0, data);
     }
 
 } // namespace nixmultitag

@@ -63,22 +63,6 @@ namespace nixtag {
         output.set(0, handle(newFeat));
     }
 
-    void retrieveData(const extractor &input, infusor &output) {
-        nix::Tag currObj = input.entity<nix::Tag>(1);
-        double index = input.num<double>(2);
-
-        mxArray *data = make_mx_array_from_ds(currObj.retrieveData(index));
-        output.set(0, data);
-    }
-
-    void retrieveFeatureData(const extractor &input, infusor &output) {
-        nix::Tag currObj = input.entity<nix::Tag>(1);
-        double index = input.num<double>(2);
-
-        mxArray *data = make_mx_array_from_ds(currObj.retrieveFeatureData(index));
-        output.set(0, data);
-    }
-
     void openReferenceIdx(const extractor &input, infusor &output) {
         nix::Tag currObj = input.entity<nix::Tag>(1);
         nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
@@ -128,6 +112,38 @@ namespace nixtag {
             return currObj.features(filter);
         });
         output.set(0, res);
+    }
+
+    void retrieveData(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        std::string name_id = input.str(2);
+
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveData(name_id));
+        output.set(0, data);
+    }
+
+    void retrieveDataIdx(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveData(idx));
+        output.set(0, data);
+    }
+
+    void retrieveFeatureData(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        std::string name_id = input.str(2);
+
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveFeatureData(name_id));
+        output.set(0, data);
+    }
+
+    void retrieveFeatureDataIdx(const extractor &input, infusor &output) {
+        nix::Tag currObj = input.entity<nix::Tag>(1);
+        nix::ndsize_t idx = (nix::ndsize_t)input.num<double>(2);
+
+        mxArray *data = make_mx_array_from_ds(currObj.retrieveFeatureData(idx));
+        output.set(0, data);
     }
 
 } // namespace nixtag

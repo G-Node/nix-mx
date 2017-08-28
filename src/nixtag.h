@@ -25,10 +25,6 @@ namespace nixtag {
 
     void createFeature(const extractor &input, infusor &output);
 
-    void retrieveData(const extractor &input, infusor &output);
-
-    void retrieveFeatureData(const extractor &input, infusor &output);
-
     void openReferenceIdx(const extractor &input, infusor &output);
 
     void openFeatureIdx(const extractor &input, infusor &output);
@@ -42,6 +38,14 @@ namespace nixtag {
     void referencesFiltered(const extractor &input, infusor &output);
 
     void featuresFiltered(const extractor &input, infusor &output);
+
+    void retrieveData(const extractor &input, infusor &output);
+
+    void retrieveDataIdx(const extractor &input, infusor &output);
+
+    void retrieveFeatureData(const extractor &input, infusor &output);
+
+    void retrieveFeatureDataIdx(const extractor &input, infusor &output);
 
 } // namespace nixtag
 
