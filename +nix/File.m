@@ -7,13 +7,13 @@
 % LICENSE file in the root of the Project.
 
 classdef File < nix.Entity
-    %File nix File object
-    
+    % File nix File object
+
     properties(Hidden)
         % namespace reference for nix-mx functions
         alias = 'File'
-    end;
-    
+    end
+
     methods
         function obj = File(path, mode)
             if ~exist('mode', 'var')
@@ -21,7 +21,7 @@ classdef File < nix.Entity
             end
             h = nix_mx('File::open', path, mode); 
             obj@nix.Entity(h);
-            
+
             % assign relations
             nix.Dynamic.add_dyn_relation(obj, 'blocks', @nix.Block);
             nix.Dynamic.add_dyn_relation(obj, 'sections', @nix.Section);
@@ -30,98 +30,110 @@ classdef File < nix.Entity
         end
 
         % braindead...
-        function check = is_open(obj)
-            check = nix_mx('File::isOpen', obj.nix_handle);
+        function r = is_open(obj)
+            fname = strcat(obj.alias, '::isOpen');
+            r = nix_mx(fname, obj.nix_handle);
         end
 
-        function mode = file_mode(obj)
-            mode = nix_mx('File::fileMode', obj.nix_handle);
+        function r = file_mode(obj)
+            fname = strcat(obj.alias, '::fileMode');
+            r = nix_mx(fname, obj.nix_handle);
         end
 
-        function res = validate(obj)
-            res = nix_mx('File::validate', obj.nix_handle);
+        function r = validate(obj)
+            fname = strcat(obj.alias, '::validate');
+            r = nix_mx(fname, obj.nix_handle);
         end
 
         % ----------------
         % Block methods
         % ----------------
 
-        function newBlock = create_block(obj, name, type)
-            newBlock = nix.Block(nix_mx('File::createBlock', obj.nix_handle, name, type));
-        end;
-
-        function c = block_count(obj)
-            c = nix_mx('File::blockCount', obj.nix_handle);
+        function r = create_block(obj, name, type)
+            fname = strcat(obj.alias, '::createBlock');
+            h = nix_mx(fname, obj.nix_handle, name, type);
+            r = nix.Block(h);
         end
 
-        function hasBlock = has_block(obj, id_or_name)
-            hasBlock = nix_mx('File::hasBlock', obj.nix_handle, id_or_name);
-        end;
-
-        function retObj = open_block(obj, id_or_name)
-            retObj = nix.Utils.open_entity(obj, ...
-                'File::openBlock', id_or_name, @nix.Block);
+        function r = block_count(obj)
+            fname = strcat(obj.alias, '::blockCount');
+            r = nix_mx(fname, obj.nix_handle);
         end
 
-        function retObj = open_block_idx(obj, idx)
-            retObj = nix.Utils.open_entity(obj, ...
-                'File::openBlockIdx', idx, @nix.Block);
+        function r = has_block(obj, id_or_name)
+            fname = strcat(obj.alias, '::hasBlock');
+            r = nix_mx(fname, obj.nix_handle, id_or_name);
         end
 
-        function delCheck = delete_block(obj, del)
-            delCheck = nix.Utils.delete_entity(obj, ...
-                del, 'nix.Block', 'File::deleteBlock');
-        end;
+        function r = open_block(obj, id_or_name)
+            fname = strcat(obj.alias, '::openBlock');
+            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.Block);
+        end
 
-        function filtered = filter_blocks(obj, filter, val)
-            filtered = nix.Utils.filter(obj, filter, val, ...
-                'File::blocksFiltered', @nix.Block);
+        function r = open_block_idx(obj, idx)
+            fname = strcat(obj.alias, '::openBlockIdx');
+            r = nix.Utils.open_entity(obj, fname, idx, @nix.Block);
+        end
+
+        function r = delete_block(obj, del)
+            fname = strcat(obj.alias, '::deleteBlock');
+            r = nix.Utils.delete_entity(obj, del, 'nix.Block', fname);
+        end
+
+        function r = filter_blocks(obj, filter, val)
+            fname = strcat(obj.alias, '::blocksFiltered');
+            r = nix.Utils.filter(obj, filter, val, fname, @nix.Block);
         end
 
         % ----------------
         % Section methods
         % ----------------
 
-        function newSec = create_section(obj, name, type)
-            newSec = nix.Section(nix_mx('File::createSection', obj.nix_handle, name, type));
-        end;
-
-        function c = section_count(obj)
-            c = nix_mx('File::sectionCount', obj.nix_handle);
+        function r = create_section(obj, name, type)
+            fname = strcat(obj.alias, '::createSection');
+            h = nix_mx(fname, obj.nix_handle, name, type);
+            r = nix.Section(h);
         end
 
-        function hasSec = has_section(obj, id_or_name)
-            hasSec = nix_mx('File::hasSection', obj.nix_handle, id_or_name);
-        end;
-
-        function retObj = open_section(obj, id_or_name)
-            retObj = nix.Utils.open_entity(obj, ...
-                'File::openSection', id_or_name, @nix.Section);
+        function r = section_count(obj)
+            fname = strcat(obj.alias, '::sectionCount');
+            r = nix_mx(fname, obj.nix_handle);
         end
 
-        function retObj = open_section_idx(obj, idx)
-            retObj = nix.Utils.open_entity(obj, ...
-                'File::openSectionIdx', idx, @nix.Section);
+        function r = has_section(obj, id_or_name)
+            fname = strcat(obj.alias, '::hasSection');
+            r = nix_mx(fname, obj.nix_handle, id_or_name);
         end
 
-        function delCheck = delete_section(obj, del)
-            delCheck = nix.Utils.delete_entity(obj, del, 'nix.Section', 'File::deleteSection');
+        function r = open_section(obj, id_or_name)
+            fname = strcat(obj.alias, '::openSection');
+            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.Section);
         end
 
-        function filtered = filter_sections(obj, filter, val)
-            filtered = nix.Utils.filter(obj, filter, val, ...
-                'File::sectionsFiltered', @nix.Section);
+        function r = open_section_idx(obj, idx)
+            fname = strcat(obj.alias, '::openSectionIdx');
+            r = nix.Utils.open_entity(obj, fname, idx, @nix.Section);
         end
-        
+
+        function r = delete_section(obj, del)
+            fname = strcat(obj.alias, '::deleteSection');
+            r = nix.Utils.delete_entity(obj, del, 'nix.Section', fname);
+        end
+
+        function r = filter_sections(obj, filter, val)
+            fname = strcat(obj.alias, '::sectionsFiltered');
+            r = nix.Utils.filter(obj, filter, val, fname, @nix.Section);
+        end
+
         % maxdepth is an index
-        function sec = find_sections(obj, max_depth)
-            sec = obj.find_filtered_sections(max_depth, nix.Filter.accept_all, '');
+        function r = find_sections(obj, max_depth)
+            r = obj.find_filtered_sections(max_depth, nix.Filter.accept_all, '');
         end
-        
+
         % maxdepth is an index
-        function sec = find_filtered_sections(obj, max_depth, filter, val)
-            sec = nix.Utils.find(obj, ...
-                max_depth, filter, val, 'File::findSections', @nix.Section);
+        function r = find_filtered_sections(obj, max_depth, filter, val)
+            fname = strcat(obj.alias, '::findSections');
+            r = nix.Utils.find(obj, max_depth, filter, val, fname, @nix.Section);
         end
     end
 

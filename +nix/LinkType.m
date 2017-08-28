@@ -7,7 +7,7 @@
 % LICENSE file in the root of the Project.
 
 classdef LinkType
-    %LINKTYPE nix link types
+    % LINKTYPE nix link types
 
     properties (Constant)
         Tagged = uint8(0)

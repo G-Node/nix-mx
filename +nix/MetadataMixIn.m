@@ -11,27 +11,26 @@ classdef MetadataMixIn < handle
     % mixin class for nix entities with metadata
     % depends on 
     % - nix.Entity
-    
+
     properties (Abstract, Hidden)
         alias
     end
-    
-    methods
-        function metadata = open_metadata(obj)
-            metadata = nix.Utils.fetchObj(...
-                strcat(obj.alias, '::openMetadataSection'), ...
-                obj.nix_handle, @nix.Section);
-        end;
 
-        function set_metadata(obj, val)
+    methods
+        function r = open_metadata(obj)
+            fname = strcat(obj.alias, '::openMetadataSection');
+            r = nix.Utils.fetchObj(fname, obj.nix_handle, @nix.Section);
+        end
+
+        function [] = set_metadata(obj, val)
             if (isempty(val))
-                nix_mx(strcat(obj.alias, '::setNoneMetadata'), ...
-                    obj.nix_handle, val);
+                fname = strcat(obj.alias, '::setNoneMetadata');
+                nix_mx(fname, obj.nix_handle, val);
             else
-                nix.Utils.add_entity(obj, val, 'nix.Section', ...
-                    strcat(obj.alias, '::setMetadata'));
-            end;
-        end;
-    end;
-    
+                fname = strcat(obj.alias, '::setMetadata');
+                nix.Utils.add_entity(obj, val, 'nix.Section', fname);
+            end
+        end
+    end
+
 end

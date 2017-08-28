@@ -23,5 +23,5 @@ classdef DataType
         UInt32;
         UInt64;
     end
-    
+
 end
