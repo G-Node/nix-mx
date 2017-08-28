@@ -25,11 +25,11 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             obj@nix.SourcesMixIn();
 
             % assign dynamic properties
-            nix.Dynamic.add_dyn_attr(obj, 'label', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'expansionOrigin', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'polynomCoefficients', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'dataExtent', 'rw');
+            nix.Dynamic.addProperty(obj, 'label', 'rw');
+            nix.Dynamic.addProperty(obj, 'unit', 'rw');
+            nix.Dynamic.addProperty(obj, 'expansionOrigin', 'rw');
+            nix.Dynamic.addProperty(obj, 'polynomCoefficients', 'rw');
+            nix.Dynamic.addProperty(obj, 'dataExtent', 'rw');
         end
 
         % -----------------

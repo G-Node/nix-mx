@@ -16,7 +16,7 @@ classdef SourcesMixIn < handle
 
     methods
         function obj = SourcesMixIn()
-            nix.Dynamic.add_dyn_relation(obj, 'sources', @nix.Source);
+            nix.Dynamic.addGetChildEntities(obj, 'sources', @nix.Source);
         end
 
         function r = sourceCount(obj)

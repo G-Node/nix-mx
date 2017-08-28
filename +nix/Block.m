@@ -20,11 +20,11 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             obj@nix.MetadataMixIn();
 
             % assign relations
-            nix.Dynamic.add_dyn_relation(obj, 'groups', @nix.Group);
-            nix.Dynamic.add_dyn_relation(obj, 'dataArrays', @nix.DataArray);
-            nix.Dynamic.add_dyn_relation(obj, 'sources', @nix.Source);
-            nix.Dynamic.add_dyn_relation(obj, 'tags', @nix.Tag);
-            nix.Dynamic.add_dyn_relation(obj, 'multiTags', @nix.MultiTag);
+            nix.Dynamic.addGetChildEntities(obj, 'groups', @nix.Group);
+            nix.Dynamic.addGetChildEntities(obj, 'dataArrays', @nix.DataArray);
+            nix.Dynamic.addGetChildEntities(obj, 'sources', @nix.Source);
+            nix.Dynamic.addGetChildEntities(obj, 'tags', @nix.Tag);
+            nix.Dynamic.addGetChildEntities(obj, 'multiTags', @nix.MultiTag);
         end
 
         % -----------------

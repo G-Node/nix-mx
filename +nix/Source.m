@@ -20,7 +20,7 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
             obj@nix.MetadataMixIn();
 
             % assign relations
-            nix.Dynamic.add_dyn_relation(obj, 'sources', @nix.Source);
+            nix.Dynamic.addGetChildEntities(obj, 'sources', @nix.Source);
         end
 
         % ------------------

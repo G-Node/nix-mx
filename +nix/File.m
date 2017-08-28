@@ -23,8 +23,8 @@ classdef File < nix.Entity
             obj@nix.Entity(h);
 
             % assign relations
-            nix.Dynamic.add_dyn_relation(obj, 'blocks', @nix.Block);
-            nix.Dynamic.add_dyn_relation(obj, 'sections', @nix.Section);
+            nix.Dynamic.addGetChildEntities(obj, 'blocks', @nix.Block);
+            nix.Dynamic.addGetChildEntities(obj, 'sections', @nix.Section);
         end
 
         % braindead...

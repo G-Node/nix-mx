@@ -19,11 +19,11 @@ classdef RangeDimension < nix.Entity
             obj@nix.Entity(h);
 
             % assign dynamic properties
-            nix.Dynamic.add_dyn_attr(obj, 'dimensionType', 'r');
-            nix.Dynamic.add_dyn_attr(obj, 'isAlias', 'r');
-            nix.Dynamic.add_dyn_attr(obj, 'label', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'ticks', 'rw');
+            nix.Dynamic.addProperty(obj, 'dimensionType', 'r');
+            nix.Dynamic.addProperty(obj, 'isAlias', 'r');
+            nix.Dynamic.addProperty(obj, 'label', 'rw');
+            nix.Dynamic.addProperty(obj, 'unit', 'rw');
+            nix.Dynamic.addProperty(obj, 'ticks', 'rw');
         end
 
         function r = tickAt(obj, index)

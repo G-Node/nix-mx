@@ -24,8 +24,8 @@ classdef Property < nix.NamedEntity
             obj@nix.NamedEntity(h);
 
             % assign dynamic properties
-            nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'datatype', 'r');
+            nix.Dynamic.addProperty(obj, 'unit', 'rw');
+            nix.Dynamic.addProperty(obj, 'datatype', 'r');
         end
 
         function r = get.values(obj)

@@ -19,8 +19,8 @@ classdef SetDimension < nix.Entity
             obj@nix.Entity(h);
 
             % assign dynamic properties
-            nix.Dynamic.add_dyn_attr(obj, 'dimensionType', 'r');
-            nix.Dynamic.add_dyn_attr(obj, 'labels', 'rw');
+            nix.Dynamic.addProperty(obj, 'dimensionType', 'r');
+            nix.Dynamic.addProperty(obj, 'labels', 'rw');
         end
     end
 

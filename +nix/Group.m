@@ -21,9 +21,9 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             obj@nix.SourcesMixIn();
 
             % assign relations
-            nix.Dynamic.add_dyn_relation(obj, 'dataArrays', @nix.DataArray);
-            nix.Dynamic.add_dyn_relation(obj, 'tags', @nix.Tag);
-            nix.Dynamic.add_dyn_relation(obj, 'multiTags', @nix.MultiTag);
+            nix.Dynamic.addGetChildEntities(obj, 'dataArrays', @nix.DataArray);
+            nix.Dynamic.addGetChildEntities(obj, 'tags', @nix.Tag);
+            nix.Dynamic.addGetChildEntities(obj, 'multiTags', @nix.MultiTag);
         end
 
         % -----------------

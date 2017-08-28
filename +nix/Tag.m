@@ -21,13 +21,13 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             obj@nix.SourcesMixIn();
 
             % assign dynamic properties
-            nix.Dynamic.add_dyn_attr(obj, 'position', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'extent', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'units', 'rw');
+            nix.Dynamic.addProperty(obj, 'position', 'rw');
+            nix.Dynamic.addProperty(obj, 'extent', 'rw');
+            nix.Dynamic.addProperty(obj, 'units', 'rw');
 
             % assign relations
-            nix.Dynamic.add_dyn_relation(obj, 'references', @nix.DataArray);
-            nix.Dynamic.add_dyn_relation(obj, 'features', @nix.Feature);
+            nix.Dynamic.addGetChildEntities(obj, 'references', @nix.DataArray);
+            nix.Dynamic.addGetChildEntities(obj, 'features', @nix.Feature);
         end
 
         % ------------------

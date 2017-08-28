@@ -20,11 +20,11 @@ classdef Section < nix.NamedEntity
             obj@nix.NamedEntity(h);
 
             % assign dynamic properties
-            nix.Dynamic.add_dyn_attr(obj, 'repository', 'rw');
+            nix.Dynamic.addProperty(obj, 'repository', 'rw');
 
             % assign relations
-            nix.Dynamic.add_dyn_relation(obj, 'sections', @nix.Section);
-            nix.Dynamic.add_dyn_relation(obj, 'properties', @nix.Property);
+            nix.Dynamic.addGetChildEntities(obj, 'sections', @nix.Section);
+            nix.Dynamic.addGetChildEntities(obj, 'properties', @nix.Property);
         end
 
         function r = parent(obj)
