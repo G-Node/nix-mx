@@ -38,17 +38,17 @@ classdef Utils
 
         function r = fetchEntityCount(obj, mxMethodName)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            r = nix_mx(mxMethod, obj.nix_handle);
+            r = nix_mx(mxMethod, obj.nixhandle);
         end
 
         function r = fetchHasEntity(obj, mxMethodName, identifier)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            r = nix_mx(mxMethod, obj.nix_handle, identifier);
+            r = nix_mx(mxMethod, obj.nixhandle, identifier);
         end
 
         function r = fetchObjList(obj, mxMethodName, objConstructor)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            list = nix_mx(mxMethod, obj.nix_handle);
+            list = nix_mx(mxMethod, obj.nixhandle);
             r = nix.Utils.createEntityArray(list, objConstructor);
         end
 
@@ -59,20 +59,20 @@ classdef Utils
         % returned nix Entities.
         function r = fetchObjListByEntity(obj, mxMethodName, relatedHandle, objConstructor)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            list = nix_mx(mxMethod, obj.nix_handle, relatedHandle);
+            list = nix_mx(mxMethod, obj.nixhandle, relatedHandle);
             r = nix.Utils.createEntityArray(list, objConstructor);
         end
 
         function r = fetchObj(obj, mxMethodName, objConstructor)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            h = nix_mx(mxMethod, obj.nix_handle);
+            h = nix_mx(mxMethod, obj.nixhandle);
             r = nix.Utils.createEntity(h, objConstructor);
         end
 
         function [] = addEntity(obj, mxMethodName, idNameEntity, nixEntity)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             id = nix.Utils.parseEntityId(idNameEntity, nixEntity);
-            nix_mx(mxMethod, obj.nix_handle, id);
+            nix_mx(mxMethod, obj.nixhandle, id);
         end
 
         function [] = addEntityArray(obj, mxMethodName, entityArray, nixEntity)
@@ -89,11 +89,11 @@ classdef Utils
                     err.message = sprintf('Element #%s is not a %s.', num2str(i), nixEntity);
                     error(err);
                 end
-                handleArray{i} = entityArray{i}.nix_handle;
+                handleArray{i} = entityArray{i}.nixhandle;
             end
 
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            nix_mx(mxMethod, obj.nix_handle, handleArray);
+            nix_mx(mxMethod, obj.nixhandle, handleArray);
         end
 
         % Function can be used for both nix delete and remove methods.
@@ -102,12 +102,12 @@ classdef Utils
         function r = deleteEntity(obj, mxMethodName, idNameEntity, nixEntity)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             id = nix.Utils.parseEntityId(idNameEntity, nixEntity);
-            r = nix_mx(mxMethod, obj.nix_handle, id);
+            r = nix_mx(mxMethod, obj.nixhandle, id);
         end
 
         function r = openEntity(obj, mxMethodName, idName, objConstructor)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            h = nix_mx(mxMethod, obj.nix_handle, idName);
+            h = nix_mx(mxMethod, obj.nixhandle, idName);
             r = nix.Utils.createEntity(h, objConstructor);
         end
 
@@ -135,7 +135,7 @@ classdef Utils
             nix.Utils.validFilter(filter, val);
 
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            list = nix_mx(mxMethod, obj.nix_handle, uint8(filter), val);
+            list = nix_mx(mxMethod, obj.nixhandle, uint8(filter), val);
             r = nix.Utils.createEntityArray(list, objConstructor);
         end
 
@@ -156,7 +156,7 @@ classdef Utils
             md = nix.Utils.handleIndex(maxDepth);
 
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            list = nix_mx(mxMethod, obj.nix_handle, md, uint8(filter), val);
+            list = nix_mx(mxMethod, obj.nixhandle, md, uint8(filter), val);
             r = nix.Utils.createEntityArray(list, objConstructor);
         end
 

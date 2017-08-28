@@ -60,7 +60,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function r = retrieveData(obj, positionIdx, idName)
             posIdx = nix.Utils.handleIndex(positionIdx);
             fname = strcat(obj.alias, '::retrieveData');
-            data = nix_mx(fname, obj.nix_handle, posIdx, idName);
+            data = nix_mx(fname, obj.nixhandle, posIdx, idName);
             r = nix.Utils.transposeArray(data);
         end
 
@@ -68,7 +68,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             posIdx = nix.Utils.handleIndex(positionIdx);
             refIdx = nix.Utils.handleIndex(referenceIdx);
             fname = strcat(obj.alias, '::retrieveDataIdx');
-            data = nix_mx(fname, obj.nix_handle, posIdx, refIdx);
+            data = nix_mx(fname, obj.nixhandle, posIdx, refIdx);
             r = nix.Utils.transposeArray(data);
         end
 
@@ -87,7 +87,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function r = addFeature(obj, entity, linkType)
             addId = nix.Utils.parseEntityId(entity, 'nix.DataArray');
             fname = strcat(obj.alias, '::createFeature');
-            h = nix_mx(fname, obj.nix_handle, addId, linkType);
+            h = nix_mx(fname, obj.nixhandle, addId, linkType);
             r = nix.Utils.createEntity(h, @nix.Feature);
         end
 
@@ -111,7 +111,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function r = retrieveFeatureData(obj, positionIdx, idName)
             posIdx = nix.Utils.handleIndex(positionIdx);
             fname = strcat(obj.alias, '::featureRetrieveData');
-            data = nix_mx(fname, obj.nix_handle, posIdx, idName);
+            data = nix_mx(fname, obj.nixhandle, posIdx, idName);
             r = nix.Utils.transposeArray(data);
         end
 
@@ -119,7 +119,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             posIdx = nix.Utils.handleIndex(positionIdx);
             featIdx = nix.Utils.handleIndex(featureIdx);
             fname = strcat(obj.alias, '::featureRetrieveDataIdx');
-            data = nix_mx(fname, obj.nix_handle, posIdx, featIdx);
+            data = nix_mx(fname, obj.nixhandle, posIdx, featIdx);
             r = nix.Utils.transposeArray(data);
         end
 
@@ -137,7 +137,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
         function r = hasPositions(obj)
             fname = strcat(obj.alias, '::hasPositions');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix_mx(fname, obj.nixhandle);
         end
 
         function r = openPositions(obj)
@@ -159,7 +159,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function [] = setExtents(obj, entity)
             if (isempty(entity))
                 fname = strcat(obj.alias, '::setNoneExtents');
-                nix_mx(fname, obj.nix_handle, 0);
+                nix_mx(fname, obj.nixhandle, 0);
             else
                 nix.Utils.addEntity(obj, 'setExtents', entity, 'nix.DataArray');
             end

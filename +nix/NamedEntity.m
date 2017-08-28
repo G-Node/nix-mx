@@ -30,7 +30,7 @@ classdef NamedEntity < nix.Entity
                 error(err);
             end
             fname = strcat(obj.alias, '::compare');
-            r = nix_mx(fname, obj.nix_handle, entity.nix_handle);
+            r = nix_mx(fname, obj.nixhandle, entity.nixhandle);
         end
     end
 

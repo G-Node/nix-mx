@@ -30,7 +30,7 @@ classdef Property < nix.NamedEntity
 
         function r = get.values(obj)
             fname = strcat(obj.alias, '::values');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix_mx(fname, obj.nixhandle);
         end
 
         function [] = set.values(obj, val)
@@ -54,7 +54,7 @@ classdef Property < nix.NamedEntity
             end
 
             fname = strcat(obj.alias, '::updateValues');
-            nix_mx(fname, obj.nix_handle, values);
+            nix_mx(fname, obj.nixhandle, values);
         end
 
         function r = valueCount(obj)
@@ -63,7 +63,7 @@ classdef Property < nix.NamedEntity
 
         function [] = deleteValues(obj)
             fname = strcat(obj.alias, '::deleteValues');
-            nix_mx(fname, obj.nix_handle);
+            nix_mx(fname, obj.nixhandle);
         end
     end
 

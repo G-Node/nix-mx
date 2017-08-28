@@ -61,14 +61,14 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
         function r = retrieveData(obj, idName)
             fname = strcat(obj.alias, '::retrieveData');
-            data = nix_mx(fname, obj.nix_handle, idName);
+            data = nix_mx(fname, obj.nixhandle, idName);
             r = nix.Utils.transposeArray(data);
         end
 
         function r = retrieveDataIdx(obj, index)
             idx = nix.Utils.handleIndex(index);
             fname = strcat(obj.alias, '::retrieveDataIdx');
-            data = nix_mx(fname, obj.nix_handle, idx);
+            data = nix_mx(fname, obj.nixhandle, idx);
             r = nix.Utils.transposeArray(data);
         end
 
@@ -87,7 +87,7 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function r = addFeature(obj, entity, linkType)
             id = nix.Utils.parseEntityId(entity, 'nix.DataArray');
             fname = strcat(obj.alias, '::createFeature');
-            h = nix_mx(fname, obj.nix_handle, id, linkType);
+            h = nix_mx(fname, obj.nixhandle, id, linkType);
             r = nix.Utils.createEntity(h, @nix.Feature);
         end
 
@@ -110,14 +110,14 @@ classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
         function r = retrieveFeatureData(obj, idName)
             fname = strcat(obj.alias, '::featureRetrieveData');
-            data = nix_mx(fname, obj.nix_handle, idName);
+            data = nix_mx(fname, obj.nixhandle, idName);
             r = nix.Utils.transposeArray(data);
         end
 
         function r = retrieveFeatureDataIdx(obj, index)
             idx = nix.Utils.handleIndex(index);
             fname = strcat(obj.alias, '::featureRetrieveDataIdx');
-            data = nix_mx(fname, obj.nix_handle, idx);
+            data = nix_mx(fname, obj.nixhandle, idx);
             r = nix.Utils.transposeArray(data);
         end
 

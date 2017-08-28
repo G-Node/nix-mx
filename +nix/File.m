@@ -30,17 +30,17 @@ classdef File < nix.Entity
         % braindead...
         function r = isOpen(obj)
             fname = strcat(obj.alias, '::isOpen');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix_mx(fname, obj.nixhandle);
         end
 
         function r = fileMode(obj)
             fname = strcat(obj.alias, '::fileMode');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix_mx(fname, obj.nixhandle);
         end
 
         function r = validate(obj)
             fname = strcat(obj.alias, '::validate');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix_mx(fname, obj.nixhandle);
         end
 
         % ----------------
@@ -49,7 +49,7 @@ classdef File < nix.Entity
 
         function r = createBlock(obj, name, type)
             fname = strcat(obj.alias, '::createBlock');
-            h = nix_mx(fname, obj.nix_handle, name, type);
+            h = nix_mx(fname, obj.nixhandle, name, type);
             r = nix.Utils.createEntity(h, @nix.Block);
         end
 
@@ -84,7 +84,7 @@ classdef File < nix.Entity
 
         function r = createSection(obj, name, type)
             fname = strcat(obj.alias, '::createSection');
-            h = nix_mx(fname, obj.nix_handle, name, type);
+            h = nix_mx(fname, obj.nixhandle, name, type);
             r = nix.Utils.createEntity(h, @nix.Section);
         end
 

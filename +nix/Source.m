@@ -33,7 +33,7 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
 
         function r = createSource(obj, name, type)
             fname = strcat(obj.alias, '::createSource');
-            h = nix_mx(fname, obj.nix_handle, name, type);
+            h = nix_mx(fname, obj.nixhandle, name, type);
             r = nix.Utils.createEntity(h, @nix.Source);
         end
 

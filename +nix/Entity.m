@@ -11,7 +11,7 @@ classdef Entity < dynamicprops
     %   handles object lifetime
 
     properties (Hidden)
-        nix_handle
+        nixhandle
     end
 
     properties (SetAccess=private, GetAccess=public, Hidden)
@@ -24,20 +24,20 @@ classdef Entity < dynamicprops
 
     methods
         function obj = Entity(h)
-            obj.nix_handle = h;
+            obj.nixhandle = h;
         end
 
         function [] = delete(obj)
-            nix_mx('Entity::destroy', obj.nix_handle);
+            nix_mx('Entity::destroy', obj.nixhandle);
         end
 
         function r = updatedAt(obj)
-            r = nix_mx('Entity::updatedAt', obj.nix_handle);
+            r = nix_mx('Entity::updatedAt', obj.nixhandle);
         end
 
         function r = get.info(obj)
             fname = strcat(obj.alias, '::describe');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix_mx(fname, obj.nixhandle);
         end
     end
 

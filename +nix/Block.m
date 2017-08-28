@@ -37,7 +37,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
 
         function r = createGroup(obj, name, nixtype)
             fname = strcat(obj.alias, '::createGroup');
-            h = nix_mx(fname, obj.nix_handle, name, nixtype);
+            h = nix_mx(fname, obj.nixhandle, name, nixtype);
             r = nix.Utils.createEntity(h, @nix.Group);
         end
 
@@ -97,7 +97,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
                 error(err);
             else
                 fname = strcat(obj.alias, '::createDataArray');
-                h = nix_mx(fname, obj.nix_handle, name, nixtype, lower(datatype.char), shape);
+                h = nix_mx(fname, obj.nixhandle, name, nixtype, lower(datatype.char), shape);
                 r = nix.Utils.createEntity(h, @nix.DataArray);
             end
         end
@@ -151,7 +151,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
 
         function r = createSource(obj, name, type)
             fname = strcat(obj.alias, '::createSource');
-            h = nix_mx(fname, obj.nix_handle, name, type);
+            h = nix_mx(fname, obj.nixhandle, name, type);
             r = nix.Utils.createEntity(h, @nix.Source);
         end
 
@@ -209,7 +209,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
 
         function r = createTag(obj, name, type, position)
             fname = strcat(obj.alias, '::createTag');
-            h = nix_mx(fname, obj.nix_handle, name, type, position);
+            h = nix_mx(fname, obj.nixhandle, name, type, position);
             r = nix.Utils.createEntity(h, @nix.Tag);
         end
 
@@ -246,7 +246,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         function r = createMultiTag(obj, name, type, refDataArray)
             fname = strcat(obj.alias, '::createMultiTag');
             id = nix.Utils.parseEntityId(refDataArray, 'nix.DataArray');
-            h = nix_mx(fname, obj.nix_handle, name, type, id);
+            h = nix_mx(fname, obj.nixhandle, name, type, id);
             r = nix.Utils.createEntity(h, @nix.MultiTag);
         end
 

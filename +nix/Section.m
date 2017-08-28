@@ -38,7 +38,7 @@ classdef Section < nix.NamedEntity
         function [] = setLink(obj, val)
             if (isempty(val))
                 fname = strcat(obj.alias, '::setNoneLink');
-                nix_mx(fname, obj.nix_handle);
+                nix_mx(fname, obj.nixhandle);
             else
                 nix.Utils.addEntity(obj, 'setLink', val, 'nix.Section');
             end
@@ -58,7 +58,7 @@ classdef Section < nix.NamedEntity
 
         function r = createSection(obj, name, type)
             fname = strcat(obj.alias, '::createSection');
-            h = nix_mx(fname, obj.nix_handle, name, type);
+            h = nix_mx(fname, obj.nixhandle, name, type);
             r = nix.Utils.createEntity(h, @nix.Section);
         end
 
@@ -116,7 +116,7 @@ classdef Section < nix.NamedEntity
                 error(err);
             else
                 fname = strcat(obj.alias, '::createProperty');
-                h = nix_mx(fname, obj.nix_handle, name, lower(datatype.char));
+                h = nix_mx(fname, obj.nixhandle, name, lower(datatype.char));
                 r = nix.Utils.createEntity(h, @nix.Property);
             end
         end
@@ -126,7 +126,7 @@ classdef Section < nix.NamedEntity
                 val = num2cell(val);
             end
             fname = strcat(obj.alias, '::createPropertyWithValue');
-            h = nix_mx(fname, obj.nix_handle, name, val);
+            h = nix_mx(fname, obj.nixhandle, name, val);
             r = nix.Utils.createEntity(h, @nix.Property);
         end
 
@@ -138,7 +138,7 @@ classdef Section < nix.NamedEntity
             end
 
             fname = strcat(obj.alias, '::deleteProperty');
-            r = nix_mx(fname, obj.nix_handle, id);
+            r = nix_mx(fname, obj.nixhandle, id);
         end
 
         function r = openProperty(obj, idName)
@@ -202,7 +202,7 @@ classdef Section < nix.NamedEntity
             else
                 fname = strcat('referringBlock', fsuffix);
                 r = nix.Utils.fetchObjListByEntity(obj, fname, ...
-                                            varargin{1}.nix_handle, entityConstructor);
+                                            varargin{1}.nixhandle, entityConstructor);
             end
         end
     end
