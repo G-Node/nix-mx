@@ -7,8 +7,7 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestFile
-%TESTFILE tests for File
-%   Detailed explanation goes here
+% TESTFILE tests for File
 
     funcs = {};
     funcs{end+1} = @testReadOnly;
@@ -419,17 +418,17 @@ function [] = testFindSection
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     sl1 = f.createSection('sectionLvl1', 'nixSection');
 
-    sl21 = sl1.create_section('sectionLvl2_1', 'nixSection');
-    sl22 = sl1.create_section('sectionLvl2_2', 'nixSection');
+    sl21 = sl1.createSection('sectionLvl2_1', 'nixSection');
+    sl22 = sl1.createSection('sectionLvl2_2', 'nixSection');
 
-    sl31 = sl21.create_section('sectionLvl3_1', 'nixSection');
-    sl32 = sl21.create_section('sectionLvl3_2', 'nixSection');
-    sl33 = sl21.create_section('sectionLvl3_3', 'nixSection');
+    sl31 = sl21.createSection('sectionLvl3_1', 'nixSection');
+    sl32 = sl21.createSection('sectionLvl3_2', 'nixSection');
+    sl33 = sl21.createSection('sectionLvl3_3', 'nixSection');
 
-    sl41 = sl31.create_section('sectionLvl4_1', 'nixSection');
-    sl42 = sl31.create_section('sectionLvl4_2', 'nixSection');
-    sl43 = sl31.create_section('sectionLvl4_3', 'nixSection');
-    sl44 = sl31.create_section('sectionLvl4_4', 'nixSection');
+    sl41 = sl31.createSection('sectionLvl4_1', 'nixSection');
+    sl42 = sl31.createSection('sectionLvl4_2', 'nixSection');
+    sl43 = sl31.createSection('sectionLvl4_3', 'nixSection');
+    sl44 = sl31.createSection('sectionLvl4_4', 'nixSection');
 
     % Check invalid entry
     err = 'Provide a valid search depth';
@@ -466,17 +465,17 @@ function [] = testFindSectionFiltered
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     sl1 = f.createSection('sectionLvl1', 'nixSection');
 
-    sl21 = sl1.create_section('sectionLvl2_1', 'nixSection');
-    sl22 = sl1.create_section('sectionLvl2_2', findSection);
+    sl21 = sl1.createSection('sectionLvl2_1', 'nixSection');
+    sl22 = sl1.createSection('sectionLvl2_2', findSection);
 
-    sl31 = sl21.create_section('sectionLvl3_1', 'nixSection');
-    sl32 = sl21.create_section('sectionLvl3_2', 'nixSection');
-    sl33 = sl21.create_section('sectionLvl3_3', findSection);
+    sl31 = sl21.createSection('sectionLvl3_1', 'nixSection');
+    sl32 = sl21.createSection('sectionLvl3_2', 'nixSection');
+    sl33 = sl21.createSection('sectionLvl3_3', findSection);
 
-    sl41 = sl31.create_section('sectionLvl4_1', 'nixSection');
-    sl42 = sl31.create_section('sectionLvl4_2', 'nixSection');
-    sl43 = sl31.create_section('sectionLvl4_3', findSection);
-    sl44 = sl31.create_section('sectionLvl4_4', 'nixSection');
+    sl41 = sl31.createSection('sectionLvl4_1', 'nixSection');
+    sl42 = sl31.createSection('sectionLvl4_2', 'nixSection');
+    sl43 = sl31.createSection('sectionLvl4_3', findSection);
+    sl44 = sl31.createSection('sectionLvl4_4', 'nixSection');
 
     % test find by id
     filtered = f.filterFindSections(1, nix.Filter.id, sl41.id);

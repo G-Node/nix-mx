@@ -35,7 +35,7 @@ classdef Section < nix.NamedEntity
         % Link methods
         % ----------------
 
-        function [] = set_link(obj, val)
+        function [] = setLink(obj, val)
             if (isempty(val))
                 fname = strcat(obj.alias, '::setNoneLink');
                 nix_mx(fname, obj.nix_handle);
@@ -48,7 +48,7 @@ classdef Section < nix.NamedEntity
             r = nix.Utils.fetchObj(obj, 'openLink', @nix.Section);
         end
 
-        function r = inherited_properties(obj)
+        function r = inheritedProperties(obj)
             r = nix.Utils.fetchObjList(obj, 'inheritedProperties', @nix.Property);
         end
 
@@ -56,60 +56,60 @@ classdef Section < nix.NamedEntity
         % Section methods
         % ----------------
 
-        function r = create_section(obj, name, type)
+        function r = createSection(obj, name, type)
             fname = strcat(obj.alias, '::createSection');
             h = nix_mx(fname, obj.nix_handle, name, type);
             r = nix.Utils.createEntity(h, @nix.Section);
         end
 
-        function r = delete_section(obj, del)
+        function r = deleteSection(obj, del)
             r = nix.Utils.delete_entity(obj, 'deleteSection', del, 'nix.Section');
         end
 
-        function r = open_section(obj, id_or_name)
-            r = nix.Utils.open_entity(obj, 'openSection', id_or_name, @nix.Section);
+        function r = openSection(obj, idName)
+            r = nix.Utils.open_entity(obj, 'openSection', idName, @nix.Section);
         end
 
-        function r = open_section_idx(obj, index)
+        function r = openSectionIdx(obj, index)
             idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openSectionIdx', idx, @nix.Section);
         end
 
-        function r = has_section(obj, id_or_name)
-            r = nix.Utils.fetchHasEntity(obj, 'hasSection', id_or_name);
+        function r = hasSection(obj, idName)
+            r = nix.Utils.fetchHasEntity(obj, 'hasSection', idName);
         end
 
-        function r = section_count(obj)
+        function r = sectionCount(obj)
             r = nix.Utils.fetchEntityCount(obj, 'sectionCount');
         end
 
-        function r = filter_sections(obj, filter, val)
+        function r = filterSections(obj, filter, val)
             r = nix.Utils.filter(obj, 'sectionsFiltered', filter, val, @nix.Section);
         end
 
-        % find_related returns the nearest occurrence downstream of a
+        % findRelated returns the nearest occurrence downstream of a
         % nix.Section matching the filter.
         % If no section can be found downstream, it will look for the
         % nearest occurrence upstream of a nix.Section matching the filter.
-        function r = find_related(obj, filter, val)
+        function r = findRelated(obj, filter, val)
             r = nix.Utils.filter(obj, 'findRelated', filter, val, @nix.Section);
         end
 
-        % maxdepth is handled like an index
-        function r = find_sections(obj, max_depth)
-            r = obj.find_filtered_sections(max_depth, nix.Filter.accept_all, '');
+        % maxDepth is handled like an index
+        function r = findSections(obj, maxDepth)
+            r = obj.FilterFindSections(maxDepth, nix.Filter.accept_all, '');
         end
 
-        % maxdepth is handled like an index
-        function r = find_filtered_sections(obj, max_depth, filter, val)
-            r = nix.Utils.find(obj, 'findSections', max_depth, filter, val, @nix.Section);
+        % maxDepth is handled like an index
+        function r = FilterFindSections(obj, maxDepth, filter, val)
+            r = nix.Utils.find(obj, 'findSections', maxDepth, filter, val, @nix.Section);
         end
 
         % ----------------
         % Property methods
         % ----------------
 
-        function r = create_property(obj, name, datatype)
+        function r = createProperty(obj, name, datatype)
             if (~isa(datatype, 'nix.DataType'))
                 err.identifier = 'NIXMX:InvalidArgument';
                 err.message = 'Please provide a valid nix.DataType';
@@ -121,7 +121,7 @@ classdef Section < nix.NamedEntity
             end
         end
 
-        function r = create_property_with_value(obj, name, val)
+        function r = createPropertyWithValue(obj, name, val)
             if (~iscell(val))
                 val = num2cell(val);
             end
@@ -130,7 +130,7 @@ classdef Section < nix.NamedEntity
             r = nix.Utils.createEntity(h, @nix.Property);
         end
 
-        function r = delete_property(obj, del)
+        function r = deleteProperty(obj, del)
             if (isstruct(del) && isfield(del, 'id'))
                 id = del.id;
             else
@@ -141,20 +141,20 @@ classdef Section < nix.NamedEntity
             r = nix_mx(fname, obj.nix_handle, id);
         end
 
-        function r = open_property(obj, id_or_name)
-            r = nix.Utils.open_entity(obj, 'openProperty', id_or_name, @nix.Property);
+        function r = openProperty(obj, idName)
+            r = nix.Utils.open_entity(obj, 'openProperty', idName, @nix.Property);
         end
 
-        function r = open_property_idx(obj, index)
+        function r = openPropertyIdx(obj, index)
             idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openPropertyIdx', idx, @nix.Property);
         end
 
-        function r = property_count(obj)
+        function r = propertyCount(obj)
             r = nix.Utils.fetchEntityCount(obj, 'propertyCount');
         end
 
-        function r = filter_properties(obj, filter, val)
+        function r = filterProperties(obj, filter, val)
             r = nix.Utils.filter(obj, 'propertiesFiltered', filter, val, @nix.Property);
         end
 
@@ -162,23 +162,23 @@ classdef Section < nix.NamedEntity
         % Referring entity methods
         % ----------------
 
-        function r = referring_data_arrays(obj, varargin)
-            r = obj.referring_util(@nix.DataArray, 'DataArrays', varargin{:});
+        function r = referringDataArrays(obj, varargin)
+            r = obj.referringUtil(@nix.DataArray, 'DataArrays', varargin{:});
         end
 
-        function r = referring_tags(obj, varargin)
-            r = obj.referring_util(@nix.Tag, 'Tags', varargin{:});
+        function r = referringTags(obj, varargin)
+            r = obj.referringUtil(@nix.Tag, 'Tags', varargin{:});
         end
 
-        function r = referring_multi_tags(obj, varargin)
-            r = obj.referring_util(@nix.MultiTag, 'MultiTags', varargin{:});
+        function r = referringMultiTags(obj, varargin)
+            r = obj.referringUtil(@nix.MultiTag, 'MultiTags', varargin{:});
         end
 
-        function r = referring_sources(obj, varargin)
-            r = obj.referring_util(@nix.Source, 'Sources', varargin{:});
+        function r = referringSources(obj, varargin)
+            r = obj.referringUtil(@nix.Source, 'Sources', varargin{:});
         end
 
-        function r = referring_blocks(obj)
+        function r = referringBlocks(obj)
             r = nix.Utils.fetchObjList(obj, 'referringBlocks', @nix.Block);
         end
     end
@@ -188,10 +188,10 @@ classdef Section < nix.NamedEntity
     % ----------------
 
     methods (Access=protected)
-        % referring_util receives a nix entityConstructor, part of a function
+        % referringUtil receives a nix entityConstructor, part of a function
         % name and varargin to provide abstract access to nix.Section
         % referringXXX and referringXXX(Block) methods.
-        function r = referring_util(obj, entityConstructor, fsuffix, varargin)
+        function r = referringUtil(obj, entityConstructor, fsuffix, varargin)
             if (isempty(varargin))
                 fname = strcat('referring', fsuffix);
                 r = nix.Utils.fetchObjList(obj, fname, entityConstructor);
