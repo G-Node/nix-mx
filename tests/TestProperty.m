@@ -10,16 +10,16 @@ function funcs = TestProperty
 % TESTPROPERTY % Tests for the nix.Property object
 
     funcs = {};
-    funcs{end+1} = @test_attrs;
-    funcs{end+1} = @test_update_values;
-    funcs{end+1} = @test_values;
-    funcs{end+1} = @test_value_count;
-    funcs{end+1} = @test_values_delete;
-    funcs{end+1} = @test_property_compare;
+    funcs{end+1} = @testAttributes;
+    funcs{end+1} = @testUpdateValues;
+    funcs{end+1} = @testValues;
+    funcs{end+1} = @testValueCount;
+    funcs{end+1} = @testDeleteValues;
+    funcs{end+1} = @testCompare;
 end
 
 %% Test: Access Attributes
-function [] = test_attrs( varargin )
+function [] = testAttributes( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('testSectionProperty', 'nixSection');
     p = s.createProperty('testProperty1', nix.DataType.String);
@@ -46,7 +46,7 @@ function [] = test_attrs( varargin )
 end
 
 %% Test: Access values
-function [] = test_values( varargin )
+function [] = testValues( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
     currProp = s.createPropertyWithValue('booleanProperty', {true, false, true});
@@ -57,7 +57,7 @@ function [] = test_values( varargin )
 end
 
 %% Test: Update values and uncertainty
-function [] = test_update_values( varargin )
+function [] = testUpdateValues( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
 
@@ -108,31 +108,31 @@ function [] = test_update_values( varargin )
 end
 
 %% Test: Value count
-function [] = test_value_count( varargin )
+function [] = testValueCount( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     s = f.createSection('testSection', 'nixSection');
     p = s.createPropertyWithValue('booleanProperty', {true, false, true});
 
-    assert(p.value_count() == 3);
+    assert(p.valueCount() == 3);
     p.values = {};
-    assert(p.value_count() == 0);
+    assert(p.valueCount() == 0);
     p.values = {false};
 
     clear p s f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
-    assert(f.sections{1}.properties{1}.value_count() == 1);
+    assert(f.sections{1}.properties{1}.valueCount() == 1);
 end
 
 %% Test: Delete values
-function [] = test_values_delete( varargin )
+function [] = testDeleteValues( varargin )
     testFile = fullfile(pwd,'tests','testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     s = f.createSection('testSection', 'nixSection');
 
     p = s.createPropertyWithValue('property1', {true, false, true});
     assert(~isempty(p.values));
-    p.values_delete();
+    p.deleteValues();
     assert(isempty(p.values));
 
     clear p s f;
@@ -141,7 +141,7 @@ function [] = test_values_delete( varargin )
 end
 
 %% Test: Compare properties
-function [] = test_property_compare( varargin )
+function [] = testCompare( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     s1 = f.createSection('testSection1', 'nixSection');
