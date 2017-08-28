@@ -59,8 +59,8 @@ function [] = test_add_source ( varargin )
     b = f.createBlock('sourceTest', 'nixBlock');
     tmp = b.createDataArray('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     s = b.createSource('sourceTest', 'nixSource');
-    tmp = s.create_source('nestedSource1', 'nixSource');
-    tmp = s.create_source('nestedSource2', 'nixSource');
+    tmp = s.createSource('nestedSource1', 'nixSource');
+    tmp = s.createSource('nestedSource2', 'nixSource');
     mTag = b.createMultiTag('sourcetest', 'nixMultiTag', b.dataArrays{1});
 
     assert(isempty(mTag.sources));
@@ -121,8 +121,8 @@ function [] = test_remove_source ( varargin )
     tmp = b.createDataArray(...
         'sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     s = b.createSource('sourceTest', 'nixSource');
-    tmp = s.create_source('nestedSource1', 'nixSource');
-    tmp = s.create_source('nestedSource2', 'nixSource');
+    tmp = s.createSource('nestedSource1', 'nixSource');
+    tmp = s.createSource('nestedSource2', 'nixSource');
     t = b.createMultiTag('sourcetest', 'nixMultiTag', b.dataArrays{1});
 
     t.add_source(s.sources{1}.id);
@@ -303,8 +303,8 @@ function [] = test_fetch_sources( varargin )
     b = f.createBlock('sourceTest', 'nixBlock');
     tmp = b.createDataArray('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     s = b.createSource('sourceTest', 'nixSource');
-    tmp = s.create_source('nestedSource1', 'nixSource');
-    tmp = s.create_source('nestedSource2', 'nixSource');
+    tmp = s.createSource('nestedSource1', 'nixSource');
+    tmp = s.createSource('nestedSource2', 'nixSource');
     t = b.createMultiTag('sourcetest', 'nixMultiTag', b.dataArrays{1});
     t.add_source(s.sources{1}.id);
     t.add_source(s.sources{2});
@@ -332,7 +332,7 @@ function [] = test_open_source( varargin )
     tmp = b.createDataArray('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     s = b.createSource('sourceTest', 'nixSource');
     sName = 'nestedSource';
-    tmp = s.create_source(sName, 'nixSource');
+    tmp = s.createSource(sName, 'nixSource');
     t = b.createMultiTag('sourcetest', 'nixMultiTag', b.dataArrays{1});
     t.add_source(s.sources{1});
 
@@ -1132,7 +1132,7 @@ function [] = test_filter_source( varargin )
     t.add_source(main);
     mainID = main.id;
     subName = 'testSubSource1';
-    s = main.create_source(subName, 'nixSource');
+    s = main.createSource(subName, 'nixSource');
     subID = s.id;
 
     assert(isempty(f.blocks{1}.multiTags{1}.filter_sources(nix.Filter.source, 'Do not exist')));

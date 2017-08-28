@@ -27,61 +27,61 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
         % Sources methods
         % ------------------
 
-        function r = source_count(obj)
+        function r = sourceCount(obj)
             r = nix.Utils.fetchEntityCount(obj, 'sourceCount');
         end
 
-        function r = create_source(obj, name, type)
+        function r = createSource(obj, name, type)
             fname = strcat(obj.alias, '::createSource');
             h = nix_mx(fname, obj.nix_handle, name, type);
             r = nix.Utils.createEntity(h, @nix.Source);
         end
 
-        function r = has_source(obj, id_or_name)
-            r = nix.Utils.fetchHasEntity(obj, 'hasSource', id_or_name);
+        function r = hasSource(obj, idName)
+            r = nix.Utils.fetchHasEntity(obj, 'hasSource', idName);
         end
 
-        function r = delete_source(obj, del)
+        function r = deleteSource(obj, del)
             r = nix.Utils.delete_entity(obj, 'deleteSource', del, 'nix.Source');
         end
 
-        function r = open_source(obj, id_or_name)
-            r = nix.Utils.open_entity(obj, 'openSource', id_or_name, @nix.Source);
+        function r = openSource(obj, idName)
+            r = nix.Utils.open_entity(obj, 'openSource', idName, @nix.Source);
         end
 
-        function r = open_source_idx(obj, index)
+        function r = openSourceIdx(obj, index)
             idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openSourceIdx', idx, @nix.Source);
         end
 
-        function r = parent_source(obj)
+        function r = parentSource(obj)
             r = nix.Utils.fetchObj(obj, 'parentSource', @nix.Source);
         end
 
-        function r = referring_data_arrays(obj)
+        function r = referringDataArrays(obj)
             r = nix.Utils.fetchObjList(obj, 'referringDataArrays', @nix.DataArray);
         end
 
-        function r = referring_tags(obj)
+        function r = referringTags(obj)
             r = nix.Utils.fetchObjList(obj, 'referringTags', @nix.Tag);
         end
 
-        function r = referring_multi_tags(obj)
+        function r = referringMultiTags(obj)
             r = nix.Utils.fetchObjList(obj, 'referringMultiTags', @nix.MultiTag);
         end
 
-        function r = filter_sources(obj, filter, val)
+        function r = filterSources(obj, filter, val)
             r = nix.Utils.filter(obj, 'sourcesFiltered', filter, val, @nix.Source);
         end
 
         % maxdepth is an index where idx = 0 corresponds to the calling source
-        function r = find_sources(obj, max_depth)
-            r = obj.find_filtered_sources(max_depth, nix.Filter.accept_all, '');
+        function r = findSources(obj, maxDepth)
+            r = obj.filterFindSources(maxDepth, nix.Filter.accept_all, '');
         end
 
         % maxdepth is an index where idx = 0 corresponds to the calling source
-        function r = find_filtered_sources(obj, max_depth, filter, val)
-            r = nix.Utils.find(obj, 'findSources', max_depth, filter, val, @nix.Source);
+        function r = filterFindSources(obj, maxDepth, filter, val)
+            r = nix.Utils.find(obj, 'findSources', maxDepth, filter, val, @nix.Source);
         end
     end
 

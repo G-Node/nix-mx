@@ -307,8 +307,8 @@ function [] = testAddSource ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourceTest', 'nixBlock');
     s = b.createSource('sourceTest', 'nixSource');
-    tmp = s.create_source('nestedSource1', 'nixSource');
-    tmp = s.create_source('nestedSource2', 'nixSource');
+    tmp = s.createSource('nestedSource1', 'nixSource');
+    tmp = s.createSource('nestedSource2', 'nixSource');
     getDataArray = b.createDataArray('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
 
     assert(isempty(getDataArray.sources));
@@ -357,7 +357,7 @@ function [] = testOpenSource( varargin )
     b = f.createBlock('test', 'nixBlock');
     s = b.createSource('test', 'nixSource');
     sourceName = 'nestedSource';
-    nSource = s.create_source(sourceName, 'nixSource');
+    nSource = s.createSource(sourceName, 'nixSource');
 
     d = b.createDataArray('sourceTest', 'nixDataArray', nix.DataType.Double, [1 2]);
     d.add_source(nSource);
@@ -394,8 +394,8 @@ function [] = testRemoveSource ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourceTest', 'nixBlock');
     s = b.createSource('sourceTest', 'nixSource');
-    tmp = s.create_source('nestedSource1', 'nixSource');
-    tmp = s.create_source('nestedSource2', 'nixSource');
+    tmp = s.createSource('nestedSource1', 'nixSource');
+    tmp = s.createSource('nestedSource2', 'nixSource');
     getDataArray = b.createDataArray('sourceTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
 
     getDataArray.add_source(s.sources{1}.id);
@@ -660,7 +660,7 @@ function [] = testFilterSource( varargin )
     d.add_source(main);
     mainID = main.id;
     subName = 'testSubSource1';
-    s = main.create_source(subName, 'nixSource');
+    s = main.createSource(subName, 'nixSource');
     subID = s.id;
 
     assert(isempty(f.blocks{1}.dataArrays{1}.filter_sources(nix.Filter.source, 'Do not exist')));

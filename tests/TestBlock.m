@@ -817,7 +817,7 @@ function [] = testFilterSource( varargin )
     mainSource = b.createSource(mainName, 'nixSource');
     mainID = mainSource.id;
     subName = 'testSubSource1';
-    s = mainSource.create_source(subName, 'nixSource');
+    s = mainSource.createSource(subName, 'nixSource');
     subID = s.id;
 
     assert(isempty(f.blocks{1}.filterSources(nix.Filter.source, 'Do not exist')));
@@ -1104,17 +1104,17 @@ function [] = testFindSource
     b = f.createBlock('testBlock', 'nixBlock');
     sl1 = b.createSource('sourceLvl1', 'nixSource');
 
-    sl21 = sl1.create_source('sourceLvl2_1', 'nixSource');
-    sl22 = sl1.create_source('sourceLvl2_2', 'nixSource');
+    sl21 = sl1.createSource('sourceLvl2_1', 'nixSource');
+    sl22 = sl1.createSource('sourceLvl2_2', 'nixSource');
 
-    sl31 = sl21.create_source('sourceLvl3_1', 'nixSource');
-    sl32 = sl21.create_source('sourceLvl3_2', 'nixSource');
-    sl33 = sl21.create_source('sourceLvl3_3', 'nixSource');
+    sl31 = sl21.createSource('sourceLvl3_1', 'nixSource');
+    sl32 = sl21.createSource('sourceLvl3_2', 'nixSource');
+    sl33 = sl21.createSource('sourceLvl3_3', 'nixSource');
 
-    sl41 = sl31.create_source('sourceLvl4_1', 'nixSource');
-    sl42 = sl31.create_source('sourceLvl4_2', 'nixSource');
-    sl43 = sl31.create_source('sourceLvl4_3', 'nixSource');
-    sl44 = sl31.create_source('sourceLvl4_4', 'nixSource');
+    sl41 = sl31.createSource('sourceLvl4_1', 'nixSource');
+    sl42 = sl31.createSource('sourceLvl4_2', 'nixSource');
+    sl43 = sl31.createSource('sourceLvl4_3', 'nixSource');
+    sl44 = sl31.createSource('sourceLvl4_4', 'nixSource');
 
     % Check invalid entry
     err = 'Provide a valid search depth';
@@ -1152,17 +1152,17 @@ function [] = testFindSourceFiltered
     b = f.createBlock('testBlock', 'nixBlock');
     sl1 = b.createSource('sourceLvl1', 'nixSource');
 
-    sl21 = sl1.create_source('sourceLvl2_1', 'nixSource');
-    sl22 = sl1.create_source('sourceLvl2_2', findSource);
+    sl21 = sl1.createSource('sourceLvl2_1', 'nixSource');
+    sl22 = sl1.createSource('sourceLvl2_2', findSource);
 
-    sl31 = sl21.create_source('sourceLvl3_1', findSource);
-    sl32 = sl21.create_source('sourceLvl3_2', 'nixSource');
-    sl33 = sl21.create_source('sourceLvl3_3', 'nixSource');
+    sl31 = sl21.createSource('sourceLvl3_1', findSource);
+    sl32 = sl21.createSource('sourceLvl3_2', 'nixSource');
+    sl33 = sl21.createSource('sourceLvl3_3', 'nixSource');
 
-    sl41 = sl31.create_source('sourceLvl4_1', findSource);
-    sl42 = sl31.create_source('sourceLvl4_2', 'nixSource');
-    sl43 = sl31.create_source('sourceLvl4_3', 'nixSource');
-    sl44 = sl31.create_source('sourceLvl4_4', 'nixSource');
+    sl41 = sl31.createSource('sourceLvl4_1', findSource);
+    sl42 = sl31.createSource('sourceLvl4_2', 'nixSource');
+    sl43 = sl31.createSource('sourceLvl4_3', 'nixSource');
+    sl44 = sl31.createSource('sourceLvl4_4', 'nixSource');
 
     % test find by id
     filtered = b.filterFindSources(2, nix.Filter.id, sl41.id);
