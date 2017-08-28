@@ -7,8 +7,7 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestBlock
-%TESTFILE Tests for the nix.Block object
-%   Detailed explanation goes here
+% TESTBLOCK Tests for the nix.Block object
 
     funcs = {};
     funcs{end+1} = @testAttributes;
@@ -887,7 +886,7 @@ function [] = testFilterGroup( varargin )
     mainEntity = b.createGroup(mainName, 'nixGroup');
     subName = 'testSubSource1';
     s = b.createSource(subName, 'nixSource');
-    mainEntity.add_source(s);
+    mainEntity.addSource(s);
     subID = s.id;
 
     % filter works only for ID, not for name
@@ -952,7 +951,7 @@ function [] = testFilterTag( varargin )
     mainEntity = b.createTag(mainName, 'nixTag', [12 3]);
     subName = 'testSubSource1';
     s = b.createSource(subName, 'nixSource');
-    mainEntity.add_source(s);
+    mainEntity.addSource(s);
     subID = s.id;
 
     % filter works only for ID, not for name
@@ -1018,7 +1017,7 @@ function [] = testFilterMultiTag( varargin )
     mainEntity = b.createMultiTag(mainName, 'nixMultiTag', d);
     subName = 'testSubSource1';
     s = b.createSource(subName, 'nixSource');
-    mainEntity.add_source(s);
+    mainEntity.addSource(s);
     subID = s.id;
 
     % filter works only for ID, not for name
@@ -1089,7 +1088,7 @@ function [] = testFilterDataArray( varargin )
     mainEntity = b.createDataArray(mainName, 'nixDataArray', nix.DataType.Bool, [2 9]);
     subName = 'testSubSource1';
     s = b.createSource(subName, 'nixSource');
-    mainEntity.add_source(s);
+    mainEntity.addSource(s);
     subID = s.id;
 
     % filter works only for ID, not for name

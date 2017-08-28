@@ -236,12 +236,12 @@ function [] = testReferringDataArrays( varargin )
     assert(isempty(s.referringDataArrays));
 
     d1 = b.createDataArray('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    d1.add_source(s);
+    d1.addSource(s);
     assert(~isempty(s.referringDataArrays));
     assert(strcmp(s.referringDataArrays{1}.name, d1.name));
 
     d2 = b.createDataArray('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
-    d2.add_source(s);
+    d2.addSource(s);
     assert(size(s.referringDataArrays, 1) == 2);
 end
 
@@ -255,12 +255,12 @@ function [] = testReferringTags( varargin )
     assert(isempty(s.referringTags));
 
     t1 = b.createTag('testTag1', 'nixTag', [1, 2]);
-    t1.add_source(s);
+    t1.addSource(s);
     assert(~isempty(s.referringTags));
     assert(strcmp(s.referringTags{1}.name, t1.name));
 
     t2 = b.createTag('testTag2', 'nixTag', [1, 2]);
-    t2.add_source(s);
+    t2.addSource(s);
     assert(size(s.referringTags, 1) == 2);
 end
 
@@ -275,12 +275,12 @@ function [] = testReferringMultiTags( varargin )
     assert(isempty(s.referringMultiTags));
 
     t1 = b.createMultiTag('testMultiTag1', 'nixMultiTag', d);
-    t1.add_source(s);
+    t1.addSource(s);
     assert(~isempty(s.referringMultiTags));
     assert(strcmp(s.referringMultiTags{1}.name, t1.name));
 
     t2 = b.createMultiTag('testMultiTag2', 'nixMultiTag', d);
-    t2.add_source(s);
+    t2.addSource(s);
     assert(size(s.referringMultiTags, 1) == 2);
 end
 

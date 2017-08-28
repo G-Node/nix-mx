@@ -6,8 +6,9 @@
 % modification, are permitted under the terms of the BSD License. See
 % LICENSE file in the root of the Project.
 
-%% TESTFILE Tests for the nix.Group object
 function funcs = TestGroup
+%% TESTGROUP Tests for the nix.Group object
+
     funcs = {};
     funcs{end+1} = @testAttributes;
     funcs{end+1} = @testAddDataArray;
@@ -623,8 +624,8 @@ function [] = testAddSource ( varargin )
     
     assert(isempty(g.sources));
     assert(isempty(f.blocks{1}.groups{1}.sources));
-    g.add_source(s.sources{1}.id);
-    g.add_source(s.sources{2});
+    g.addSource(s.sources{1}.id);
+    g.addSource(s.sources{2});
     assert(size(g.sources, 1) == 2);
     assert(size(f.blocks{1}.groups{1}.sources, 1) == 2);
     
@@ -646,20 +647,20 @@ function [] = testAddSources ( varargin )
     assert(isempty(g.sources));
 
     try
-        g.add_sources('hurra');
+        g.addSources('hurra');
     catch ME
         assert(strcmp(ME.message, 'Expected cell array'));
     end;
     assert(isempty(g.sources));
 
     try
-        g.add_sources({12, 13});
+        g.addSources({12, 13});
     catch ME
         assert(~isempty(strfind(ME.message, 'not a nix.Source')));
     end;
     assert(isempty(g.sources));
 
-    g.add_sources(b.sources());
+    g.addSources(b.sources());
     assert(size(g.sources, 1) == 3);
 
     clear g tmp b f;
@@ -675,17 +676,17 @@ function [] = testRemoveSource ( varargin )
     tmp = s.createSource('nestedSource1', 'nixSource');
     tmp = s.createSource('nestedSource2', 'nixSource');
     g = b.createGroup('sourceTest', 'nixGroup');
-    g.add_source(s.sources{1}.id);
-    g.add_source(s.sources{2});
+    g.addSource(s.sources{1}.id);
+    g.addSource(s.sources{2});
 
     assert(size(g.sources,1) == 2);
-    g.remove_source(s.sources{2});
+    g.removeSource(s.sources{2});
     assert(size(g.sources,1) == 1);
 
-    g.remove_source(s.sources{1}.id);
+    g.removeSource(s.sources{1}.id);
     assert(isempty(g.sources));
 
-    assert(g.remove_source('I do not exist'));
+    assert(g.removeSource('I do not exist'));
     assert(size(s.sources, 1) == 2);
 end
 
@@ -697,15 +698,17 @@ function [] = testHasSource( varargin )
     b = f.createBlock('testblock', 'nixBlock');
     g = b.createGroup('testGroup', 'nixGroup');
     s = b.createSource(sName, 'nixSource');
-    g.add_source(b.sources{1}.id)
+    g.addSource(b.sources{1}.id)
 
-    assert(~g.has_source('I do not exist'));
-    assert(g.has_source(s.id));
-    assert(g.has_source(s));
+    assert(~g.hasSource('I do not exist'));
+    assert(g.hasSource(s.id));
+    assert(g.hasSource(s));
+    assert(~g.hasSource(sName));
 
     clear s g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(f.blocks{1}.hasSource(sName));
+    assert(~f.blocks{1}.groups{1}.hasSource(sName));
 end
 
 %% Test: fetch sources
@@ -718,9 +721,9 @@ function [] = testFetchSources( varargin )
     tmp = s.createSource('nestedsource3', 'nixSource');
     g = b.createGroup('sourceTest', 'nixGroup');
 
-    g.add_source(s.sources{1});
-    g.add_source(s.sources{2});
-    g.add_source(s.sources{3});
+    g.addSource(s.sources{1});
+    g.addSource(s.sources{2});
+    g.addSource(s.sources{3});
     assert(size(g.sources, 1) == 3);
 end
 
@@ -733,16 +736,16 @@ function [] = testOpenSource( varargin )
     nSource = s.createSource(sourceName, 'nixSource');
 
     g = b.createGroup('sourceTest', 'nixGroup');
-    g.add_source(s.sources{1});
+    g.addSource(s.sources{1});
 
     % -- test get source by ID
-    assert(~isempty(g.open_source(nSource.id)));
+    assert(~isempty(g.openSource(nSource.id)));
 
     % -- test get source by name
-    assert(~isempty(g.open_source(sourceName)));
+    assert(~isempty(g.openSource(sourceName)));
 
     %-- test open non existing source
-    getNonSource = g.open_source('I do not exist');
+    getNonSource = g.openSource('I do not exist');
     assert(isempty(getNonSource));
 end
 
@@ -753,14 +756,14 @@ function [] = testSourceCount( varargin )
     b = f.createBlock('testBlock', 'nixBlock');
     g = b.createGroup('testGroup', 'nixGroup');
     
-    assert(g.source_count() == 0);
-    g.add_source(b.createSource('testSource1', 'nixSource'));
-    assert(g.source_count() == 1);
-    g.add_source(b.createSource('testSource2', 'nixSource'));
+    assert(g.sourceCount() == 0);
+    g.addSource(b.createSource('testSource1', 'nixSource'));
+    assert(g.sourceCount() == 1);
+    g.addSource(b.createSource('testSource2', 'nixSource'));
     
     clear g b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
-    assert(f.blocks{1}.groups{1}.source_count() == 2);
+    assert(f.blocks{1}.groups{1}.sourceCount() == 2);
 end
 
 
@@ -866,13 +869,13 @@ function [] = testOpenSourceIdx( varargin )
     s1 = b.createSource('testSource1', 'nixSource');
     s2 = b.createSource('testSource2', 'nixSource');
     s3 = b.createSource('testSource3', 'nixSource');
-    g.add_source(s1);
-    g.add_source(s2);
-    g.add_source(s3);
+    g.addSource(s1);
+    g.addSource(s2);
+    g.addSource(s3);
 
-    assert(strcmp(f.blocks{1}.groups{1}.open_source_idx(1).name, s1.name));
-    assert(strcmp(f.blocks{1}.groups{1}.open_source_idx(2).name, s2.name));
-    assert(strcmp(f.blocks{1}.groups{1}.open_source_idx(3).name, s3.name));
+    assert(strcmp(f.blocks{1}.groups{1}.openSourceIdx(1).name, s1.name));
+    assert(strcmp(f.blocks{1}.groups{1}.openSourceIdx(2).name, s2.name));
+    assert(strcmp(f.blocks{1}.groups{1}.openSourceIdx(3).name, s3.name));
 end
 
 function [] = testCompare( varargin )
@@ -898,69 +901,69 @@ function [] = testFilterSource( varargin )
     b = f.createBlock('testBlock', 'nixBlock');
     g = b.createGroup('testGroup', 'nixGroup');
     s = b.createSource(filterName, 'nixSource');
-    g.add_source(s);
+    g.addSource(s);
     filterID = s.id;
 	s = b.createSource('testSource1', filterType);
-    g.add_source(s);
+    g.addSource(s);
     filterIDs = {filterID, s.id};
     s = b.createSource('testSource2', filterType);
-    g.add_source(s);
+    g.addSource(s);
     
     % test empty id filter
-    assert(isempty(f.blocks{1}.groups{1}.filter_sources(nix.Filter.id, 'IdoNotExist')));
+    assert(isempty(f.blocks{1}.groups{1}.filterSources(nix.Filter.id, 'IdoNotExist')));
 
     % test nix.Filter.accept_all
-    filtered = f.blocks{1}.groups{1}.filter_sources(nix.Filter.accept_all, '');
+    filtered = f.blocks{1}.groups{1}.filterSources(nix.Filter.accept_all, '');
     assert(size(filtered, 1) == 3);
     
     % test nix.Filter.id
-    filtered = f.blocks{1}.groups{1}.filter_sources(nix.Filter.id, filterID);
+    filtered = f.blocks{1}.groups{1}.filterSources(nix.Filter.id, filterID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, filterID));
 
     % test nix.Filter.ids
-    filtered = f.blocks{1}.groups{1}.filter_sources(nix.Filter.ids, filterIDs);
+    filtered = f.blocks{1}.groups{1}.filterSources(nix.Filter.ids, filterIDs);
     assert(size(filtered, 1) == 2);
     assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
     
     % test nix.Filter.name
-    filtered  = f.blocks{1}.groups{1}.filter_sources(nix.Filter.name, filterName);
+    filtered  = f.blocks{1}.groups{1}.filterSources(nix.Filter.name, filterName);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, filterName));
     
     % test nix.Filter.type
-    filtered = f.blocks{1}.groups{1}.filter_sources(nix.Filter.type, filterType);
+    filtered = f.blocks{1}.groups{1}.filterSources(nix.Filter.type, filterType);
     assert(size(filtered, 1) == 2);
 
     % test nix.Filter.metadata
     mainName = 'testSubSection';
     mainSource = b.createSource(mainName, 'nixSource');
-    g.add_source(mainSource);
+    g.addSource(mainSource);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
     mainSource.set_metadata(s);
     subID = s.id;
 
-    assert(isempty(f.blocks{1}.groups{1}.filter_sources(nix.Filter.metadata, 'Do not exist')));
-    filtered = f.blocks{1}.groups{1}.filter_sources(nix.Filter.metadata, subID);
+    assert(isempty(f.blocks{1}.groups{1}.filterSources(nix.Filter.metadata, 'Do not exist')));
+    filtered = f.blocks{1}.groups{1}.filterSources(nix.Filter.metadata, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 
     % test nix.Filter.source
     mainName = 'testSubSource';
     mainSource = b.createSource(mainName, 'nixSource');
-    g.add_source(mainSource);
+    g.addSource(mainSource);
     mainID = mainSource.id;
     subName = 'testSubSource1';
     s = mainSource.createSource(subName, 'nixSource');
     subID = s.id;
 
-    assert(isempty(f.blocks{1}.groups{1}.filter_sources(nix.Filter.source, 'Do not exist')));
-    filtered = f.blocks{1}.groups{1}.filter_sources(nix.Filter.source, subName);
+    assert(isempty(f.blocks{1}.groups{1}.filterSources(nix.Filter.source, 'Do not exist')));
+    filtered = f.blocks{1}.groups{1}.filterSources(nix.Filter.source, subName);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, mainID));
 
-    filtered = f.blocks{1}.groups{1}.filter_sources(nix.Filter.source, subID);
+    filtered = f.blocks{1}.groups{1}.filterSources(nix.Filter.source, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 end
@@ -1028,7 +1031,7 @@ function [] = testFilterTag( varargin )
     mainID = main.id;
     subName = 'testSubSource1';
     s = b.createSource(subName, 'nixSource');
-    main.add_source(s);
+    main.addSource(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.groups{1}.filterTags(nix.Filter.source, 'Do not exist')));
@@ -1103,7 +1106,7 @@ function [] = testFilterMultiTag( varargin )
     mainID = main.id;
     subName = 'testSubSource1';
     s = b.createSource(subName, 'nixSource');
-    main.add_source(s);
+    main.addSource(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.groups{1}.filterMultiTags(nix.Filter.source, 'Do not exist')));
@@ -1177,7 +1180,7 @@ function [] = testFilterDataArray( varargin )
     mainID = main.id;
     subName = 'testSubSource1';
     s = b.createSource(subName, 'nixSource');
-    main.add_source(s);
+    main.addSource(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.groups{1}.filterDataArrays(nix.Filter.source, 'Do not exist')));

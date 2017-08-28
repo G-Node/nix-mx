@@ -19,38 +19,38 @@ classdef SourcesMixIn < handle
             nix.Dynamic.add_dyn_relation(obj, 'sources', @nix.Source);
         end
 
-        function r = source_count(obj)
+        function r = sourceCount(obj)
             r = nix.Utils.fetchEntityCount(obj, 'sourceCount');
         end
 
-        % has_source supports only check by id, not by name
-        function r = has_source(obj, id_or_entity)
-            has = nix.Utils.parseEntityId(id_or_entity, 'nix.Source');
+        % hasSource supports only check by id, not by name
+        function r = hasSource(obj, idEntity)
+            has = nix.Utils.parseEntityId(idEntity, 'nix.Source');
             r = nix.Utils.fetchHasEntity(obj, 'hasSource', has);
         end
 
-        function [] = add_source(obj, add_this)
-            nix.Utils.add_entity(obj, 'addSource', add_this, 'nix.Source');
+        function [] = addSource(obj, entity)
+            nix.Utils.add_entity(obj, 'addSource', entity, 'nix.Source');
         end
 
-        function [] = add_sources(obj, add_cell_array)
-            nix.Utils.add_entity_array(obj, 'addSources', add_cell_array, 'nix.Source');
+        function [] = addSources(obj, entityArray)
+            nix.Utils.add_entity_array(obj, 'addSources', entityArray, 'nix.Source');
         end
 
-        function r = remove_source(obj, del)
+        function r = removeSource(obj, del)
             r = nix.Utils.delete_entity(obj, 'removeSource', del, 'nix.Source');
         end
 
-        function r = open_source(obj, id_or_name)
-            r = nix.Utils.open_entity(obj, 'openSource', id_or_name, @nix.Source);
+        function r = openSource(obj, idName)
+            r = nix.Utils.open_entity(obj, 'openSource', idName, @nix.Source);
         end
 
-        function r = open_source_idx(obj, index)
+        function r = openSourceIdx(obj, index)
             idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openSourceIdx', idx, @nix.Source);
         end
 
-        function r = filter_sources(obj, filter, val)
+        function r = filterSources(obj, filter, val)
             r = nix.Utils.filter(obj, 'sourcesFiltered', filter, val, @nix.Source);
         end
     end
