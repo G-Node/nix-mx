@@ -62,16 +62,16 @@ classdef File < nix.Entity
         end
 
         function r = openBlock(obj, id_or_name)
-            r = nix.Utils.open_entity(obj, 'openBlock', id_or_name, @nix.Block);
+            r = nix.Utils.openEntity(obj, 'openBlock', id_or_name, @nix.Block);
         end
 
         function r = openBlockIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openBlockIdx', idx, @nix.Block);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openBlockIdx', idx, @nix.Block);
         end
 
         function r = deleteBlock(obj, del)
-            r = nix.Utils.delete_entity(obj, 'deleteBlock', del, 'nix.Block');
+            r = nix.Utils.deleteEntity(obj, 'deleteBlock', del, 'nix.Block');
         end
 
         function r = filterBlocks(obj, filter, val)
@@ -97,16 +97,16 @@ classdef File < nix.Entity
         end
 
         function r = openSection(obj, id_or_name)
-            r = nix.Utils.open_entity(obj, 'openSection', id_or_name, @nix.Section);
+            r = nix.Utils.openEntity(obj, 'openSection', id_or_name, @nix.Section);
         end
 
         function r = openSectionIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openSectionIdx', idx, @nix.Section);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openSectionIdx', idx, @nix.Section);
         end
 
         function r = deleteSection(obj, del)
-            r = nix.Utils.delete_entity(obj, 'deleteSection', del, 'nix.Section');
+            r = nix.Utils.deleteEntity(obj, 'deleteSection', del, 'nix.Section');
         end
 
         function r = filterSections(obj, filter, val)

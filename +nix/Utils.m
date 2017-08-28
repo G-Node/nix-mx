@@ -10,11 +10,11 @@ classdef Utils
 
     methods(Static)
 
-        function r = parseEntityId(id_or_entity, nixEntity)
-            if (isa(id_or_entity, nixEntity))
-                r = id_or_entity.id;
-            elseif (isa(id_or_entity, 'char'))
-                r = id_or_entity;
+        function r = parseEntityId(idEntity, nixEntity)
+            if (isa(idEntity, nixEntity))
+                r = idEntity.id;
+            elseif (isa(idEntity, 'char'))
+                r = idEntity;
             else
                 err.identifier = 'NIXMX:InvalidArgument';
                 err.message = sprintf('Expected an id, name or %s entity', nixEntity);
@@ -53,13 +53,13 @@ classdef Utils
         end
 
         % This method calls the nix-mx function specified by 'nixMxFunc', handing 
-        % over 'handle' as the main nix entity handle and 'related_handle' as a 
+        % over 'handle' as the main nix entity handle and 'relatedHandle' as a 
         % second nix entity handle related to the first one.
         % 'objConstructor' requires the Matlab entity constructor of the expected 
         % returned nix Entities.
-        function r = fetchObjListByEntity(obj, mxMethodName, related_handle, objConstructor)
+        function r = fetchObjListByEntity(obj, mxMethodName, relatedHandle, objConstructor)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            list = nix_mx(mxMethod, obj.nix_handle, related_handle);
+            list = nix_mx(mxMethod, obj.nix_handle, relatedHandle);
             r = nix.Utils.createEntityArray(list, objConstructor);
         end
 
@@ -69,45 +69,45 @@ classdef Utils
             r = nix.Utils.createEntity(h, objConstructor);
         end
 
-        function [] = add_entity(obj, mxMethodName, idNameEntity, nixEntity)
+        function [] = addEntity(obj, mxMethodName, idNameEntity, nixEntity)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             id = nix.Utils.parseEntityId(idNameEntity, nixEntity);
             nix_mx(mxMethod, obj.nix_handle, id);
         end
 
-        function [] = add_entity_array(obj, mxMethodName, add_cell_array, nixEntity)
-            if (~iscell(add_cell_array))
+        function [] = addEntityArray(obj, mxMethodName, entityArray, nixEntity)
+            if (~iscell(entityArray))
                 err.identifier = 'NIXMX:InvalidArgument';
                 err.message = 'Expected cell array';
                 error(err);
             end
 
-            handle_array = cell(1, length(add_cell_array));
-            for i = 1:length(add_cell_array)
-                if (~strcmpi(class(add_cell_array{i}), nixEntity))
+            handleArray = cell(1, length(entityArray));
+            for i = 1:length(entityArray)
+                if (~strcmpi(class(entityArray{i}), nixEntity))
                     err.identifier = 'NIXMX:InvalidArgument';
                     err.message = sprintf('Element #%s is not a %s.', num2str(i), nixEntity);
                     error(err);
                 end
-                handle_array{i} = add_cell_array{i}.nix_handle;
+                handleArray{i} = entityArray{i}.nix_handle;
             end
 
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            nix_mx(mxMethod, obj.nix_handle, handle_array);
+            nix_mx(mxMethod, obj.nix_handle, handleArray);
         end
 
         % Function can be used for both nix delete and remove methods.
         % The first actually removes the entity, the latter
         % removes only the reference to the entity.
-        function r = delete_entity(obj, mxMethodName, idNameEntity, nixEntity)
+        function r = deleteEntity(obj, mxMethodName, idNameEntity, nixEntity)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             id = nix.Utils.parseEntityId(idNameEntity, nixEntity);
             r = nix_mx(mxMethod, obj.nix_handle, id);
         end
 
-        function r = open_entity(obj, mxMethodName, id_or_name, objConstructor)
+        function r = openEntity(obj, mxMethodName, idName, objConstructor)
             mxMethod = strcat(obj.alias, '::', mxMethodName);
-            h = nix_mx(mxMethod, obj.nix_handle, id_or_name);
+            h = nix_mx(mxMethod, obj.nix_handle, idName);
             r = nix.Utils.createEntity(h, objConstructor);
         end
 
@@ -115,7 +115,7 @@ classdef Utils
         % nix.Filter helper functions
         % -----------------------------------------------------------
 
-        function [] = valid_filter(filter, val)
+        function [] = validFilter(filter, val)
             if (~isa(filter, 'nix.Filter'))
                 err.identifier = 'NIXMX:InvalidArgument';
                 err.message = 'Valid nix.Filter required';
@@ -132,7 +132,7 @@ classdef Utils
         end
 
         function r = filter(obj, mxMethodName, filter, val, objConstructor)
-            nix.Utils.valid_filter(filter, val);
+            nix.Utils.validFilter(filter, val);
 
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             list = nix_mx(mxMethod, obj.nix_handle, uint8(filter), val);
@@ -143,17 +143,17 @@ classdef Utils
         % findXXX helper functions
         % -----------------------------------------------------------
 
-        function r = find(obj, mxMethodName, max_depth, filter, val, objConstructor)
-            if (~isnumeric(max_depth))
+        function r = find(obj, mxMethodName, maxDepth, filter, val, objConstructor)
+            if (~isnumeric(maxDepth))
                 err.identifier = 'NIXMX:InvalidArgument';
                 err.message = 'Provide a valid search depth';
                 error(err);
             end
 
-            nix.Utils.valid_filter(filter, val);
+            nix.Utils.validFilter(filter, val);
 
             % transform matlab to c++ style index
-            md = nix.Utils.handle_index(max_depth);
+            md = nix.Utils.handleIndex(maxDepth);
 
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             list = nix_mx(mxMethod, obj.nix_handle, md, uint8(filter), val);
@@ -164,14 +164,14 @@ classdef Utils
         % c++ vs matlab helper functions
         % -----------------------------------------------------------
 
-        function r = transpose_array(data)
+        function r = transposeArray(data)
         % Data must agree with file & dimensions; see mkarray.cc(42)
             r = permute(data, length(size(data)):-1:1);
         end
 
-        function r = handle_index(idx)
+        function r = handleIndex(idx)
         % Matlab uses 1-based indexing opposed to 0 based indexing in C++.
-        % handle_index transforms a Matlab style index to a C++ style
+        % handleIndex transforms a Matlab style index to a C++ style
         % index and raises the appropriate Matlab error in case of an
         % invalid subscript.
             if (idx < 1)

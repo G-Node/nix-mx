@@ -42,16 +42,16 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = deleteSource(obj, del)
-            r = nix.Utils.delete_entity(obj, 'deleteSource', del, 'nix.Source');
+            r = nix.Utils.deleteEntity(obj, 'deleteSource', del, 'nix.Source');
         end
 
         function r = openSource(obj, idName)
-            r = nix.Utils.open_entity(obj, 'openSource', idName, @nix.Source);
+            r = nix.Utils.openEntity(obj, 'openSource', idName, @nix.Source);
         end
 
         function r = openSourceIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openSourceIdx', idx, @nix.Source);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openSourceIdx', idx, @nix.Source);
         end
 
         function r = parentSource(obj)

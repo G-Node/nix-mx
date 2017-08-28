@@ -39,24 +39,24 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = getDataArray(obj, idName)
-            r = nix.Utils.open_entity(obj, 'getDataArray', idName, @nix.DataArray);
+            r = nix.Utils.openEntity(obj, 'getDataArray', idName, @nix.DataArray);
         end
 
         function r = openDataArrayIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openDataArrayIdx', idx, @nix.DataArray);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openDataArrayIdx', idx, @nix.DataArray);
         end
 
         function [] = addDataArray(obj, entity)
-            nix.Utils.add_entity(obj, 'addDataArray', entity, 'nix.DataArray');
+            nix.Utils.addEntity(obj, 'addDataArray', entity, 'nix.DataArray');
         end
 
         function [] = addDataArrays(obj, entityArray)
-            nix.Utils.add_entity_array(obj, 'addDataArrays', entityArray, 'nix.DataArray');
+            nix.Utils.addEntityArray(obj, 'addDataArrays', entityArray, 'nix.DataArray');
         end
 
         function r = removeDataArray(obj, del)
-            r = nix.Utils.delete_entity(obj, 'removeDataArray', del, 'nix.DataArray');
+            r = nix.Utils.deleteEntity(obj, 'removeDataArray', del, 'nix.DataArray');
         end
 
         function r = filterDataArrays(obj, filter, val)
@@ -68,11 +68,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % -----------------
 
         function [] = addTag(obj, entity)
-            nix.Utils.add_entity(obj, 'addTag', entity, 'nix.Tag');
+            nix.Utils.addEntity(obj, 'addTag', entity, 'nix.Tag');
         end
 
         function [] = addTags(obj, entityArray)
-            nix.Utils.add_entity_array(obj, 'addTags', entityArray, 'nix.Tag');
+            nix.Utils.addEntityArray(obj, 'addTags', entityArray, 'nix.Tag');
         end
 
         function r = hasTag(obj, idName)
@@ -80,16 +80,16 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = getTag(obj, idName)
-            r = nix.Utils.open_entity(obj, 'getTag', idName, @nix.Tag);
+            r = nix.Utils.openEntity(obj, 'getTag', idName, @nix.Tag);
         end
 
         function r = openTagIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openTagIdx', idx, @nix.Tag);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openTagIdx', idx, @nix.Tag);
         end
 
         function r = removeTag(obj, del)
-            r = nix.Utils.delete_entity(obj, 'removeTag', del, 'nix.Tag');
+            r = nix.Utils.deleteEntity(obj, 'removeTag', del, 'nix.Tag');
         end
 
         function r = tagCount(obj)
@@ -105,11 +105,11 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % -----------------
 
         function [] = addMultiTag(obj, entity)
-            nix.Utils.add_entity(obj, 'addMultiTag', entity, 'nix.MultiTag');
+            nix.Utils.addEntity(obj, 'addMultiTag', entity, 'nix.MultiTag');
         end
 
         function [] = addMultiTags(obj, entityArray)
-            nix.Utils.add_entity_array(obj, 'addMultiTags', entityArray, 'nix.MultiTag');
+            nix.Utils.addEntityArray(obj, 'addMultiTags', entityArray, 'nix.MultiTag');
         end
 
         function r = hasMultiTag(obj, idName)
@@ -117,16 +117,16 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = getMultiTag(obj, idName)
-            r = nix.Utils.open_entity(obj, 'getMultiTag', idName, @nix.MultiTag);
+            r = nix.Utils.openEntity(obj, 'getMultiTag', idName, @nix.MultiTag);
         end
 
         function r = openMultiTagIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openMultiTagIdx', idx, @nix.MultiTag);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openMultiTagIdx', idx, @nix.MultiTag);
         end
 
         function r = removeMultiTag(obj, del)
-            r = nix.Utils.delete_entity(obj, 'removeMultiTag', del, 'nix.MultiTag');
+            r = nix.Utils.deleteEntity(obj, 'removeMultiTag', del, 'nix.MultiTag');
         end
 
         function r = multiTagCount(obj)

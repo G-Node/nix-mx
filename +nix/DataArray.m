@@ -112,7 +112,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function r = readAllData(obj)
             fname = strcat(obj.alias, '::readAll');
             data = nix_mx(fname, obj.nix_handle);
-            r = nix.Utils.transpose_array(data);
+            r = nix.Utils.transposeArray(data);
         end
 
         %-- TODO add (optional) offset
@@ -143,7 +143,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             end
 
             fname = strcat(obj.alias, '::writeAll');
-            nix_mx(fname, obj.nix_handle, nix.Utils.transpose_array(data));
+            nix_mx(fname, obj.nix_handle, nix.Utils.transposeArray(data));
         end
 
         function r = datatype(obj)

@@ -46,16 +46,16 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = openGroup(obj, idName)
-            r = nix.Utils.open_entity(obj, 'getGroup', idName, @nix.Group);
+            r = nix.Utils.openEntity(obj, 'getGroup', idName, @nix.Group);
         end
 
         function r = openGroupIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openGroupIdx', idx, @nix.Group);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openGroupIdx', idx, @nix.Group);
         end
 
         function r = deleteGroup(obj, idNameEntity)
-            r = nix.Utils.delete_entity(obj, 'deleteGroup', idNameEntity, 'nix.Group');
+            r = nix.Utils.deleteEntity(obj, 'deleteGroup', idNameEntity, 'nix.Group');
         end
 
         function r = filterGroups(obj, filter, val)
@@ -71,12 +71,12 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = openDataArray(obj, idName)
-            r = nix.Utils.open_entity(obj, 'openDataArray', idName, @nix.DataArray);
+            r = nix.Utils.openEntity(obj, 'openDataArray', idName, @nix.DataArray);
         end
 
         function r = openDataArrayIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openDataArrayIdx', idx, @nix.DataArray);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openDataArrayIdx', idx, @nix.DataArray);
         end
 
         function r = createDataArray(obj, name, nixtype, datatype, shape)
@@ -134,7 +134,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = deleteDataArray(obj, del)
-            r = nix.Utils.delete_entity(obj, 'deleteDataArray', del, 'nix.DataArray');
+            r = nix.Utils.deleteEntity(obj, 'deleteDataArray', del, 'nix.DataArray');
         end
 
         function r = filterDataArrays(obj, filter, val)
@@ -160,16 +160,16 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = deleteSource(obj, del)
-            r = nix.Utils.delete_entity(obj, 'deleteSource', del, 'nix.Source');
+            r = nix.Utils.deleteEntity(obj, 'deleteSource', del, 'nix.Source');
         end
 
         function r = openSource(obj, idName)
-            r = nix.Utils.open_entity(obj, 'openSource', idName, @nix.Source);
+            r = nix.Utils.openEntity(obj, 'openSource', idName, @nix.Source);
         end
 
         function r = openSourceIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openSourceIdx', idx, @nix.Source);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openSourceIdx', idx, @nix.Source);
         end
 
         function r = filterSources(obj, filter, val)
@@ -199,12 +199,12 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = openTag(obj, idName)
-            r = nix.Utils.open_entity(obj, 'openTag', idName, @nix.Tag);
+            r = nix.Utils.openEntity(obj, 'openTag', idName, @nix.Tag);
         end
 
         function r = openTagIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openTagIdx', idx, @nix.Tag);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openTagIdx', idx, @nix.Tag);
         end
 
         function r = createTag(obj, name, type, position)
@@ -214,7 +214,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = deleteTag(obj, del)
-            r = nix.Utils.delete_entity(obj, 'deleteTag', del, 'nix.Tag');
+            r = nix.Utils.deleteEntity(obj, 'deleteTag', del, 'nix.Tag');
         end
 
         function r = filterTags(obj, filter, val)
@@ -234,12 +234,12 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = openMultiTag(obj, idName)
-            r = nix.Utils.open_entity(obj, 'openMultiTag', idName, @nix.MultiTag);
+            r = nix.Utils.openEntity(obj, 'openMultiTag', idName, @nix.MultiTag);
         end
 
         function r = openMultiTagIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openMultiTagIdx', idx, @nix.MultiTag);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openMultiTagIdx', idx, @nix.MultiTag);
         end
 
         %-- Creating a multitag requires an already existing data array
@@ -251,7 +251,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = deleteMultiTag(obj, del)
-            r = nix.Utils.delete_entity(obj, 'deleteMultiTag', del, 'nix.MultiTag');
+            r = nix.Utils.deleteEntity(obj, 'deleteMultiTag', del, 'nix.MultiTag');
         end
 
         function r = filterMultiTags(obj, filter, val)

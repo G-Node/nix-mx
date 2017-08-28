@@ -30,24 +30,24 @@ classdef SourcesMixIn < handle
         end
 
         function [] = addSource(obj, entity)
-            nix.Utils.add_entity(obj, 'addSource', entity, 'nix.Source');
+            nix.Utils.addEntity(obj, 'addSource', entity, 'nix.Source');
         end
 
         function [] = addSources(obj, entityArray)
-            nix.Utils.add_entity_array(obj, 'addSources', entityArray, 'nix.Source');
+            nix.Utils.addEntityArray(obj, 'addSources', entityArray, 'nix.Source');
         end
 
         function r = removeSource(obj, del)
-            r = nix.Utils.delete_entity(obj, 'removeSource', del, 'nix.Source');
+            r = nix.Utils.deleteEntity(obj, 'removeSource', del, 'nix.Source');
         end
 
         function r = openSource(obj, idName)
-            r = nix.Utils.open_entity(obj, 'openSource', idName, @nix.Source);
+            r = nix.Utils.openEntity(obj, 'openSource', idName, @nix.Source);
         end
 
         function r = openSourceIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openSourceIdx', idx, @nix.Source);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openSourceIdx', idx, @nix.Source);
         end
 
         function r = filterSources(obj, filter, val)

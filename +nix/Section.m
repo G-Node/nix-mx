@@ -40,7 +40,7 @@ classdef Section < nix.NamedEntity
                 fname = strcat(obj.alias, '::setNoneLink');
                 nix_mx(fname, obj.nix_handle);
             else
-                nix.Utils.add_entity(obj, 'setLink', val, 'nix.Section');
+                nix.Utils.addEntity(obj, 'setLink', val, 'nix.Section');
             end
         end
 
@@ -63,16 +63,16 @@ classdef Section < nix.NamedEntity
         end
 
         function r = deleteSection(obj, del)
-            r = nix.Utils.delete_entity(obj, 'deleteSection', del, 'nix.Section');
+            r = nix.Utils.deleteEntity(obj, 'deleteSection', del, 'nix.Section');
         end
 
         function r = openSection(obj, idName)
-            r = nix.Utils.open_entity(obj, 'openSection', idName, @nix.Section);
+            r = nix.Utils.openEntity(obj, 'openSection', idName, @nix.Section);
         end
 
         function r = openSectionIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openSectionIdx', idx, @nix.Section);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openSectionIdx', idx, @nix.Section);
         end
 
         function r = hasSection(obj, idName)
@@ -142,12 +142,12 @@ classdef Section < nix.NamedEntity
         end
 
         function r = openProperty(obj, idName)
-            r = nix.Utils.open_entity(obj, 'openProperty', idName, @nix.Property);
+            r = nix.Utils.openEntity(obj, 'openProperty', idName, @nix.Property);
         end
 
         function r = openPropertyIdx(obj, index)
-            idx = nix.Utils.handle_index(index);
-            r = nix.Utils.open_entity(obj, 'openPropertyIdx', idx, @nix.Property);
+            idx = nix.Utils.handleIndex(index);
+            r = nix.Utils.openEntity(obj, 'openPropertyIdx', idx, @nix.Property);
         end
 
         function r = propertyCount(obj)
