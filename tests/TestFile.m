@@ -316,8 +316,8 @@ function [] = testFilterSection( varargin )
     % test empty id filter
     assert(isempty(f.filterSections(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.filterSections(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.filterSections(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
     
     % test nix.Filter.id
@@ -373,8 +373,8 @@ function [] = testFilterBlock( varargin )
     % test empty id filter
     assert(isempty(f.filterBlocks(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.filterBlocks(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.filterBlocks(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
     
     % test nix.Filter.id

@@ -76,7 +76,7 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
 
         % maxdepth is an index where idx = 0 corresponds to the calling source
         function r = findSources(obj, maxDepth)
-            r = obj.filterFindSources(maxDepth, nix.Filter.accept_all, '');
+            r = obj.filterFindSources(maxDepth, nix.Filter.acceptall, '');
         end
 
         % maxdepth is an index where idx = 0 corresponds to the calling source

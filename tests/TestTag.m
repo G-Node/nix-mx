@@ -811,8 +811,8 @@ function [] = testFilterSource( varargin )
     % test empty id filter
     assert(isempty(f.blocks{1}.tags{1}.filterSources(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.tags{1}.filterSources(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.tags{1}.filterSources(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
 
     % test nix.Filter.id
@@ -886,8 +886,8 @@ function [] = testFilterReference( varargin )
     % test empty id filter
     assert(isempty(f.blocks{1}.tags{1}.filterReferences(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.tags{1}.filterReferences(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.tags{1}.filterReferences(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
 
     % test nix.Filter.id
@@ -956,8 +956,8 @@ function [] = testFilterFeature( varargin )
     % test empty id filter
     assert(isempty(f.blocks{1}.tags{1}.filterFeatures(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.tags{1}.filterFeatures(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.tags{1}.filterFeatures(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 2);
 
     % test nix.Filter.id

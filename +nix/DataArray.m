@@ -86,7 +86,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % instead of 0 compared to all other index functions.
             fname = strcat(obj.alias, '::openDimensionIdx');
             dim = nix_mx(fname, obj.nixhandle, idx);
-            switch (dim.dimension_type)
+            switch (dim.dimensionType)
                 case 'set'
                     r = nix.Utils.createEntity(dim.handle, @nix.SetDimension);
                 case 'sampled'

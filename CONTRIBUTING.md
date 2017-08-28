@@ -67,9 +67,9 @@ Style guide
 Adhere to the MATLAB Style Guidelines 2.0 as suggested by Richard Johnson.
 
 Furthermore, adhere to these additional guidelines for the nix-mx project:
-
-- keep line length at 90 max.
-- use `r` as return variable name of simple (2-3 line) functions.
-- always use ';' to terminate proper statements, never for terminating control structures.
+- Keep line length at a maximum of 90 characters.
+- Use `r` as return variable name of simple (2-3 line) functions.
+- Always terminate proper statements with a semicolon.
+- Never terminate control structures with a semicolon.
 - Structure names should start with a capital letter.
 - Structure field names should be camel case and start with a lower case letter.

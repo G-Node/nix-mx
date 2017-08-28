@@ -57,12 +57,12 @@ classdef File < nix.Entity
             r = nix.Utils.fetchEntityCount(obj, 'blockCount');
         end
 
-        function r = hasBlock(obj, id_or_name)
-            r = nix.Utils.fetchHasEntity(obj, 'hasBlock', id_or_name);
+        function r = hasBlock(obj, idName)
+            r = nix.Utils.fetchHasEntity(obj, 'hasBlock', idName);
         end
 
-        function r = openBlock(obj, id_or_name)
-            r = nix.Utils.openEntity(obj, 'openBlock', id_or_name, @nix.Block);
+        function r = openBlock(obj, idName)
+            r = nix.Utils.openEntity(obj, 'openBlock', idName, @nix.Block);
         end
 
         function r = openBlockIdx(obj, index)
@@ -92,12 +92,12 @@ classdef File < nix.Entity
             r = nix.Utils.fetchEntityCount(obj, 'sectionCount');
         end
 
-        function r = hasSection(obj, id_or_name)
-            r = nix.Utils.fetchHasEntity(obj, 'hasSection', id_or_name);
+        function r = hasSection(obj, idName)
+            r = nix.Utils.fetchHasEntity(obj, 'hasSection', idName);
         end
 
-        function r = openSection(obj, id_or_name)
-            r = nix.Utils.openEntity(obj, 'openSection', id_or_name, @nix.Section);
+        function r = openSection(obj, idName)
+            r = nix.Utils.openEntity(obj, 'openSection', idName, @nix.Section);
         end
 
         function r = openSectionIdx(obj, index)
@@ -114,13 +114,13 @@ classdef File < nix.Entity
         end
 
         % maxdepth is an index
-        function r = findSections(obj, max_depth)
-            r = obj.filterFindSections(max_depth, nix.Filter.accept_all, '');
+        function r = findSections(obj, maxDepth)
+            r = obj.filterFindSections(maxDepth, nix.Filter.acceptall, '');
         end
 
         % maxdepth is an index
-        function r = filterFindSections(obj, max_depth, filter, val)
-            r = nix.Utils.find(obj, 'findSections', max_depth, filter, val, @nix.Section);
+        function r = filterFindSections(obj, maxDepth, filter, val)
+            r = nix.Utils.find(obj, 'findSections', maxDepth, filter, val, @nix.Section);
         end
     end
 

@@ -776,8 +776,8 @@ function [] = testFilterSource( varargin )
     % test empty id filter
     assert(isempty(f.blocks{1}.filterSources(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.filterSources(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.filterSources(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
     
     % test nix.Filter.id
@@ -846,8 +846,8 @@ function [] = testFilterGroup( varargin )
     % test empty id filter
     assert(isempty(f.blocks{1}.filterGroups(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.filterGroups(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.filterGroups(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
     
     % test nix.Filter.id
@@ -911,8 +911,8 @@ function [] = testFilterTag( varargin )
     % test empty id filter
     assert(isempty(f.blocks{1}.filterTags(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.filterTags(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.filterTags(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
     
     % test nix.Filter.id
@@ -977,8 +977,8 @@ function [] = testFilterMultiTag( varargin )
     % test empty id filter
     assert(isempty(f.blocks{1}.filterMultiTags(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.filterMultiTags(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.filterMultiTags(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
 
     % test nix.Filter.id
@@ -1048,8 +1048,8 @@ function [] = testFilterDataArray( varargin )
     % test empty id filter
     assert(isempty(f.blocks{1}.filterDataArrays(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.filterDataArrays(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.filterDataArrays(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
 
     % test nix.Filter.id

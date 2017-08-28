@@ -627,8 +627,8 @@ function [] = testFilterSection( varargin )
     % test empty id filter
     assert(isempty(f.sections{1}.filterSections(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.sections{1}.filterSections(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.sections{1}.filterSections(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
     
     % test nix.Filter.id
@@ -679,8 +679,8 @@ function [] = testFilterProperty( varargin )
     % test empty id filter
     assert(isempty(f.sections{1}.filterProperties(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.sections{1}.filterProperties(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.sections{1}.filterProperties(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 2);
     
     % test nix.Filter.id

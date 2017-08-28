@@ -315,8 +315,8 @@ function [] = testFilterSource( varargin )
     % test empty id filter
     assert(isempty(f.blocks{1}.sources{1}.filterSources(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.sources{1}.filterSources(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.sources{1}.filterSources(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
 
     % test nix.Filter.id
