@@ -530,24 +530,25 @@ function [] = testSetMetadata ( varargin )
     tmp = f.createSection(secName2, 'nixSection');
     b = f.createBlock('testBlock', 'nixBlock');
     
-    assert(isempty(b.open_metadata));
-    assert(isempty(f.blocks{1}.open_metadata));
+    assert(isempty(b.openMetadata));
+    assert(isempty(f.blocks{1}.openMetadata));
 
-    b.set_metadata(f.sections{1});
-    assert(strcmp(b.open_metadata.name, secName1));
-    assert(strcmp(f.blocks{1}.open_metadata.name, secName1));
+    b.setMetadata(f.sections{1});
+    assert(strcmp(b.openMetadata.name, secName1));
+    assert(strcmp(f.blocks{1}.openMetadata.name, secName1));
 
-    b.set_metadata(f.sections{2});
-    assert(strcmp(b.open_metadata.name, secName2));
-    assert(strcmp(f.blocks{1}.open_metadata.name, secName2));
-    b.set_metadata('');
-    assert(isempty(b.open_metadata));
-    assert(isempty(f.blocks{1}.open_metadata));
+    b.setMetadata(f.sections{2});
+    assert(strcmp(b.openMetadata.name, secName2));
+    assert(strcmp(f.blocks{1}.openMetadata.name, secName2));
+    b.setMetadata('');
+    assert(isempty(b.openMetadata));
+    assert(isempty(f.blocks{1}.openMetadata));
 
-    b.set_metadata(f.sections{2});
+    b.setMetadata(f.sections{2});
+
     clear tmp b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
-	assert(strcmp(f.blocks{1}.open_metadata.name, secName2));
+	assert(strcmp(f.blocks{1}.openMetadata.name, secName2));
 end
 
 function [] = testOpenMetadata( varargin )
@@ -555,9 +556,9 @@ function [] = testOpenMetadata( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     tmp = f.createSection('testSection', 'nixSection');
     b = f.createBlock('testBlock', 'nixBlock');
-    b.set_metadata(f.sections{1});
+    b.setMetadata(f.sections{1});
 
-    assert(strcmp(b.open_metadata.name, 'testSection'));
+    assert(strcmp(b.openMetadata.name, 'testSection'));
 end
 
 %% Test: nix.Block has nix.DataArray by ID or name
@@ -803,7 +804,7 @@ function [] = testFilterSource( varargin )
     mainSource = b.createSource(mainName, 'nixSource');
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
-    mainSource.set_metadata(s);
+    mainSource.setMetadata(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.filterSources(nix.Filter.metadata, 'Do not exist')));
@@ -873,7 +874,7 @@ function [] = testFilterGroup( varargin )
     mainEntity = b.createGroup(mainName, 'nixGroup');
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
-    mainEntity.set_metadata(s);
+    mainEntity.setMetadata(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.filterGroups(nix.Filter.metadata, 'Do not exist')));
@@ -938,7 +939,7 @@ function [] = testFilterTag( varargin )
     mainEntity = b.createTag(mainName, 'nixTag', [1 8]);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
-    mainEntity.set_metadata(s);
+    mainEntity.setMetadata(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.filterTags(nix.Filter.metadata, 'Do not exist')));
@@ -1004,7 +1005,7 @@ function [] = testFilterMultiTag( varargin )
     mainEntity = b.createMultiTag(mainName, 'nixMultiTag', d);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
-    mainEntity.set_metadata(s);
+    mainEntity.setMetadata(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.filterMultiTags(nix.Filter.metadata, 'Do not exist')));
@@ -1075,7 +1076,7 @@ function [] = testFilterDataArray( varargin )
     mainEntity = b.createDataArray(mainName, 'nixDataArray', nix.DataType.Bool, [2 9]);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
-    mainEntity.set_metadata(s);
+    mainEntity.setMetadata(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.filterMultiTags(nix.Filter.metadata, 'Do not exist')));
@@ -1193,7 +1194,7 @@ function [] = testFindSourceFiltered
 
     % test nix.Filter.metadata
     sec = f.createSection('testSection', 'nixSection');
-    sl43.set_metadata(sec);
+    sl43.setMetadata(sec);
     filtered = b.filterFindSources(1, nix.Filter.metadata, sec.id);
     assert(isempty(filtered));
     filtered = b.filterFindSources(4, nix.Filter.metadata, sec.id);

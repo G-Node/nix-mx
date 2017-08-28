@@ -614,25 +614,26 @@ function [] = testSetMetadata ( varargin )
     tmp = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
     t = b.createMultiTag('metadataTest', 'nixMultiTag', b.dataArrays{1});
 
-    assert(isempty(t.open_metadata));
-    assert(isempty(f.blocks{1}.multiTags{1}.open_metadata));
+    assert(isempty(t.openMetadata));
+    assert(isempty(f.blocks{1}.multiTags{1}.openMetadata));
 
-    t.set_metadata(f.sections{1});
-    assert(strcmp(t.open_metadata.name, secName1));
-    assert(strcmp(f.blocks{1}.multiTags{1}.open_metadata.name, secName1));
+    t.setMetadata(f.sections{1});
+    assert(strcmp(t.openMetadata.name, secName1));
+    assert(strcmp(f.blocks{1}.multiTags{1}.openMetadata.name, secName1));
 
-    t.set_metadata(f.sections{2});
-    assert(strcmp(t.open_metadata.name, secName2));
-    assert(strcmp(f.blocks{1}.multiTags{1}.open_metadata.name, secName2));
+    t.setMetadata(f.sections{2});
+    assert(strcmp(t.openMetadata.name, secName2));
+    assert(strcmp(f.blocks{1}.multiTags{1}.openMetadata.name, secName2));
     
-    t.set_metadata('');
-    assert(isempty(t.open_metadata));
-    assert(isempty(f.blocks{1}.multiTags{1}.open_metadata));
+    t.setMetadata('');
+    assert(isempty(t.openMetadata));
+    assert(isempty(f.blocks{1}.multiTags{1}.openMetadata));
     
-    t.set_metadata(f.sections{2});
+    t.setMetadata(f.sections{2});
+
     clear tmp t b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
-    assert(strcmp(f.blocks{1}.multiTags{1}.open_metadata.name, secName2));
+    assert(strcmp(f.blocks{1}.multiTags{1}.openMetadata.name, secName2));
 end
 
 %% Test: Open metadata
@@ -642,9 +643,9 @@ function [] = testOpenMetadata( varargin )
     b = f.createBlock('testBlock', 'nixBlock');
     tmp = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
     t = b.createMultiTag('metadataTest', 'nixMultiTag', b.dataArrays{1});
-    t.set_metadata(f.sections{1});
+    t.setMetadata(f.sections{1});
 
-    assert(strcmp(t.open_metadata.name, 'testSection'));
+    assert(strcmp(t.openMetadata.name, 'testSection'));
 end
 
 %% Test: Retrieve reference data by id or name
@@ -1119,7 +1120,7 @@ function [] = testFilterSource( varargin )
     t.addSource(mainSource);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
-    mainSource.set_metadata(s);
+    mainSource.setMetadata(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.multiTags{1}.filterSources(nix.Filter.metadata, 'Do not exist')));
@@ -1195,7 +1196,7 @@ function [] = testFilterReference( varargin )
     t.addReference(main);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
-    main.set_metadata(s);
+    main.setMetadata(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.multiTags{1}.filterReferences(nix.Filter.metadata, 'Do not exist')));

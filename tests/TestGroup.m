@@ -778,24 +778,25 @@ function [] = testSetMetadata ( varargin )
     tmp = f.createSection(secName2, 'nixSection');
     b = f.createBlock('testBlock', 'nixBlock');
     g = b.createGroup('testGroup', 'nixGroup');
-    assert(isempty(g.open_metadata));
-    assert(isempty(f.blocks{1}.groups{1}.open_metadata))
+    assert(isempty(g.openMetadata));
+    assert(isempty(f.blocks{1}.groups{1}.openMetadata))
     
-    g.set_metadata(f.sections{1});
-    assert(strcmp(g.open_metadata.name, secName1));
-    assert(strcmp(f.blocks{1}.groups{1}.open_metadata.name, secName1));
+    g.setMetadata(f.sections{1});
+    assert(strcmp(g.openMetadata.name, secName1));
+    assert(strcmp(f.blocks{1}.groups{1}.openMetadata.name, secName1));
 
-    g.set_metadata(f.sections{2});
-    assert(strcmp(g.open_metadata.name, secName2));
-    assert(strcmp(f.blocks{1}.groups{1}.open_metadata.name, secName2));
-    g.set_metadata('');
-    assert(isempty(g.open_metadata));
-    assert(isempty(f.blocks{1}.groups{1}.open_metadata));
+    g.setMetadata(f.sections{2});
+    assert(strcmp(g.openMetadata.name, secName2));
+    assert(strcmp(f.blocks{1}.groups{1}.openMetadata.name, secName2));
+    g.setMetadata('');
+    assert(isempty(g.openMetadata));
+    assert(isempty(f.blocks{1}.groups{1}.openMetadata));
 
-    g.set_metadata(f.sections{2});
+    g.setMetadata(f.sections{2});
+
     clear tmp g b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
-	assert(strcmp(f.blocks{1}.groups{1}.open_metadata.name, secName2));
+	assert(strcmp(f.blocks{1}.groups{1}.openMetadata.name, secName2));
 end
 
 function [] = testOpenMetadata( varargin )
@@ -804,9 +805,9 @@ function [] = testOpenMetadata( varargin )
     tmp = f.createSection('testSection', 'nixSection');
     b = f.createBlock('testBlock', 'nixBlock');
     g = b.createGroup('testGroup', 'nixGroup');
-    g.set_metadata(f.sections{1});
+    g.setMetadata(f.sections{1});
 
-    assert(strcmp(g.open_metadata.name, 'testSection'));
+    assert(strcmp(g.openMetadata.name, 'testSection'));
 end
 
 function [] = testOpenDataArrayIdx( varargin )
@@ -941,7 +942,7 @@ function [] = testFilterSource( varargin )
     g.addSource(mainSource);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
-    mainSource.set_metadata(s);
+    mainSource.setMetadata(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.groups{1}.filterSources(nix.Filter.metadata, 'Do not exist')));
@@ -1016,7 +1017,7 @@ function [] = testFilterTag( varargin )
     g.addTag(main);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
-    main.set_metadata(s);
+    main.setMetadata(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.groups{1}.filterTags(nix.Filter.metadata, 'Do not exist')));
@@ -1091,7 +1092,7 @@ function [] = testFilterMultiTag( varargin )
     g.addMultiTag(main);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
-    main.set_metadata(s);
+    main.setMetadata(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.groups{1}.filterMultiTags(nix.Filter.metadata, 'Do not exist')));
@@ -1165,7 +1166,7 @@ function [] = testFilterDataArray( varargin )
     g.addDataArray(main);
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
-    main.set_metadata(s);
+    main.setMetadata(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.groups{1}.filterDataArrays(nix.Filter.metadata, 'Do not exist')));

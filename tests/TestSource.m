@@ -112,25 +112,25 @@ function [] = testSetMetadata ( varargin )
     b = f.createBlock('testBlock', 'nixBlock');
     s = b.createSource('testSource', 'nixSource');
 
-    assert(isempty(s.open_metadata));
-    assert(isempty(f.blocks{1}.sources{1}.open_metadata));
+    assert(isempty(s.openMetadata));
+    assert(isempty(f.blocks{1}.sources{1}.openMetadata));
 
-    s.set_metadata(f.sections{1});
-    assert(strcmp(s.open_metadata.name, secName1));
-    assert(strcmp(f.blocks{1}.sources{1}.open_metadata.name, secName1));
+    s.setMetadata(f.sections{1});
+    assert(strcmp(s.openMetadata.name, secName1));
+    assert(strcmp(f.blocks{1}.sources{1}.openMetadata.name, secName1));
 
-    s.set_metadata(f.sections{2});
-    assert(strcmp(s.open_metadata.name, secName2));
-    assert(strcmp(f.blocks{1}.sources{1}.open_metadata.name, secName2));
+    s.setMetadata(f.sections{2});
+    assert(strcmp(s.openMetadata.name, secName2));
+    assert(strcmp(f.blocks{1}.sources{1}.openMetadata.name, secName2));
 
-    s.set_metadata('');
-    assert(isempty(s.open_metadata));
-    assert(isempty(f.blocks{1}.sources{1}.open_metadata));
+    s.setMetadata('');
+    assert(isempty(s.openMetadata));
+    assert(isempty(f.blocks{1}.sources{1}.openMetadata));
 
-	s.set_metadata(f.sections{2});
+	s.setMetadata(f.sections{2});
     clear tmp b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
-    assert(strcmp(f.blocks{1}.sources{1}.open_metadata.name, secName2));
+    assert(strcmp(f.blocks{1}.sources{1}.openMetadata.name, secName2));
 end
 
 %% Test: Open metadata
@@ -139,9 +139,9 @@ function [] = testOpenMetadata( varargin )
     tmp = f.createSection('testSection', 'nixSection');
     b = f.createBlock('testBlock', 'nixBlock');
     s = b.createSource('testSource', 'nixSource');
-    s.set_metadata(f.sections{1});
+    s.setMetadata(f.sections{1});
 
-    assert(strcmp(s.open_metadata.name, 'testSection'));
+    assert(strcmp(s.openMetadata.name, 'testSection'));
 end
 
 %% Test: create source
@@ -343,7 +343,7 @@ function [] = testFilterSource( varargin )
     mainSource = ms.createSource(mainName, 'nixSource');
     subName = 'testSubSection1';
     s = f.createSection(subName, 'nixSection');
-    mainSource.set_metadata(s);
+    mainSource.setMetadata(s);
     subID = s.id;
 
     assert(isempty(f.blocks{1}.sources{1}.filterSources(nix.Filter.metadata, 'Do not exist')));
@@ -467,7 +467,7 @@ function [] = testFilterFindSource( varargin )
 
     % test nix.Filter.metadata
     sec = f.createSection('testSection', 'nixSection');
-    sl43.set_metadata(sec);
+    sl43.setMetadata(sec);
     filtered = s.filterFindSources(1, nix.Filter.metadata, sec.id);
     assert(isempty(filtered));
     filtered = s.filterFindSources(5, nix.Filter.metadata, sec.id);

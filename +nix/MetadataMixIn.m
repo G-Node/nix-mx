@@ -17,11 +17,11 @@ classdef MetadataMixIn < handle
     end
 
     methods
-        function r = open_metadata(obj)
+        function r = openMetadata(obj)
             r = nix.Utils.fetchObj(obj, 'openMetadataSection', @nix.Section);
         end
 
-        function [] = set_metadata(obj, val)
+        function [] = setMetadata(obj, val)
             if (isempty(val))
                 fname = strcat(obj.alias, '::setNoneMetadata');
                 nix_mx(fname, obj.nix_handle, val);

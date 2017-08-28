@@ -7,8 +7,7 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestSection
-%TESTFILE % Tests for the nix.Section object
-%   Detailed explanation goes here
+% TESTSECTION Tests for the nix.Section object
 
     funcs = {};
     funcs{end+1} = @testCreateSection;
@@ -360,14 +359,14 @@ function [] = testReferringDataArrays( varargin )
     
     assert(isempty(s.referringDataArrays));
 
-    d1.set_metadata(s);
+    d1.setMetadata(s);
     assert(~isempty(s.referringDataArrays));
     
-    d2.set_metadata(s);
+    d2.setMetadata(s);
     assert(size(s.referringDataArrays, 1) == 2);
     
     b2.deleteDataArray(d2);
-    d1.set_metadata('');
+    d1.setMetadata('');
     assert(isempty(s.referringDataArrays));
 end
 
@@ -383,8 +382,8 @@ function [] = testReferringBlockDataArrays( varargin )
     d2 = b2.createDataArray('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
     s = f.createSection('testSection', 'nixSection');
     
-    d1.set_metadata(s);
-    d2.set_metadata(s);
+    d1.setMetadata(s);
+    d2.setMetadata(s);
 
     % test multiple arguments fail
     try
@@ -417,14 +416,14 @@ function [] = testReferringTags( varargin )
     
     assert(isempty(s.referringTags));
 
-    t1.set_metadata(s);
+    t1.setMetadata(s);
     assert(~isempty(s.referringTags));
     
-    t2.set_metadata(s);
+    t2.setMetadata(s);
     assert(size(s.referringTags, 1) == 2);
     
     b2.deleteTag(t2);
-    t1.set_metadata('');
+    t1.setMetadata('');
     assert(isempty(s.referringTags));
 end
 
@@ -440,8 +439,8 @@ function [] = testReferringBlockTags( varargin )
     t2 = b2.createTag('testTag2', 'nixTag', [3, 4]);
     s = f.createSection('testSection', 'nixSection');
 
-    t1.set_metadata(s);
-    t2.set_metadata(s);
+    t1.setMetadata(s);
+    t2.setMetadata(s);
 
     % test multiple arguments fail
     try
@@ -476,14 +475,14 @@ function [] = testReferringMultiTags( varargin )
     
     assert(isempty(s.referringMultiTags));
 
-    t1.set_metadata(s);
+    t1.setMetadata(s);
     assert(~isempty(s.referringMultiTags));
     
-    t2.set_metadata(s);
+    t2.setMetadata(s);
     assert(size(s.referringMultiTags, 1) == 2);
     
     b2.deleteMultiTag(t2);
-    t1.set_metadata('');
+    t1.setMetadata('');
     assert(isempty(s.referringMultiTags));
 end
 
@@ -501,8 +500,8 @@ function [] = testReferringBlockMultiTags( varargin )
     t2 = b2.createMultiTag('testMultiTag2', 'nixMultiTag', d);
     s = f.createSection('testSection', 'nixSection');
 
-    t1.set_metadata(s);
-    t2.set_metadata(s);
+    t1.setMetadata(s);
+    t2.setMetadata(s);
 
     % test multiple arguments fail
     try
@@ -535,14 +534,14 @@ function [] = testReferringSources( varargin )
     
     assert(isempty(s.referringSources));
 
-    s1.set_metadata(s);
+    s1.setMetadata(s);
     assert(~isempty(s.referringSources));
     
-    s2.set_metadata(s);
+    s2.setMetadata(s);
     assert(size(s.referringSources, 1) == 2);
     
     b2.deleteSource(s2);
-    s1.set_metadata('');
+    s1.setMetadata('');
     assert(isempty(s.referringSources));
 end
 
@@ -558,8 +557,8 @@ function [] = testReferringBlockSources( varargin )
     s2 = b2.createSource('testSource2', 'nixSource');
     s = f.createSection('testSection', 'nixSection');
 
-    s1.set_metadata(s);
-    s2.set_metadata(s);
+    s1.setMetadata(s);
+    s2.setMetadata(s);
 
     % test multiple arguments fail
     try
@@ -590,13 +589,13 @@ function [] = testReferringBlocks( varargin )
     
     assert(isempty(s.referringBlocks));
 
-    b1.set_metadata(s);
+    b1.setMetadata(s);
     assert(~isempty(s.referringBlocks));
     
-    b2.set_metadata(s);
+    b2.setMetadata(s);
     assert(size(s.referringBlocks, 1) == 2);
     
-    b2.set_metadata('')
+    b2.setMetadata('')
     assert(size(s.referringBlocks, 1) == 1);
 end
 
