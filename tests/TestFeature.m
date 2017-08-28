@@ -7,29 +7,28 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestFeature
-%TESTTag tests for Tag
-%   Detailed explanation goes here
+% TESTFEATURE tests for Feature
 
     funcs = {};
-    funcs{end+1} = @test_open_data;
-    funcs{end+1} = @test_get_set_link_type;
-    funcs{end+1} = @test_set_data;
+    funcs{end+1} = @testOpenData;
+    funcs{end+1} = @testHandleLinkType;
+    funcs{end+1} = @testSetData;
 end
 
 %% Test: Open data from feature
-function [] = test_open_data ( varargin )
+function [] = testOpenData ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
     tmp = b.createDataArray('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
     t = b.createTag('featureTest', 'nixTag', [1, 2]);
     tmp = t.addFeature(b.dataArrays{1}, nix.LinkType.Tagged);
     
-    getFeature = t.features{1};
-    assert(~isempty(getFeature.open_data));
+    feat = t.features{1};
+    assert(~isempty(feat.openData));
 end
 
 %% Test: Get and set nix.LinkType
-function [] = test_get_set_link_type ( varargin )
+function [] = testHandleLinkType ( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
@@ -65,7 +64,7 @@ function [] = test_get_set_link_type ( varargin )
 end
 
 %% Test: Set data by entity, ID and name
-function [] = test_set_data ( varargin )
+function [] = testSetData ( varargin )
     fileName = 'testRW.h5';
     daName1 = 'featTestDA1';
     daName2 = 'featTestDA2';
@@ -82,14 +81,14 @@ function [] = test_set_data ( varargin )
     t = b.createTag('featureTest', 'nixTag', [1, 2]);
     feat = t.addFeature(b.dataArrays{1}, nix.LinkType.Tagged);
     
-    assert(strcmp(feat.open_data.name, daName1));
-    feat.set_data(da2);
-    assert(strcmp(f.blocks{1}.tags{1}.features{1}.open_data.name, daName2));
-    feat.set_data(da3.id);
-    assert(strcmp(f.blocks{1}.tags{1}.features{1}.open_data.name, daName3));
-    feat.set_data(da4.name);
+    assert(strcmp(feat.openData.name, daName1));
+    feat.setData(da2);
+    assert(strcmp(f.blocks{1}.tags{1}.features{1}.openData.name, daName2));
+    feat.setData(da3.id);
+    assert(strcmp(f.blocks{1}.tags{1}.features{1}.openData.name, daName3));
+    feat.setData(da4.name);
     
     clear feat t da4 da3 da2 da1 b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
-    assert(strcmp(f.blocks{1}.tags{1}.features{1}.open_data.name, daName4));
+    assert(strcmp(f.blocks{1}.tags{1}.features{1}.openData.name, daName4));
 end

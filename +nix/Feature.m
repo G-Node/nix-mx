@@ -38,14 +38,14 @@ classdef Feature < nix.Entity
             nix_mx(fname, obj.nix_handle, linkType);
         end
 
-        function r = open_data(obj)
+        function r = openData(obj)
             fname = strcat(obj.alias, '::openData');
             h = nix_mx(fname, obj.nix_handle);
             r = nix.Utils.createEntity(h, @nix.DataArray);
         end
 
-        function [] = set_data(obj, setData)
-            id = nix.Utils.parseEntityId(setData, 'nix.DataArray');
+        function [] = setData(obj, data)
+            id = nix.Utils.parseEntityId(data, 'nix.DataArray');
             fname = strcat(obj.alias, '::setData');
             nix_mx(fname, obj.nix_handle, id);
         end
