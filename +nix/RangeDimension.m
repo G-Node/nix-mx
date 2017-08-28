@@ -26,13 +26,13 @@ classdef RangeDimension < nix.Entity
             nix.Dynamic.add_dyn_attr(obj, 'ticks', 'rw');
         end
 
-        function r = tick_at(obj, index)
+        function r = tickAt(obj, index)
             index = nix.Utils.handle_index(index);
             fname = strcat(obj.alias, '::tickAt');
             r = nix_mx(fname, obj.nix_handle, index);
         end
 
-        function r = index_of(obj, position)
+        function r = indexOf(obj, position)
             fname = strcat(obj.alias, '::indexOf');
             r = nix_mx(fname, obj.nix_handle, position);
         end

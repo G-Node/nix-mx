@@ -26,12 +26,12 @@ classdef SampledDimension < nix.Entity
             nix.Dynamic.add_dyn_attr(obj, 'offset', 'rw');
         end
 
-        function r = index_of(obj, position)
+        function r = indexOf(obj, position)
             fname = strcat(obj.alias, '::indexOf');
             r = nix_mx(fname, obj.nix_handle, position);
         end
 
-        function r = position_at(obj, index)
+        function r = positionAt(obj, index)
             index = nix.Utils.handle_index(index);
             fname = strcat(obj.alias, '::positionAt');
             r = nix_mx(fname, obj.nix_handle, index);
