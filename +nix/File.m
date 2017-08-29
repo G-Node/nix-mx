@@ -7,7 +7,7 @@
 %
 % When a file variable is cleared, the handle to the file will be automatically closed.
 %
-% nix.File properties:
+% nix.File dynamic properties:
 %   blocks      access to all nix.Block child entities.
 %   sections    access to all first level nix.Section child entities.
 %
