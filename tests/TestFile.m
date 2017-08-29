@@ -1,3 +1,5 @@
+% TestFile provides tests for all supported nix.File methods.
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,8 +9,6 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestFile
-% TESTFILE tests for File
-
     funcs = {};
     funcs{end+1} = @testReadOnly;
     funcs{end+1} = @testReadWrite;
@@ -217,8 +217,8 @@ function [] = testDeleteSection( varargin )
     assert(~checkDelete);
 end
 
+%% Test: Open Section
 function [] = testOpenSection( varargin )
-%% Test open section
     f = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
     getSection = f.openSection(f.sections{1,1}.id);
     assert(strcmp(getSection.name, 'General'));
@@ -228,8 +228,8 @@ function [] = testOpenSection( varargin )
     assert(isempty(getSection));
 end
 
+%% Test: Open Section by index
 function [] = testOpenSectionIdx( varargin )
-%% Test Open Section by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     s1 = f.createSection('testSection1', 'nixSection');
     s2 = f.createSection('testSection2', 'nixSection');
@@ -240,8 +240,8 @@ function [] = testOpenSectionIdx( varargin )
     assert(strcmp(f.openSectionIdx(3).name, s3.name));
 end
 
+%% Test: Open Block by ID or name
 function [] = testOpenBlock( varargin )
-%% Test Open Block by ID or name
     f = nix.File(fullfile(pwd,'tests','test.h5'), nix.FileMode.ReadOnly);
 
     getBlockByID = f.openBlock(f.blocks{1,1}.id);
@@ -255,8 +255,8 @@ function [] = testOpenBlock( varargin )
     assert(isempty(getBlock));
 end
 
+%% Test: Open Block by index
 function [] = testOpenBlockIdx( varargin )
-%% Test Open Block by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
     b2 = f.createBlock('testBlock2', 'nixBlock');
@@ -267,7 +267,7 @@ function [] = testOpenBlockIdx( varargin )
     assert(strcmp(f.openBlockIdx(3).name, b3.name));
 end
 
-%% Test: nix.File has nix.Block by ID or name
+%% Test: Has Block by ID or name
 function [] = testHasBlock( varargin )
     fileName = 'testRW.h5';
     blockName = 'hasBlockTest';
@@ -283,7 +283,7 @@ function [] = testHasBlock( varargin )
     assert(f.hasBlock(bID));
 end
 
-%% Test: nix.File has nix.Section by ID or name
+%% Test: Has Section by ID or name
 function [] = testHasSection( varargin )
     fileName = 'testRW.h5';
     secName = 'hasSectionTest';
@@ -299,8 +299,8 @@ function [] = testHasSection( varargin )
     assert(f.hasSection(sID));
 end
 
+%% Test: Filter Sections
 function [] = testFilterSection( varargin )
-%% Test: filter Sections
     filterName = 'filterMe';
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
@@ -356,8 +356,8 @@ function [] = testFilterSection( varargin )
 
 end
 
+%% Test: Filter Blocks
 function [] = testFilterBlock( varargin )
-%% Test: filter Blocks
     filterName = 'filterMe';
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
@@ -413,7 +413,7 @@ function [] = testFilterBlock( varargin )
 
 end
 
-%% Test: Find sections w/o filter
+%% Test: Find Sections w/o filter
 function [] = testFindSection
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     sl1 = f.createSection('sectionLvl1', 'nixSection');
@@ -459,7 +459,7 @@ function [] = testFindSection
     assert(size(filtered, 1) == 1);
 end
 
-%% Test: Find sections with filter
+%% Test: Find Sections with filter
 function [] = testFindSectionFiltered
     findSection = 'nixFindSection';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
