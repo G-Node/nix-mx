@@ -1,3 +1,5 @@
+% TestTag provides tests for all supported nix.Tag methods.
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,8 +9,6 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestTag
-% TESTTag tests for Tag
-
     funcs = {};
     funcs{end+1} = @testAddSource;
     funcs{end+1} = @testAddSources;
@@ -16,8 +16,8 @@ function funcs = TestTag
     funcs{end+1} = @testAddReference;
     funcs{end+1} = @testAddReferences;
     funcs{end+1} = @testRemoveReference;
-    funcs{end+1} = @testAddFeature;
-    funcs{end+1} = @testRemoveFeature;
+    funcs{end+1} = @testCreateFeature;
+    funcs{end+1} = @testDeleteFeature;
     funcs{end+1} = @testFetchReferences;
     funcs{end+1} = @testReferenceCount;
     funcs{end+1} = @testFetchSources;
@@ -46,7 +46,7 @@ function funcs = TestTag
     funcs{end+1} = @testFilterFeature;
 end
 
-%% Test: Add sources by entity and id
+%% Test: Add Sources by entity and id
 function [] = testAddSource ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
@@ -69,7 +69,7 @@ function [] = testAddSource ( varargin )
     assert(size(f.blocks{1}.tags{1}.sources, 1) == 2);
 end
 
-%% Test: Add sources by entity cell array
+%% Test: Add Sources by entity cell array
 function [] = testAddSources ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
@@ -103,7 +103,7 @@ function [] = testAddSources ( varargin )
     assert(size(f.blocks{1}.tags{1}.sources, 1) == 3);
 end
 
-%% Test: Remove sources by entity and id
+%% Test: Remove Sources by entity and id
 function [] = testRemoveSource ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
@@ -203,8 +203,8 @@ function [] = testRemoveReference ( varargin )
     assert(size(b.dataArrays, 1) == 2);
 end
 
-%% Test: Add features by entity and id
-function [] = testAddFeature ( varargin )
+%% Test: Create Features by entity and id
+function [] = testCreateFeature ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
@@ -219,12 +219,12 @@ function [] = testAddFeature ( varargin )
     
     assert(isempty(t.features));
     assert(isempty(f.blocks{1}.tags{1}.features));
-    tmp = t.addFeature(b.dataArrays{1}.id, nix.LinkType.Tagged);
-    tmp = t.addFeature(b.dataArrays{2}, nix.LinkType.Tagged);
-    tmp = t.addFeature(b.dataArrays{3}.id, nix.LinkType.Untagged);
-    tmp = t.addFeature(b.dataArrays{4}, nix.LinkType.Untagged);
-    tmp = t.addFeature(b.dataArrays{5}.id, nix.LinkType.Indexed);
-    tmp = t.addFeature(b.dataArrays{6}, nix.LinkType.Indexed);
+    tmp = t.createFeature(b.dataArrays{1}.id, nix.LinkType.Tagged);
+    tmp = t.createFeature(b.dataArrays{2}, nix.LinkType.Tagged);
+    tmp = t.createFeature(b.dataArrays{3}.id, nix.LinkType.Untagged);
+    tmp = t.createFeature(b.dataArrays{4}, nix.LinkType.Untagged);
+    tmp = t.createFeature(b.dataArrays{5}.id, nix.LinkType.Indexed);
+    tmp = t.createFeature(b.dataArrays{6}, nix.LinkType.Indexed);
     assert(size(t.features, 1) == 6);
     assert(size(f.blocks{1}.tags{1}.features, 1) == 6);
 
@@ -233,26 +233,26 @@ function [] = testAddFeature ( varargin )
     assert(size(f.blocks{1}.tags{1}.features, 1) == 6);
 end
 
-%% Test: Remove features by entity and id
-function [] = testRemoveFeature ( varargin )
+%% Test: Remove Features by entity and id
+function [] = testDeleteFeature ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
     tmp = b.createDataArray('featureTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
     tmp = b.createDataArray('featureTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
     position = [1.0 1.2 1.3 15.9];
     t = b.createTag('featureTest', 'nixTag', position);
-    tmp = t.addFeature(b.dataArrays{1}.id, nix.LinkType.Tagged);
-    tmp = t.addFeature(b.dataArrays{2}, nix.LinkType.Tagged);
+    tmp = t.createFeature(b.dataArrays{1}.id, nix.LinkType.Tagged);
+    tmp = t.createFeature(b.dataArrays{2}, nix.LinkType.Tagged);
 
-    assert(t.removeFeature(t.features{2}.id));
-    assert(t.removeFeature(t.features{1}));
+    assert(t.deleteFeature(t.features{2}.id));
+    assert(t.deleteFeature(t.features{1}));
     assert(isempty(t.features));
 
-    assert(~t.removeFeature('I do not exist'));
+    assert(~t.deleteFeature('I do not exist'));
     assert(size(b.dataArrays, 1) == 2);
 end
 
-%% Test: fetch references
+%% Test: Fetch references
 function [] = testFetchReferences( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('referenceTest', 'nixBlock');
@@ -285,7 +285,7 @@ function [] = testReferenceCount( varargin )
     assert(f.blocks{1}.tags{1}.referenceCount() == 2);
 end
 
-%% Test: fetch sources
+%% Test: Fetch Sources
 function [] = testFetchSources( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
@@ -302,7 +302,7 @@ function [] = testFetchSources( varargin )
     assert(size(t.sources, 1) == 3);
 end
 
-%% Test: fetch features
+%% Test: Fetch Features
 function [] = testFetchFeatures( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
@@ -311,8 +311,8 @@ function [] = testFetchFeatures( varargin )
     position = [1.0 1.2 1.3 15.9];
     t = b.createTag('featureTest', 'nixTag', position);
 
-    tmp = t.addFeature(b.dataArrays{1}, nix.LinkType.Tagged);
-    tmp = t.addFeature(b.dataArrays{2}, nix.LinkType.Tagged);
+    tmp = t.createFeature(b.dataArrays{1}, nix.LinkType.Tagged);
+    tmp = t.createFeature(b.dataArrays{2}, nix.LinkType.Tagged);
 
     assert(size(t.features, 1) == 2);
 end
@@ -325,10 +325,10 @@ function [] = testFeatureCount( varargin )
     t = b.createTag('testTag', 'nixTag', [1 2]);
 
     assert(t.featureCount() == 0);
-    t.addFeature(b.createDataArray('testDataArray1', 'nixDataArray', ...
+    t.createFeature(b.createDataArray('testDataArray1', 'nixDataArray', ...
         nix.DataType.Double, [1 2]), nix.LinkType.Tagged);
     assert(t.featureCount() == 1);
-    t.addFeature(b.createDataArray('testDataArray2', 'nixDataArray', ...
+    t.createFeature(b.createDataArray('testDataArray2', 'nixDataArray', ...
         nix.DataType.Double, [3 4]), nix.LinkType.Tagged);
     
     clear t b f;
@@ -336,7 +336,7 @@ function [] = testFeatureCount( varargin )
     assert(f.blocks{1}.tags{1}.featureCount() == 2);
 end
 
-%% Test: Open source by ID or name
+%% Test: Open Source by id or name
 function [] = testOpenSource( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
@@ -375,7 +375,7 @@ function [] = testOpenSourceIdx( varargin )
     assert(strcmp(f.blocks{1}.tags{1}.openSourceIdx(3).name, s3.name));
 end
 
-%% Test: nix.Tag has nix.Source by ID or entity
+%% Test: Has Source by id or entity
 function [] = testHasSource( varargin )
     fileName = 'testRW.h5';
     sName = 'sourceTest1';
@@ -413,14 +413,14 @@ function [] = testSourceCount( varargin )
     assert(f.blocks{1}.tags{1}.sourceCount() == 2);
 end
 
-%% Test: Open feature by ID
+%% Test: Open Feature by id
 function [] = testOpenFeature( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
     tmp = b.createDataArray('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     position = [1.0 1.2 1.3 15.9];
     t = b.createTag('featureTest', 'nixTag', position);
-    tmp = t.addFeature(b.dataArrays{1}, nix.LinkType.Tagged);
+    tmp = t.createFeature(b.dataArrays{1}, nix.LinkType.Tagged);
 
     assert(~isempty(t.openFeature(t.features{1}.id)));
 
@@ -429,24 +429,24 @@ function [] = testOpenFeature( varargin )
     assert(isempty(feat));
 end
 
+%% Test Open Feature by index
 function [] = testOpenFeatureIdx( varargin )
-%% Test Open feature by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
     t = b.createTag('testTag', 'nixTag', [2 9]);
     d1 = b.createDataArray('testFeature1', 'nixDataArray', nix.DataType.Double, [1 2]);
     d2 = b.createDataArray('testFeature2', 'nixDataArray', nix.DataType.Double, [3 2]);
     d3 = b.createDataArray('testFeature3', 'nixDataArray', nix.DataType.Double, [7 2]);
-    t.addFeature(d1, nix.LinkType.Tagged);
-    t.addFeature(d2, nix.LinkType.Untagged);
-    t.addFeature(d3, nix.LinkType.Indexed);
+    t.createFeature(d1, nix.LinkType.Tagged);
+    t.createFeature(d2, nix.LinkType.Untagged);
+    t.createFeature(d3, nix.LinkType.Indexed);
 
     assert(f.blocks{1}.tags{1}.openFeatureIdx(1).linkType == nix.LinkType.Tagged);
     assert(f.blocks{1}.tags{1}.openFeatureIdx(2).linkType == nix.LinkType.Untagged);
     assert(f.blocks{1}.tags{1}.openFeatureIdx(3).linkType == nix.LinkType.Indexed);
 end
 
-%% Test: Open reference by ID or name
+%% Test: Open reference by id or name
 function [] = testOpenReference( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('referenceTest', 'nixBlock');
@@ -466,8 +466,8 @@ function [] = testOpenReference( varargin )
     assert(isempty(getNonRef));
 end
 
-function [] = testOpenReference_idx( varargin )
 %% Test Open reference by index
+function [] = testOpenReference_idx( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
     t = b.createTag('testTag', 'nixTag', [2 9]);
@@ -588,7 +588,7 @@ function [] = testRetrieveDataIdx( varargin )
     assert(retData(1) == raw(t.position + 1), 'Position check failed');
 end
 
-%% Test: Retrieve feature data by name and id
+%% Test: Retrieve Feature data by name and id
 function [] = testRetrieveFeatureData( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
@@ -613,14 +613,14 @@ function [] = testRetrieveFeatureData( varargin )
     % test retrieve untagged feature data by name
     df = b.createDataArrayFromData('testUntagged', 'nixDataArray', rawFeature);
     df.appendSampledDimension(1);
-    t.addFeature(df, nix.LinkType.Untagged);
+    t.createFeature(df, nix.LinkType.Untagged);
     retData = t.retrieveFeatureData('testUntagged');
     assert(size(retData, 2) == size(rawFeature, 2), 'Untagged size check fail');
 
     % test retrieve tagged feature data by id
     df = b.createDataArrayFromData('testTagged', 'nixDataArray', rawFeature);
     df.appendSampledDimension(1);
-    t.addFeature(df, nix.LinkType.Tagged);
+    t.createFeature(df, nix.LinkType.Tagged);
     retData = t.retrieveFeatureData(df.id);
     assert(size(retData, 2) == t.extent, 'Tagged Extent check fail');
     assert(retData(1) == rawFeature(t.position + 1), 'Tagged Position check fail');
@@ -628,12 +628,12 @@ function [] = testRetrieveFeatureData( varargin )
     % test retrieve indexed feature data by id
     df = b.createDataArrayFromData('testIndexed', 'nixDataArray', rawFeature);
     df.appendSampledDimension(1);
-    t.addFeature(df, nix.LinkType.Indexed);
+    t.createFeature(df, nix.LinkType.Indexed);
     retData = t.retrieveFeatureData(df.id);
     assert(size(retData, 2) == size(rawFeature, 2), 'Indexed size check fail');
 end
 
-%% Test: Retrieve feature data by index
+%% Test: Retrieve Feature data by index
 function [] = testRetrieveFeatureDataIdx( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
@@ -650,14 +650,14 @@ function [] = testRetrieveFeatureDataIdx( varargin )
     % test retrieve untagged feature data 
     df = b.createDataArrayFromData('testUntagged', 'nixDataArray', rawFeature);
     df.appendSampledDimension(1);
-    t.addFeature(df, nix.LinkType.Untagged);
+    t.createFeature(df, nix.LinkType.Untagged);
     retData = t.retrieveFeatureDataIdx(1);
     assert(size(retData, 2) == size(rawFeature, 2), 'Untagged size check fail');
 
     % test retrieve tagged feature data 
     df = b.createDataArrayFromData('testTagged', 'nixDataArray', rawFeature);
     df.appendSampledDimension(1);
-    t.addFeature(df, nix.LinkType.Tagged);
+    t.createFeature(df, nix.LinkType.Tagged);
     retData = t.retrieveFeatureDataIdx(2);
     assert(size(retData, 2) == t.extent, 'Tagged Extent check fail');
     assert(retData(1) == rawFeature(t.position + 1), 'Tagged Position check fail');
@@ -665,7 +665,7 @@ function [] = testRetrieveFeatureDataIdx( varargin )
     % test retrieve indexed feature data
     df = b.createDataArrayFromData('testIndexed', 'nixDataArray', rawFeature);
     df.appendSampledDimension(1);
-    t.addFeature(df, nix.LinkType.Indexed);
+    t.createFeature(df, nix.LinkType.Indexed);
     retData = t.retrieveFeatureDataIdx(3);
     assert(size(retData, 2) == size(rawFeature, 2), 'Indexed size check fail');
 
@@ -676,7 +676,7 @@ function [] = testRetrieveFeatureDataIdx( varargin )
     end
 end
 
-%% Test: Read and write nix.Tag attributes
+%% Test: Read and write Tag attributes
 function [] = testAttributes( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
@@ -741,14 +741,14 @@ function [] = testAttributes( varargin )
     assert(isequal(f.blocks{1}.tags{1}.extent, lastExt));
 end
 
-%% Test: nix.Tag has feature by ID
+%% Test: Has Feature by id
 function [] = testHasFeature( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
     da = b.createDataArray('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     t = b.createTag('featureTest', 'nixTag', [1.0 1.2 1.3 15.9]);
-    feature = t.addFeature(b.dataArrays{1}, nix.LinkType.Tagged);
+    feature = t.createFeature(b.dataArrays{1}, nix.LinkType.Tagged);
     featureID = feature.id;
 
     assert(~t.hasFeature('I do not exist'));
@@ -759,7 +759,7 @@ function [] = testHasFeature( varargin )
     assert(f.blocks{1}.tags{1}.hasFeature(featureID));
 end
 
-%% Test: nix.Tag has reference by ID or name
+%% Test: Has reference by id or name
 function [] = testHasReference( varargin )
     fileName = 'testRW.h5';
     daName = 'referenceTest';
@@ -777,8 +777,8 @@ function [] = testHasReference( varargin )
     assert(f.blocks{1}.tags{1}.hasReference(daName));
 end
 
-function [] = testCompare( varargin )
 %% Test: Compare Tag entities
+function [] = testCompare( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
     b2 = f.createBlock('testBlock2', 'nixBlock');
@@ -792,7 +792,7 @@ function [] = testCompare( varargin )
     assert(t1.compare(t3) ~= 0);
 end
 
-%% Test: filter sources
+%% Test: Filter Sources
 function [] = testFilterSource( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
@@ -867,7 +867,7 @@ function [] = testFilterSource( varargin )
     assert(strcmp(filtered{1}.name, mainName));
 end
 
-%% Test: filter references
+%% Test: Filter references
 function [] = testFilterReference( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
@@ -941,16 +941,16 @@ function [] = testFilterReference( varargin )
     assert(strcmp(filtered{1}.name, mainName));
 end
 
-%% Test: filter features
+%% Test: Filter Features
 function [] = testFilterFeature( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
     t = b.createTag('testTag', 'nixTag', [1 2 3]);
     d = b.createDataArray('testDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    feat = t.addFeature(d, nix.LinkType.Tagged);
+    feat = t.createFeature(d, nix.LinkType.Tagged);
     filterID = feat.id;
 	d = b.createDataArray('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
-    feat = t.addFeature(d, nix.LinkType.Tagged);
+    feat = t.createFeature(d, nix.LinkType.Tagged);
     filterIDs = {filterID, feat.id};
 
     % test empty id filter

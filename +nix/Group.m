@@ -115,7 +115,7 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function [] = addDataArray(obj, idNameEntity)
-            % Add a nix.DataArray to referenced list of the invoking Group.
+            % Add a nix.DataArray to the referenced list of the invoking Group.
             %
             % idNameEntity (char/nix.DataArray):  The id or name of an existing DataArray,
             %                                     or a valid nix.DataArray entity.
