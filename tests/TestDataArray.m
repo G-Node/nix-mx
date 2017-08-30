@@ -1,3 +1,5 @@
+% TestDataArray provides tests for all supported nix.DataArray methods.
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,8 +9,6 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestDataArray
-% TESTDATAARRAY tests for DataArray
-
     funcs = {};
     funcs{end+1} = @testAttributes;
     funcs{end+1} = @testOpenData;
@@ -35,8 +35,8 @@ function funcs = TestDataArray
     funcs{end+1} = @testFilterSource;
 end
 
-function [] = testAttributes( varargin )
 %% Test: Access Attributes
+function [] = testAttributes( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
@@ -161,7 +161,7 @@ function [] = testOpenMetadata( varargin )
     assert(strcmp(da.openMetadata.name, 'testSection'));
 end
 
-%% Test: List sources
+%% Test: List Sources
 function [] = testListSources( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     b = f.blocks{1};
@@ -302,7 +302,7 @@ function [] = testWriteDataInteger( varargin )
     assert(isequal(f.blocks{1}.dataArrays{8}.readAllData, numData));
 end
 
-%% Test: Add sources by entity and id
+%% Test: Add Source by entity and id
 function [] = testAddSource ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourceTest', 'nixBlock');
@@ -317,7 +317,7 @@ function [] = testAddSource ( varargin )
     assert(size(d.sources, 1) == 2);
 end
 
-%% Test: Add sources by entity cell array
+%% Test: Add Sources by entity cell array
 function [] = testAddSources ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
@@ -351,7 +351,7 @@ function [] = testAddSources ( varargin )
     assert(size(f.blocks{1}.dataArrays{1}.sources, 1) == 3);
 end
 
-%% Test: Open source by ID or name
+%% Test: Open Source by id or name
 function [] = testOpenSource( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
@@ -389,7 +389,7 @@ function [] = testOpenSourceIdx( varargin )
     assert(strcmp(f.blocks{1}.dataArrays{1}.openSourceIdx(3).name, s3.name));
 end
 
-%% Test: Remove sources by entity and id
+%% Test: Remove Source by entity and id
 function [] = testRemoveSource ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourceTest', 'nixBlock');
@@ -409,7 +409,7 @@ function [] = testRemoveSource ( varargin )
     assert(size(s.sources, 1) == 2);
 end
 
-%% Test: has nix.Source by ID or entity
+%% Test: Has Source by id or entity
 function [] = testHasSource( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
@@ -513,8 +513,8 @@ function [] = testDimensions( varargin )
     assert(isequal(daAliasWa.dataExtent, [3 3]));
 end
 
+%% Test: Open Dimension by index
 function [] = testOpenDimensionIdx( varargin )
-%% Test: Open dimension by index
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
@@ -524,8 +524,6 @@ function [] = testOpenDimensionIdx( varargin )
     da.appendSampledDimension(200);
     da.appendRangeDimension([1, 2, 3, 4]);
 
-    % for some weird reason getting the dimension by index starts with 1
-    % instead of 0 compared to all other index functions.
     assert(strcmp(da.openDimensionIdx(1).dimensionType, 'set'));
     assert(strcmp(da.openDimensionIdx(2).dimensionType, 'sample'));
     assert(strcmp(da.openDimensionIdx(3).dimensionType, 'range'));
@@ -583,8 +581,8 @@ function [] = testSetDataExtent( varargin )
     assert(da.dataExtent(1) == extent(1) && size(da.readAllData, 2) == extent(2));
 end
 
-function [] = testCompare( varargin )
 %% Test: Compare DataArray entities
+function [] = testCompare( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
     b2 = f.createBlock('testBlock2', 'nixBlock');
@@ -598,7 +596,7 @@ function [] = testCompare( varargin )
     assert(d1.compare(d3) ~= 0);
 end
 
-%% Test: filter sources
+%% Test: Filter Sources
 function [] = testFilterSource( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
