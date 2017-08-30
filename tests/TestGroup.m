@@ -1,3 +1,5 @@
+% TestGroup provides tests for all supported nix.Group methods.
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,27 +9,25 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestGroup
-%% TESTGROUP Tests for the nix.Group object
-
     funcs = {};
     funcs{end+1} = @testAttributes;
     funcs{end+1} = @testAddDataArray;
     funcs{end+1} = @testAddDataArrays;
     funcs{end+1} = @testHasDataArray;
-    funcs{end+1} = @testGetDataArray;
+    funcs{end+1} = @testOpenDataArray;
     funcs{end+1} = @testRemoveDataArray;
     funcs{end+1} = @testUpdateLinkedDataArray;
     funcs{end+1} = @testDataArrayCount;
     funcs{end+1} = @testAddTag;
     funcs{end+1} = @testAddTags;
     funcs{end+1} = @testHasTag;
-    funcs{end+1} = @testGetTag;
+    funcs{end+1} = @testOpenTag;
     funcs{end+1} = @testRemoveTag;
     funcs{end+1} = @testTagCount;
     funcs{end+1} = @testAddMultiTag;
     funcs{end+1} = @testAddMultiTags;
     funcs{end+1} = @testHasMultiTag;
-    funcs{end+1} = @testGetMultiTag;
+    funcs{end+1} = @testOpenMultiTag;
     funcs{end+1} = @testRemoveMultiTag;
     funcs{end+1} = @testMultiTagCount;
     funcs{end+1} = @testAddSource;
@@ -50,7 +50,7 @@ function funcs = TestGroup
     funcs{end+1} = @testFilterDataArray;
 end
 
-%% Test: Access nix.Group attributes
+%% Test: Access Group attributes
 function [] = testAttributes( varargin )
     fileName = 'testRW.h5';
     groupName = 'testGroup';
@@ -86,29 +86,48 @@ function [] = testAttributes( varargin )
     assert(strcmp(b.groups{1}.definition, defOW));
 end
 
-%% Test: Add nix.DataArray to nix.Group
+%% Test: Add DataArray by id, name and entity
 function [] = testAddDataArray( varargin )
     fileName = 'testRW.h5';
     daName = 'testDataArray';
     daType = 'nixDataArray';
+    dataType = nix.DataType.Double;
+    shape = [2 3];
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
-    da = b.createDataArray(daName, daType, nix.DataType.Double, [2 3]);
+    da = b.createDataArray(daName, daType, dataType, shape);
     g = b.createGroup('testGroup', 'nixGroup');
 
+    %-- test add invalid entity fail
+    try
+        g.addDataArray(b);
+    catch ME
+        assert(strcmp(ME.identifier, 'NIXMX:InvalidArgument'));
+    end
+
+    %-- test add by entity
     assert(isempty(g.dataArrays));
     assert(isempty(f.blocks{1}.groups{1}.dataArrays));
     g.addDataArray(da);
     assert(size(g.dataArrays, 1) == 1);
     assert(strcmp(f.blocks{1}.groups{1}.dataArrays{1}.name, daName));
 
+    %-- test add by id
+    da = b.createDataArray('da2', daType, dataType, shape);
+    g.addDataArray(da.id);
+
+    %-- test add by name
+    da = b.createDataArray('da3', daType, dataType, shape);
+    g.addDataArray(da.name);
+    assert(size(g.dataArrays, 1) == 3);
+    
     clear g da b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(strcmp(f.blocks{1}.groups{1}.dataArrays{1}.name, daName));
 end
 
-%% Test: Add dataArrays by entity cell array
+%% Test: Add DataArrays by entity cell array
 function [] = testAddDataArrays ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
@@ -142,7 +161,7 @@ function [] = testAddDataArrays ( varargin )
     assert(size(f.blocks{1}.groups{1}.dataArrays, 1) == 3);
 end
 
-%% Test: has nix.DataArray by id or name
+%% Test: Has DataArray by id or name
 function [] = testHasDataArray( varargin )
     fileName = 'testRW.h5';
     daName = 'testDataArray';
@@ -158,8 +177,8 @@ function [] = testHasDataArray( varargin )
     assert(~g.hasDataArray('I do not exist'));
 end
 
-%% Test: Get nix.DataArray by id or name
-function [] = testGetDataArray( varargin )
+%% Test: Open DataArray by id or name
+function [] = testOpenDataArray( varargin )
     fileName = 'testRW.h5';
     daName = 'testDataArray';
     daType = 'nixDataArray';
@@ -172,16 +191,16 @@ function [] = testGetDataArray( varargin )
     g.addDataArray(da);
 
     testClass = 'nix.DataArray';
-    daTestID = g.getDataArray(daID);
+    daTestID = g.openDataArray(daID);
     assert(strcmp(class(daTestID), testClass));
     assert(strcmp(daTestID.name, daName));
 
-    daTestName = g.getDataArray(daName);
+    daTestName = g.openDataArray(daName);
     assert(strcmp(class(daTestName), testClass));
     assert(strcmp(daTestName.id, daID));
 end
 
-%% Test: Remove nix.DataArray from nix.Group by id and entity
+%% Test: Remove DataArray by id and entity
 function [] = testRemoveDataArray( varargin )
     fileName = 'testRW.h5';
     daName1 = 'testDataArray1';
@@ -202,22 +221,22 @@ function [] = testRemoveDataArray( varargin )
     assert(size(b.dataArrays, 1) == 3);
     g.removeDataArray(da3);
     assert(size(b.dataArrays, 1) == 3);
-    assert(isempty(g.getDataArray(da3.name)));
+    assert(isempty(g.openDataArray(da3.name)));
 
     g.removeDataArray(da2.id);
     assert(size(b.dataArrays, 1) == 3);
-    assert(isempty(g.getDataArray(da2.name)));
-    assert(~isempty(g.getDataArray(da1.name)));
+    assert(isempty(g.openDataArray(da2.name)));
+    assert(~isempty(g.openDataArray(da1.name)));
 
     clear da1 da2 da3 g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(size(f.blocks{1}.dataArrays, 1) == 3);
-    assert(isempty(f.blocks{1}.groups{1}.getDataArray(daName3)));
-    assert(isempty(f.blocks{1}.groups{1}.getDataArray(daName2)));
-    assert(~isempty(f.blocks{1}.groups{1}.getDataArray(daName1)));
+    assert(isempty(f.blocks{1}.groups{1}.openDataArray(daName3)));
+    assert(isempty(f.blocks{1}.groups{1}.openDataArray(daName2)));
+    assert(~isempty(f.blocks{1}.groups{1}.openDataArray(daName1)));
 end
 
-%% Test: Updates of a linked nix.DataArray between nix.Block and nix.Group
+%% Test: Update linked DataArray between Block and Group
 function [] = testUpdateLinkedDataArray( varargin )
     fileName = 'testRW.h5';
     daName1 = 'testDataArray1';
@@ -239,17 +258,17 @@ function [] = testUpdateLinkedDataArray( varargin )
     assert(size(b.dataArrays, 1) == 3);
     b.deleteDataArray(da1);
     assert(size(b.dataArrays, 1) == 2)
-    assert(isempty(g.getDataArray(daName1)));
-    assert(~isempty(g.getDataArray(daName2)));
+    assert(isempty(g.openDataArray(daName1)));
+    assert(~isempty(g.openDataArray(daName2)));
 
     %-- test udpate linked DataArray
     upDADefFromGroup = 'def 2';
-    g.getDataArray(daName2).definition = upDADefFromGroup;
+    g.openDataArray(daName2).definition = upDADefFromGroup;
     assert(strcmp(b.openDataArray(daName2).definition, upDADefFromGroup));
 
     upDADefFromBlock = 'def 3';
     b.openDataArray(daName3).definition = upDADefFromBlock;
-    assert(strcmp(g.getDataArray(daName3).definition, upDADefFromBlock));
+    assert(strcmp(g.openDataArray(daName3).definition, upDADefFromBlock));
 
     clear da1 da2 da3 g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
@@ -274,34 +293,46 @@ function [] = testDataArrayCount( varargin )
     assert(f.blocks{1}.groups{1}.dataArrayCount() == 2);
 end
 
-%% Test: Add nix.Tag by entity or id
+%% Test: Add Tag by id, name and entity
 function [] = testAddTag( varargin )
     fileName = 'testRW.h5';
     tagName1 = 'testTag1';
     tagName2 = 'testTag2';
+    tagName3 = 'testTag3';
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('test', 'nixBlock');
     t1 = b.createTag(tagName1, 'nixTag', [1.0 1.2 1.3 15.9]);
     t2 = b.createTag(tagName2, 'nixTag', [1.0 1.2 1.3 15.9]);
+    t3 = b.createTag(tagName3, 'nixTag', [1.0 1.2 1.3 15.9]);
     tID = t2.id;
     g = b.createGroup('testGroup', 'nixGroup');
     assert(isempty(g.tags));
     assert(isempty(f.blocks{1}.groups{1}.tags));
+
+    %-- add Tag by entity
     g.addTag(t1);
     assert(strcmp(g.tags{1}.name, tagName1));
     assert(strcmp(f.blocks{1}.groups{1}.tags{1}.name, tagName1));
+
+    %-- add Tag by id
     g.addTag(tID);
     assert(strcmp(g.tags{2}.name, tagName2));
     assert(size(f.blocks{1}.groups{1}.tags, 1) == 2);
 
-    clear t1 t2 g b f;
+    %-- add Tag by name
+    g.addTag(tagName3);
+    assert(strcmp(g.tags{3}.name, tagName3));
+    assert(size(f.blocks{1}.groups{1}.tags, 1) == 3);
+
+    clear t1 t2 t3 g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(strcmp(f.blocks{1}.groups{1}.tags{1}.name, tagName1));
     assert(strcmp(f.blocks{1}.groups{1}.tags{2}.name, tagName2));
+    assert(strcmp(f.blocks{1}.groups{1}.tags{3}.name, tagName3));
 end
 
-%% Test: Add tags by entity cell array
+%% Test: Add Tags by entity cell array
 function [] = testAddTags ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
@@ -335,7 +366,7 @@ function [] = testAddTags ( varargin )
     assert(size(f.blocks{1}.groups{1}.tags, 1) == 3);
 end
 
-%% Test: has nix.Tag by id or name
+%% Test: Has Tag by id or name
 function [] = testHasTag( varargin )
     fileName = 'testRW.h5';
     tagName = 'testTag';
@@ -351,8 +382,8 @@ function [] = testHasTag( varargin )
     assert(~g.hasTag('I do not exist'));
 end
 
-%% Test: get nix.Tag by id or name
-function [] = testGetTag( varargin )
+%% Test: Open Tag by id or name
+function [] = testOpenTag( varargin )
     fileName = 'testRW.h5';
     tagName = 'testTag';
 
@@ -362,16 +393,16 @@ function [] = testGetTag( varargin )
     t = b.createTag(tagName, 'nixTag', [1.0 1.2 1.3 15.9]);
     tID = t.id;
 
-    assert(isempty(f.blocks{1}.groups{1}.getTag(tID)));
+    assert(isempty(f.blocks{1}.groups{1}.openTag(tID)));
     g.addTag(t);
-    assert(strcmp(f.blocks{1}.groups{1}.getTag(tID).name, tagName));
+    assert(strcmp(f.blocks{1}.groups{1}.openTag(tID).name, tagName));
 
     clear t g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
-    assert(strcmp(f.blocks{1}.groups{1}.getTag(tagName).name, tagName));
+    assert(strcmp(f.blocks{1}.groups{1}.openTag(tagName).name, tagName));
 end
 
-%% Test: Remove nix.Tag by entity or id
+%% Test: Remove Tag by entity or id
 function [] = testRemoveTag( varargin )
     fileName = 'testRW.h5';
     tagName1 = 'testTag1';
@@ -429,11 +460,12 @@ function [] = testTagCount( varargin )
     assert(f.blocks{1}.groups{1}.tagCount() == 2);
 end
 
-%% Test: Add nix.MultiTag by entity and id
+%% Test: Add MultiTag by id, name and entity
 function [] = testAddMultiTag( varargin )
     fileName = 'testRW.h5';
     tagName1 = 'mTagTest1';
     tagName2 = 'mTagTest2';
+    tagName3 = 'mTagTest3';
     tagType = 'nixMultiTag';
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
@@ -444,25 +476,35 @@ function [] = testAddMultiTag( varargin )
         'mTagTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
     tmp = b.createMultiTag(tagName1, tagType, b.dataArrays{1});
     tmp = b.createMultiTag(tagName2, tagType, b.dataArrays{2});
+    tmp = b.createMultiTag(tagName3, tagType, b.dataArrays{2});
     g = b.createGroup('testGroup', 'nixGroup');
 
     assert(isempty(g.multiTags));
     assert(isempty(f.blocks{1}.groups{1}.multiTags));
+
+    %-- add MultiTag by entity
     g.addMultiTag(b.multiTags{1});
     assert(size(g.multiTags, 1) == 1);
     assert(size(f.blocks{1}.groups{1}.multiTags, 1) == 1);
 
+    %-- add MultiTag by id
     g.addMultiTag(b.multiTags{2}.id);
     assert(size(g.multiTags, 1) == 2);
     assert(size(f.blocks{1}.groups{1}.multiTags, 1) == 2);
+
+    %-- add MultiTag by name
+    g.addMultiTag(tagName3);
+    assert(size(g.multiTags, 1) == 3);
+    assert(size(f.blocks{1}.groups{1}.multiTags, 1) == 3);
 
     clear tmp g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
     assert(strcmp(f.blocks{1}.groups{1}.multiTags{1}.name, tagName1));
     assert(strcmp(f.blocks{1}.groups{1}.multiTags{2}.name, tagName2));
+    assert(strcmp(f.blocks{1}.groups{1}.multiTags{3}.name, tagName3));
 end
 
-%% Test: Add multiTags by entity cell array
+%% Test: Add MultiTags by entity cell array
 function [] = testAddMultiTags ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
@@ -498,7 +540,7 @@ function [] = testAddMultiTags ( varargin )
     assert(size(f.blocks{1}.groups{1}.multiTags, 1) == 3);
 end
 
-%% Test: has nix.MultiTag by id or name
+%% Test: Has MultiTag by id or name
 function [] = testHasMultiTag( varargin )
     fileName = 'testRW.h5';
     tagName1 = 'mTagTest1';
@@ -522,8 +564,8 @@ function [] = testHasMultiTag( varargin )
     assert(~g.hasMultiTag('I do not exist'));
 end
 
-%% Test: get nix.MultiTag by id or name
-function [] = testGetMultiTag( varargin )
+%% Test: Open MultiTag by id or name
+function [] = testOpenMultiTag( varargin )
     fileName = 'testRW.h5';
     tagName = 'mTagTest';
     tagType = 'nixMultiTag';
@@ -536,16 +578,16 @@ function [] = testGetMultiTag( varargin )
     g = b.createGroup('testGroup', 'nixGroup');
 
     g.addMultiTag(b.multiTags{1});
-    assert(strcmp(f.blocks{1}.groups{1}.getMultiTag(t.id).name, tagName));
+    assert(strcmp(f.blocks{1}.groups{1}.openMultiTag(t.id).name, tagName));
 
     clear t da g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
-    assert(strcmp(f.blocks{1}.groups{1}.getMultiTag(tagName).name, tagName));
+    assert(strcmp(f.blocks{1}.groups{1}.openMultiTag(tagName).name, tagName));
 
-    assert(isempty(f.blocks{1}.groups{1}.getMultiTag('I do not exist')));
+    assert(isempty(f.blocks{1}.groups{1}.openMultiTag('I do not exist')));
 end
 
-%% Test: Remove nix.MultiTag by entity or id
+%% Test: Remove MultiTag by entity or id
 function [] = testRemoveMultiTag( varargin )
     fileName = 'testRW.h5';
     tagName1 = 'mTagTest1';
@@ -612,7 +654,7 @@ function [] = testMultiTagCount( varargin )
     assert(f.blocks{1}.groups{1}.multiTagCount() == 2);
 end
 
-%% Test: Add sources by entity and id
+%% Test: Add Source by entity and id
 function [] = testAddSource ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
@@ -634,7 +676,7 @@ function [] = testAddSource ( varargin )
     assert(size(f.blocks{1}.groups{1}.sources, 1) == 2);
 end
 
-%% Test: Add sources by entity cell array
+%% Test: Add Sources by entity cell array
 function [] = testAddSources ( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
@@ -668,7 +710,7 @@ function [] = testAddSources ( varargin )
     assert(size(f.blocks{1}.groups{1}.sources, 1) == 3);
 end
 
-%% Test: Remove sources by entity and id
+%% Test: Remove Source by entity and id
 function [] = testRemoveSource ( varargin )
     testFile = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = testFile.createBlock('test', 'nixBlock');
@@ -690,7 +732,7 @@ function [] = testRemoveSource ( varargin )
     assert(size(s.sources, 1) == 2);
 end
 
-%% Test: nix.Group has nix.Source by ID, name or entity
+%% Test: Has Source by id, name or entity
 function [] = testHasSource( varargin )
     fileName = 'testRW.h5';
     sName = 'sourcetest1';
@@ -711,7 +753,7 @@ function [] = testHasSource( varargin )
     assert(~f.blocks{1}.groups{1}.hasSource(sName));
 end
 
-%% Test: fetch sources
+%% Test: Fetch Source
 function [] = testFetchSources( varargin )
     testFile = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = testFile.createBlock('test', 'nixBlock');
@@ -727,7 +769,7 @@ function [] = testFetchSources( varargin )
     assert(size(g.sources, 1) == 3);
 end
 
-%% Test: Open source by ID or name
+%% Test: Open Source by id or name
 function [] = testOpenSource( varargin )
     testFile = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = testFile.createBlock('test', 'nixBlock');
@@ -738,10 +780,10 @@ function [] = testOpenSource( varargin )
     g = b.createGroup('sourceTest', 'nixGroup');
     g.addSource(s.sources{1});
 
-    % -- test get source by ID
+    % -- test open source by ID
     assert(~isempty(g.openSource(nSource.id)));
 
-    % -- test get source by name
+    % -- test open source by name
     assert(~isempty(g.openSource(sourceName)));
 
     %-- test open non existing source
@@ -799,8 +841,8 @@ function [] = testSetMetadata ( varargin )
 	assert(strcmp(f.blocks{1}.groups{1}.openMetadata.name, secName2));
 end
 
-function [] = testOpenMetadata( varargin )
 %% Test: Open metadata
+function [] = testOpenMetadata( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     tmp = f.createSection('testSection', 'nixSection');
     b = f.createBlock('testBlock', 'nixBlock');
@@ -810,8 +852,8 @@ function [] = testOpenMetadata( varargin )
     assert(strcmp(g.openMetadata.name, 'testSection'));
 end
 
+%% Test: Open DataArray by index
 function [] = testOpenDataArrayIdx( varargin )
-%% Test Open DataArray by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
     g = b.createGroup('testGroup', 'nixGroup');
@@ -827,8 +869,8 @@ function [] = testOpenDataArrayIdx( varargin )
     assert(strcmp(f.blocks{1}.groups{1}.openDataArrayIdx(3).name, d3.name));
 end
 
+%% Test: Open Tag by index
 function [] = testOpenTagIdx( varargin )
-%% Test Open Tag by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
     g = b.createGroup('testGroup', 'nixGroup');
@@ -844,8 +886,8 @@ function [] = testOpenTagIdx( varargin )
     assert(strcmp(f.blocks{1}.groups{1}.openTagIdx(3).name, t3.name));
 end
 
+%% Test: Open MultiTag by index
 function [] = testOpenMultiTagIdx( varargin )
-%% Test Open MultiTag by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
     g = b.createGroup('testGroup', 'nixGroup');
@@ -862,8 +904,8 @@ function [] = testOpenMultiTagIdx( varargin )
     assert(strcmp(f.blocks{1}.groups{1}.openMultiTagIdx(3).name, t3.name));
 end
 
+%% Test: Open Source by index
 function [] = testOpenSourceIdx( varargin )
-%% Test Open Source by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
     g = b.createGroup('testGroup', 'nixGroup');
@@ -879,8 +921,8 @@ function [] = testOpenSourceIdx( varargin )
     assert(strcmp(f.blocks{1}.groups{1}.openSourceIdx(3).name, s3.name));
 end
 
+%% Test: Compare Group entities
 function [] = testCompare( varargin )
-%% Test: Compare group entities
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
     b2 = f.createBlock('testBlock2', 'nixBlock');
@@ -894,7 +936,7 @@ function [] = testCompare( varargin )
     assert(g1.compare(g3) ~= 0);
 end
 
-%% Test: filter sources
+%% Test: Filter Sources
 function [] = testFilterSource( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
@@ -969,7 +1011,7 @@ function [] = testFilterSource( varargin )
     assert(strcmp(filtered{1}.name, mainName));
 end
 
-%% Test: filter tags
+%% Test: Filter Tags
 function [] = testFilterTag( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
@@ -1043,7 +1085,7 @@ function [] = testFilterTag( varargin )
     assert(strcmp(filtered{1}.name, mainName));
 end
 
-%% Test: filter multi tags
+%% Test: Filter MultiTags
 function [] = testFilterMultiTag( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
@@ -1118,7 +1160,7 @@ function [] = testFilterMultiTag( varargin )
     assert(strcmp(filtered{1}.name, mainName));
 end
 
-%% Test: filter dataArray
+%% Test: Filter DataArray
 function [] = testFilterDataArray( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
