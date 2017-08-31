@@ -32,7 +32,6 @@
 %   references   access to all nix.DataArray child entities referenced by the MultiTag.
 %   features     access to all nix.Features child entities referenced by the MultiTag.
 %   sources      access to all first level nix.Source child entities.
-%   sections     access to all first level nix.Section child entities.
 %
 % See also nix.DataArray, nix.Feature, nix.Source, nix.Section.
 %
@@ -487,7 +486,7 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function [] = setExtents(obj, idNameEntity)
-            % Set a nix.DataArray as the extents data of the invoking Tag.
+            % Set a nix.DataArray as the extents data of the invoking MultiTag.
             %
             % If extents were already set, using this method again will
             % replace the reference to the old DataArray with a reference

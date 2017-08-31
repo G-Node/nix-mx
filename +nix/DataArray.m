@@ -47,7 +47,6 @@
 % nix.DataArray dynamic child entity properties:
 %   dimensions   access to all dimensions associated with a DataArray.
 %   sources      access to all first level nix.Source child entities.
-%   sections     access to all first level nix.Section child entities.
 %
 % See also nix.Source, nix.Section.
 %

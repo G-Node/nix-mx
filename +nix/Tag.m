@@ -37,7 +37,6 @@
 %   references   access to all nix.DataArray child entities referenced by the Tag.
 %   features     access to all nix.Features child entities referenced by the Tag.
 %   sources      access to all first level nix.Source child entities.
-%   sections     access to all first level nix.Section child entities.
 %
 % See also nix.DataArray, nix.Feature, nix.Source, nix.Section.
 %

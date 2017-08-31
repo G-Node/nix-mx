@@ -20,7 +20,6 @@
 %   sources      access to all first level nix.Source child entities.
 %   tags         access to all nix.Tag child entities.
 %   multiTags    access to all nix.MultiTag child entities.
-%   sections     access to all first level nix.Section child entities.
 %
 % See also nix.DataArray, nix.Source, nix.Group, nix.Tag, nix.MultiTag, nix.Section.
 %
