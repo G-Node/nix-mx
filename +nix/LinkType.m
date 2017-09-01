@@ -1,3 +1,8 @@
+% nix.LinkType class providing constant tyoes available for nix.Features
+%
+% See also nix.Feature.
+%
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,7 +12,6 @@
 % LICENSE file in the root of the Project.
 
 classdef LinkType
-    % LINKTYPE nix link types
 
     properties (Constant)
         Tagged = uint8(0);

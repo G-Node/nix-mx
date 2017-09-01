@@ -1,3 +1,5 @@
+% TestFeature provides tests for all supported nix.Feature methods.
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,15 +9,13 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestFeature
-% TESTFEATURE tests for Feature
-
     funcs = {};
     funcs{end+1} = @testOpenData;
     funcs{end+1} = @testHandleLinkType;
     funcs{end+1} = @testSetData;
 end
 
-%% Test: Open data from feature
+%% Test: Open data from Feature
 function [] = testOpenData ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
@@ -27,7 +27,7 @@ function [] = testOpenData ( varargin )
     assert(~isempty(feat.openData));
 end
 
-%% Test: Get and set nix.LinkType
+%% Test: Get and set LinkType
 function [] = testHandleLinkType ( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
@@ -63,7 +63,7 @@ function [] = testHandleLinkType ( varargin )
     assert(f.blocks{1}.tags{1}.features{1}.linkType == 2);
 end
 
-%% Test: Set data by entity, ID and name
+%% Test: Set data by entity, id and name
 function [] = testSetData ( varargin )
     fileName = 'testRW.h5';
     daName1 = 'featTestDA1';
