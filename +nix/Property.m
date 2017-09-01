@@ -5,9 +5,12 @@
 %   name (char):        read-only, name of the entity.      
 %   definition (char):  read-write, additional description of the entity.
 %   unit (char):        read-write, unit of the values associated with a Property.
-%                       The provided unit has to be an SI unit.
+%                         The provided unit has to be an SI unit.
 %   datatype (char):    read-only, provides the datatype of the values associated 
-%                       with a Property. Attribute is set when the Property is created.
+%                         with a Property. Attribute is set when the Property is created.
+%
+%   info (struct):      Entity property summary. The values in this structure are detached
+%                       from the entity, changes will not be persisted to the file.
 %
 % nix.Property dynamic child entity properties:
 %   values     access to all value child entities.
@@ -47,7 +50,7 @@
 classdef Property < nix.NamedEntity
 
     properties (Hidden)
-        alias = 'Property'  % nix-mx namespace to access Property specific nix backend functions.
+        alias = 'Property'  % namespace for Property nix backend function access.
     end
 
     properties (Dependent)

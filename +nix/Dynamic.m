@@ -1,4 +1,4 @@
-% Dynamic class implements methods to dynamically assign properties.
+% Class implements methods to dynamically assign properties.
 %
 % Utility class, do not use out of context.
 %

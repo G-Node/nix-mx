@@ -15,6 +15,9 @@
 %                         entity and expose it to search methods in a broader context.
 %   definition (char):  read-write, additional description of the entity.
 %
+%   info (struct):      Entity property summary. The values in this structure are detached
+%                       from the entity, changes will not be persisted to the file.
+%
 % nix.Group dynamic child entity properties:
 %   dataArrays   access to all nix.DataArray child entities.
 %   tags         access to all nix.Tag child entities.
@@ -35,7 +38,7 @@
 classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
     properties (Hidden)
-        alias = 'Group'  % nix-mx namespace to access Group specific nix backend functions.
+        alias = 'Group'  % namespace for Group nix backend function access.
     end
 
     methods

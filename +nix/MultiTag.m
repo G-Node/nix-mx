@@ -24,9 +24,12 @@
 %   type (char):        read-write, type can be used to give semantic meaning to an 
 %                         entity and expose it to search methods in a broader context.
 %   definition (char):  read-write, optional description of the entity.
-%   unit ([char]):     read-write, the array of units is applied to all values for 
-%                        position and extent in order to calculate the right position
-%                        vectors in referenced DataArrays.
+%   unit ([char]):      read-write, the array of units is applied to all values for 
+%                         position and extent in order to calculate the right position
+%                         vectors in referenced DataArrays.
+%
+%   info (struct):      Entity property summary. The values in this structure are detached
+%                       from the entity, changes will not be persisted to the file.
 %
 % nix.MultiTag dynamic child entity properties:
 %   references   access to all nix.DataArray child entities referenced by the MultiTag.
@@ -47,7 +50,7 @@
 classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
     properties (Hidden)
-        alias = 'MultiTag'  % nix-mx namespace to access MultiTag specific nix backend functions.
+        alias = 'MultiTag'  % namespace for MultiTag nix backend function access.
     end
 
     methods

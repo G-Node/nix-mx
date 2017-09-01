@@ -27,6 +27,9 @@
 %                         repository where the semantic definition of the current 
 %                         Section can be found.
 %
+%   info (struct):      Entity property summary. The values in this structure are detached
+%                       from the entity, changes will not be persisted to the file.
+%
 % nix.Section dynamic child entity properties:
 %   sections     access to all direct nix.Section child entities.
 %   properties   access to all nix.Property child entities.
@@ -46,7 +49,7 @@
 classdef Section < nix.NamedEntity
 
     properties (Hidden)
-        alias = 'Section'  % nix-mx namespace to access Section specific nix backend functions.
+        alias = 'Section'  % namespace for Section nix backend function access.
     end
 
     methods

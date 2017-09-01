@@ -1,4 +1,4 @@
-% Entity base class for nix entities.
+% Base class for nix entities.
 %
 % Class provides access to the info property and handles the lifetime
 % of a nix entitiy.

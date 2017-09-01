@@ -25,13 +25,16 @@
 %                         entity and expose it to search methods in a broader context.
 %   definition (char):  read-write, optional description of the entity.
 %   position (double):  read-write, the position is a vector that points into referenced 
-%                           DataArrays.
+%                         DataArrays.
 %   extent (double):    read-write, given a specified position vector, the extent vector 
-%                           defined the size of a region of interest in the 
-%                           referenced DataArray entities.
-%   unit ([char]):        read-write, the array of units is applied to all values for 
-%                           position and extent in order to calculate the right position
-%                           vectors in referenced DataArrays.
+%                         defined the size of a region of interest in the 
+%                         referenced DataArray entities.
+%   unit ([char]):      read-write, the array of units is applied to all values for 
+%                         position and extent in order to calculate the right position
+%                         vectors in referenced DataArrays.
+%
+%   info (struct):      Entity property summary. The values in this structure are detached
+%                       from the entity, changes will not be persisted to the file.
 %
 % nix.Tag dynamic child entity properties:
 %   references   access to all nix.DataArray child entities referenced by the Tag.
@@ -52,7 +55,7 @@
 classdef Tag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
     properties (Hidden)
-        alias = 'Tag'  % nix-mx namespace to access Tag specific nix backend functions.
+        alias = 'Tag'  % namespace for Tag nix backend function access.
     end
 
     methods

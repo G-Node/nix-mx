@@ -15,6 +15,9 @@
 %                         entity and expose it to search methods in a broader context.
 %   definition (char):  read-write, additional description of the entity.
 %
+%   info (struct):      Entity property summary. The values in this structure are detached
+%                       from the entity, changes will not be persisted to the file.
+%
 % nix.Source dynamic child entity properties:
 %   sources      access to all nix.Source child entities.
 %
@@ -32,7 +35,7 @@
 classdef Source < nix.NamedEntity & nix.MetadataMixIn
 
     properties (Hidden)
-        alias = 'Source'  % nix-mx namespace to access Source specific nix backend functions.
+        alias = 'Source'  % namespace for Source nix backend function access.
     end
 
     methods

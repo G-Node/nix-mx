@@ -14,6 +14,9 @@
 %                         entity and expose it to search methods in a broader context.
 %   definition (char):  read-write, optional description of the entity.
 %
+%   info (struct):      Entity property summary. The values in this structure are detached
+%                       from the entity, changes will not be persisted to the file.
+%
 % nix.Block dynamic child entity properties:
 %   groups       access to all nix.Group child entities.
 %   dataArrays   access to all nix.DataArray child entities.
@@ -35,7 +38,7 @@
 classdef Block < nix.NamedEntity & nix.MetadataMixIn
 
     properties (Hidden)
-        alias = 'Block'  % nix-mx namespace to access Block specific nix backend functions.
+        alias = 'Block'  % namespace for Block nix backend function access.
     end
 
     methods

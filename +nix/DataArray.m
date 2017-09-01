@@ -44,6 +44,9 @@
 %                                  e.g. a 2D array must always remain a 2D array, but 
 %                                  can be modified in either of the two dimensions.
 %
+%   info (struct):  Entity property summary. The values in this structure are detached
+%                   from the entity, changes will not be persisted to the file.
+%
 % nix.DataArray dynamic child entity properties:
 %   dimensions   access to all dimensions associated with a DataArray.
 %   sources      access to all first level nix.Source child entities.
@@ -62,7 +65,7 @@
 classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
 
     properties (Hidden)
-        alias = 'DataArray'  % nix-mx namespace to access DataArray specific nix backend functions.
+        alias = 'DataArray'  % namespace for DataArray nix backend function access.
     end
 
     properties (Dependent)

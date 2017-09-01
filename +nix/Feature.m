@@ -9,6 +9,9 @@
 %   id (char):                read-only, automatically created id of the entity.
 %   linkType (nix.LinkType):  see nix.LinkType description below.
 %
+%   info (struct):  Entity property summary. The values in this structure are detached
+%                   from the entity, changes will not be persisted to the file.
+%
 % nix.LinkType.Tagged
 %   This LinkType indicates, that the position and extent will be applied also 
 %   to the data stored via the Feature when it is fetched via the Tag/MultiTag.
@@ -41,7 +44,7 @@
 classdef Feature < nix.Entity
 
     properties (Hidden)
-        alias = 'Feature'  % nix-mx namespace to access Feature specific nix backend functions.
+        alias = 'Feature'  % namespace for Feature nix backend function access.
     end
 
     properties (Dependent)

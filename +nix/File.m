@@ -8,6 +8,10 @@
 % When a file variable is cleared, the handle to the file will be automatically closed.
 %
 % nix.File dynamic properties:
+%   info (struct):  Entity property summary. The values in this structure are detached
+%                   from the entity, changes will not be persisted to the file.
+%
+% nix.File dynamic child entity properties:
 %   blocks      access to all nix.Block child entities.
 %   sections    access to all first level nix.Section child entities.
 %
@@ -28,7 +32,7 @@
 classdef File < nix.Entity
 
     properties (Hidden)
-        alias = 'File'  % nix-mx namespace to access File specific nix backend functions.
+        alias = 'File'  % namespace for File nix backend function access.
     end
 
     methods
