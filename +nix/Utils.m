@@ -178,7 +178,7 @@ classdef Utils
         end
 
         function r = handleIndex(idx)
-            % Matlab uses 1-based indexing opposed to 0 based indexing in C++.
+            % Matlab uses 1-based indexing opposed to 0-based indexing in C++.
             % handleIndex transforms a Matlab style index to a C++ style
             % index and raises the appropriate Matlab error in case of an
             % invalid subscript.

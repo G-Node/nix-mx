@@ -1,3 +1,5 @@
+% TestDimensions provides tests for all supported nix.Dimension methods.
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,16 +9,14 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestDimensions
-% TestDimensions tests for Dimensions
-
     funcs = {};
     funcs{end+1} = @testSetDimension;
     funcs{end+1} = @testSampleDimension;
     funcs{end+1} = @testRangeDimension;
 end
 
+%% Test: SetDimension
 function [] = testSetDimension( varargin )
-%% Test: set dimension
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
@@ -49,8 +49,8 @@ function [] = testSetDimension( varargin )
     end;
 end
 
+%% Test: SampledDimension
 function [] = testSampleDimension( varargin )
-%% Test: sampled dimension
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
@@ -102,8 +102,8 @@ function [] = testSampleDimension( varargin )
     assert(d1.positionAt(10) == d1.offset + 9 * d1.samplingInterval);
 end
 
+%% Test: RangeDimension
 function [] = testRangeDimension( varargin )
-%% Test: range dimension
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);

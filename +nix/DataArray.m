@@ -122,7 +122,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             %
             % Used to provide labels for dimensionless data e.g. when stacking 
             % different signals. In the example the first dimension would
-            % describe the measured unit, the section dimension the time,
+            % describe the measured unit, the second dimension the time,
             % the third dimension would provide labels for three different
             % signals measured within the same experiment and packed into
             % the same 3D DataArray.

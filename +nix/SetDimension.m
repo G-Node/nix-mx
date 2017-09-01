@@ -1,3 +1,23 @@
+% nix.SetDimension class provides access to the SetDimension properties.
+%
+% Used to provide labels for dimensionless data e.g. when stacking  different signals. 
+% In the example the first dimension would describe the measured unit, the second 
+% dimension the time, the third dimension would provide labels for three different
+% signals measured within the same experiment and packed into the same 3D DataArray.
+%
+% nix.SetDimension dynamic properties
+%   dimensionType (char):  read-only, returns type of the dimension as string.
+%   labels ([char]):       read-write, Character cell array to get and set
+%                            labels of the dimension.
+%
+%  Examples:    dt = currDataArray.dimensions{1}.dimensionType;
+%
+%               labels = currDataArray.dimensions{2}.labels;
+%               currDataArray.dimensions{2}.labels = {'sinus', 'cosinus'};
+%
+% See also nix.DataArray.
+%
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,11 +27,9 @@
 % LICENSE file in the root of the Project.
 
 classdef SetDimension < nix.Entity
-    % SetDimension nix SetDimension object
 
     properties (Hidden)
-        % namespace reference for nix-mx functions
-        alias = 'SetDimension'
+        alias = 'SetDimension'  % nix-mx namespace to access SetDimension specific nix backend functions.
     end
 
     methods
