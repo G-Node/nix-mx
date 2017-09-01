@@ -145,12 +145,12 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = referringDataArrays(obj)
-            % Returns all nix.DataArrays which referrence the invoking Source.
+            % Returns all nix.DataArrays which reference the invoking Source.
             %
             % Returns:  ([nix.DataArray]) A cell array of all DataArray entities
             %                             referring to the invoking Source.
             %
-            % Example:  getSource = currSource.referringDataArrays();
+            % Example:  getDataArrays = currSource.referringDataArrays();
             %
             % See also nix.DataArray.
 
@@ -158,12 +158,12 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = referringTags(obj)
-            % Returns all nix.Tags which referrence the invoking Source.
+            % Returns all nix.Tags which reference the invoking Source.
             %
             % Returns:  ([nix.Tag]) A cell array of all Tag entities
             %                       referring to the invoking Source.
             %
-            % Example:  getSource = currSource.referringTags();
+            % Example:  getTags = currSource.referringTags();
             %
             % See also nix.Tag.
 
@@ -171,12 +171,12 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = referringMultiTags(obj)
-            % Returns all nix.MultiTags which referrence the invoking Source.
+            % Returns all nix.MultiTags which reference the invoking Source.
             %
             % Returns:  ([nix.MultiTag]) A cell array of all MultiTag entities
             %                            referring to the invoking Source.
             %
-            % Example:  getSource = currSource.referringMultiTags();
+            % Example:  getMultiTags = currSource.referringMultiTags();
             %
             % See also nix.MultiTag.
 
@@ -187,7 +187,7 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
             % Get a filtered cell array of all direct child Sources 
             % of the invoking Source.
             %
-            % filter (nix.Filter):  the nix.Filter to be applied.
+            % filter (nix.Filter):  The nix.Filter to be applied.
             % val (char):           Value that is applied with the selected
             %                       filter.
             %

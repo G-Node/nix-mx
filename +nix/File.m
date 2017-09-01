@@ -11,6 +11,9 @@
 %   blocks      access to all nix.Block child entities.
 %   sections    access to all first level nix.Section child entities.
 %
+% Example opening a NIX file:
+%   getFileAccess = nix.File('/path/to/file', nix.FileMode.ReadWrite);
+%
 % See also nix.Block, nix.Section.
 %
 %
@@ -32,11 +35,13 @@ classdef File < nix.Entity
         function obj = File(path, mode)
             % File constructor used to open or create a nix.File.
             %
-            % path (char):  path to a file to open or create.
-            % mode (char):  requires a valid nix.FileMode. Defaults to 
-            %                 nix.FileMode.ReadWrite if no FileMode is provided.
+            % path (char):  Path to a file to open or create.
+            % mode (char):  Requires a valid nix.FileMode. Defaults to 
+            %               nix.FileMode.ReadWrite if no FileMode is provided.
             %
             % Returns: (nix.File).
+            %
+            % Example:  getFileAccess = nix.File('/path/to/file', nix.FileMode.ReadWrite);
             %
             % See also nix.FileMode.
 
@@ -56,6 +61,8 @@ classdef File < nix.Entity
             % Check if the file is currently open.
             %
             % Returns:  (logical) True if the file is open, False otherwise.
+            %
+            % Example:  check = currFile.isOpen();
 
             fname = strcat(obj.alias, '::isOpen');
             r = nix_mx(fname, obj.nixhandle);
@@ -65,6 +72,8 @@ classdef File < nix.Entity
             % Get the mode in which the file has been opened.
             %
             % Returns: (nix.FileMode).
+            %
+            % Example:  getFileMode = currFile.fileMode();
             %
             % See also nix.FileMode.
 
@@ -79,6 +88,8 @@ classdef File < nix.Entity
             % offending entities.
             %
             % Returns:  (struct) Custom warning/error struct.
+            %
+            % Example: checkFile = currFile.validate();
 
             fname = strcat(obj.alias, '::validate');
             r = nix_mx(fname, obj.nixhandle);
@@ -91,16 +102,14 @@ classdef File < nix.Entity
         function r = createBlock(obj, name, type)
             % Create a new nix.Block entity, that is immediately persisted to the file.
             %
-            %   name (char):  the name of the Block, has to be unique within the file.
-            %                 read only Block property.
-            %   type (char):  the type of the Block, required.
-            %                 Type can be used to give semantic meaning to an entity
-            %                 and expose it to search methods in a broader context.
-            %                 read/write Block property.
+            % name (char):  The name of the Block, has to be unique within the file.
+            % type (char):  The type of the Block, required.
+            %               Type can be used to give semantic meaning to an entity
+            %               and expose it to search methods in a broader context.
             %
-            %   Returns:  (nix.Block) The newly created Block.
+            % Returns:  (nix.Block) The newly created Block.
             %
-            %   Example:  newBlock = f.createBlock('trial1', 'ephys');
+            % Example:  newBlock = f.createBlock('trial1', 'ephys');
             %
             % See also nix.Block.
 
@@ -174,7 +183,7 @@ classdef File < nix.Entity
             % will be deleted from the file as well.
             %
             % idNameEntity (char/nix.Block):  Name or id of the entity to
-            %                                   be deleted or the entity itself.
+            %                                 be deleted or the entity itself.
             %
             % Returns:  (logical) True if the Block has been removed, false otherwise.
             %
@@ -190,14 +199,14 @@ classdef File < nix.Entity
         function r = filterBlocks(obj, filter, val)
             % Get a filtered cell array of all Blocks within this file.
             %
-            % filter (nix.Filter):  the nix.Filter to be applied. Supports
-            %                       the filters 'acceptall', 'id', 'ids',
+            % filter (nix.Filter):  The nix.Filter to be applied. Supports
+            %                       The filters 'acceptall', 'id', 'ids',
             %                       'name' and 'type'.
             % val (char):           Value that is applied with the selected
             %                       filter.
             %
             % Returns:  ([nix.Block]) A cell array of Blocks filtered according
-            %                           to the applied nix.Filter.
+            %                         to the applied nix.Filter.
             %
             % Example:  getBlocks = f.filterBlocks(nix.Filter.type, 'ephys');
             %
@@ -213,16 +222,14 @@ classdef File < nix.Entity
         function r = createSection(obj, name, type)
             % Create a new nix.Section entity, that is immediately persisted to the file.
             %
-            %   name (char):  the name of the Section, has to be unique within the file.
-            %                 read only Section property.
-            %   type (char):  the type of the Section, required.
-            %                 Type can be used to give semantic meaning to an entity
-            %                 and expose it to search methods in a broader context.
-            %                 read/write Section property.
+            % name (char):  The name of the Section, has to be unique within the file.
+            % type (char):  The type of the Section, required.
+            %               Type can be used to give semantic meaning to an entity
+            %               and expose it to search methods in a broader context.
             %
-            %   Returns:  (nix.Section) The newly created Section.
+            % Returns:  (nix.Section) The newly created Section.
             %
-            %   Example:  newSec = f.createSection('settings1', 'ephys');
+            % Example:  newSec = f.createSection('settings1', 'ephys');
             %
             % See also nix.Section.
 
@@ -232,9 +239,9 @@ classdef File < nix.Entity
         end
 
         function r = sectionCount(obj)
-            % Get the number of root Sections in the file.
+            % Get the number of direct child Sections in the file.
             %
-            % Returns:  (uint) The number of root (non nested) Sections.
+            % Returns:  (uint) The number of direct child (non nested) Sections.
             %
             % Example:  sc = f.sectionCount();
             %
@@ -264,7 +271,7 @@ classdef File < nix.Entity
             % idName (char):  Name or ID of the Section.
             %
             % Returns:  (nix.Section) The nix.Section or an empty cell, 
-            %                       if the Section was not found.
+            %                         if the Section was not found.
             %
             % Example:  getSec = f.openSection('23bb8a99-1812-4bc6-a52c-45e96864756b');
             %           getSec = f.openSection('settings1');
@@ -275,7 +282,7 @@ classdef File < nix.Entity
         end
 
         function r = openSectionIdx(obj, index)
-            % Retrieves an existing Section from the file, accessed by index.
+            % Retrieves an Section from the file, accessed by index.
             %
             % index (double):  The index of the Section to read.
             %
@@ -312,8 +319,8 @@ classdef File < nix.Entity
         function r = filterSections(obj, filter, val)
             % Get a filtered cell array of all root Sections within this file.
             %
-            % filter (nix.Filter):  the nix.Filter to be applied. Supports
-            %                       the filters 'acceptall', 'id', 'ids',
+            % filter (nix.Filter):  The nix.Filter to be applied. Supports
+            %                       The filters 'acceptall', 'id', 'ids',
             %                       'name' and 'type'.
             % val (char):           Value that is applied with the selected
             %                       filter.
@@ -357,11 +364,9 @@ classdef File < nix.Entity
             %
             % maxDepth (double):    The maximum depth of traversal to retrieve nested 
             %                       Sections. Should be handled like an index.
-            % filter (nix.Filter):  the nix.Filter to be applied. Supports
-            %                       the filters 'acceptall', 'id', 'ids',
-            %                       'name' and 'type'.
-            % val (char):           Value that is applied with the selected
-            %                       filter.
+            % filter (nix.Filter):  The nix.Filter to be applied. Supports the filters 
+            %                       'acceptall', 'id', 'ids', 'name' and 'type'.
+            % val (char):           Value that is applied with the selected filter.
             %
             % Example:  allSec = f.filterFindSections(2, nix.Filter.type, 'ephys');
             %

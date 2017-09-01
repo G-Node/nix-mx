@@ -31,7 +31,7 @@ classdef MetadataMixIn < handle
             % Retrieves the referenced nix.Section from the invoking nix.Entity.
             %
             % Returns:  (nix.Section) The Section or an empty cell, 
-            %                       if the Section was not found.
+            %                         if no Section was referenced.
             %
             % Example:  getSec = currEntity.openMetadata();
             %
@@ -55,7 +55,7 @@ classdef MetadataMixIn < handle
             %
             % Example:  currEntity.setMetadata('some-section-id');
             %           currEntity.setMetadata(currFile.sections{1});
-            %           currEntity.setMetadata(''); % remove reference to section
+            %           currEntity.setMetadata('');  %-- remove reference to Section.
             %
             % See also nix.Section.
 
