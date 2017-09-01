@@ -1,3 +1,5 @@
+% TestProperty provides tests for all supported nix.Property methods.
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,8 +9,6 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestProperty
-% TESTPROPERTY % Tests for the nix.Property object
-
     funcs = {};
     funcs{end+1} = @testAttributes;
     funcs{end+1} = @testUpdateValues;
@@ -140,7 +140,7 @@ function [] = testDeleteValues( varargin )
     assert(isempty(f.sections{1}.properties{1}.values));
 end
 
-%% Test: Compare properties
+%% Test: Compare Properties
 function [] = testCompare( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
