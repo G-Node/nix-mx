@@ -1,3 +1,5 @@
+% TestSource provides tests for all supported nix.Source methods.
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,7 +9,6 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestSource
-% TESTSOURCE tests for Source
     funcs = {};
     funcs{end+1} = @testCreateSource;
     funcs{end+1} = @testDeleteSource;
@@ -29,7 +30,7 @@ function funcs = TestSource
     funcs{end+1} = @testFilterFindSource;
 end
 
-%% Test: fetch sources
+%% Test: Fetch Sources
 function [] = testFetchSources( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
@@ -50,7 +51,7 @@ function [] = testFetchSources( varargin )
     assert(size(f.blocks{1}.sources{1}.sources, 1) == 2);
 end
 
-%% Test: Open source by ID or name
+%% Test: Open Source by id or name
 function [] = testOpenSource( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourcetest', 'nixBlock');
@@ -70,8 +71,8 @@ function [] = testOpenSource( varargin )
     assert(isempty(getNonSource));
 end
 
-function [] = testOpenSourceIdx( varargin )
 %% Test Open Source by index
+function [] = testOpenSourceIdx( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
     s = b.createSource('testSource', 'nixSource');
@@ -144,7 +145,7 @@ function [] = testOpenMetadata( varargin )
     assert(strcmp(s.openMetadata.name, 'testSection'));
 end
 
-%% Test: create source
+%% Test: Create Source
 function [] = testCreateSource ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourcetest', 'nixBlock');
@@ -157,7 +158,7 @@ function [] = testCreateSource ( varargin )
     assert(strcmp(createSource.type, 'nixSource'));
 end
 
-%% Test: delete source
+%% Test: Delete Source by id, name and entity
 function [] = testDeleteSource( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('sourcetest', 'nixBlock');
@@ -166,14 +167,16 @@ function [] = testDeleteSource( varargin )
 
     tmp = s.createSource('nestedsource1', 'nixSource');
     tmp = s.createSource('nestedsource2', 'nixSource');
-    assert(s.deleteSource('nestedsource1'));
-    assert(s.deleteSource(s.sources{1}.id));
+    tmp = s.createSource('nestedsource3', 'nixSource');
+    assert(s.deleteSource(s.sources{3}.id));
+    assert(s.deleteSource(s.sources{2}.name));
+    assert(s.deleteSource(s.sources{1}));
     assert(~s.deleteSource('I do not exist'));
     assert(isempty(s.sources));
 end
 
-function [] = testAttributes( varargin )
 %% Test: Access Attributes
+function [] = testAttributes( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('tagtest', 'test nixBlock');
     s = b.createSource('sourcetest', 'test nixSource');
@@ -193,7 +196,7 @@ function [] = testAttributes( varargin )
     assert(isempty(s.definition));
 end
 
-%% Test: nix.Source has nix.Source by ID or name
+%% Test: Has Source by id and name
 function [] = testHasSource( varargin )
     fileName = 'testRW.h5';
     sName = 'nestedsource';
@@ -211,7 +214,7 @@ function [] = testHasSource( varargin )
     assert(f.blocks{1}.sources{1}.hasSource(nestedID));
 end
 
-%% Test: Get parent source
+%% Test: Get parent Source
 function [] = testParentSource( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
@@ -224,9 +227,10 @@ function [] = testParentSource( varargin )
 
     assert(strcmp(s3.parentSource.name, sourceName2));
     assert(strcmp(s2.parentSource.name, sourceName1));
+    assert(isempty(s1.parentSource));
 end
 
-%% Test: Referring data arrays
+%% Test: Referring DataArrays
 function [] = testReferringDataArrays( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
@@ -245,7 +249,7 @@ function [] = testReferringDataArrays( varargin )
     assert(size(s.referringDataArrays, 1) == 2);
 end
 
-%% Test: Referring tags
+%% Test: Referring Tags
 function [] = testReferringTags( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
@@ -264,7 +268,7 @@ function [] = testReferringTags( varargin )
     assert(size(s.referringTags, 1) == 2);
 end
 
-%% Test: Referring multi tags
+%% Test: Referring MultiTags
 function [] = testReferringMultiTags( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
@@ -284,8 +288,8 @@ function [] = testReferringMultiTags( varargin )
     assert(size(s.referringMultiTags, 1) == 2);
 end
 
-function [] = testCompare( varargin )
 %% Test: Compare Source entities
+function [] = testCompare( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
     b2 = f.createBlock('testBlock2', 'nixBlock');
@@ -299,7 +303,7 @@ function [] = testCompare( varargin )
     assert(s1.compare(s3) ~= 0);
 end
 
-%% Test: filter sources
+%% Test: Filter Sources
 function [] = testFilterSource( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
@@ -369,7 +373,7 @@ function [] = testFilterSource( varargin )
     assert(strcmp(filtered{1}.name, mainName));
 end
 
-%% Test: Find source w/o filter
+%% Test: Find Source w/o filter
 function [] = testFindSource( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('testBlock', 'nixBlock');
@@ -417,7 +421,7 @@ function [] = testFindSource( varargin )
     assert(size(filtered, 1) == 1);
 end
 
-%% Test: Find sources with filters
+%% Test: Find Sources with filters
 function [] = testFilterFindSource( varargin )
     findSource = 'nixFindSource';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);

@@ -70,12 +70,12 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         function r = createGroup(obj, name, type)
             % Create a new nix.Group entity associated with the invoking Block.
             %
-            %   name (char):  The name of the Group, has to be unique within the file.
-            %   type (char):  The type of the Group.
+            % name (char):  The name of the Group, has to be unique within the file.
+            % type (char):  The type of the Group.
             %
-            %   Returns:  (nix.Group) The newly created Group.
+            % Returns:  (nix.Group) The newly created Group.
             %
-            %   Example:  newGroup = currBlock.createGroup('subTrial2', 'ephys');
+            % Example:  newGroup = currBlock.createGroup('subTrial2', 'ephys');
             %
             % See also nix.Group.
 
@@ -217,18 +217,18 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         function r = createDataArray(obj, name, type, datatype, shape)
             % Create a new nix.DataArray entity associated with the invoking Block.
             %
-            %   name (char):  The name of the DataArray, has to be unique within the file.
-            %   type (char):  The type of the DataArray.
-            %   datatype (nix.DataType):  Provides the datatype of the data that the 
-            %                             DataArray will contain. It has to be a valid
-            %                             nix.DataType.
-            %   shape (double):  The dimensionality of the data that the DataArray will 
+            % name (char):  The name of the DataArray, has to be unique within the file.
+            % type (char):  The type of the DataArray.
+            % datatype (nix.DataType):  Provides the datatype of the data that the 
+            %                           DataArray will contain. It has to be a valid
+            %                           nix.DataType.
+            % shape (double):  The dimensionality of the data that the DataArray will 
             %                    contain.
             %
-            %   Returns:  (nix.DataArray) The newly created DataArray.
+            % Returns:  (nix.DataArray) The newly created DataArray.
             %
-            %   Example:  newDataArray = currBlock.createDataArray('sessionData1', ...
-            %                               'epyhs_data', nix.DataType.Double, [12 15]);
+            % Example:  newDataArray = currBlock.createDataArray('sessionData1', ...
+            %                             'epyhs_data', nix.DataType.Double, [12 15]);
             %             % allocates space for a 12x15 array of datatype double.
             %
             % See also nix.DataArray, nix.DataType.
@@ -263,13 +263,13 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             % successful creation, the contents of data will be written to the
             % DataArray.
             %
-            %   name (char):  The name of the DataArray, has to be unique within the file.
-            %   type (char):  The type of the DataArray, required.
-            %   data (var):   Raw data the DataArray is supposed to contain.
+            % name (char):  The name of the DataArray, has to be unique within the file.
+            % type (char):  The type of the DataArray, required.
+            % data (var):   Raw data the DataArray is supposed to contain.
             %
-            %   Returns:  (nix.DataArray) The newly created DataArray.
+            % Returns:  (nix.DataArray) The newly created DataArray.
             %
-            %   Example:  newDataArray = currBlock.createDataArray('sessionData2', ...
+            % Example:  newDataArray = currBlock.createDataArray('sessionData2', ...
             %                               'epyhs_data', rawDataVariable);
             %
             % See also nix.DataArray, nix.DataType.
@@ -371,12 +371,12 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         function r = createSource(obj, name, type)
             % Create a new nix.Source entity associated with the invoking Block.
             %
-            %   name (char):  The name of the Source, has to be unique within the file.
-            %   type (char):  The type of the Source.
+            % name (char):  The name of the Source, has to be unique within the file.
+            % type (char):  The type of the Source.
             %
-            %   Returns:  (nix.Source) The newly created Source.
+            % Returns:  (nix.Source) The newly created Source.
             %
-            %   Example:  newSource = currBlock.createSource('cell5', 'pyramidal');
+            % Example:  newSource = currBlock.createSource('cell5', 'pyramidal');
             %
             % See also nix.Source.
 
@@ -481,7 +481,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             % Example:  allSources = currBlock.findSources(2);
             %           % will add all Sources until including the 2nd layer of Sources.
             %
-            % See also nix.Section.
+            % See also nix.Source.
 
             r = obj.filterFindSources(maxDepth, nix.Filter.acceptall, '');
         end
@@ -502,7 +502,8 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             % val (char):           Value that is applied with the selected
             %                       filter.
             %
-            % Example:  allSources = f.filterFindSources(2, nix.Filter.type, 'ephys');
+            % Example:  allSources = currBlock.filterFindSources(...
+            %                               2, nix.Filter.type, 'ephys');
             %
             % See also nix.Source, nix.Filter.
 
