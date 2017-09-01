@@ -7,7 +7,7 @@
 % to one nix.Section entity and therefore makes it possible to annotate the entities 
 % with additional metadata.
 %
-% Depends on nix.Entity.
+% Depends on nix.Entity; Utility class, do not use out of context.
 %
 % See also nix.Section, nix.Block, nix.Group, nix.DataArray, nix.Tag, nix.MultiTag, nix.Source, nix.Entity.
 %

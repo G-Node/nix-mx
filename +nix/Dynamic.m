@@ -1,3 +1,8 @@
+% Dynamic class implements methods to dynamically assign properties.
+%
+% Utility class, do not use out of context.
+%
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,8 +12,6 @@
 % LICENSE file in the root of the Project.
 
 classdef Dynamic
-    % Dynamic class (with static methods hehe)
-    % implements methods to dynamically assigns properties 
 
     methods (Static)
         function addProperty(obj, prop, mode)

@@ -1,3 +1,5 @@
+% nix.DataTypes provides access to the DataTypes supported by NIX.
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,7 +9,6 @@
 % LICENSE file in the root of the Project.
 
 classdef DataType
-    % DataTypes supported by nix.
 
     enumeration
         Bool;

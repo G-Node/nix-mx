@@ -1,3 +1,8 @@
+% nix.Utils provides utility functions accessing the nix backend.
+%
+% Utility functions, do not use out of context!
+%
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -52,12 +57,13 @@ classdef Utils
             r = nix.Utils.createEntityArray(list, objConstructor);
         end
 
-        % This method calls the nix-mx function specified by 'nixMxFunc', handing 
-        % over 'handle' as the main nix entity handle and 'relatedHandle' as a 
-        % second nix entity handle related to the first one.
-        % 'objConstructor' requires the Matlab entity constructor of the expected 
-        % returned nix Entities.
         function r = fetchObjListByEntity(obj, mxMethodName, relatedHandle, objConstructor)
+            % This method calls the nix-mx function specified by 'nixMxFunc', handing 
+            % over 'handle' as the main nix entity handle and 'relatedHandle' as a 
+            % second nix entity handle related to the first one.
+            % 'objConstructor' requires the Matlab entity constructor of the expected 
+            % returned nix Entities.
+
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             list = nix_mx(mxMethod, obj.nixhandle, relatedHandle);
             r = nix.Utils.createEntityArray(list, objConstructor);
@@ -96,10 +102,11 @@ classdef Utils
             nix_mx(mxMethod, obj.nixhandle, handleArray);
         end
 
-        % Function can be used for both nix delete and remove methods.
-        % The first actually removes the entity, the latter
-        % removes only the reference to the entity.
         function r = deleteEntity(obj, mxMethodName, idNameEntity, nixEntity)
+            % Function can be used for both nix delete and remove methods.
+            % The first actually removes the entity, the latter
+            % removes only the reference to the entity.
+
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             id = nix.Utils.parseEntityId(idNameEntity, nixEntity);
             r = nix_mx(mxMethod, obj.nixhandle, id);
@@ -165,15 +172,17 @@ classdef Utils
         % -----------------------------------------------------------
 
         function r = transposeArray(data)
-        % Data must agree with file & dimensions; see mkarray.cc(42)
+            % Data must agree with file & dimensions; see mkarray.cc(42)
+
             r = permute(data, length(size(data)):-1:1);
         end
 
         function r = handleIndex(idx)
-        % Matlab uses 1-based indexing opposed to 0 based indexing in C++.
-        % handleIndex transforms a Matlab style index to a C++ style
-        % index and raises the appropriate Matlab error in case of an
-        % invalid subscript.
+            % Matlab uses 1-based indexing opposed to 0 based indexing in C++.
+            % handleIndex transforms a Matlab style index to a C++ style
+            % index and raises the appropriate Matlab error in case of an
+            % invalid subscript.
+
             if (idx < 1)
                 err.identifier = 'MATLAB:badsubscript';
                 err.message = 'Subscript indices must either be real positive integers or logicals.';
