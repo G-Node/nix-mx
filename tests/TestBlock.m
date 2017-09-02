@@ -98,13 +98,13 @@ function [] = test_create_data_array( varargin )
     try
         b.create_data_array('stringDataArray', dtype, nix.DataType.String, [1 5]);
     catch ME
-        assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
+        assert(strcmp(ME.identifier, 'NIXMX:UnsupportedDataType'));
     end;
     
     try
         b.create_data_array('I will crash and burn', dtype, 'Thou shalt not work!', [1 5]);
     catch ME
-        assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
+        assert(strcmp(ME.identifier, 'NIXMX:UnsupportedDataType'));
     end;
 
     da = b.create_data_array('floatDataArray', dtype, nix.DataType.Float, [3 3]);
@@ -153,13 +153,13 @@ function [] = test_create_data_array_from_data( varargin )
     try
         b.create_data_array_from_data('stringDataArray', daType, ['a' 'b']);
     catch ME
-        assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
+        assert(strcmp(ME.identifier, 'NIXMX:UnsupportedDataType'));
     end;
     
     try
         b.create_data_array_from_data('I will crash and burn', daType, {1 2 3});
     catch ME
-        assert(strcmp(ME.identifier, 'Block:unsupportedDataType'));
+        assert(strcmp(ME.identifier, 'NIXMX:UnsupportedDataType'));
     end;
     
     assert(~isempty(b.dataArrays));

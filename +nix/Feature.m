@@ -14,7 +14,7 @@ classdef Feature < nix.Entity
         alias = 'Feature'
     end
 
-    properties(Dependent)
+    properties (Dependent)
         id
         linkType
     end
@@ -41,15 +41,13 @@ classdef Feature < nix.Entity
         function r = open_data(obj)
             fname = strcat(obj.alias, '::openData');
             h = nix_mx(fname, obj.nix_handle);
-            r = nix.DataArray(h);
+            r = nix.Utils.createEntity(h, @nix.DataArray);
         end
 
         function [] = set_data(obj, setData)
-            if(strcmp(class(setData), 'nix.DataArray'))
-                setData = setData.id;
-            end
+            id = nix.Utils.parseEntityId(setData, 'nix.DataArray');
             fname = strcat(obj.alias, '::setData');
-            nix_mx(fname, obj.nix_handle, setData);
+            nix_mx(fname, obj.nix_handle, id);
         end
     end
 

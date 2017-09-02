@@ -10,12 +10,12 @@ classdef Property < nix.NamedEntity
     % PROPERTY Metadata Property class
     %   NIX metadata property
 
-    properties(Hidden)
+    properties (Hidden)
         % namespace reference for nix-mx functions
         alias = 'Property'
     end
 
-    properties(Dependent)
+    properties (Dependent)
         values
     end
 
@@ -48,7 +48,9 @@ classdef Property < nix.NamedEntity
                 end
 
                 if (~strcmpi(class(curr), obj.datatype))
-                    error('Values do not match property data type!');
+                    err.identifier = 'NIXMX:InvalidArgument';
+                    err.message = sprintf('Value #%d does not match property data type', i);
+                    error(err);
                 end
             end
 
@@ -57,24 +59,12 @@ classdef Property < nix.NamedEntity
         end
 
         function r = value_count(obj)
-            fname = strcat(obj.alias, '::valueCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'valueCount');
         end
 
         function [] = values_delete(obj)
             fname = strcat(obj.alias, '::deleteValues');
             nix_mx(fname, obj.nix_handle);
-        end
-
-        % return value 0 means name and id of two properties are
-        % identical, any other value means either name or id differ.
-        function r = compare(obj, property)
-            if (~strcmp(class(property), class(obj)))
-               error('Function only supports comparison of Properties.');
-            end
-
-            fname = strcat(obj.alias, '::compare');
-            r = nix_mx(fname, obj.nix_handle, property.nix_handle);
         end
     end
 

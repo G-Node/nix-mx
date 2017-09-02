@@ -28,59 +28,49 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
         % ------------------
 
         function r = source_count(obj)
-            fname = strcat(obj.alias, '::sourceCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'sourceCount');
         end
 
         function r = create_source(obj, name, type)
             fname = strcat(obj.alias, '::createSource');
             h = nix_mx(fname, obj.nix_handle, name, type);
-            r = nix.Source(h);
+            r = nix.Utils.createEntity(h, @nix.Source);
         end
 
         function r = has_source(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasSource');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasSource', id_or_name);
         end
 
         function r = delete_source(obj, del)
-            fname = strcat(obj.alias, '::deleteSource');
-            r = nix.Utils.delete_entity(obj, del, 'nix.Source', fname);
+            r = nix.Utils.delete_entity(obj, 'deleteSource', del, 'nix.Source');
         end
 
         function r = open_source(obj, id_or_name)
-            fname = strcat(obj.alias, '::openSource');
-            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.Source);
+            r = nix.Utils.open_entity(obj, 'openSource', id_or_name, @nix.Source);
         end
 
         function r = open_source_idx(obj, idx)
-            fname = strcat(obj.alias, '::openSourceIdx');
-            r = nix.Utils.open_entity(obj, fname, idx, @nix.Source);
+            r = nix.Utils.open_entity(obj, 'openSourceIdx', idx, @nix.Source);
         end
 
         function r = parent_source(obj)
-            fname = strcat(obj.alias, '::parentSource');
-            r = nix.Utils.fetchObj(fname, obj.nix_handle, @nix.Source);
+            r = nix.Utils.fetchObj(obj, 'parentSource', @nix.Source);
         end
 
         function r = referring_data_arrays(obj)
-            fname = strcat(obj.alias, '::referringDataArrays');
-            r = nix.Utils.fetchObjList(fname, obj.nix_handle, @nix.DataArray);
+            r = nix.Utils.fetchObjList(obj, 'referringDataArrays', @nix.DataArray);
         end
 
         function r = referring_tags(obj)
-            fname = strcat(obj.alias, '::referringTags');
-            r = nix.Utils.fetchObjList(fname, obj.nix_handle, @nix.Tag);
+            r = nix.Utils.fetchObjList(obj, 'referringTags', @nix.Tag);
         end
 
         function r = referring_multi_tags(obj)
-            fname = strcat(obj.alias, '::referringMultiTags');
-            r = nix.Utils.fetchObjList(fname, obj.nix_handle, @nix.MultiTag);
+            r = nix.Utils.fetchObjList(obj, 'referringMultiTags', @nix.MultiTag);
         end
 
         function r = filter_sources(obj, filter, val)
-            fname = strcat(obj.alias, '::sourcesFiltered');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.Source);
+            r = nix.Utils.filter(obj, 'sourcesFiltered', filter, val, @nix.Source);
         end
 
         % maxdepth is an index where idx = 0 corresponds to the calling source
@@ -90,8 +80,7 @@ classdef Source < nix.NamedEntity & nix.MetadataMixIn
 
         % maxdepth is an index where idx = 0 corresponds to the calling source
         function r = find_filtered_sources(obj, max_depth, filter, val)
-            fname = strcat(obj.alias, '::findSources');
-            r = nix.Utils.find(obj, max_depth, filter, val, fname, @nix.Source);
+            r = nix.Utils.find(obj, 'findSources', max_depth, filter, val, @nix.Source);
         end
     end
 

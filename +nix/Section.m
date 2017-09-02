@@ -10,7 +10,7 @@ classdef Section < nix.NamedEntity
     % SECTION Metadata Section class
     %   NIX metadata section
 
-    properties(Hidden)
+    properties (Hidden)
         % namespace reference for nix-mx functions
         alias = 'Section'
     end
@@ -29,8 +29,7 @@ classdef Section < nix.NamedEntity
         end
 
         function r = parent(obj)
-            fname = strcat(obj.alias, '::parent');
-            r = nix.Utils.fetchObj(fname, obj.nix_handle, @nix.Section);
+            r = nix.Utils.fetchObj(obj, 'parent', @nix.Section);
         end
 
         % ----------------
@@ -42,19 +41,16 @@ classdef Section < nix.NamedEntity
                 fname = strcat(obj.alias, '::setNoneLink');
                 nix_mx(fname, obj.nix_handle);
             else
-                fname = strcat(obj.alias, '::setLink');
-                nix.Utils.add_entity(obj, val, 'nix.Section', fname);
+                nix.Utils.add_entity(obj, 'setLink', val, 'nix.Section');
             end
         end
 
         function r = openLink(obj)
-            fname = strcat(obj.alias, '::openLink');
-            r = nix.Utils.fetchObj(fname, obj.nix_handle, @nix.Section);
+            r = nix.Utils.fetchObj(obj, 'openLink', @nix.Section);
         end
 
         function r = inherited_properties(obj)
-            fname = strcat(obj.alias, '::inheritedProperties');
-            r = nix.Utils.fetchObjList(fname, obj.nix_handle, @nix.Property);
+            r = nix.Utils.fetchObjList(obj, 'inheritedProperties', @nix.Property);
         end
 
         % ----------------
@@ -64,37 +60,31 @@ classdef Section < nix.NamedEntity
         function r = create_section(obj, name, type)
             fname = strcat(obj.alias, '::createSection');
             h = nix_mx(fname, obj.nix_handle, name, type);
-            r = nix.Section(h);
+            r = nix.Utils.createEntity(h, @nix.Section);
         end
 
         function r = delete_section(obj, del)
-            fname = strcat(obj.alias, '::deleteSection');
-            r = nix.Utils.delete_entity(obj, del, 'nix.Section', fname);
+            r = nix.Utils.delete_entity(obj, 'deleteSection', del, 'nix.Section');
         end
 
         function r = open_section(obj, id_or_name)
-            fname = strcat(obj.alias, '::openSection');
-            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.Section);
+            r = nix.Utils.open_entity(obj, 'openSection', id_or_name, @nix.Section);
         end
 
         function r = open_section_idx(obj, idx)
-            fname = strcat(obj.alias, '::openSectionIdx');
-            r = nix.Utils.open_entity(obj, fname, idx, @nix.Section);
+            r = nix.Utils.open_entity(obj, 'openSectionIdx', idx, @nix.Section);
         end
 
         function r = has_section(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasSection');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasSection', id_or_name);
         end
 
         function r = section_count(obj)
-            fname = strcat(obj.alias, '::sectionCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'sectionCount');
         end
 
         function r = filter_sections(obj, filter, val)
-            fname = strcat(obj.alias, '::sectionsFiltered');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.Section);
+            r = nix.Utils.filter(obj, 'sectionsFiltered', filter, val, @nix.Section);
         end
 
         % find_related returns the nearest occurrence downstream of a
@@ -102,8 +92,7 @@ classdef Section < nix.NamedEntity
         % If no section can be found downstream, it will look for the
         % nearest occurrence upstream of a nix.Section matching the filter.
         function r = find_related(obj, filter, val)
-            fname = strcat(obj.alias, '::findRelated');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.Section);
+            r = nix.Utils.filter(obj, 'findRelated', filter, val, @nix.Section);
         end
 
         % maxdepth is an index
@@ -113,8 +102,7 @@ classdef Section < nix.NamedEntity
 
         % maxdepth is an index
         function r = find_filtered_sections(obj, max_depth, filter, val)
-            fname = strcat(obj.alias, '::findSections');
-            r = nix.Utils.find(obj, max_depth, filter, val, fname, @nix.Section);
+            r = nix.Utils.find(obj, 'findSections', max_depth, filter, val, @nix.Section);
         end
 
         % ----------------
@@ -123,11 +111,13 @@ classdef Section < nix.NamedEntity
 
         function r = create_property(obj, name, datatype)
             if (~isa(datatype, 'nix.DataType'))
-                error('Please provide a valid nix.DataType');
+                err.identifier = 'NIXMX:InvalidArgument';
+                err.message = 'Please provide a valid nix.DataType';
+                error(err);
             else
                 fname = strcat(obj.alias, '::createProperty');
                 h = nix_mx(fname, obj.nix_handle, name, lower(datatype.char));
-                r = nix.Property(h);
+                r = nix.Utils.createEntity(h, @nix.Property);
             end
         end
 
@@ -137,40 +127,34 @@ classdef Section < nix.NamedEntity
             end
             fname = strcat(obj.alias, '::createPropertyWithValue');
             h = nix_mx(fname, obj.nix_handle, name, val);
-            r = nix.Property(h);
+            r = nix.Utils.createEntity(h, @nix.Property);
         end
 
         function r = delete_property(obj, del)
             if (isstruct(del) && isfield(del, 'id'))
-                delID = del.id;
-            elseif (strcmp(class(del), 'nix.Property'))
-                delID = del.id;
+                id = del.id;
             else
-                delID = del;
+                id = nix.Utils.parseEntityId(del, 'nix.Property');
             end
 
             fname = strcat(obj.alias, '::deleteProperty');
-            r = nix_mx(fname, obj.nix_handle, delID);
+            r = nix_mx(fname, obj.nix_handle, id);
         end
 
         function r = open_property(obj, id_or_name)
-            fname = strcat(obj.alias, '::openProperty');
-            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.Property);
+            r = nix.Utils.open_entity(obj, 'openProperty', id_or_name, @nix.Property);
         end
 
         function r = open_property_idx(obj, idx)
-            fname = strcat(obj.alias, '::openPropertyIdx');
-            r = nix.Utils.open_entity(obj, fname, idx, @nix.Property);
+            r = nix.Utils.open_entity(obj, 'openPropertyIdx', idx, @nix.Property);
         end
 
         function r = property_count(obj)
-            fname = strcat(obj.alias, '::propertyCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'propertyCount');
         end
 
         function r = filter_properties(obj, filter, val)
-            fname = strcat(obj.alias, '::propertiesFiltered');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.Property);
+            r = nix.Utils.filter(obj, 'propertiesFiltered', filter, val, @nix.Property);
         end
 
         % ----------------
@@ -194,8 +178,7 @@ classdef Section < nix.NamedEntity
         end
 
         function r = referring_blocks(obj)
-            fname = strcat(obj.alias, '::referringBlocks');
-            r = nix.Utils.fetchObjList(fname, obj.nix_handle, @nix.Block);
+            r = nix.Utils.fetchObjList(obj, 'referringBlocks', @nix.Block);
         end
     end
 
@@ -203,21 +186,22 @@ classdef Section < nix.NamedEntity
     % Referring utility method
     % ----------------
 
-    methods(Access=protected)
+    methods (Access=protected)
         % referring_util receives a nix entityConstructor, part of a function
         % name and varargin to provide abstract access to nix.Section
         % referringXXX and referringXXX(Block) methods.
         function r = referring_util(obj, entityConstructor, fsuffix, varargin)
             if (isempty(varargin))
-                fname = strcat(obj.alias, '::referring', fsuffix);
-                r = nix.Utils.fetchObjList(fname, obj.nix_handle, entityConstructor);
-            elseif ((size(varargin, 2) > 1) || ...
-                    (~strcmp(class(varargin{1}), 'nix.Block')))
-                error('Provide either empty arguments or a single Block entity');
+                fname = strcat('referring', fsuffix);
+                r = nix.Utils.fetchObjList(obj, fname, entityConstructor);
+            elseif ((size(varargin, 2) > 1) || (~isa(varargin{1}, 'nix.Block')))
+                err.identifier = 'NIXMX:InvalidArgument';
+                err.message = 'Provide either empty arguments or a single Block entity';
+                error(err);
             else
-                fname = strcat(obj.alias, '::referringBlock', fsuffix);
-                r = nix.Utils.fetchObjListByEntity(fname, ...
-                    obj.nix_handle, varargin{1}.nix_handle, entityConstructor);
+                fname = strcat('referringBlock', fsuffix);
+                r = nix.Utils.fetchObjListByEntity(obj, fname, ...
+                                            varargin{1}.nix_handle, entityConstructor);
             end
         end
     end

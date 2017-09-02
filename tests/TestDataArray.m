@@ -190,18 +190,18 @@ function [] = test_write_data_double( varargin )
     try
         da.write_all(logData);
     catch ME
-        assert(strcmp(ME.identifier, 'DataArray:improperDataType'));
-    end;
+        assert(strcmp(ME.identifier, 'NIXMX:improperDataType'));
+    end
     try
         da.write_all(charData);
     catch ME
-        assert(strcmp(ME.identifier, 'DataArray:improperDataType'));
-    end;
+        assert(strcmp(ME.identifier, 'NIXMX:improperDataType'));
+    end
     try
         da.write_all(cellData);
     catch ME
-        assert(strcmp(ME.identifier, 'DataArray:improperDataType'));
-    end;
+        assert(strcmp(ME.identifier, 'NIXMX:improperDataType'));
+    end
 
     clear da b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
@@ -225,13 +225,13 @@ function [] = test_write_data_logical( varargin )
     try
         da.write_all(numData);
     catch ME
-        assert(strcmp(ME.identifier, 'DataArray:improperDataType'));
-    end;
+        assert(strcmp(ME.identifier, 'NIXMX:improperDataType'));
+    end
     try
         da.write_all(charData);
     catch ME
-        assert(strcmp(ME.identifier, 'DataArray:improperDataType'));
-    end;
+        assert(strcmp(ME.identifier, 'NIXMX:improperDataType'));
+    end
 
     clear da b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);

@@ -149,7 +149,7 @@ end
 
 %% Test: Compare properties
 function [] = test_property_compare( varargin )
-    testFile = fullfile(pwd,'tests','testRW.h5');
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
     s1 = f.create_section('testSection1', 'nixSection');
     s2 = f.create_section('testSection2', 'nixSection');
@@ -159,14 +159,17 @@ function [] = test_property_compare( varargin )
     % test invalid property comparison
     try
         p.compare('I shall crash and burn');
+        err.identifier = 'Test:UnraisedError';
+        error(err);
     catch ME
-        assert(strcmp(ME.message, 'Function only supports comparison of Properties.'));
+        msg = 'Only entities of the same class can be compared.';
+        assert(strcmp(ME.message, msg), 'Compare exception fail');
     end
-    
+
     % test property equal comparison
     assert(~p.compare(p));
 
     % test property not eqal
     pNEq = s2.create_property_with_value('property', {true, false});
-    assert(p.compare(pNEq)~=0);
+    assert(p.compare(pNEq) ~= 0);
 end

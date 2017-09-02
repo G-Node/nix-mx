@@ -14,7 +14,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         alias = 'DataArray'
     end
 
-    properties(Dependent)
+    properties (Dependent)
         dimensions % should not be dynamic due to complex set operation
     end
 
@@ -43,11 +43,14 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             for i = 1:length(currList)
                 switch currList(i).dtype
                     case 'set'
-                        dimensions{i} = nix.SetDimension(currList(i).dimension);
+                        dimensions{i} = nix.Utils.createEntity(currList(i).dimension, ...
+                            @nix.SetDimension);
                     case 'sample'
-                        dimensions{i} = nix.SampledDimension(currList(i).dimension);
+                        dimensions{i} = nix.Utils.createEntity(currList(i).dimension, ...
+                            @nix.SampledDimension);
                     case 'range'
-                        dimensions{i} = nix.RangeDimension(currList(i).dimension);
+                        dimensions{i} = nix.Utils.createEntity(currList(i).dimension, ...
+                            @nix.RangeDimension);
                     otherwise
                        disp('some dimension type is unknown! skip')
                 end
@@ -57,25 +60,25 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function r = append_set_dimension(obj)
             fname = strcat(obj.alias, '::appendSetDimension');
             h = nix_mx(fname, obj.nix_handle);
-            r = nix.SetDimension(h);
+            r = nix.Utils.createEntity(h, @nix.SetDimension);
         end
 
         function r = append_sampled_dimension(obj, interval)
             fname = strcat(obj.alias, '::appendSampledDimension');
             h = nix_mx(fname, obj.nix_handle, interval);
-            r = nix.SampledDimension(h);
+            r = nix.Utils.createEntity(h, @nix.SampledDimension);
         end
 
         function r = append_range_dimension(obj, ticks)
             fname = strcat(obj.alias, '::appendRangeDimension');
             h = nix_mx(fname, obj.nix_handle, ticks);
-            r = nix.RangeDimension(h);
+            r = nix.Utils.createEntity(h, @nix.RangeDimension);
         end
 
         function r = append_alias_range_dimension(obj)
             fname = strcat(obj.alias, '::appendAliasRangeDimension');
             h = nix_mx(fname, obj.nix_handle);
-            r = nix.RangeDimension(h);
+            r = nix.Utils.createEntity(h, @nix.RangeDimension);
         end
 
         function r = open_dimension_idx(obj, idx)
@@ -83,13 +86,13 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % instead of 0 compared to all other index functions.
             fname = strcat(obj.alias, '::openDimensionIdx');
             dim = nix_mx(fname, obj.nix_handle, idx);
-            switch(dim.dimension_type)
+            switch (dim.dimension_type)
                 case 'set'
-                    r = nix.SetDimension(dim.handle);
+                    r = nix.Utils.createEntity(dim.handle, @nix.SetDimension);
                 case 'sampled'
-                    r = nix.SampledDimension(dim.handle);
+                    r = nix.Utils.createEntity(dim.handle, @nix.SampledDimension);
                 case 'range'
-                    r = nix.RangeDimension(dim.handle);
+                    r = nix.Utils.createEntity(dim.handle, @nix.RangeDimension);
             end
         end
 
@@ -99,8 +102,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         end
 
         function r = dimension_count(obj)
-            fname = strcat(obj.alias, '::dimensionCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'dimensionCount');
         end
 
         % -----------------
@@ -117,31 +119,30 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         %-- If a DataArray has been created as boolean or numeric,
         %-- provide that only values of the proper DataType can be written.
         function [] = write_all(obj, data)
-            if(isinteger(obj.read_all) && isfloat(data))
+            if (isinteger(obj.read_all) && isfloat(data))
                 disp('Warning: Writing Float data to an Integer DataArray');
             end
 
-            errorStruct.identifier = 'DataArray:improperDataType';
-            if(islogical(obj.read_all) && ~islogical(data))
-                errorStruct.message = strcat('Trying to write', ...
-                    32, class(data), ' to a logical DataArray.');
-                error(errorStruct);
-            elseif(isnumeric(obj.read_all) && ~isnumeric(data))
-                errorStruct.message = strcat('Trying to write', ...
-                    32, class(data), ' to a ', 32, class(obj.read_all), ...
-                    ' DataArray.');
-                error(errorStruct);
-            elseif(ischar(data))
+            err.identifier = 'NIXMX:improperDataType';
+            if (islogical(obj.read_all) && ~islogical(data))
+                m = sprintf('Trying to write %s to a logical DataArray', class(data));
+                err.message = m;
+                error(err);
+            elseif (isnumeric(obj.read_all) && ~isnumeric(data))
+                m = sprintf('Trying to write %s to a %s DataArray', class(data), class(obj.read_all));
+                err.message = m;
+                error(err);
+            elseif (ischar(data))
                 %-- Should actually not be reachable at the moment, 
                 %-- since writing Strings to DataArrays is not supported,
                 %-- but safety first.
-                errorStruct.identifier = 'DataArray:unsupportedDataType';
-                errorStruct.message = ('Writing char/string DataArrays is not supported as of yet.');
-                error(errorStruct);
-            else
-                fname = strcat(obj.alias, '::writeAll');
-                nix_mx(fname, obj.nix_handle, nix.Utils.transpose_array(data));
+                err.identifier = 'NIXMX:unsupportedDataType';
+                err.message = 'Writing char/string DataArrays is currently not supported.';
+                error(err);
             end
+
+            fname = strcat(obj.alias, '::writeAll');
+            nix_mx(fname, obj.nix_handle, nix.Utils.transpose_array(data));
         end
 
         function r = datatype(obj)
@@ -161,8 +162,6 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function [] = set_data_extent(obj, extent)
             fname = strcat(obj.alias, '::setDataExtent');
             nix_mx(fname, obj.nix_handle, extent);
-            % update changed dataExtent in obj.info
-            obj.info = nix_mx(strcat(obj.alias, '::describe'), obj.nix_handle);
         end
     end
 

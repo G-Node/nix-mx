@@ -31,43 +31,35 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % -----------------
 
         function r = data_array_count(obj)
-            fname = strcat(obj.alias, '::dataArrayCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'dataArrayCount');
         end
 
         function r = has_data_array(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasDataArray');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasDataArray', id_or_name);
         end
 
         function r = get_data_array(obj, id_or_name)
-            fname = strcat(obj.alias, '::getDataArray');
-            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.DataArray);
+            r = nix.Utils.open_entity(obj, 'getDataArray', id_or_name, @nix.DataArray);
         end
 
         function r = open_data_array_idx(obj, idx)
-            fname = strcat(obj.alias, '::openDataArrayIdx');
-            r = nix.Utils.open_entity(obj, fname, idx, @nix.DataArray);
+            r = nix.Utils.open_entity(obj, 'openDataArrayIdx', idx, @nix.DataArray);
         end
 
         function [] = add_data_array(obj, add_this)
-            fname = strcat(obj.alias, '::addDataArray');
-            nix.Utils.add_entity(obj, add_this, 'nix.DataArray', fname);
+            nix.Utils.add_entity(obj, 'addDataArray', add_this, 'nix.DataArray');
         end
 
         function [] = add_data_arrays(obj, add_cell_array)
-            fname = strcat(obj.alias, '::addDataArrays');
-            nix.Utils.add_entity_array(obj, add_cell_array, 'nix.DataArray', fname);
+            nix.Utils.add_entity_array(obj, 'addDataArrays', add_cell_array, 'nix.DataArray');
         end
 
         function r = remove_data_array(obj, del)
-            fname = strcat(obj.alias, '::removeDataArray');
-            r = nix.Utils.delete_entity(obj, del, 'nix.DataArray', fname);
+            r = nix.Utils.delete_entity(obj, 'removeDataArray', del, 'nix.DataArray');
         end
 
         function r = filter_data_arrays(obj, filter, val)
-            fname = strcat(obj.alias, '::dataArraysFiltered');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.DataArray);
+            r = nix.Utils.filter(obj, 'dataArraysFiltered', filter, val, @nix.DataArray);
         end
 
         % -----------------
@@ -75,43 +67,35 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % -----------------
 
         function [] = add_tag(obj, add_this)
-            fname = strcat(obj.alias, '::addTag');
-            nix.Utils.add_entity(obj, add_this, 'nix.Tag', fname);
+            nix.Utils.add_entity(obj, 'addTag', add_this, 'nix.Tag');
         end
 
         function [] = add_tags(obj, add_cell_array)
-            fname = strcat(obj.alias, '::addTags');
-            nix.Utils.add_entity_array(obj, add_cell_array, 'nix.Tag', fname);
+            nix.Utils.add_entity_array(obj, 'addTags', add_cell_array, 'nix.Tag');
         end
 
         function r = has_tag(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasTag');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasTag', id_or_name);
         end
 
         function r = get_tag(obj, id_or_name)
-            fname = strcat(obj.alias, '::getTag');
-            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.Tag);
+            r = nix.Utils.open_entity(obj, 'getTag', id_or_name, @nix.Tag);
         end
 
         function r = open_tag_idx(obj, idx)
-            fname = strcat(obj.alias, '::openTagIdx');
-            r = nix.Utils.open_entity(obj, fname, idx, @nix.Tag);
+            r = nix.Utils.open_entity(obj, 'openTagIdx', idx, @nix.Tag);
         end
 
         function r = remove_tag(obj, del)
-            fname = strcat(obj.alias, '::removeTag');
-            r = nix.Utils.delete_entity(obj, del, 'nix.Tag', fname);
+            r = nix.Utils.delete_entity(obj, 'removeTag', del, 'nix.Tag');
         end
 
         function r = tag_count(obj)
-            fname = strcat(obj.alias, '::tagCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'tagCount');
         end
 
         function r = filter_tags(obj, filter, val)
-            fname = strcat(obj.alias, '::tagsFiltered');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.Tag);
+            r = nix.Utils.filter(obj, 'tagsFiltered', filter, val, @nix.Tag);
         end
 
         % -----------------
@@ -119,43 +103,35 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % -----------------
 
         function [] = add_multi_tag(obj, add_this)
-            fname = strcat(obj.alias, '::addMultiTag');
-            nix.Utils.add_entity(obj, add_this, 'nix.MultiTag', fname);
+            nix.Utils.add_entity(obj, 'addMultiTag', add_this, 'nix.MultiTag');
         end
 
         function [] = add_multi_tags(obj, add_cell_array)
-            fname = strcat(obj.alias, '::addMultiTags');
-            nix.Utils.add_entity_array(obj, add_cell_array, 'nix.MultiTag', fname);
+            nix.Utils.add_entity_array(obj, 'addMultiTags', add_cell_array, 'nix.MultiTag');
         end
 
         function r = has_multi_tag(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasMultiTag');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasMultiTag', id_or_name);
         end
 
         function r = get_multi_tag(obj, id_or_name)
-            fname = strcat(obj.alias, '::getMultiTag');
-            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.MultiTag);
+            r = nix.Utils.open_entity(obj, 'getMultiTag', id_or_name, @nix.MultiTag);
         end
 
         function r = open_multi_tag_idx(obj, idx)
-            fname = strcat(obj.alias, '::openMultiTagIdx');
-            r = nix.Utils.open_entity(obj, fname, idx, @nix.MultiTag);
+            r = nix.Utils.open_entity(obj, 'openMultiTagIdx', idx, @nix.MultiTag);
         end
 
         function r = remove_multi_tag(obj, del)
-            fname = strcat(obj.alias, '::removeMultiTag');
-            r = nix.Utils.delete_entity(obj, del, 'nix.MultiTag', fname);
+            r = nix.Utils.delete_entity(obj, 'removeMultiTag', del, 'nix.MultiTag');
         end
 
         function r = multi_tag_count(obj)
-            fname = strcat(obj.alias, '::multiTagCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'multiTagCount');
         end
 
         function r = filter_multi_tags(obj, filter, val)
-            fname = strcat(obj.alias, '::multiTagsFiltered');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.MultiTag);
+            r = nix.Utils.filter(obj, 'multiTagsFiltered', filter, val, @nix.MultiTag);
         end
     end
 

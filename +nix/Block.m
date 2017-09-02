@@ -32,39 +32,33 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % -----------------
 
         function r = group_count(obj)
-            fname = strcat(obj.alias, '::groupCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'groupCount');
         end
 
         function r = create_group(obj, name, nixtype)
             fname = strcat(obj.alias, '::createGroup');
             h = nix_mx(fname, obj.nix_handle, name, nixtype);
-            r = nix.Group(h);
+            r = nix.Utils.createEntity(h, @nix.Group);
         end
 
         function r = has_group(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasGroup');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasGroup', id_or_name);
         end
 
         function r = get_group(obj, id_or_name)
-            fname = strcat(obj.alias, '::getGroup');
-            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.Group);
+            r = nix.Utils.open_entity(obj, 'getGroup', id_or_name, @nix.Group);
         end
 
         function r = open_group_idx(obj, idx)
-            fname = strcat(obj.alias, '::openGroupIdx');
-            r = nix.Utils.open_entity(obj, fname, idx, @nix.Group);
+            r = nix.Utils.open_entity(obj, 'openGroupIdx', idx, @nix.Group);
         end
 
-        function r = delete_group(obj, del)
-            fname = strcat(obj.alias, '::deleteGroup');
-            r = nix.Utils.delete_entity(obj, del, 'nix.Group', fname);
+        function r = delete_group(obj, idNameEntity)
+            r = nix.Utils.delete_entity(obj, 'deleteGroup', idNameEntity, 'nix.Group');
         end
 
         function r = filter_groups(obj, filter, val)
-            fname = strcat(obj.alias, '::groupsFiltered');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.Group);
+            r = nix.Utils.filter(obj, 'groupsFiltered', filter, val, @nix.Group);
         end
 
         % -----------------
@@ -72,18 +66,15 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % -----------------
 
         function r = data_array_count(obj)
-            fname = strcat(obj.alias, '::dataArrayCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'dataArrayCount');
         end
 
         function r = data_array(obj, id_or_name)
-            fname = strcat(obj.alias, '::openDataArray');
-            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.DataArray);
+            r = nix.Utils.open_entity(obj, 'openDataArray', id_or_name, @nix.DataArray);
         end
 
         function r = open_data_array_idx(obj, idx)
-            fname = strcat(obj.alias, '::openDataArrayIdx');
-            r = nix.Utils.open_entity(obj, fname, idx, @nix.DataArray);
+            r = nix.Utils.open_entity(obj, 'openDataArrayIdx', idx, @nix.DataArray);
         end
 
         function r = create_data_array(obj, name, nixtype, datatype, shape)
@@ -91,21 +82,21 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             %-- 1D data arrays created with this function.
             %-- e.g. size([1 2 3]) returns shape [1 3], which would not
             %-- be accepted when trying to add an alias range dimension.
-            if(shape(1) == 1)
+            if (shape(1) == 1)
                 shape(2:size(shape, 2));
             end
 
-            errorStruct.identifier = 'Block:unsupportedDataType';
-            if(~isa(datatype, 'nix.DataType'))
-                errorStruct.message = 'Please provide a valid nix.DataType';
-                error(errorStruct);
-            elseif(isequal(datatype, nix.DataType.String))
-                errorStruct.message = 'Writing Strings to DataArrays is not supported as of yet.';
-                error(errorStruct);
+            err.identifier = 'NIXMX:UnsupportedDataType';
+            if (~isa(datatype, 'nix.DataType'))
+                err.message = 'Please provide a valid nix.DataType';
+                error(err);
+            elseif (isequal(datatype, nix.DataType.String))
+                err.message = 'Writing char/string DataArrays is currently not supported.';
+                error(err);
             else
                 fname = strcat(obj.alias, '::createDataArray');
                 h = nix_mx(fname, obj.nix_handle, name, nixtype, lower(datatype.char), shape);
-                r = nix.DataArray(h);
+                r = nix.Utils.createEntity(h, @nix.DataArray);
             end
         end
 
@@ -115,21 +106,21 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
             %-- 1D data arrays created with this function.
             %-- e.g. size([1 2 3]) returns shape [1 3], which would not
             %-- be accepted when trying to add an alias range dimension.
-            if(shape(1) == 1)
+            if (shape(1) == 1)
                 shape = size(data, 2);
             end
 
-            errorStruct.identifier = 'Block:unsupportedDataType';
-            if(ischar(data))
-                errorStruct.message = 'Writing Strings to DataArrays is not supported as of yet.';
-                error(errorStruct);
-            elseif(islogical(data))
+            err.identifier = 'NIXMX:UnsupportedDataType';
+            if (ischar(data))
+                err.message = 'Writing char/string DataArrays is currently not supported.';
+                error(err);
+            elseif (islogical(data))
                 dtype = nix.DataType.Bool;
-            elseif(isnumeric(data))
+            elseif (isnumeric(data))
                 dtype = nix.DataType.Double;
             else
-                errorStruct.message = 'DataType of provided data is not supported.';
-                error(errorStruct);
+                err.message = 'DataType of provided data is not supported.';
+                error(err);
             end
 
             r = obj.create_data_array(name, nixtype, dtype, shape);
@@ -137,18 +128,15 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         end
 
         function r = has_data_array(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasDataArray');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasDataArray', id_or_name);
         end
 
         function r = delete_data_array(obj, del)
-            fname = strcat(obj.alias, '::deleteDataArray');
-            r = nix.Utils.delete_entity(obj, del, 'nix.DataArray', fname);
+            r = nix.Utils.delete_entity(obj, 'deleteDataArray', del, 'nix.DataArray');
         end
 
         function r = filter_data_arrays(obj, filter, val)
-            fname = strcat(obj.alias, '::dataArraysFiltered');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.DataArray);
+            r = nix.Utils.filter(obj, 'dataArraysFiltered', filter, val, @nix.DataArray);
         end
 
         % -----------------
@@ -156,38 +144,33 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % -----------------
 
         function r = source_count(obj)
-            fname = strcat(obj.alias, '::sourceCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'sourceCount');
         end
 
         function r = create_source(obj, name, type)
             fname = strcat(obj.alias, '::createSource');
-            r = nix.Source(nix_mx(fname, obj.nix_handle, name, type));
+            h = nix_mx(fname, obj.nix_handle, name, type);
+            r = nix.Utils.createEntity(h, @nix.Source);
         end
 
         function r = has_source(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasSource');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasSource', id_or_name);
         end
 
         function r = delete_source(obj, del)
-            fname = strcat(obj.alias, '::deleteSource');
-            r = nix.Utils.delete_entity(obj, del, 'nix.Source', fname);
+            r = nix.Utils.delete_entity(obj, 'deleteSource', del, 'nix.Source');
         end
 
         function r = open_source(obj, id_or_name)
-            fname = strcat(obj.alias, '::openSource');
-            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.Source);
+            r = nix.Utils.open_entity(obj, 'openSource', id_or_name, @nix.Source);
         end
 
         function r = open_source_idx(obj, idx)
-            fname = strcat(obj.alias, '::openSourceIdx');
-            r = nix.Utils.open_entity(obj, fname, idx, @nix.Source);
+            r = nix.Utils.open_entity(obj, 'openSourceIdx', idx, @nix.Source);
         end
 
         function r = filter_sources(obj, filter, val)
-            fname = strcat(obj.alias, '::sourcesFiltered');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.Source);
+            r = nix.Utils.filter(obj, 'sourcesFiltered', filter, val, @nix.Source);
         end
 
         % maxdepth is an index
@@ -197,8 +180,7 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
 
         % maxdepth is an index
         function r = find_filtered_sources(obj, max_depth, filter, val)
-            fname = strcat(obj.alias, '::findSources');
-            r = nix.Utils.find(obj, max_depth, filter, val, fname, @nix.Source);
+            r = nix.Utils.find(obj, 'findSources', max_depth, filter, val, @nix.Source);
         end
 
         % -----------------
@@ -206,39 +188,33 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % -----------------
 
         function r = tag_count(obj)
-            fname = strcat(obj.alias, '::tagCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'tagCount');
         end
 
         function r = has_tag(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasTag');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasTag', id_or_name);
         end
 
         function r = open_tag(obj, id_or_name)
-            fname = strcat(obj.alias, '::openTag');
-            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.Tag);
+            r = nix.Utils.open_entity(obj, 'openTag', id_or_name, @nix.Tag);
         end
 
         function r = open_tag_idx(obj, idx)
-            fname = strcat(obj.alias, '::openTagIdx');
-            r = nix.Utils.open_entity(obj, fname, idx, @nix.Tag);
+            r = nix.Utils.open_entity(obj, 'openTagIdx', idx, @nix.Tag);
         end
 
         function r = create_tag(obj, name, type, position)
             fname = strcat(obj.alias, '::createTag');
             h = nix_mx(fname, obj.nix_handle, name, type, position);
-            r = nix.Tag(h);
+            r = nix.Utils.createEntity(h, @nix.Tag);
         end
 
         function r = delete_tag(obj, del)
-            fname = strcat(obj.alias, '::deleteTag');
-            r = nix.Utils.delete_entity(obj, del, 'nix.Tag', fname);
+            r = nix.Utils.delete_entity(obj, 'deleteTag', del, 'nix.Tag');
         end
 
         function r = filter_tags(obj, filter, val)
-            fname = strcat(obj.alias, '::tagsFiltered');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.Tag);
+            r = nix.Utils.filter(obj, 'tagsFiltered', filter, val, @nix.Tag);
         end
 
         % -----------------
@@ -246,46 +222,35 @@ classdef Block < nix.NamedEntity & nix.MetadataMixIn
         % -----------------
 
         function r = multi_tag_count(obj)
-            fname = strcat(obj.alias, '::multiTagCount');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix.Utils.fetchEntityCount(obj, 'multiTagCount');
         end
 
         function r = has_multi_tag(obj, id_or_name)
-            fname = strcat(obj.alias, '::hasMultiTag');
-            r = nix_mx(fname, obj.nix_handle, id_or_name);
+            r = nix.Utils.fetchHasEntity(obj, 'hasMultiTag', id_or_name);
         end
 
         function r = open_multi_tag(obj, id_or_name)
-            fname = strcat(obj.alias, '::openMultiTag');
-            r = nix.Utils.open_entity(obj, fname, id_or_name, @nix.MultiTag);
+            r = nix.Utils.open_entity(obj, 'openMultiTag', id_or_name, @nix.MultiTag);
         end
 
         function r = open_multi_tag_idx(obj, idx)
-            fname = strcat(obj.alias, '::openMultiTagIdx');
-            r = nix.Utils.open_entity(obj, fname, idx, @nix.MultiTag);
+            r = nix.Utils.open_entity(obj, 'openMultiTagIdx', idx, @nix.MultiTag);
         end
 
         %-- Creating a multitag requires an already existing data array
         function r = create_multi_tag(obj, name, type, add_data_array)
-            if(strcmp(class(add_data_array), 'nix.DataArray'))
-                addID = add_data_array.id;
-            else
-                addID = add_data_array;
-            end
-
             fname = strcat(obj.alias, '::createMultiTag');
-            h = nix_mx(fname, obj.nix_handle, name, type, addID);
-            r = nix.MultiTag(h);
+            id = nix.Utils.parseEntityId(add_data_array, 'nix.DataArray');
+            h = nix_mx(fname, obj.nix_handle, name, type, id);
+            r = nix.Utils.createEntity(h, @nix.MultiTag);
         end
 
         function r = delete_multi_tag(obj, del)
-            fname = strcat(obj.alias, '::deleteMultiTag');
-            r = nix.Utils.delete_entity(obj, del, 'nix.MultiTag', fname);
+            r = nix.Utils.delete_entity(obj, 'deleteMultiTag', del, 'nix.MultiTag');
         end
 
         function r = filter_multi_tags(obj, filter, val)
-            fname = strcat(obj.alias, '::multiTagsFiltered');
-            r = nix.Utils.filter(obj, filter, val, fname, @nix.MultiTag);
+            r = nix.Utils.filter(obj, 'multiTagsFiltered', filter, val, @nix.MultiTag);
         end
     end
 
