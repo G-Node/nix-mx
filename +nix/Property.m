@@ -47,7 +47,7 @@
 % modification, are permitted under the terms of the BSD License. See
 % LICENSE file in the root of the Project.
 
-classdef Property < nix.NamedEntity
+classdef Property < nix.Entity
 
     properties (Hidden)
         alias = 'Property'  % namespace for Property nix backend function access.
@@ -59,9 +59,12 @@ classdef Property < nix.NamedEntity
 
     methods
         function obj = Property(h)
-            obj@nix.NamedEntity(h);
+            obj = obj@nix.Entity(h);
 
             % assign dynamic properties
+            nix.Dynamic.addProperty(obj, 'id', 'r');
+            nix.Dynamic.addProperty(obj, 'name', 'r');
+            nix.Dynamic.addProperty(obj, 'definition', 'rw');
             nix.Dynamic.addProperty(obj, 'unit', 'rw');
             nix.Dynamic.addProperty(obj, 'datatype', 'r');
         end
@@ -112,6 +115,26 @@ classdef Property < nix.NamedEntity
 
             fname = strcat(obj.alias, '::deleteValues');
             nix_mx(fname, obj.nixhandle);
+        end
+
+        function r = compare(obj, entity)
+            % Checks two NIX entities of the same class for equality.
+            %
+            % The name property is the first comparison. If they are the same, 
+            % the ids of the entities will be compared.
+            %
+            % Returns:  (double)  0 if both entities are equal.
+            %                     > or < 0 if the entities are different.
+            %
+            % Example:  check = currSource.compare(otherSource);
+
+            if (~isa(obj, class(entity)))
+                err.identifier = 'NIXMX:InvalidArgument';
+                err.message = 'Only entities of the same class can be compared.';
+                error(err);
+            end
+            fname = strcat(obj.alias, '::compare');
+            r = nix_mx(fname, obj.nixhandle, entity.nixhandle);
         end
     end
 
