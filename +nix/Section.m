@@ -21,7 +21,6 @@ classdef Section < nix.NamedEntity
 
             % assign dynamic properties
             nix.Dynamic.add_dyn_attr(obj, 'repository', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'mapping', 'rw');
 
             % assign relations
             nix.Dynamic.add_dyn_relation(obj, 'sections', @nix.Section);

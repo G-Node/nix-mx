@@ -159,24 +159,19 @@ function [] = test_attrs( varargin )
     assert(strcmp(s.name, 'foo'));
     assert(strcmp(s.type, 'bar'));
     assert(isempty(s.repository));
-    assert(isempty(s.mapping));
     assert(isempty(s.definition));
 
     s.type = 'nixBlock';
     s.definition = 'section definition';
     s.repository = 'rep1';
-    s.mapping = 'map1';
     assert(strcmp(s.type, 'nixBlock'));
     assert(strcmp(s.definition, 'section definition'));
     assert(strcmp(s.repository, 'rep1'));
-    assert(strcmp(s.mapping, 'map1'));
 
     s.definition = '';
     s.repository = '';
-    s.mapping = '';
     assert(isempty(s.definition));
     assert(isempty(s.repository));
-    assert(isempty(s.mapping));
 end
 
 function [] = test_properties( varargin )

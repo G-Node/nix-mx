@@ -31,25 +31,19 @@ function [] = test_attrs( varargin )
 
     assert(isempty(p.definition));
     assert(isempty(p.unit));
-    assert(isempty(s.mapping));
 
     p.definition = 'property definition';
     p.unit = 'ms';
-    p.mapping = 'property mapping';
     assert(strcmp(p.definition, 'property definition'));
     assert(strcmp(p.unit, 'ms'));
-    assert(strcmp(p.mapping, 'property mapping'));
 
     p.definition = 'next property definition';
     p.unit = 'mm';
-    p.mapping = 'next property mapping';
 
     p.definition = '';
     p.unit = '';
-    p.mapping = '';
     assert(isempty(p.definition));
     assert(isempty(p.unit));
-    assert(isempty(s.mapping));
 end
 
 %% Test: Access values
