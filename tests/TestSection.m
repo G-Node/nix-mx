@@ -106,9 +106,9 @@ function [] = test_open_section_idx( varargin )
     s2 = s.create_section('testSection2', 'nixSection');
     s3 = s.create_section('testSection3', 'nixSection');
 
-    assert(strcmp(f.sections{1}.open_section_idx(0).name, s1.name));
-    assert(strcmp(f.sections{1}.open_section_idx(1).name, s2.name));
-    assert(strcmp(f.sections{1}.open_section_idx(2).name, s3.name));
+    assert(strcmp(f.sections{1}.open_section_idx(1).name, s1.name));
+    assert(strcmp(f.sections{1}.open_section_idx(2).name, s2.name));
+    assert(strcmp(f.sections{1}.open_section_idx(3).name, s3.name));
 end
 
 function [] = test_parent( varargin )
@@ -292,9 +292,9 @@ function [] = test_open_property_idx( varargin )
     p2 = s.create_property('testProperty2', nix.DataType.Bool);
     p3 = s.create_property('testProperty3', nix.DataType.String);
 
-    assert(strcmp(f.sections{1}.open_property_idx(0).name, p1.name));
-    assert(strcmp(f.sections{1}.open_property_idx(1).name, p2.name));
-    assert(strcmp(f.sections{1}.open_property_idx(2).name, p3.name));
+    assert(strcmp(f.sections{1}.open_property_idx(1).name, p1.name));
+    assert(strcmp(f.sections{1}.open_property_idx(2).name, p2.name));
+    assert(strcmp(f.sections{1}.open_property_idx(3).name, p3.name));
 end
 
 %% Test: Property count
@@ -753,23 +753,23 @@ function [] = test_find_section
     end
 
     % find all
-    filtered = sl1.find_sections(4);
+    filtered = sl1.find_sections(5);
     assert(size(filtered, 1) == 10);
 
     % find until level 4
-    filtered = sl1.find_sections(3);
+    filtered = sl1.find_sections(4);
     assert(size(filtered, 1) == 10);
 
     % find until level 3
-    filtered = sl1.find_sections(2);
+    filtered = sl1.find_sections(3);
     assert(size(filtered, 1) == 6);
 
     % find until level 2
-    filtered = sl1.find_sections(1);
+    filtered = sl1.find_sections(2);
     assert(size(filtered, 1) == 3);
 
     % find until level 1
-    filtered = sl1.find_sections(0);
+    filtered = sl1.find_sections(1);
     assert(size(filtered, 1) == 1);
 end
 
@@ -797,32 +797,32 @@ function [] = test_find_section_filtered
     side1 = side.create_section(sideName, 'nixSection');
 
     % test find by id
-    filtered = sl1.find_filtered_sections(0, nix.Filter.id, sl41.id);
+    filtered = sl1.find_filtered_sections(1, nix.Filter.id, sl41.id);
     assert(isempty(filtered));
-    filtered = sl1.find_filtered_sections(3, nix.Filter.id, sl41.id);
+    filtered = sl1.find_filtered_sections(4, nix.Filter.id, sl41.id);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, sl41.id));
 
     % test find by ids
     filterids = {sl1.id, sl41.id};
-    filtered = sl1.find_filtered_sections(0, nix.Filter.ids, filterids);
+    filtered = sl1.find_filtered_sections(1, nix.Filter.ids, filterids);
     assert(size(filtered, 1) == 1);
-    filtered = sl1.find_filtered_sections(3, nix.Filter.ids, filterids);
+    filtered = sl1.find_filtered_sections(4, nix.Filter.ids, filterids);
     assert(size(filtered, 1) == 2);
 
     % test find by name
-    filtered = sl1.find_filtered_sections(4, nix.Filter.name, sideName);
+    filtered = sl1.find_filtered_sections(5, nix.Filter.name, sideName);
     assert(isempty(filtered));
-    filtered = sl1.find_filtered_sections(0, nix.Filter.name, sl41.name);
+    filtered = sl1.find_filtered_sections(1, nix.Filter.name, sl41.name);
     assert(isempty(filtered));
-    filtered = sl1.find_filtered_sections(3, nix.Filter.name, sl41.name);
+    filtered = sl1.find_filtered_sections(4, nix.Filter.name, sl41.name);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, sl41.name));
 
     % test find by type
-    filtered = sl1.find_filtered_sections(0, nix.Filter.type, findSection);
+    filtered = sl1.find_filtered_sections(1, nix.Filter.type, findSection);
     assert(isempty(filtered));
-    filtered = sl1.find_filtered_sections(3, nix.Filter.type, findSection);
+    filtered = sl1.find_filtered_sections(4, nix.Filter.type, findSection);
     assert(size(filtered, 1) == 3);
     assert(strcmp(filtered{1}.type, findSection));
 

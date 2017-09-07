@@ -70,7 +70,8 @@ classdef Section < nix.NamedEntity
             r = nix.Utils.open_entity(obj, 'openSection', id_or_name, @nix.Section);
         end
 
-        function r = open_section_idx(obj, idx)
+        function r = open_section_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openSectionIdx', idx, @nix.Section);
         end
 
@@ -94,12 +95,12 @@ classdef Section < nix.NamedEntity
             r = nix.Utils.filter(obj, 'findRelated', filter, val, @nix.Section);
         end
 
-        % maxdepth is an index
+        % maxdepth is handled like an index
         function r = find_sections(obj, max_depth)
             r = obj.find_filtered_sections(max_depth, nix.Filter.accept_all, '');
         end
 
-        % maxdepth is an index
+        % maxdepth is handled like an index
         function r = find_filtered_sections(obj, max_depth, filter, val)
             r = nix.Utils.find(obj, 'findSections', max_depth, filter, val, @nix.Section);
         end
@@ -144,7 +145,8 @@ classdef Section < nix.NamedEntity
             r = nix.Utils.open_entity(obj, 'openProperty', id_or_name, @nix.Property);
         end
 
-        function r = open_property_idx(obj, idx)
+        function r = open_property_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openPropertyIdx', idx, @nix.Property);
         end
 

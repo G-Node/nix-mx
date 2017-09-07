@@ -82,9 +82,9 @@ function [] = test_open_source_idx( varargin )
     s2 = s.create_source('testSource2', 'nixSource');
     s3 = s.create_source('testSource3', 'nixSource');
 
-    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(0).name, s1.name));
-    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(1).name, s2.name));
-    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(2).name, s3.name));
+    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(1).name, s1.name));
+    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(2).name, s2.name));
+    assert(strcmp(f.blocks{1}.sources{1}.open_source_idx(3).name, s3.name));
 end
 
 %% Test: Source count
@@ -400,23 +400,23 @@ function [] = test_find_source
     end
 
     % find all
-    filtered = s.find_sources(4);
+    filtered = s.find_sources(5);
     assert(size(filtered, 1) == 11);
 
     % find until level 3
-    filtered = s.find_sources(3);
+    filtered = s.find_sources(4);
     assert(size(filtered, 1) == 7);
 
     % find until level 2
-    filtered = s.find_sources(2);
+    filtered = s.find_sources(3);
     assert(size(filtered, 1) == 4);
 
     % find until level 1
-    filtered = s.find_sources(1);
+    filtered = s.find_sources(2);
     assert(size(filtered, 1) == 2);
 
     % find until level 0
-    filtered = s.find_sources(0);
+    filtered = s.find_sources(1);
     assert(size(filtered, 1) == 1);
 end
 
@@ -441,46 +441,46 @@ function [] = test_find_source_filtered
     sl44 = sl31.create_source('sourceLvl4_4', 'nixSource');
 
     % test find by id
-    filtered = s.find_filtered_sources(0, nix.Filter.id, sl41.id);
+    filtered = s.find_filtered_sources(1, nix.Filter.id, sl41.id);
     assert(isempty(filtered));
-    filtered = s.find_filtered_sources(4, nix.Filter.id, sl41.id);
+    filtered = s.find_filtered_sources(5, nix.Filter.id, sl41.id);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, sl41.id));
 
     % test find by ids
     filterids = {sl1.id, sl41.id};
-    filtered = s.find_filtered_sources(1, nix.Filter.ids, filterids);
+    filtered = s.find_filtered_sources(2, nix.Filter.ids, filterids);
     assert(size(filtered, 1) == 1);
-    filtered = s.find_filtered_sources(4, nix.Filter.ids, filterids);
+    filtered = s.find_filtered_sources(5, nix.Filter.ids, filterids);
     assert(size(filtered, 1) == 2);
 
     % test find by name
-    filtered = s.find_filtered_sources(0, nix.Filter.name, sl41.name);
+    filtered = s.find_filtered_sources(1, nix.Filter.name, sl41.name);
     assert(isempty(filtered));
-    filtered = s.find_filtered_sources(4, nix.Filter.name, sl41.name);
+    filtered = s.find_filtered_sources(5, nix.Filter.name, sl41.name);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, sl41.name));
 
     % test find by type
-    filtered = s.find_filtered_sources(0, nix.Filter.type, findSource);
+    filtered = s.find_filtered_sources(1, nix.Filter.type, findSource);
     assert(isempty(filtered));
-    filtered = s.find_filtered_sources(4, nix.Filter.type, findSource);
+    filtered = s.find_filtered_sources(5, nix.Filter.type, findSource);
     assert(size(filtered, 1) == 3);
     assert(strcmp(filtered{1}.type, findSource));
 
     % test nix.Filter.metadata
     sec = f.create_section('testSection', 'nixSection');
     sl43.set_metadata(sec);
-    filtered = s.find_filtered_sources(0, nix.Filter.metadata, sec.id);
+    filtered = s.find_filtered_sources(1, nix.Filter.metadata, sec.id);
     assert(isempty(filtered));
-    filtered = s.find_filtered_sources(4, nix.Filter.metadata, sec.id);
+    filtered = s.find_filtered_sources(5, nix.Filter.metadata, sec.id);
     assert(size(filtered, 1) == 1);
     strcmp(filtered{1}.id, sl43.id);
 
     % test nix.Filter.source
-    filtered = s.find_filtered_sources(0, nix.Filter.source, sl44.id);
+    filtered = s.find_filtered_sources(1, nix.Filter.source, sl44.id);
     assert(isempty(filtered));
-    filtered = s.find_filtered_sources(4, nix.Filter.source, sl44.id);
+    filtered = s.find_filtered_sources(5, nix.Filter.source, sl44.id);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, sl31.id));
 end

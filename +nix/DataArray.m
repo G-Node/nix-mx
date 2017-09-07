@@ -52,7 +52,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
                         dimensions{i} = nix.Utils.createEntity(currList(i).dimension, ...
                             @nix.RangeDimension);
                     otherwise
-                       disp('some dimension type is unknown! skip')
+                       disp('some dimension type is unknown! skip');
                 end
             end
         end

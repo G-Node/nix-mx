@@ -52,17 +52,21 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             r = nix.Utils.open_entity(obj, 'openReferences', id_or_name, @nix.DataArray);
         end
 
-        function r = open_reference_idx(obj, idx)
+        function r = open_reference_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openReferenceIdx', idx, @nix.DataArray);
         end
 
-        function r = retrieve_data(obj, pos_idx, id_or_name)
+        function r = retrieve_data(obj, position_idx, id_or_name)
+            pos_idx = nix.Utils.handle_index(position_idx);
             fname = strcat(obj.alias, '::retrieveData');
             data = nix_mx(fname, obj.nix_handle, pos_idx, id_or_name);
             r = nix.Utils.transpose_array(data);
         end
 
-        function r = retrieve_data_idx(obj, pos_idx, ref_idx)
+        function r = retrieve_data_idx(obj, position_idx, reference_idx)
+            pos_idx = nix.Utils.handle_index(position_idx);
+            ref_idx = nix.Utils.handle_index(reference_idx);
             fname = strcat(obj.alias, '::retrieveDataIdx');
             data = nix_mx(fname, obj.nix_handle, pos_idx, ref_idx);
             r = nix.Utils.transpose_array(data);
@@ -99,17 +103,21 @@ classdef MultiTag < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             r = nix.Utils.open_entity(obj, 'openFeature', id_or_name, @nix.Feature);
         end
 
-        function r = open_feature_idx(obj, idx)
+        function r = open_feature_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openFeatureIdx', idx, @nix.Feature);
         end
 
-        function r = retrieve_feature_data(obj, pos_idx, id_or_name)
+        function r = retrieve_feature_data(obj, position_idx, id_or_name)
+            pos_idx = nix.Utils.handle_index(position_idx);
             fname = strcat(obj.alias, '::featureRetrieveData');
             data = nix_mx(fname, obj.nix_handle, pos_idx, id_or_name);
             r = nix.Utils.transpose_array(data);
         end
 
-        function r = retrieve_feature_data_idx(obj, pos_idx, feat_idx)
+        function r = retrieve_feature_data_idx(obj, position_idx, feature_idx)
+            pos_idx = nix.Utils.handle_index(position_idx);
+            feat_idx = nix.Utils.handle_index(feature_idx);
             fname = strcat(obj.alias, '::featureRetrieveDataIdx');
             data = nix_mx(fname, obj.nix_handle, pos_idx, feat_idx);
             r = nix.Utils.transpose_array(data);

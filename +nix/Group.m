@@ -42,7 +42,8 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             r = nix.Utils.open_entity(obj, 'getDataArray', id_or_name, @nix.DataArray);
         end
 
-        function r = open_data_array_idx(obj, idx)
+        function r = open_data_array_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openDataArrayIdx', idx, @nix.DataArray);
         end
 
@@ -82,7 +83,8 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             r = nix.Utils.open_entity(obj, 'getTag', id_or_name, @nix.Tag);
         end
 
-        function r = open_tag_idx(obj, idx)
+        function r = open_tag_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openTagIdx', idx, @nix.Tag);
         end
 
@@ -118,7 +120,8 @@ classdef Group < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             r = nix.Utils.open_entity(obj, 'getMultiTag', id_or_name, @nix.MultiTag);
         end
 
-        function r = open_multi_tag_idx(obj, idx)
+        function r = open_multi_tag_idx(obj, index)
+            idx = nix.Utils.handle_index(index);
             r = nix.Utils.open_entity(obj, 'openMultiTagIdx', idx, @nix.MultiTag);
         end
 
