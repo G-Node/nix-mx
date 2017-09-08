@@ -20,24 +20,24 @@ disp([10 'starting tests']);
 %--     id: 7b59c0b9-b200-4b53-951d-6851dbd1cdc8
 %--     name: joe097
 
-all_tests = {};
-all_tests{end+1} = struct('name', 'FILE', 'tests', {TestFile()});
-all_tests{end+1} = struct('name', 'BLOCK', 'tests', {TestBlock()});
-all_tests{end+1} = struct('name', 'GROUP', 'tests', {TestGroup()});
-all_tests{end+1} = struct('name', 'SOURCE', 'tests', {TestSource()});
-all_tests{end+1} = struct('name', 'DATAARRAY', 'tests', {TestDataArray()});
-all_tests{end+1} = struct('name', 'TAG', 'tests', {TestTag()});
-all_tests{end+1} = struct('name', 'MULTITAG', 'tests', {TestMultiTag()});
-all_tests{end+1} = struct('name', 'SECTION', 'tests', {TestSection()});
-all_tests{end+1} = struct('name', 'FEATURE', 'tests', {TestFeature()});
-all_tests{end+1} = struct('name', 'PROPERTY', 'tests', {TestProperty()});
-all_tests{end+1} = struct('name', 'DIMENSIONS', 'tests', {TestDimensions()});
+all = {};
+all{end+1} = struct('name', 'FILE', 'tests', {TestFile()});
+all{end+1} = struct('name', 'BLOCK', 'tests', {TestBlock()});
+all{end+1} = struct('name', 'GROUP', 'tests', {TestGroup()});
+all{end+1} = struct('name', 'SOURCE', 'tests', {TestSource()});
+all{end+1} = struct('name', 'DATAARRAY', 'tests', {TestDataArray()});
+all{end+1} = struct('name', 'TAG', 'tests', {TestTag()});
+all{end+1} = struct('name', 'MULTITAG', 'tests', {TestMultiTag()});
+all{end+1} = struct('name', 'SECTION', 'tests', {TestSection()});
+all{end+1} = struct('name', 'FEATURE', 'tests', {TestFeature()});
+all{end+1} = struct('name', 'PROPERTY', 'tests', {TestProperty()});
+all{end+1} = struct('name', 'DIMENSIONS', 'tests', {TestDimensions()});
 
-for i = 1:length(all_tests)
-    fprintf([10 'Execute ' all_tests{i}.name ' tests:\n\n']);
+for i = 1:length(all)
+    fprintf([10 'Execute ' all{i}.name ' tests:\n\n']);
     
-    for j = 1:length(all_tests{i}.tests)
-        stats = wrapper(all_tests{i}.tests{j}, stats);
+    for j = 1:length(all{i}.tests)
+        stats = wrapper(all{i}.tests{j}, stats);
     end
 end;
 

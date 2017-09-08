@@ -24,13 +24,13 @@ classdef Property < nix.NamedEntity
             obj@nix.NamedEntity(h);
 
             % assign dynamic properties
-            nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'datatype', 'r');
+            nix.Dynamic.addProperty(obj, 'unit', 'rw');
+            nix.Dynamic.addProperty(obj, 'datatype', 'r');
         end
 
         function r = get.values(obj)
             fname = strcat(obj.alias, '::values');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix_mx(fname, obj.nixhandle);
         end
 
         function [] = set.values(obj, val)
@@ -54,16 +54,16 @@ classdef Property < nix.NamedEntity
             end
 
             fname = strcat(obj.alias, '::updateValues');
-            nix_mx(fname, obj.nix_handle, values);
+            nix_mx(fname, obj.nixhandle, values);
         end
 
-        function r = value_count(obj)
+        function r = valueCount(obj)
             r = nix.Utils.fetchEntityCount(obj, 'valueCount');
         end
 
-        function [] = values_delete(obj)
+        function [] = deleteValues(obj)
             fname = strcat(obj.alias, '::deleteValues');
-            nix_mx(fname, obj.nix_handle);
+            nix_mx(fname, obj.nixhandle);
         end
     end
 

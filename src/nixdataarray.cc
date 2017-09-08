@@ -151,7 +151,7 @@ namespace nixdataarray {
 
         nix::Dimension d = currObj.getDimension(idx);
 
-        struct_builder sb({ 1 }, { "dimension_type", "handle" });
+        struct_builder sb({ 1 }, { "dimensionType", "handle" });
 
         switch (d.dimensionType()) {
         case nix::DimensionType::Set:

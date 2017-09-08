@@ -24,8 +24,8 @@ for i = 1:length(f.blocks)
     b = f.blocks{i};
     
     % fetch trial indexes of a certain type = 'nix.trial'
-    trial_idx = cellfun(@(x) strcmp(x.type, 'nix.trial'), b.tags);
-    disp([10 b.name ': ' num2str(length(nonzeros(trial_idx))) ' trials']);
+    trialIdx = cellfun(@(x) strcmp(x.type, 'nix.trial'), b.tags);
+    disp([10 b.name ': ' num2str(length(nonzeros(trialIdx))) ' trials']);
     
     % display source names
     for j = 1:length(b.sources)
@@ -53,7 +53,7 @@ selection2 = b.dataArrays(idx);
 
 % get actual data
 d1 = selection2{1};
-dataset = d1.read_all();
+dataset = d1.readAllData();
 
 % understand dimensions
 dim1 = d1.dimensions{1};
@@ -79,5 +79,5 @@ cellfun(@(x) disp(x), sec.properties);
 value = sec.properties{1}.values{1};
 
 % or by name
-value = sec.open_property('Name').values{1}.value;
+value = sec.openProperty('Name').values{1}.value;
 

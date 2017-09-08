@@ -7,22 +7,20 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestDimensions
-%TestDimensions tests for Dimensions
-%   Detailed explanation goes here
+% TestDimensions tests for Dimensions
 
     funcs = {};
-    funcs{end+1} = @test_set_dimension;
-    funcs{end+1} = @test_sample_dimension;
-    funcs{end+1} = @test_range_dimension;
+    funcs{end+1} = @testSetDimension;
+    funcs{end+1} = @testSampleDimension;
+    funcs{end+1} = @testRangeDimension;
 end
 
-function [] = test_set_dimension( varargin )
+function [] = testSetDimension( varargin )
 %% Test: set dimension
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('daTestBlock', 'test nixBlock');
-    da = b.create_data_array(...
-        'daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
-    d1 = da.append_set_dimension();
+    b = f.createBlock('daTestBlock', 'test nixBlock');
+    da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
+    d1 = da.appendSetDimension();
 
     assert(strcmp(d1.dimensionType, 'set'));
     assert(isempty(d1.labels));
@@ -51,13 +49,12 @@ function [] = test_set_dimension( varargin )
     end;
 end
 
-function [] = test_sample_dimension( varargin )
+function [] = testSampleDimension( varargin )
 %% Test: sampled dimension
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('daTestBlock', 'test nixBlock');
-    da = b.create_data_array(...
-        'daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
-    d1 = da.append_sampled_dimension(200);
+    b = f.createBlock('daTestBlock', 'test nixBlock');
+    da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
+    d1 = da.appendSampledDimension(200);
 
     assert(strcmp(d1.dimensionType, 'sample'));
     assert(isempty(d1.label));
@@ -85,8 +82,8 @@ function [] = test_sample_dimension( varargin )
     assert(length(axis) == 10);
     assert(axis(end) == (length(axis) - 1) * d1.samplingInterval + d1.offset);
     
-    assert(d1.position_at(1) == d1.offset);
-    assert(d1.position_at(10) == d1.offset + 9 * d1.samplingInterval);
+    assert(d1.positionAt(1) == d1.offset);
+    assert(d1.positionAt(10) == d1.offset + 9 * d1.samplingInterval);
 
     d1.label = '';
     d1.unit = '';
@@ -101,18 +98,17 @@ function [] = test_sample_dimension( varargin )
     assert(axis(1) == 0);
     assert(axis(end) == (length(axis) - 1) * d1.samplingInterval + d1.offset);
     
-    assert(d1.position_at(1) == d1.offset);
-    assert(d1.position_at(10) == d1.offset + 9 * d1.samplingInterval);
+    assert(d1.positionAt(1) == d1.offset);
+    assert(d1.positionAt(10) == d1.offset + 9 * d1.samplingInterval);
 end
 
-function [] = test_range_dimension( varargin )
+function [] = testRangeDimension( varargin )
 %% Test: range dimension
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('daTestBlock', 'test nixBlock');
-    da = b.create_data_array(...
-        'daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
+    b = f.createBlock('daTestBlock', 'test nixBlock');
+    da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
     ticks = [1 2 3 4];
-    d1 = da.append_range_dimension(ticks);
+    d1 = da.appendRangeDimension(ticks);
 
     assert(strcmp(d1.dimensionType, 'range'));
     assert(isempty(d1.label));
@@ -124,17 +120,17 @@ function [] = test_range_dimension( varargin )
     assert(length(axis) == 3);
     assert(axis(end) == ticks(length(axis)));
 
-    assert(d1.tick_at(1) == ticks(1));
-    assert(d1.tick_at(3) == ticks(3));
+    assert(d1.tickAt(1) == ticks(1));
+    assert(d1.tickAt(3) == ticks(3));
 
-    new_ticks = [5 6 7 8];
+    newTicks = [5 6 7 8];
     d1.label = 'foo';
     d1.unit = 'mV';
-    d1.ticks = new_ticks;
+    d1.ticks = newTicks;
     
     assert(strcmp(d1.label, 'foo'));
     assert(strcmp(d1.unit, 'mV'));
-    assert(isequal(d1.ticks, new_ticks));
+    assert(isequal(d1.ticks, newTicks));
     
     d1.label = '';
     d1.unit = '';

@@ -15,10 +15,10 @@ classdef NamedEntity < nix.Entity
             obj = obj@nix.Entity(h);
 
             % assign dynamic properties
-            nix.Dynamic.add_dyn_attr(obj, 'id', 'r');
-            nix.Dynamic.add_dyn_attr(obj, 'name', 'r');
-            nix.Dynamic.add_dyn_attr(obj, 'type', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'definition', 'rw');
+            nix.Dynamic.addProperty(obj, 'id', 'r');
+            nix.Dynamic.addProperty(obj, 'name', 'r');
+            nix.Dynamic.addProperty(obj, 'type', 'rw');
+            nix.Dynamic.addProperty(obj, 'definition', 'rw');
         end
 
         function r = compare(obj, entity)
@@ -30,7 +30,7 @@ classdef NamedEntity < nix.Entity
                 error(err);
             end
             fname = strcat(obj.alias, '::compare');
-            r = nix_mx(fname, obj.nix_handle, entity.nix_handle);
+            r = nix_mx(fname, obj.nixhandle, entity.nixhandle);
         end
     end
 

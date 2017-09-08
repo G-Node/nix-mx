@@ -19,22 +19,22 @@ classdef RangeDimension < nix.Entity
             obj@nix.Entity(h);
 
             % assign dynamic properties
-            nix.Dynamic.add_dyn_attr(obj, 'dimensionType', 'r');
-            nix.Dynamic.add_dyn_attr(obj, 'isAlias', 'r');
-            nix.Dynamic.add_dyn_attr(obj, 'label', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'ticks', 'rw');
+            nix.Dynamic.addProperty(obj, 'dimensionType', 'r');
+            nix.Dynamic.addProperty(obj, 'isAlias', 'r');
+            nix.Dynamic.addProperty(obj, 'label', 'rw');
+            nix.Dynamic.addProperty(obj, 'unit', 'rw');
+            nix.Dynamic.addProperty(obj, 'ticks', 'rw');
         end
 
-        function r = tick_at(obj, index)
-            index = nix.Utils.handle_index(index);
+        function r = tickAt(obj, index)
+            index = nix.Utils.handleIndex(index);
             fname = strcat(obj.alias, '::tickAt');
-            r = nix_mx(fname, obj.nix_handle, index);
+            r = nix_mx(fname, obj.nixhandle, index);
         end
 
-        function r = index_of(obj, position)
+        function r = indexOf(obj, position)
             fname = strcat(obj.alias, '::indexOf');
-            r = nix_mx(fname, obj.nix_handle, position);
+            r = nix_mx(fname, obj.nixhandle, position);
         end
 
         function r = axis(obj, count, startIndex)
@@ -42,10 +42,10 @@ classdef RangeDimension < nix.Entity
                 startIndex = 1;
             end
 
-            startIndex = nix.Utils.handle_index(startIndex);
+            startIndex = nix.Utils.handleIndex(startIndex);
 
             fname = strcat(obj.alias, '::axis');
-            r = nix_mx(fname, obj.nix_handle, count, startIndex);
+            r = nix_mx(fname, obj.nixhandle, count, startIndex);
         end
     end
 

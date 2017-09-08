@@ -7,62 +7,61 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestBlock
-%TESTFILE Tests for the nix.Block object
-%   Detailed explanation goes here
+% TESTBLOCK Tests for the nix.Block object
 
     funcs = {};
-    funcs{end+1} = @test_attrs;
-    funcs{end+1} = @test_create_data_array;
-    funcs{end+1} = @test_create_data_array_from_data;
-    funcs{end+1} = @test_delete_data_array;
-    funcs{end+1} = @test_create_tag;
-    funcs{end+1} = @test_delete_tag;
-    funcs{end+1} = @test_create_multi_tag;
-    funcs{end+1} = @test_delete_multi_tag;
-    funcs{end+1} = @test_create_source;
-    funcs{end+1} = @test_delete_source;
-    funcs{end+1} = @test_list_arrays;
-    funcs{end+1} = @test_list_sources;
-    funcs{end+1} = @test_list_tags;
-    funcs{end+1} = @test_list_multitags;
-    funcs{end+1} = @test_open_array;
-    funcs{end+1} = @test_open_tag;
-    funcs{end+1} = @test_open_multitag;
-    funcs{end+1} = @test_open_source;
-    funcs{end+1} = @test_open_group_idx;
-    funcs{end+1} = @test_open_data_array_idx;
-    funcs{end+1} = @test_open_tag_idx;
-    funcs{end+1} = @test_open_multi_tag_idx;
-    funcs{end+1} = @test_open_source_idx;
-    funcs{end+1} = @test_has_data_array;
-    funcs{end+1} = @test_has_source;
-    funcs{end+1} = @test_has_multitag;
-    funcs{end+1} = @test_has_tag;
-    funcs{end+1} = @test_set_metadata;
-    funcs{end+1} = @test_open_metadata;
-    funcs{end+1} = @test_create_group;
-    funcs{end+1} = @test_has_group;
-    funcs{end+1} = @test_get_group;
-    funcs{end+1} = @test_delete_group;
-    funcs{end+1} = @test_group_count;
-    funcs{end+1} = @test_data_array_count;
-    funcs{end+1} = @test_tag_count;
-    funcs{end+1} = @test_multi_tag_count;
-    funcs{end+1} = @test_source_count;
-    funcs{end+1} = @test_compare;
-    funcs{end+1} = @test_filter_source;
-    funcs{end+1} = @test_filter_group;
-    funcs{end+1} = @test_filter_tag;
-    funcs{end+1} = @test_filter_multi_tag;
-    funcs{end+1} = @test_filter_data_array;
-    funcs{end+1} = @test_find_source;
-    funcs{end+1} = @test_find_source_filtered;
+    funcs{end+1} = @testAttributes;
+    funcs{end+1} = @testCreateDataArray;
+    funcs{end+1} = @testCreateDataArrayFromData;
+    funcs{end+1} = @testDeleteDataArray;
+    funcs{end+1} = @testCreateTag;
+    funcs{end+1} = @testDeleteTag;
+    funcs{end+1} = @testCreateMultiTag;
+    funcs{end+1} = @testDeleteMultiTag;
+    funcs{end+1} = @testCreateSource;
+    funcs{end+1} = @testDeleteSource;
+    funcs{end+1} = @testListArrays;
+    funcs{end+1} = @testListSources;
+    funcs{end+1} = @testListTags;
+    funcs{end+1} = @testListMultiTags;
+    funcs{end+1} = @testOpenDataArray;
+    funcs{end+1} = @testOpenTag;
+    funcs{end+1} = @testOpenMultiTag;
+    funcs{end+1} = @testOpenSource;
+    funcs{end+1} = @testOpenGroupIdx;
+    funcs{end+1} = @testOpenDataArrayIdx;
+    funcs{end+1} = @testOpenTagIdx;
+    funcs{end+1} = @testOpenMultiTagIdx;
+    funcs{end+1} = @testOpenSourceIdx;
+    funcs{end+1} = @testHasDataArray;
+    funcs{end+1} = @testHasSource;
+    funcs{end+1} = @testHasMultiTag;
+    funcs{end+1} = @testHasTag;
+    funcs{end+1} = @testSetMetadata;
+    funcs{end+1} = @testOpenMetadata;
+    funcs{end+1} = @testCreateGroup;
+    funcs{end+1} = @testHasGroup;
+    funcs{end+1} = @testOpenGroup;
+    funcs{end+1} = @testDeleteGroup;
+    funcs{end+1} = @testGroupCount;
+    funcs{end+1} = @testDataArrayCount;
+    funcs{end+1} = @testTagCount;
+    funcs{end+1} = @testMultiTagCount;
+    funcs{end+1} = @testSourceCount;
+    funcs{end+1} = @testCompare;
+    funcs{end+1} = @testFilterSource;
+    funcs{end+1} = @testFilterGroup;
+    funcs{end+1} = @testFilterTag;
+    funcs{end+1} = @testFilterMultiTag;
+    funcs{end+1} = @testFilterDataArray;
+    funcs{end+1} = @testFindSource;
+    funcs{end+1} = @testFindSourceFiltered;
 end
 
-function [] = test_attrs( varargin )
+function [] = testAttributes( varargin )
 %% Test: Access Attributes
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('tagtest', 'test nixBlock');
+    b = f.createBlock('tagtest', 'test nixBlock');
 
     assert(~isempty(b.id));
     assert(strcmp(b.name, 'tagtest'));
@@ -80,43 +79,43 @@ function [] = test_attrs( varargin )
 end
 
 %% Test: Create Data Array
-function [] = test_create_data_array( varargin )
+function [] = testCreateDataArray( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('arraytest', 'nixblock');
+    b = f.createBlock('arraytest', 'nixblock');
     
     assert(isempty(b.dataArrays));
     
     dtype = 'nix.DataArray';
     doubleName = 'doubleDataArray';
-    da = b.create_data_array(doubleName, dtype, nix.DataType.Double, [2 3]);
+    da = b.createDataArray(doubleName, dtype, nix.DataType.Double, [2 3]);
     assert(strcmp(da.name, doubleName));
     assert(strcmp(da.type, dtype));
-    tmp = da.read_all();
+    tmp = da.readAllData();
     assert(all(tmp(:) == 0));
 
     try
-        b.create_data_array('stringDataArray', dtype, nix.DataType.String, [1 5]);
+        b.createDataArray('stringDataArray', dtype, nix.DataType.String, [1 5]);
     catch ME
         assert(strcmp(ME.identifier, 'NIXMX:UnsupportedDataType'));
     end;
     
     try
-        b.create_data_array('I will crash and burn', dtype, 'Thou shalt not work!', [1 5]);
+        b.createDataArray('I will crash and burn', dtype, 'Thou shalt not work!', [1 5]);
     catch ME
         assert(strcmp(ME.identifier, 'NIXMX:UnsupportedDataType'));
     end;
 
-    da = b.create_data_array('floatDataArray', dtype, nix.DataType.Float, [3 3]);
-    da = b.create_data_array('Int8DataArray', dtype, nix.DataType.Int8, [3 3]);
-    da = b.create_data_array('Int16DataArray', dtype, nix.DataType.Int16, [3 3]);
-    da = b.create_data_array('Int32DataArray', dtype, nix.DataType.Int32, [3 3]);
-    da = b.create_data_array('Int64DataArray', dtype, nix.DataType.Int64, [3 3]);
-    da = b.create_data_array('UInt8DataArray', dtype, nix.DataType.UInt8, [3 3]);
-    da = b.create_data_array('UInt16DataArray', dtype, nix.DataType.UInt16, [3 3]);
-    da = b.create_data_array('UInt32DataArray', dtype, nix.DataType.UInt32, [3 3]);
-    da = b.create_data_array('UInt64DataArray', dtype, nix.DataType.UInt64, [3 3]);
-    da = b.create_data_array('logicalArray', dtype, nix.DataType.Bool, [3 3]);
+    da = b.createDataArray('floatDataArray', dtype, nix.DataType.Float, [3 3]);
+    da = b.createDataArray('Int8DataArray', dtype, nix.DataType.Int8, [3 3]);
+    da = b.createDataArray('Int16DataArray', dtype, nix.DataType.Int16, [3 3]);
+    da = b.createDataArray('Int32DataArray', dtype, nix.DataType.Int32, [3 3]);
+    da = b.createDataArray('Int64DataArray', dtype, nix.DataType.Int64, [3 3]);
+    da = b.createDataArray('UInt8DataArray', dtype, nix.DataType.UInt8, [3 3]);
+    da = b.createDataArray('UInt16DataArray', dtype, nix.DataType.UInt16, [3 3]);
+    da = b.createDataArray('UInt32DataArray', dtype, nix.DataType.UInt32, [3 3]);
+    da = b.createDataArray('UInt64DataArray', dtype, nix.DataType.UInt64, [3 3]);
+    da = b.createDataArray('logicalArray', dtype, nix.DataType.Bool, [3 3]);
     
     clear da b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
@@ -124,40 +123,40 @@ function [] = test_create_data_array( varargin )
 end
 
 %% Test: Create Data Array from data
-function [] = test_create_data_array_from_data( varargin )
+function [] = testCreateDataArrayFromData( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     daType = 'nix.DataArray';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('arraytest', 'nixblock');
+    b = f.createBlock('arraytest', 'nixblock');
     
     assert(isempty(b.dataArrays));
     
     numName = 'numDataArray';
     numData = [1, 2, 3; 4, 5, 6];
-    da = b.create_data_array_from_data(numName, daType, numData);
+    da = b.createDataArrayFromData(numName, daType, numData);
     assert(strcmp(da.name, numName));
     assert(strcmp(da.type, daType));
     
-    tmp = da.read_all();
+    tmp = da.readAllData();
     assert(strcmp(class(tmp), class(numData)));
     assert(isequal(size(tmp), size(numData)));
     assert(isequal(tmp, numData));
     
     logName = 'logicalDataArray';
     logData = logical([1 0 1; 0 1 0; 1 0 1]);
-    da = b.create_data_array_from_data(logName, daType, logData);
-    assert(islogical(da.read_all));
-    assert(isequal(size(da.read_all), size(logData)));
-    assert(isequal(da.read_all, logData));
+    da = b.createDataArrayFromData(logName, daType, logData);
+    assert(islogical(da.readAllData));
+    assert(isequal(size(da.readAllData), size(logData)));
+    assert(isequal(da.readAllData, logData));
     
     try
-        b.create_data_array_from_data('stringDataArray', daType, ['a' 'b']);
+        b.createDataArrayFromData('stringDataArray', daType, ['a' 'b']);
     catch ME
         assert(strcmp(ME.identifier, 'NIXMX:UnsupportedDataType'));
     end;
     
     try
-        b.create_data_array_from_data('I will crash and burn', daType, {1 2 3});
+        b.createDataArrayFromData('I will crash and burn', daType, {1 2 3});
     catch ME
         assert(strcmp(ME.identifier, 'NIXMX:UnsupportedDataType'));
     end;
@@ -166,29 +165,29 @@ function [] = test_create_data_array_from_data( varargin )
 end
 
 %% Test: delete dataArray by entity and id
-function [] = test_delete_data_array( varargin )
+function [] = testDeleteDataArray( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('arraytest', 'nixBlock');
-    tmp = b.create_data_array('dataArrayTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    tmp = b.create_data_array('dataArrayTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
+    b = f.createBlock('arraytest', 'nixBlock');
+    tmp = b.createDataArray('dataArrayTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.createDataArray('dataArrayTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
     
     assert(size(b.dataArrays, 1) == 2);
-    assert(b.delete_data_array(b.dataArrays{2}.id));
+    assert(b.deleteDataArray(b.dataArrays{2}.id));
     assert(size(b.dataArrays, 1) == 1);
-    assert(b.delete_data_array(b.dataArrays{1}));
+    assert(b.deleteDataArray(b.dataArrays{1}));
     assert(isempty(b.dataArrays));
-    assert(~b.delete_data_array('I do not exist'));
+    assert(~b.deleteDataArray('I do not exist'));
 end
 
-function [] = test_create_tag( varargin )
+function [] = testCreateTag( varargin )
 %% Test: Create Tag
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('tagtest', 'nixblock');
+    b = f.createBlock('tagtest', 'nixblock');
     
     assert(isempty(b.tags));
 
     position = [1.0 1.2 1.3 15.9];
-    t1 = b.create_tag('foo', 'bar', position);
+    t1 = b.createTag('foo', 'bar', position);
     assert(strcmp(t1.name, 'foo'));
     assert(strcmp(t1.type, 'bar'));
     assert(isequal(t1.position, position));
@@ -197,96 +196,96 @@ function [] = test_create_tag( varargin )
 end
 
 %% Test: delete tag by entity and id
-function [] = test_delete_tag( varargin )
+function [] = testDeleteTag( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('tagtest', 'nixBlock');
+    b = f.createBlock('tagtest', 'nixBlock');
     position = [1.0 1.2 1.3 15.9];
-    tmp = b.create_tag('tagtest1', 'nixTag', position);
-    tmp = b.create_tag('tagtest2', 'nixTag', position);
+    tmp = b.createTag('tagtest1', 'nixTag', position);
+    tmp = b.createTag('tagtest2', 'nixTag', position);
     
     assert(size(b.tags, 1) == 2);
-    assert(b.delete_tag(b.tags{2}.id));
+    assert(b.deleteTag(b.tags{2}.id));
     assert(size(b.tags, 1) == 1);
-    assert(b.delete_tag(b.tags{1}));
+    assert(b.deleteTag(b.tags{1}));
     assert(isempty(b.tags));
 
-    assert(~b.delete_tag('I do not exist'));
+    assert(~b.deleteTag('I do not exist'));
 end
 
-function [] = test_create_multi_tag( varargin )
-%% Test: Create multitag by data_array entity and data_array id
+function [] = testCreateMultiTag( varargin )
+%% Test: Create multitag by DataArray entity and DataArray id
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('mTagTestBlock', 'nixBlock');
-    tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    tmp = b.create_data_array('mTagTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
+    b = f.createBlock('mTagTestBlock', 'nixBlock');
+    tmp = b.createDataArray('mTagTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.createDataArray('mTagTestDataArray2', 'nixDataArray', nix.DataType.Double, [3 4]);
     assert(isempty(b.multiTags));
 
-    %-- create by data_array entity
-    tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag1', b.dataArrays{1});
+    %-- create by DataArray entity
+    tmp = b.createMultiTag('mTagTest1', 'nixMultiTag1', b.dataArrays{1});
     assert(~isempty(b.multiTags));
     assert(strcmp(b.multiTags{1}.name, 'mTagTest1'));
 
-    %-- create by data_array id
-    tmp = b.create_multi_tag('mTagTest2', 'nixMultiTag2', b.dataArrays{2}.id);
+    %-- create by DataArray id
+    tmp = b.createMultiTag('mTagTest2', 'nixMultiTag2', b.dataArrays{2}.id);
     assert(size(b.multiTags, 1) == 2);
     assert(strcmp(b.multiTags{2}.type, 'nixMultiTag2'));
 end
 
 %% Test: delete multitag by entity and id
-function [] = test_delete_multi_tag( varargin )
+function [] = testDeleteMultiTag( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('mTagTestBlock', 'nixBlock');
-    tmp = b.create_data_array('mTagTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag1', b.dataArrays{1});
-    tmp = b.create_multi_tag('mTagTest2', 'nixMultiTag2', b.dataArrays{1});
+    b = f.createBlock('mTagTestBlock', 'nixBlock');
+    tmp = b.createDataArray('mTagTestDataArray1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.createMultiTag('mTagTest1', 'nixMultiTag1', b.dataArrays{1});
+    tmp = b.createMultiTag('mTagTest2', 'nixMultiTag2', b.dataArrays{1});
 
     assert(size(b.multiTags, 1) == 2);
-    assert(b.delete_multi_tag(b.multiTags{2}.id));
+    assert(b.deleteMultiTag(b.multiTags{2}.id));
     assert(size(b.multiTags, 1) == 1);
-    assert(b.delete_multi_tag(b.multiTags{1}));
+    assert(b.deleteMultiTag(b.multiTags{1}));
     assert(isempty(b.multiTags));
     assert(size(b.dataArrays, 1) == 1);
 
-    assert(~b.delete_multi_tag('I do not exist'));
+    assert(~b.deleteMultiTag('I do not exist'));
 end
 
 %% Test: create source
-function [] = test_create_source ( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.create_block('sourcetest', 'nixblock');
-    assert(isempty(getBlock.sources));
+function [] = testCreateSource ( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('sourcetest', 'nixblock');
+    assert(isempty(b.sources));
 
-    createSource = getBlock.create_source('sourcetest','nixsource');
-    assert(~isempty(getBlock.sources));
-    assert(strcmp(createSource.name, 'sourcetest'));
-    assert(strcmp(createSource.type, 'nixsource'));
+    s = b.createSource('sourcetest','nixsource');
+    assert(~isempty(b.sources));
+    assert(strcmp(s.name, 'sourcetest'));
+    assert(strcmp(s.type, 'nixsource'));
 end
 
 %% Test: delete source by entity and id
-function [] = test_delete_source( varargin )
-    test_file = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    getBlock = test_file.create_block('sourcetest', 'nixblock');
-    tmp = getBlock.create_source('sourcetest1','nixsource');
-    tmp = getBlock.create_source('sourcetest2','nixsource');
-    tmp = getBlock.create_source('sourcetest3','nixsource');
+function [] = testDeleteSource( varargin )
+    f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
+    b = f.createBlock('sourcetest', 'nixblock');
+    tmp = b.createSource('sourcetest1','nixsource');
+    tmp = b.createSource('sourcetest2','nixsource');
+    tmp = b.createSource('sourcetest3','nixsource');
 
-    assert(getBlock.delete_source('sourcetest1'));
-    assert(getBlock.delete_source(getBlock.sources{1}.id));
-    assert(getBlock.delete_source(getBlock.sources{1}));
-    assert(isempty(getBlock.sources));
+    assert(b.deleteSource('sourcetest1'));
+    assert(b.deleteSource(b.sources{1}.id));
+    assert(b.deleteSource(b.sources{1}));
+    assert(isempty(b.sources));
     
-    assert(~getBlock.delete_source('I do not exist'));
+    assert(~b.deleteSource('I do not exist'));
 end
 
 %% Test: Fetch nix.DataArrays
-function [] = test_list_arrays( varargin )
+function [] = testListArrays( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('arraytest', 'nixBlock');
+    b = f.createBlock('arraytest', 'nixBlock');
 
     assert(isempty(b.dataArrays));
-    tmp = b.create_data_array('arrayTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
-    tmp = b.create_data_array('arrayTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
+    tmp = b.createDataArray('arrayTest1', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.createDataArray('arrayTest2', 'nixDataArray', nix.DataType.Double, [3 4]);
     assert(size(b.dataArrays, 1) == 2);
     assert(size(f.blocks{1}.dataArrays, 1) == 2);
 
@@ -296,16 +295,16 @@ function [] = test_list_arrays( varargin )
 end
 
 %% Test: Fetch nix.Sources
-function [] = test_list_sources( varargin )
+function [] = testListSources( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('sourcetest', 'nixBlock');
+    b = f.createBlock('sourcetest', 'nixBlock');
 
     assert(isempty(b.sources));
-    tmp = b.create_source('sourcetest1','nixSource');
+    tmp = b.createSource('sourcetest1','nixSource');
     assert(size(b.sources, 1) == 1);
     assert(size(f.blocks{1}.sources, 1) == 1);
-    tmp = b.create_source('sourcetest2','nixSource');
+    tmp = b.createSource('sourcetest2','nixSource');
     assert(size(b.sources, 1) == 2);
     assert(size(f.blocks{1}.sources, 1) == 2);
 
@@ -315,17 +314,17 @@ function [] = test_list_sources( varargin )
 end
 
 %% Test: Fetch nix.Tags
-function [] = test_list_tags( varargin )
+function [] = testListTags( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('tagtest', 'nixBlock');
+    b = f.createBlock('tagtest', 'nixBlock');
     position = [1.0 1.2 1.3 15.9];
 
     assert(isempty(b.tags));
-    tmp = b.create_tag('tagtest1', 'nixTag', position);
+    tmp = b.createTag('tagtest1', 'nixTag', position);
     assert(size(b.tags, 1) == 1);
     assert(size(f.blocks{1}.tags, 1) == 1);
-    tmp = b.create_tag('tagtest2', 'nixTag', position);
+    tmp = b.createTag('tagtest2', 'nixTag', position);
     assert(size(b.tags, 1) == 2);
     assert(size(f.blocks{1}.tags, 1) == 2);
 
@@ -335,17 +334,17 @@ function [] = test_list_tags( varargin )
 end
 
 %% Test: fetch multitags
-function [] = test_list_multitags( varargin )
+function [] = testListMultiTags( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    b = f.create_block('mTagTestBlock', 'nixBlock');
-    tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    b = f.createBlock('mTagTestBlock', 'nixBlock');
+    tmp = b.createDataArray('mTagTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
 
     assert(isempty(b.multiTags));
-    tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createMultiTag('mTagTest1', 'nixMultiTag', b.dataArrays{1});
     assert(size(b.multiTags, 1) == 1);
     assert(size(f.blocks{1}.multiTags, 1) == 1);
-    tmp = b.create_multi_tag('mTagTest2', 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createMultiTag('mTagTest2', 'nixMultiTag', b.dataArrays{1});
     assert(size(b.multiTags, 1) == 2);
     assert(size(f.blocks{1}.multiTags, 1) == 2);
 
@@ -354,259 +353,260 @@ function [] = test_list_multitags( varargin )
     assert(size(f.blocks{1}.multiTags, 1) == 2);
 end
 
-function [] = test_open_array( varargin )
+function [] = testOpenDataArray( varargin )
 %% Test: Open data array by ID or name
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('arraytest', 'nixBlock');
+    b = f.createBlock('arraytest', 'nixBlock');
     daName = 'arrayTest1';
     
     assert(isempty(b.dataArrays));
-    tmp = b.create_data_array(daName, 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.createDataArray(daName, 'nixDataArray', nix.DataType.Double, [1 2]);
 
-    getDataArrayByID = b.data_array(b.dataArrays{1,1}.id);
+    getDataArrayByID = b.openDataArray(b.dataArrays{1,1}.id);
     assert(~isempty(getDataArrayByID));
 
-    getDataArrayByName = b.data_array(daName);
+    getDataArrayByName = b.openDataArray(daName);
     assert(~isempty(getDataArrayByName));
     
     %-- test open non existing dataarray
-    getDataArray = b.data_array('I do not exist');
+    getDataArray = b.openDataArray('I do not exist');
     assert(isempty(getDataArray));
 end
 
-function [] = test_open_tag( varargin )
+function [] = testOpenTag( varargin )
 %% Test: Open tag by ID or name
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('tagtest', 'nixBlock');
+    b = f.createBlock('tagtest', 'nixBlock');
     position = [1.0 1.2 1.3 15.9];
     tagName = 'tagtest1';
-    tmp = b.create_tag(tagName, 'nixTag', position);
+    tmp = b.createTag(tagName, 'nixTag', position);
 
-    getTagByID = b.open_tag(b.tags{1,1}.id);
+    getTagByID = b.openTag(b.tags{1,1}.id);
     assert(~isempty(getTagByID));
 
-    getTagByName = b.open_tag(tagName);
+    getTagByName = b.openTag(tagName);
     assert(~isempty(getTagByName));
     
     %-- test open non existing tag
-    getTag = b.open_tag('I do not exist');
+    getTag = b.openTag('I do not exist');
     assert(isempty(getTag));
 end
 
-function [] = test_open_multitag( varargin )
+function [] = testOpenMultiTag( varargin )
 %% Test: Open multi tag by ID or name
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('mTagTestBlock', 'nixBlock');
-    tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    b = f.createBlock('mTagTestBlock', 'nixBlock');
+    tmp = b.createDataArray('mTagTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
     mTagName = 'mTagTest1';
-    tmp = b.create_multi_tag(mTagName, 'nixMultiTag', b.dataArrays{1});
+    tmp = b.createMultiTag(mTagName, 'nixMultiTag', b.dataArrays{1});
 
-    getMultiTagByID = b.open_multi_tag(b.multiTags{1,1}.id);
+    getMultiTagByID = b.openMultiTag(b.multiTags{1,1}.id);
     assert(~isempty(getMultiTagByID));
 
-    getMultiTagByName = b.open_multi_tag(mTagName);
+    getMultiTagByName = b.openMultiTag(mTagName);
     assert(~isempty(getMultiTagByName));
     
     %-- test open non existing multitag
-    getMultiTag = b.open_multi_tag('I do not exist');
+    getMultiTag = b.openMultiTag('I do not exist');
     assert(isempty(getMultiTag));
 end
 
-function [] = test_open_source( varargin )
+function [] = testOpenSource( varargin )
 %% Test: Open source by ID or name
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('sourcetest', 'nixBlock');
+    b = f.createBlock('sourcetest', 'nixBlock');
     sName = 'sourcetest1';
-    tmp = b.create_source(sName, 'nixSource');
+    tmp = b.createSource(sName, 'nixSource');
     
-    getSourceByID = b.open_source(b.sources{1,1}.id);
+    getSourceByID = b.openSource(b.sources{1,1}.id);
     assert(~isempty(getSourceByID));
 
-    getSourceByName = b.open_source(sName);
+    getSourceByName = b.openSource(sName);
     assert(~isempty(getSourceByName));
     
     %-- test open non existing source
-    getSource = b.open_source('I do not exist');
+    getSource = b.openSource('I do not exist');
     assert(isempty(getSource));
 end
 
-function [] = test_open_group_idx( varargin )
+function [] = testOpenGroupIdx( varargin )
 %% Test Open Group by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    g1 = b.create_group('testGroup1', 'nixGroup');
-    g2 = b.create_group('testGroup2', 'nixGroup');
-    g3 = b.create_group('testGroup3', 'nixGroup');
+    b = f.createBlock('testBlock', 'nixBlock');
+    g1 = b.createGroup('testGroup1', 'nixGroup');
+    g2 = b.createGroup('testGroup2', 'nixGroup');
+    g3 = b.createGroup('testGroup3', 'nixGroup');
 
-    assert(strcmp(f.blocks{1}.open_group_idx(1).name, g1.name));
-    assert(strcmp(f.blocks{1}.open_group_idx(2).name, g2.name));
-    assert(strcmp(f.blocks{1}.open_group_idx(3).name, g3.name));
+    assert(strcmp(f.blocks{1}.openGroupIdx(1).name, g1.name));
+    assert(strcmp(f.blocks{1}.openGroupIdx(2).name, g2.name));
+    assert(strcmp(f.blocks{1}.openGroupIdx(3).name, g3.name));
 end
 
-function [] = test_open_data_array_idx( varargin )
+function [] = testOpenDataArrayIdx( varargin )
 %% Test Open DataArray by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    d1 = b.create_data_array('testDataArray1', 'nixDataArray', nix.DataType.Double, [3 2]);
-    d2 = b.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [6 2]);
-    d3 = b.create_data_array('testDataArray3', 'nixDataArray', nix.DataType.Double, [9 2]);
+    b = f.createBlock('testBlock', 'nixBlock');
+    d1 = b.createDataArray('testDataArray1', 'nixDataArray', nix.DataType.Double, [3 2]);
+    d2 = b.createDataArray('testDataArray2', 'nixDataArray', nix.DataType.Double, [6 2]);
+    d3 = b.createDataArray('testDataArray3', 'nixDataArray', nix.DataType.Double, [9 2]);
 
-    assert(strcmp(f.blocks{1}.open_data_array_idx(1).name, d1.name));
-    assert(strcmp(f.blocks{1}.open_data_array_idx(2).name, d2.name));
-    assert(strcmp(f.blocks{1}.open_data_array_idx(3).name, d3.name));
+    assert(strcmp(f.blocks{1}.openDataArrayIdx(1).name, d1.name));
+    assert(strcmp(f.blocks{1}.openDataArrayIdx(2).name, d2.name));
+    assert(strcmp(f.blocks{1}.openDataArrayIdx(3).name, d3.name));
 end
 
-function [] = test_open_tag_idx( varargin )
+function [] = testOpenTagIdx( varargin )
 %% Test Open Tag by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    t1 = b.create_tag('testTag1', 'nixTag', [1 2]);
-    t2 = b.create_tag('testTag2', 'nixTag', [1 2]);
-    t3 = b.create_tag('testTag3', 'nixTag', [1 2]);
+    b = f.createBlock('testBlock', 'nixBlock');
+    t1 = b.createTag('testTag1', 'nixTag', [1 2]);
+    t2 = b.createTag('testTag2', 'nixTag', [1 2]);
+    t3 = b.createTag('testTag3', 'nixTag', [1 2]);
 
-    assert(strcmp(f.blocks{1}.open_tag_idx(1).name, t1.name));
-    assert(strcmp(f.blocks{1}.open_tag_idx(2).name, t2.name));
-    assert(strcmp(f.blocks{1}.open_tag_idx(3).name, t3.name));
+    assert(strcmp(f.blocks{1}.openTagIdx(1).name, t1.name));
+    assert(strcmp(f.blocks{1}.openTagIdx(2).name, t2.name));
+    assert(strcmp(f.blocks{1}.openTagIdx(3).name, t3.name));
 end
 
-function [] = test_open_multi_tag_idx( varargin )
+function [] = testOpenMultiTagIdx( varargin )
 %% Test Open MultiTag by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Bool, [2 3]);
-    t1 = b.create_multi_tag('testMultiTag1', 'nixMultiTag', d);
-    t2 = b.create_multi_tag('testMultiTag2', 'nixMultiTag', d);
-    t3 = b.create_multi_tag('testMultiTag3', 'nixMultiTag', d);
+    b = f.createBlock('testBlock', 'nixBlock');
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Bool, [2 3]);
+    t1 = b.createMultiTag('testMultiTag1', 'nixMultiTag', d);
+    t2 = b.createMultiTag('testMultiTag2', 'nixMultiTag', d);
+    t3 = b.createMultiTag('testMultiTag3', 'nixMultiTag', d);
 
-    assert(strcmp(f.blocks{1}.open_multi_tag_idx(1).name, t1.name));
-    assert(strcmp(f.blocks{1}.open_multi_tag_idx(2).name, t2.name));
-    assert(strcmp(f.blocks{1}.open_multi_tag_idx(3).name, t3.name));
+    assert(strcmp(f.blocks{1}.openMultiTagIdx(1).name, t1.name));
+    assert(strcmp(f.blocks{1}.openMultiTagIdx(2).name, t2.name));
+    assert(strcmp(f.blocks{1}.openMultiTagIdx(3).name, t3.name));
 end
 
-function [] = test_open_source_idx( varargin )
+function [] = testOpenSourceIdx( varargin )
 %% Test Open Source by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    s1 = b.create_source('testSource1', 'nixSource');
-    s2 = b.create_source('testSource2', 'nixSource');
-    s3 = b.create_source('testSource3', 'nixSource');
+    b = f.createBlock('testBlock', 'nixBlock');
+    s1 = b.createSource('testSource1', 'nixSource');
+    s2 = b.createSource('testSource2', 'nixSource');
+    s3 = b.createSource('testSource3', 'nixSource');
 
-    assert(strcmp(f.blocks{1}.open_source_idx(1).name, s1.name));
-    assert(strcmp(f.blocks{1}.open_source_idx(2).name, s2.name));
-    assert(strcmp(f.blocks{1}.open_source_idx(3).name, s3.name));
+    assert(strcmp(f.blocks{1}.openSourceIdx(1).name, s1.name));
+    assert(strcmp(f.blocks{1}.openSourceIdx(2).name, s2.name));
+    assert(strcmp(f.blocks{1}.openSourceIdx(3).name, s3.name));
 end
 
-function [] = test_has_multitag( varargin )
+function [] = testHasMultiTag( varargin )
 %% Test: Block has multi tag by ID or name
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('mTagTestBlock', 'nixBlock');
-    tmp = b.create_data_array('mTagTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    tmp = b.create_multi_tag('mTagTest1', 'nixMultiTag', b.dataArrays{1});
+    b = f.createBlock('mTagTestBlock', 'nixBlock');
+    tmp = b.createDataArray('mTagTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    tmp = b.createMultiTag('mTagTest1', 'nixMultiTag', b.dataArrays{1});
 
-    assert(b.has_multi_tag(b.multiTags{1,1}.id));
-    assert(b.has_multi_tag(b.multiTags{1,1}.name));
+    assert(b.hasMultiTag(b.multiTags{1,1}.id));
+    assert(b.hasMultiTag(b.multiTags{1,1}.name));
     
-    assert(~b.has_multi_tag('I do not exist'));
+    assert(~b.hasMultiTag('I do not exist'));
 end
 
-function [] = test_has_tag( varargin )
+function [] = testHasTag( varargin )
 %% Test: Block has tag by ID or name
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('tagtest', 'nixBlock');
-    tmp = b.create_tag('tagtest1', 'nixTag', [1.0 1.2 1.3 15.9]);
+    b = f.createBlock('tagtest', 'nixBlock');
+    tmp = b.createTag('tagtest1', 'nixTag', [1.0 1.2 1.3 15.9]);
 
-    assert(b.has_tag(b.tags{1,1}.id));
-    assert(b.has_tag(b.tags{1,1}.name));
+    assert(b.hasTag(b.tags{1,1}.id));
+    assert(b.hasTag(b.tags{1,1}.name));
     
-    assert(~b.has_tag('I do not exist'));
+    assert(~b.hasTag('I do not exist'));
 end
 
 %% Test: Set metadata
-function [] = test_set_metadata ( varargin )
+function [] = testSetMetadata ( varargin )
     fileName = fullfile(pwd, 'tests', 'testRW.h5');
     secName1 = 'testSection1';
     secName2 = 'testSection2';
     f = nix.File(fileName, nix.FileMode.Overwrite);
-    tmp = f.create_section(secName1, 'nixSection');
-    tmp = f.create_section(secName2, 'nixSection');
-    b = f.create_block('testBlock', 'nixBlock');
+    tmp = f.createSection(secName1, 'nixSection');
+    tmp = f.createSection(secName2, 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
     
-    assert(isempty(b.open_metadata));
-    assert(isempty(f.blocks{1}.open_metadata));
+    assert(isempty(b.openMetadata));
+    assert(isempty(f.blocks{1}.openMetadata));
 
-    b.set_metadata(f.sections{1});
-    assert(strcmp(b.open_metadata.name, secName1));
-    assert(strcmp(f.blocks{1}.open_metadata.name, secName1));
+    b.setMetadata(f.sections{1});
+    assert(strcmp(b.openMetadata.name, secName1));
+    assert(strcmp(f.blocks{1}.openMetadata.name, secName1));
 
-    b.set_metadata(f.sections{2});
-    assert(strcmp(b.open_metadata.name, secName2));
-    assert(strcmp(f.blocks{1}.open_metadata.name, secName2));
-    b.set_metadata('');
-    assert(isempty(b.open_metadata));
-    assert(isempty(f.blocks{1}.open_metadata));
+    b.setMetadata(f.sections{2});
+    assert(strcmp(b.openMetadata.name, secName2));
+    assert(strcmp(f.blocks{1}.openMetadata.name, secName2));
+    b.setMetadata('');
+    assert(isempty(b.openMetadata));
+    assert(isempty(f.blocks{1}.openMetadata));
 
-    b.set_metadata(f.sections{2});
+    b.setMetadata(f.sections{2});
+
     clear tmp b f;
     f = nix.File(fileName, nix.FileMode.ReadOnly);
-	assert(strcmp(f.blocks{1}.open_metadata.name, secName2));
+	assert(strcmp(f.blocks{1}.openMetadata.name, secName2));
 end
 
-function [] = test_open_metadata( varargin )
+function [] = testOpenMetadata( varargin )
 %% Test: Open metadata
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    tmp = f.create_section('testSection', 'nixSection');
-    b = f.create_block('testBlock', 'nixBlock');
-    b.set_metadata(f.sections{1});
+    tmp = f.createSection('testSection', 'nixSection');
+    b = f.createBlock('testBlock', 'nixBlock');
+    b.setMetadata(f.sections{1});
 
-    assert(strcmp(b.open_metadata.name, 'testSection'));
+    assert(strcmp(b.openMetadata.name, 'testSection'));
 end
 
 %% Test: nix.Block has nix.DataArray by ID or name
-function [] = test_has_data_array( varargin )
+function [] = testHasDataArray( varargin )
     fileName = 'testRW.h5';
     daName = 'hasDataArrayTest';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.create_block('testblock', 'nixBlock');
-    da = b.create_data_array(daName, 'nixDataArray', nix.DataType.Double, [1 2]);
+    b = f.createBlock('testblock', 'nixBlock');
+    da = b.createDataArray(daName, 'nixDataArray', nix.DataType.Double, [1 2]);
     daID = da.id;
     
-    assert(~b.has_data_array('I do not exist'));
-    assert(b.has_data_array(daName));
+    assert(~b.hasDataArray('I do not exist'));
+    assert(b.hasDataArray(daName));
 
     clear da b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
-    assert(f.blocks{1}.has_data_array(daID));
+    assert(f.blocks{1}.hasDataArray(daID));
 end
 
 %% Test: nix.Block has nix.Source by ID or name
-function [] = test_has_source( varargin )
+function [] = testHasSource( varargin )
     fileName = 'testRW.h5';
     sName = 'sourcetest1';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.create_block('testblock', 'nixBlock');
-    s = b.create_source(sName, 'nixSource');
+    b = f.createBlock('testblock', 'nixBlock');
+    s = b.createSource(sName, 'nixSource');
     sID = s.id;
 
-    assert(~b.has_source('I do not exist'));
-    assert(b.has_source(sName));
+    assert(~b.hasSource('I do not exist'));
+    assert(b.hasSource(sName));
 
     clear s b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
-    assert(f.blocks{1}.has_source(sID));
+    assert(f.blocks{1}.hasSource(sID));
 end
 
 %% Test: Create nix.Group
-function [] = test_create_group( varargin )
+function [] = testCreateGroup( varargin )
     fileName = 'testRW.h5';
     groupName = 'testGroup';
     groupType = 'nixGroup';
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.create_block('grouptest', 'nixBlock');
+    b = f.createBlock('grouptest', 'nixBlock');
 
     assert(isempty(b.groups));
 
-    g = b.create_group(groupName, groupType);
+    g = b.createGroup(groupName, groupType);
     assert(strcmp(g.name, groupName));
     assert(strcmp(g.type, groupType));
     assert(~isempty(b.groups));
@@ -618,52 +618,52 @@ function [] = test_create_group( varargin )
 end
 
 %% Test: nix.Block has nix.Group by name or id
-function [] = test_has_group( varargin )
+function [] = testHasGroup( varargin )
     groupName = 'testGroup';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('grouptest', 'nixBlock');
+    b = f.createBlock('grouptest', 'nixBlock');
 
-    assert(~b.has_group('I do not exist'));
+    assert(~b.hasGroup('I do not exist'));
     
-    g = b.create_group(groupName, 'nixGroup');
-    assert(b.has_group(b.groups{1}.id));
-    assert(b.has_group(groupName));
+    g = b.createGroup(groupName, 'nixGroup');
+    assert(b.hasGroup(b.groups{1}.id));
+    assert(b.hasGroup(groupName));
 
-    b.delete_group(b.groups{1});
-    assert(~b.has_group(g.id));
+    b.deleteGroup(b.groups{1});
+    assert(~b.hasGroup(g.id));
 end
 
 %% Test: Get nix.Group by name or id
-function [] = test_get_group( varargin )
+function [] = testOpenGroup( varargin )
     groupName = 'testGroup';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('grouptest', 'nixBlock');
-    g = b.create_group(groupName, 'nixGroup');
+    b = f.createBlock('grouptest', 'nixBlock');
+    g = b.createGroup(groupName, 'nixGroup');
     gID = g.id;
 
     clear g b f;
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.ReadOnly);
-    assert(strcmp(f.blocks{1}.get_group(gID).name, groupName));
-    assert(strcmp(f.blocks{1}.get_group(groupName).name, groupName));
+    assert(strcmp(f.blocks{1}.openGroup(gID).name, groupName));
+    assert(strcmp(f.blocks{1}.openGroup(groupName).name, groupName));
 end
 
 %% Test: Delete nix.Group by entity and id
-function [] = test_delete_group( varargin )
+function [] = testDeleteGroup( varargin )
     fileName = 'testRW.h5';
     groupType = 'nixGroup';
 
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
-    b = f.create_block('grouptest', 'nixBlock');
-    g1 = b.create_group('testGroup1', groupType);
-    g2 = b.create_group('testGroup2', groupType);
+    b = f.createBlock('grouptest', 'nixBlock');
+    g1 = b.createGroup('testGroup1', groupType);
+    g2 = b.createGroup('testGroup2', groupType);
 
     assert(size(b.groups, 1) == 2);
-    assert(b.delete_group(b.groups{2}.id));
+    assert(b.deleteGroup(b.groups{2}.id));
     assert(size(b.groups, 1) == 1);
-    assert(b.delete_group(b.groups{1}));
+    assert(b.deleteGroup(b.groups{1}));
     assert(isempty(b.groups));
 
-    assert(~b.delete_group('I do not exist'));
+    assert(~b.deleteGroup('I do not exist'));
 
     clear g b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
@@ -671,90 +671,90 @@ function [] = test_delete_group( varargin )
 end
 
 %% Test: Group count
-function [] = test_group_count( varargin )
+function [] = testGroupCount( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    assert(b.group_count() == 0);
-    g = b.create_group('testGroup', 'nixGroup');
-    assert(b.group_count() == 1);
-    g = b.create_group('testGroup2', 'nixGroup');
+    b = f.createBlock('testBlock', 'nixBlock');
+    assert(b.groupCount() == 0);
+    g = b.createGroup('testGroup', 'nixGroup');
+    assert(b.groupCount() == 1);
+    g = b.createGroup('testGroup2', 'nixGroup');
     
     clear g b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
-    assert(f.blocks{1}.group_count() == 2);
+    assert(f.blocks{1}.groupCount() == 2);
 end
 
 %% Test: DataArray count
-function [] = test_data_array_count( varargin )
+function [] = testDataArrayCount( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
 
-    assert(b.data_array_count() == 0);
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
-    assert(b.data_array_count() == 1);
-    d = b.create_data_array('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
+    assert(b.dataArrayCount() == 0);
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    assert(b.dataArrayCount() == 1);
+    d = b.createDataArray('testDataArray2', 'nixDataArray', nix.DataType.Double, [1 2]);
     
     clear d b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
-    assert(f.blocks{1}.data_array_count() == 2);
+    assert(f.blocks{1}.dataArrayCount() == 2);
 end
 
 %% Test: Tag count
-function [] = test_tag_count( varargin )
+function [] = testTagCount( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
 
-    assert(b.tag_count() == 0);
-    t = b.create_tag('testTag1', 'nixTag', [1.0 1.2 1.3 15.9]);
-    assert(b.tag_count() == 1);
-    t = b.create_tag('testTag2', 'nixTag', [1.0 1.2 1.3 15.9]);
+    assert(b.tagCount() == 0);
+    t = b.createTag('testTag1', 'nixTag', [1.0 1.2 1.3 15.9]);
+    assert(b.tagCount() == 1);
+    t = b.createTag('testTag2', 'nixTag', [1.0 1.2 1.3 15.9]);
     
     clear t b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
-    assert(f.blocks{1}.tag_count() == 2);
+    assert(f.blocks{1}.tagCount() == 2);
 end
 
 %% Test: MultiTag count
-function [] = test_multi_tag_count( varargin )
+function [] = testMultiTagCount( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    d = b.create_data_array('mTagTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
+    b = f.createBlock('testBlock', 'nixBlock');
+    d = b.createDataArray('mTagTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2]);
 
-    assert(b.multi_tag_count() == 0);
-    t = b.create_multi_tag('testMultiTag1', 'nixMultiTag', b.dataArrays{1});
-    assert(b.multi_tag_count() == 1);
-    t = b.create_multi_tag('testMultiTag2', 'nixMultiTag', b.dataArrays{1});
+    assert(b.multiTagCount() == 0);
+    t = b.createMultiTag('testMultiTag1', 'nixMultiTag', b.dataArrays{1});
+    assert(b.multiTagCount() == 1);
+    t = b.createMultiTag('testMultiTag2', 'nixMultiTag', b.dataArrays{1});
     
     clear t d b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
-    assert(f.blocks{1}.multi_tag_count() == 2);
+    assert(f.blocks{1}.multiTagCount() == 2);
 end
 
 %% Test: Source count
-function [] = test_source_count( varargin )
+function [] = testSourceCount( varargin )
     testFile = fullfile(pwd, 'tests', 'testRW.h5');
     f = nix.File(testFile, nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
+    b = f.createBlock('testBlock', 'nixBlock');
 
-    assert(b.source_count() == 0);
-    s = b.create_source('testSource1', 'nixSource');
-    assert(b.source_count() == 1);
-    s = b.create_source('testSource2', 'nixSource');
+    assert(b.sourceCount() == 0);
+    s = b.createSource('testSource1', 'nixSource');
+    assert(b.sourceCount() == 1);
+    s = b.createSource('testSource2', 'nixSource');
     
     clear s b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
-    assert(f.blocks{1}.source_count() == 2);
+    assert(f.blocks{1}.sourceCount() == 2);
 end
 
-function [] = test_compare( varargin )
+function [] = testCompare( varargin )
 %% Test: Compare block entities
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b1 = f.create_block('testBlock1', 'nixBlock');
-    b2 = f.create_block('testBlock2', 'nixBlock');
+    b1 = f.createBlock('testBlock1', 'nixBlock');
+    b2 = f.createBlock('testBlock2', 'nixBlock');
 
     assert(b1.compare(b2) < 0);
     assert(b1.compare(b1) == 0);
@@ -762,449 +762,449 @@ function [] = test_compare( varargin )
 end
 
 %% Test: filter sources
-function [] = test_filter_source( varargin )
+function [] = testFilterSource( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    s = b.create_source(filterName, 'nixSource');
+    b = f.createBlock('testBlock', 'nixBlock');
+    s = b.createSource(filterName, 'nixSource');
     filterID = s.id;
-	s = b.create_source('testSource1', filterType);
+	s = b.createSource('testSource1', filterType);
     filterIDs = {filterID, s.id};
-    s = b.create_source('testSource2', filterType);
+    s = b.createSource('testSource2', filterType);
     
     % test empty id filter
-    assert(isempty(f.blocks{1}.filter_sources(nix.Filter.id, 'IdoNotExist')));
+    assert(isempty(f.blocks{1}.filterSources(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.filter_sources(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.filterSources(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
     
     % test nix.Filter.id
-    filtered = f.blocks{1}.filter_sources(nix.Filter.id, filterID);
+    filtered = f.blocks{1}.filterSources(nix.Filter.id, filterID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, filterID));
 
     % test nix.Filter.ids
-    filtered = f.blocks{1}.filter_sources(nix.Filter.ids, filterIDs);
+    filtered = f.blocks{1}.filterSources(nix.Filter.ids, filterIDs);
     assert(size(filtered, 1) == 2);
     assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
     
     % test nix.Filter.name
-    filtered  = f.blocks{1}.filter_sources(nix.Filter.name, filterName);
+    filtered  = f.blocks{1}.filterSources(nix.Filter.name, filterName);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, filterName));
     
     % test nix.Filter.type
-    filtered = f.blocks{1}.filter_sources(nix.Filter.type, filterType);
+    filtered = f.blocks{1}.filterSources(nix.Filter.type, filterType);
     assert(size(filtered, 1) == 2);
 
     % test nix.Filter.metadata
     mainName = 'testSubSection';
-    mainSource = b.create_source(mainName, 'nixSource');
+    mainSource = b.createSource(mainName, 'nixSource');
     subName = 'testSubSection1';
-    s = f.create_section(subName, 'nixSection');
-    mainSource.set_metadata(s);
+    s = f.createSection(subName, 'nixSection');
+    mainSource.setMetadata(s);
     subID = s.id;
 
-    assert(isempty(f.blocks{1}.filter_sources(nix.Filter.metadata, 'Do not exist')));
-    filtered = f.blocks{1}.filter_sources(nix.Filter.metadata, subID);
+    assert(isempty(f.blocks{1}.filterSources(nix.Filter.metadata, 'Do not exist')));
+    filtered = f.blocks{1}.filterSources(nix.Filter.metadata, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 
     % test nix.Filter.source
     mainName = 'testSubSource';
-    mainSource = b.create_source(mainName, 'nixSource');
+    mainSource = b.createSource(mainName, 'nixSource');
     mainID = mainSource.id;
     subName = 'testSubSource1';
-    s = mainSource.create_source(subName, 'nixSource');
+    s = mainSource.createSource(subName, 'nixSource');
     subID = s.id;
 
-    assert(isempty(f.blocks{1}.filter_sources(nix.Filter.source, 'Do not exist')));
-    filtered = f.blocks{1}.filter_sources(nix.Filter.source, subName);
+    assert(isempty(f.blocks{1}.filterSources(nix.Filter.source, 'Do not exist')));
+    filtered = f.blocks{1}.filterSources(nix.Filter.source, subName);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, mainID));
 
-    filtered = f.blocks{1}.filter_sources(nix.Filter.source, subID);
+    filtered = f.blocks{1}.filterSources(nix.Filter.source, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 end
 
 
 %% Test: filter groups
-function [] = test_filter_group( varargin )
+function [] = testFilterGroup( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    g = b.create_group(filterName, 'nixGroup');
+    b = f.createBlock('testBlock', 'nixBlock');
+    g = b.createGroup(filterName, 'nixGroup');
     filterID = g.id;
-	g = b.create_group('testGroup1', filterType);
+	g = b.createGroup('testGroup1', filterType);
     filterIDs = {filterID, g.id};
-    g = b.create_group('testGroup2', filterType);
+    g = b.createGroup('testGroup2', filterType);
     
     % test empty id filter
-    assert(isempty(f.blocks{1}.filter_groups(nix.Filter.id, 'IdoNotExist')));
+    assert(isempty(f.blocks{1}.filterGroups(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.filter_groups(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.filterGroups(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
     
     % test nix.Filter.id
-    filtered = f.blocks{1}.filter_groups(nix.Filter.id, filterID);
+    filtered = f.blocks{1}.filterGroups(nix.Filter.id, filterID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, filterID));
 
     % test nix.Filter.ids
-    filtered = f.blocks{1}.filter_groups(nix.Filter.ids, filterIDs);
+    filtered = f.blocks{1}.filterGroups(nix.Filter.ids, filterIDs);
     assert(size(filtered, 1) == 2);
     assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
     
     % test nix.Filter.name
-    filtered  = f.blocks{1}.filter_groups(nix.Filter.name, filterName);
+    filtered  = f.blocks{1}.filterGroups(nix.Filter.name, filterName);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, filterName));
     
     % test nix.Filter.type
-    filtered = f.blocks{1}.filter_groups(nix.Filter.type, filterType);
+    filtered = f.blocks{1}.filterGroups(nix.Filter.type, filterType);
     assert(size(filtered, 1) == 2);
 
     % test nix.Filter.metadata
     mainName = 'testSubSection';
-    mainEntity = b.create_group(mainName, 'nixGroup');
+    mainEntity = b.createGroup(mainName, 'nixGroup');
     subName = 'testSubSection1';
-    s = f.create_section(subName, 'nixSection');
-    mainEntity.set_metadata(s);
+    s = f.createSection(subName, 'nixSection');
+    mainEntity.setMetadata(s);
     subID = s.id;
 
-    assert(isempty(f.blocks{1}.filter_groups(nix.Filter.metadata, 'Do not exist')));
-    filtered = f.blocks{1}.filter_groups(nix.Filter.metadata, subID);
+    assert(isempty(f.blocks{1}.filterGroups(nix.Filter.metadata, 'Do not exist')));
+    filtered = f.blocks{1}.filterGroups(nix.Filter.metadata, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 
     % test nix.Filter.source
     mainName = 'testSubSource';
-    mainEntity = b.create_group(mainName, 'nixGroup');
+    mainEntity = b.createGroup(mainName, 'nixGroup');
     subName = 'testSubSource1';
-    s = b.create_source(subName, 'nixSource');
-    mainEntity.add_source(s);
+    s = b.createSource(subName, 'nixSource');
+    mainEntity.addSource(s);
     subID = s.id;
 
     % filter works only for ID, not for name
-    filtered = f.blocks{1}.filter_groups(nix.Filter.source, subID);
+    filtered = f.blocks{1}.filterGroups(nix.Filter.source, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 end
 
 %% Test: filter tags
-function [] = test_filter_tag( varargin )
+function [] = testFilterTag( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    t = b.create_tag(filterName, 'nixTag', [1 2 3]);
+    b = f.createBlock('testBlock', 'nixBlock');
+    t = b.createTag(filterName, 'nixTag', [1 2 3]);
     filterID = t.id;
-	t = b.create_tag('testTag1', filterType, [1 2 3 4]);
+	t = b.createTag('testTag1', filterType, [1 2 3 4]);
     filterIDs = {filterID, t.id};
-    t = b.create_tag('testTag2', filterType, [1 2]);
+    t = b.createTag('testTag2', filterType, [1 2]);
 
     % test empty id filter
-    assert(isempty(f.blocks{1}.filter_tags(nix.Filter.id, 'IdoNotExist')));
+    assert(isempty(f.blocks{1}.filterTags(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.filter_tags(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.filterTags(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
     
     % test nix.Filter.id
-    filtered = f.blocks{1}.filter_tags(nix.Filter.id, filterID);
+    filtered = f.blocks{1}.filterTags(nix.Filter.id, filterID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, filterID));
 
     % test nix.Filter.ids
-    filtered = f.blocks{1}.filter_tags(nix.Filter.ids, filterIDs);
+    filtered = f.blocks{1}.filterTags(nix.Filter.ids, filterIDs);
     assert(size(filtered, 1) == 2);
     assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
     
     % test nix.Filter.name
-    filtered  = f.blocks{1}.filter_tags(nix.Filter.name, filterName);
+    filtered  = f.blocks{1}.filterTags(nix.Filter.name, filterName);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, filterName));
     
     % test nix.Filter.type
-    filtered = f.blocks{1}.filter_tags(nix.Filter.type, filterType);
+    filtered = f.blocks{1}.filterTags(nix.Filter.type, filterType);
     assert(size(filtered, 1) == 2);
 
     % test nix.Filter.metadata
     mainName = 'testSubSection';
-    mainEntity = b.create_tag(mainName, 'nixTag', [1 8]);
+    mainEntity = b.createTag(mainName, 'nixTag', [1 8]);
     subName = 'testSubSection1';
-    s = f.create_section(subName, 'nixSection');
-    mainEntity.set_metadata(s);
+    s = f.createSection(subName, 'nixSection');
+    mainEntity.setMetadata(s);
     subID = s.id;
 
-    assert(isempty(f.blocks{1}.filter_tags(nix.Filter.metadata, 'Do not exist')));
-    filtered = f.blocks{1}.filter_tags(nix.Filter.metadata, subID);
+    assert(isempty(f.blocks{1}.filterTags(nix.Filter.metadata, 'Do not exist')));
+    filtered = f.blocks{1}.filterTags(nix.Filter.metadata, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 
     % test nix.Filter.source
     mainName = 'testSubSource';
-    mainEntity = b.create_tag(mainName, 'nixTag', [12 3]);
+    mainEntity = b.createTag(mainName, 'nixTag', [12 3]);
     subName = 'testSubSource1';
-    s = b.create_source(subName, 'nixSource');
-    mainEntity.add_source(s);
+    s = b.createSource(subName, 'nixSource');
+    mainEntity.addSource(s);
     subID = s.id;
 
     % filter works only for ID, not for name
-    filtered = f.blocks{1}.filter_tags(nix.Filter.source, subID);
+    filtered = f.blocks{1}.filterTags(nix.Filter.source, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 end
 
 %% Test: filter multi tags
-function [] = test_filter_multi_tag( varargin )
+function [] = testFilterMultiTag( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Bool, [2 9]);
-    t = b.create_multi_tag(filterName, 'nixMultiTag', d);
+    b = f.createBlock('testBlock', 'nixBlock');
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Bool, [2 9]);
+    t = b.createMultiTag(filterName, 'nixMultiTag', d);
     filterID = t.id;
-	t = b.create_multi_tag('testMultiTag1', filterType, d);
+	t = b.createMultiTag('testMultiTag1', filterType, d);
     filterIDs = {filterID, t.id};
-    t = b.create_multi_tag('testMultiTag2', filterType, d);
+    t = b.createMultiTag('testMultiTag2', filterType, d);
 
     % test empty id filter
-    assert(isempty(f.blocks{1}.filter_multi_tags(nix.Filter.id, 'IdoNotExist')));
+    assert(isempty(f.blocks{1}.filterMultiTags(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.filter_multi_tags(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.filterMultiTags(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
 
     % test nix.Filter.id
-    filtered = f.blocks{1}.filter_multi_tags(nix.Filter.id, filterID);
+    filtered = f.blocks{1}.filterMultiTags(nix.Filter.id, filterID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, filterID));
 
     % test nix.Filter.ids
-    filtered = f.blocks{1}.filter_multi_tags(nix.Filter.ids, filterIDs);
+    filtered = f.blocks{1}.filterMultiTags(nix.Filter.ids, filterIDs);
     assert(size(filtered, 1) == 2);
     assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
 
     % test nix.Filter.name
-    filtered  = f.blocks{1}.filter_multi_tags(nix.Filter.name, filterName);
+    filtered  = f.blocks{1}.filterMultiTags(nix.Filter.name, filterName);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, filterName));
 
     % test nix.Filter.type
-    filtered = f.blocks{1}.filter_multi_tags(nix.Filter.type, filterType);
+    filtered = f.blocks{1}.filterMultiTags(nix.Filter.type, filterType);
     assert(size(filtered, 1) == 2);
 
     % test nix.Filter.metadata
     mainName = 'testSubSection';
-    mainEntity = b.create_multi_tag(mainName, 'nixMultiTag', d);
+    mainEntity = b.createMultiTag(mainName, 'nixMultiTag', d);
     subName = 'testSubSection1';
-    s = f.create_section(subName, 'nixSection');
-    mainEntity.set_metadata(s);
+    s = f.createSection(subName, 'nixSection');
+    mainEntity.setMetadata(s);
     subID = s.id;
 
-    assert(isempty(f.blocks{1}.filter_multi_tags(nix.Filter.metadata, 'Do not exist')));
-    filtered = f.blocks{1}.filter_multi_tags(nix.Filter.metadata, subID);
+    assert(isempty(f.blocks{1}.filterMultiTags(nix.Filter.metadata, 'Do not exist')));
+    filtered = f.blocks{1}.filterMultiTags(nix.Filter.metadata, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 
     % test nix.Filter.source
     mainName = 'testSubSource';
-    mainEntity = b.create_multi_tag(mainName, 'nixMultiTag', d);
+    mainEntity = b.createMultiTag(mainName, 'nixMultiTag', d);
     subName = 'testSubSource1';
-    s = b.create_source(subName, 'nixSource');
-    mainEntity.add_source(s);
+    s = b.createSource(subName, 'nixSource');
+    mainEntity.addSource(s);
     subID = s.id;
 
     % filter works only for ID, not for name
-    filtered = f.blocks{1}.filter_multi_tags(nix.Filter.source, subID);
+    filtered = f.blocks{1}.filterMultiTags(nix.Filter.source, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
     
     % test filters work only within blocks, not between them
-    b = f.create_block('testBlock2', 'nixBlock');
-    d = b.create_data_array('testDataArray', 'nixDataArray', nix.DataType.Bool, [2 9]);
-    t = b.create_multi_tag(filterName, 'nixMultiTag', d);
-    assert(size( b.filter_multi_tags(nix.Filter.name, filterName), 1) == 1);
+    b = f.createBlock('testBlock2', 'nixBlock');
+    d = b.createDataArray('testDataArray', 'nixDataArray', nix.DataType.Bool, [2 9]);
+    t = b.createMultiTag(filterName, 'nixMultiTag', d);
+    assert(size( b.filterMultiTags(nix.Filter.name, filterName), 1) == 1);
 end
 
 %% Test: filter data arrays
-function [] = test_filter_data_array( varargin )
+function [] = testFilterDataArray( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    d = b.create_data_array(filterName, 'nixDataArray', nix.DataType.Bool, [2 9]);
+    b = f.createBlock('testBlock', 'nixBlock');
+    d = b.createDataArray(filterName, 'nixDataArray', nix.DataType.Bool, [2 9]);
     filterID = d.id;
-    d = b.create_data_array('testDataArray1', filterType, nix.DataType.Bool, [2 9]);
+    d = b.createDataArray('testDataArray1', filterType, nix.DataType.Bool, [2 9]);
     filterIDs = {filterID, d.id};
-    d = b.create_data_array('testDataArray2', filterType, nix.DataType.Bool, [2 9]);
+    d = b.createDataArray('testDataArray2', filterType, nix.DataType.Bool, [2 9]);
 
     % test empty id filter
-    assert(isempty(f.blocks{1}.filter_data_arrays(nix.Filter.id, 'IdoNotExist')));
+    assert(isempty(f.blocks{1}.filterDataArrays(nix.Filter.id, 'IdoNotExist')));
 
-    % test nix.Filter.accept_all
-    filtered = f.blocks{1}.filter_data_arrays(nix.Filter.accept_all, '');
+    % test nix.Filter.acceptall
+    filtered = f.blocks{1}.filterDataArrays(nix.Filter.acceptall, '');
     assert(size(filtered, 1) == 3);
 
     % test nix.Filter.id
-    filtered = f.blocks{1}.filter_data_arrays(nix.Filter.id, filterID);
+    filtered = f.blocks{1}.filterDataArrays(nix.Filter.id, filterID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, filterID));
 
     % test nix.Filter.ids
-    filtered = f.blocks{1}.filter_data_arrays(nix.Filter.ids, filterIDs);
+    filtered = f.blocks{1}.filterDataArrays(nix.Filter.ids, filterIDs);
     assert(size(filtered, 1) == 2);
     assert(strcmp(filtered{1}.id, filterIDs{1}) || strcmp(filtered{1}.id, filterIDs{2}));
 
     % test nix.Filter.name
-    filtered  = f.blocks{1}.filter_data_arrays(nix.Filter.name, filterName);
+    filtered  = f.blocks{1}.filterDataArrays(nix.Filter.name, filterName);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, filterName));
 
     % test nix.Filter.type
-    filtered = f.blocks{1}.filter_data_arrays(nix.Filter.type, filterType);
+    filtered = f.blocks{1}.filterDataArrays(nix.Filter.type, filterType);
     assert(size(filtered, 1) == 2);
 
     % test nix.Filter.metadata
     mainName = 'testSubSection';
-    mainEntity = b.create_data_array(mainName, 'nixDataArray', nix.DataType.Bool, [2 9]);
+    mainEntity = b.createDataArray(mainName, 'nixDataArray', nix.DataType.Bool, [2 9]);
     subName = 'testSubSection1';
-    s = f.create_section(subName, 'nixSection');
-    mainEntity.set_metadata(s);
+    s = f.createSection(subName, 'nixSection');
+    mainEntity.setMetadata(s);
     subID = s.id;
 
-    assert(isempty(f.blocks{1}.filter_multi_tags(nix.Filter.metadata, 'Do not exist')));
-    filtered = f.blocks{1}.filter_data_arrays(nix.Filter.metadata, subID);
+    assert(isempty(f.blocks{1}.filterMultiTags(nix.Filter.metadata, 'Do not exist')));
+    filtered = f.blocks{1}.filterDataArrays(nix.Filter.metadata, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 
     % test nix.Filter.source
     mainName = 'testSubSource';
-    mainEntity = b.create_data_array(mainName, 'nixDataArray', nix.DataType.Bool, [2 9]);
+    mainEntity = b.createDataArray(mainName, 'nixDataArray', nix.DataType.Bool, [2 9]);
     subName = 'testSubSource1';
-    s = b.create_source(subName, 'nixSource');
-    mainEntity.add_source(s);
+    s = b.createSource(subName, 'nixSource');
+    mainEntity.addSource(s);
     subID = s.id;
 
     % filter works only for ID, not for name
-    filtered = f.blocks{1}.filter_data_arrays(nix.Filter.source, subID);
+    filtered = f.blocks{1}.filterDataArrays(nix.Filter.source, subID);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, mainName));
 end
 
 %% Test: Find source w/o filter
-function [] = test_find_source
+function [] = testFindSource
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    sl1 = b.create_source('sourceLvl1', 'nixSource');
+    b = f.createBlock('testBlock', 'nixBlock');
+    sl1 = b.createSource('sourceLvl1', 'nixSource');
 
-    sl21 = sl1.create_source('sourceLvl2_1', 'nixSource');
-    sl22 = sl1.create_source('sourceLvl2_2', 'nixSource');
+    sl21 = sl1.createSource('sourceLvl2_1', 'nixSource');
+    sl22 = sl1.createSource('sourceLvl2_2', 'nixSource');
 
-    sl31 = sl21.create_source('sourceLvl3_1', 'nixSource');
-    sl32 = sl21.create_source('sourceLvl3_2', 'nixSource');
-    sl33 = sl21.create_source('sourceLvl3_3', 'nixSource');
+    sl31 = sl21.createSource('sourceLvl3_1', 'nixSource');
+    sl32 = sl21.createSource('sourceLvl3_2', 'nixSource');
+    sl33 = sl21.createSource('sourceLvl3_3', 'nixSource');
 
-    sl41 = sl31.create_source('sourceLvl4_1', 'nixSource');
-    sl42 = sl31.create_source('sourceLvl4_2', 'nixSource');
-    sl43 = sl31.create_source('sourceLvl4_3', 'nixSource');
-    sl44 = sl31.create_source('sourceLvl4_4', 'nixSource');
+    sl41 = sl31.createSource('sourceLvl4_1', 'nixSource');
+    sl42 = sl31.createSource('sourceLvl4_2', 'nixSource');
+    sl43 = sl31.createSource('sourceLvl4_3', 'nixSource');
+    sl44 = sl31.createSource('sourceLvl4_4', 'nixSource');
 
     % Check invalid entry
     err = 'Provide a valid search depth';
     try
-        b.find_sources('hurra');
+        b.findSources('hurra');
     catch ME
         assert(strcmp(ME.message, err));
     end
 
     % find all
-    filtered = b.find_sources(5);
+    filtered = b.findSources(5);
     assert(size(filtered, 1) == 10);
 
     % find until level 4
-    filtered = b.find_sources(4);
+    filtered = b.findSources(4);
     assert(size(filtered, 1) == 10);
 
     % find until level 3
-    filtered = b.find_sources(3);
+    filtered = b.findSources(3);
     assert(size(filtered, 1) == 6);
 
     % find until level 2
-    filtered = b.find_sources(2);
+    filtered = b.findSources(2);
     assert(size(filtered, 1) == 3);
 
     % find until level 1
-    filtered = b.find_sources(1);
+    filtered = b.findSources(1);
     assert(size(filtered, 1) == 1);
 end
 
 %% Test: Find sources with filters
-function [] = test_find_source_filtered
+function [] = testFindSourceFiltered
     findSource = 'nixFindSection';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
-    b = f.create_block('testBlock', 'nixBlock');
-    sl1 = b.create_source('sourceLvl1', 'nixSource');
+    b = f.createBlock('testBlock', 'nixBlock');
+    sl1 = b.createSource('sourceLvl1', 'nixSource');
 
-    sl21 = sl1.create_source('sourceLvl2_1', 'nixSource');
-    sl22 = sl1.create_source('sourceLvl2_2', findSource);
+    sl21 = sl1.createSource('sourceLvl2_1', 'nixSource');
+    sl22 = sl1.createSource('sourceLvl2_2', findSource);
 
-    sl31 = sl21.create_source('sourceLvl3_1', findSource);
-    sl32 = sl21.create_source('sourceLvl3_2', 'nixSource');
-    sl33 = sl21.create_source('sourceLvl3_3', 'nixSource');
+    sl31 = sl21.createSource('sourceLvl3_1', findSource);
+    sl32 = sl21.createSource('sourceLvl3_2', 'nixSource');
+    sl33 = sl21.createSource('sourceLvl3_3', 'nixSource');
 
-    sl41 = sl31.create_source('sourceLvl4_1', findSource);
-    sl42 = sl31.create_source('sourceLvl4_2', 'nixSource');
-    sl43 = sl31.create_source('sourceLvl4_3', 'nixSource');
-    sl44 = sl31.create_source('sourceLvl4_4', 'nixSource');
+    sl41 = sl31.createSource('sourceLvl4_1', findSource);
+    sl42 = sl31.createSource('sourceLvl4_2', 'nixSource');
+    sl43 = sl31.createSource('sourceLvl4_3', 'nixSource');
+    sl44 = sl31.createSource('sourceLvl4_4', 'nixSource');
 
     % test find by id
-    filtered = b.find_filtered_sources(2, nix.Filter.id, sl41.id);
+    filtered = b.filterFindSources(2, nix.Filter.id, sl41.id);
     assert(isempty(filtered));
-    filtered = b.find_filtered_sources(5, nix.Filter.id, sl41.id);
+    filtered = b.filterFindSources(5, nix.Filter.id, sl41.id);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, sl41.id));
 
     % test find by ids
     filterids = {sl1.id, sl41.id};
-    filtered = b.find_filtered_sources(1, nix.Filter.ids, filterids);
+    filtered = b.filterFindSources(1, nix.Filter.ids, filterids);
     assert(size(filtered, 1) == 1);
-    filtered = b.find_filtered_sources(4, nix.Filter.ids, filterids);
+    filtered = b.filterFindSources(4, nix.Filter.ids, filterids);
     assert(size(filtered, 1) == 2);
 
     % test find by name
-    filtered = b.find_filtered_sources(1, nix.Filter.name, sl41.name);
+    filtered = b.filterFindSources(1, nix.Filter.name, sl41.name);
     assert(isempty(filtered));
-    filtered = b.find_filtered_sources(4, nix.Filter.name, sl41.name);
+    filtered = b.filterFindSources(4, nix.Filter.name, sl41.name);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, sl41.name));
 
     % test find by type
-    filtered = b.find_filtered_sources(1, nix.Filter.type, findSource);
+    filtered = b.filterFindSources(1, nix.Filter.type, findSource);
     assert(isempty(filtered));
-    filtered = b.find_filtered_sources(4, nix.Filter.type, findSource);
+    filtered = b.filterFindSources(4, nix.Filter.type, findSource);
     assert(size(filtered, 1) == 3);
     assert(strcmp(filtered{1}.type, findSource));
 
     % test nix.Filter.metadata
-    sec = f.create_section('testSection', 'nixSection');
-    sl43.set_metadata(sec);
-    filtered = b.find_filtered_sources(1, nix.Filter.metadata, sec.id);
+    sec = f.createSection('testSection', 'nixSection');
+    sl43.setMetadata(sec);
+    filtered = b.filterFindSources(1, nix.Filter.metadata, sec.id);
     assert(isempty(filtered));
-    filtered = b.find_filtered_sources(4, nix.Filter.metadata, sec.id);
+    filtered = b.filterFindSources(4, nix.Filter.metadata, sec.id);
     assert(size(filtered, 1) == 1);
     strcmp(filtered{1}.id, sl43.id);
 
     % test nix.Filter.source
-    filtered = b.find_filtered_sources(1, nix.Filter.source, sl44.id);
+    filtered = b.filterFindSources(1, nix.Filter.source, sl44.id);
     assert(isempty(filtered));
-    filtered = b.find_filtered_sources(4, nix.Filter.source, sl44.id);
+    filtered = b.filterFindSources(4, nix.Filter.source, sl44.id);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, sl31.id));
 end

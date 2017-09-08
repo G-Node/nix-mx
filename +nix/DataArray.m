@@ -25,11 +25,11 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             obj@nix.SourcesMixIn();
 
             % assign dynamic properties
-            nix.Dynamic.add_dyn_attr(obj, 'label', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'unit', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'expansionOrigin', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'polynomCoefficients', 'rw');
-            nix.Dynamic.add_dyn_attr(obj, 'dataExtent', 'rw');
+            nix.Dynamic.addProperty(obj, 'label', 'rw');
+            nix.Dynamic.addProperty(obj, 'unit', 'rw');
+            nix.Dynamic.addProperty(obj, 'expansionOrigin', 'rw');
+            nix.Dynamic.addProperty(obj, 'polynomCoefficients', 'rw');
+            nix.Dynamic.addProperty(obj, 'dataExtent', 'rw');
         end
 
         % -----------------
@@ -39,7 +39,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         function dimensions = get.dimensions(obj)
             dimensions = {};
             fname = strcat(obj.alias, '::dimensions');
-            currList = nix_mx(fname, obj.nix_handle);
+            currList = nix_mx(fname, obj.nixhandle);
             for i = 1:length(currList)
                 switch currList(i).dtype
                     case 'set'
@@ -57,36 +57,36 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             end
         end
 
-        function r = append_set_dimension(obj)
+        function r = appendSetDimension(obj)
             fname = strcat(obj.alias, '::appendSetDimension');
-            h = nix_mx(fname, obj.nix_handle);
+            h = nix_mx(fname, obj.nixhandle);
             r = nix.Utils.createEntity(h, @nix.SetDimension);
         end
 
-        function r = append_sampled_dimension(obj, interval)
+        function r = appendSampledDimension(obj, interval)
             fname = strcat(obj.alias, '::appendSampledDimension');
-            h = nix_mx(fname, obj.nix_handle, interval);
+            h = nix_mx(fname, obj.nixhandle, interval);
             r = nix.Utils.createEntity(h, @nix.SampledDimension);
         end
 
-        function r = append_range_dimension(obj, ticks)
+        function r = appendRangeDimension(obj, ticks)
             fname = strcat(obj.alias, '::appendRangeDimension');
-            h = nix_mx(fname, obj.nix_handle, ticks);
+            h = nix_mx(fname, obj.nixhandle, ticks);
             r = nix.Utils.createEntity(h, @nix.RangeDimension);
         end
 
-        function r = append_alias_range_dimension(obj)
+        function r = appendAliasRangeDimension(obj)
             fname = strcat(obj.alias, '::appendAliasRangeDimension');
-            h = nix_mx(fname, obj.nix_handle);
+            h = nix_mx(fname, obj.nixhandle);
             r = nix.Utils.createEntity(h, @nix.RangeDimension);
         end
 
-        function r = open_dimension_idx(obj, idx)
+        function r = openDimensionIdx(obj, idx)
         % Getting the dimension by index starts with 1
         % instead of 0 compared to all other index functions.
             fname = strcat(obj.alias, '::openDimensionIdx');
-            dim = nix_mx(fname, obj.nix_handle, idx);
-            switch (dim.dimension_type)
+            dim = nix_mx(fname, obj.nixhandle, idx);
+            switch (dim.dimensionType)
                 case 'set'
                     r = nix.Utils.createEntity(dim.handle, @nix.SetDimension);
                 case 'sampled'
@@ -96,12 +96,12 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             end
         end
 
-        function r = delete_dimensions(obj)
+        function r = deleteDimensions(obj)
             fname = strcat(obj.alias, '::deleteDimensions');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix_mx(fname, obj.nixhandle);
         end
 
-        function r = dimension_count(obj)
+        function r = dimensionCount(obj)
             r = nix.Utils.fetchEntityCount(obj, 'dimensionCount');
         end
 
@@ -109,27 +109,28 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % Data access methods
         % -----------------
 
-        function r = read_all(obj)
+        function r = readAllData(obj)
             fname = strcat(obj.alias, '::readAll');
-            data = nix_mx(fname, obj.nix_handle);
-            r = nix.Utils.transpose_array(data);
+            data = nix_mx(fname, obj.nixhandle);
+            r = nix.Utils.transposeArray(data);
         end
 
         %-- TODO add (optional) offset
         %-- If a DataArray has been created as boolean or numeric,
         %-- provide that only values of the proper DataType can be written.
-        function [] = write_all(obj, data)
-            if (isinteger(obj.read_all) && isfloat(data))
+        function [] = writeAllData(obj, data)
+            if (isinteger(obj.readAllData) && isfloat(data))
                 disp('Warning: Writing Float data to an Integer DataArray');
             end
 
             err.identifier = 'NIXMX:improperDataType';
-            if (islogical(obj.read_all) && ~islogical(data))
+            if (islogical(obj.readAllData) && ~islogical(data))
                 m = sprintf('Trying to write %s to a logical DataArray', class(data));
                 err.message = m;
                 error(err);
-            elseif (isnumeric(obj.read_all) && ~isnumeric(data))
-                m = sprintf('Trying to write %s to a %s DataArray', class(data), class(obj.read_all));
+            elseif (isnumeric(obj.readAllData) && ~isnumeric(data))
+                m = sprintf('Trying to write %s to a %s DataArray', ...
+                    class(data), class(obj.readAllData));
                 err.message = m;
                 error(err);
             elseif (ischar(data))
@@ -142,12 +143,12 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             end
 
             fname = strcat(obj.alias, '::writeAll');
-            nix_mx(fname, obj.nix_handle, nix.Utils.transpose_array(data));
+            nix_mx(fname, obj.nixhandle, nix.Utils.transposeArray(data));
         end
 
         function r = datatype(obj)
             fname = strcat(obj.alias, '::dataType');
-            r = nix_mx(fname, obj.nix_handle);
+            r = nix_mx(fname, obj.nixhandle);
         end
 
         % Set data extent enables to increase the original size 
@@ -159,9 +160,9 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
         % or remodels the size of an array to a completely different
         % shape, existing data that does not fit into the new shape
         % will be lost!
-        function [] = set_data_extent(obj, extent)
+        function [] = setDataExtent(obj, extent)
             fname = strcat(obj.alias, '::setDataExtent');
-            nix_mx(fname, obj.nix_handle, extent);
+            nix_mx(fname, obj.nixhandle, extent);
         end
     end
 
