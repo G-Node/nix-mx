@@ -97,11 +97,11 @@ classdef Section < nix.NamedEntity
 
         % maxDepth is handled like an index
         function r = findSections(obj, maxDepth)
-            r = obj.FilterFindSections(maxDepth, nix.Filter.acceptall, '');
+            r = obj.filterFindSections(maxDepth, nix.Filter.acceptall, '');
         end
 
         % maxDepth is handled like an index
-        function r = FilterFindSections(obj, maxDepth, filter, val)
+        function r = filterFindSections(obj, maxDepth, filter, val)
             r = nix.Utils.find(obj, 'findSections', maxDepth, filter, val, @nix.Section);
         end
 

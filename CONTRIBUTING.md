@@ -40,7 +40,7 @@ Please try to avoid duplicates of issues. If you encounter duplicated issues, pl
 one, reference the closed issues in the one that is left open and add missing information from the closed issues
 (if necessary) to the remaining issue.
 
-Assign meaningful tags to newly crated issues and if possible assign them to milestones.
+Assign meaningful tags to newly crated issues and if possible assign them to a milestone.
 
 
 Reviewing pull requests
@@ -64,7 +64,8 @@ Testing
 Style guide
 -----------
 
-Adhere to the MATLAB Style Guidelines 2.0 as suggested by Richard Johnson.
+Adhere to the [MATLAB Style Guidelines 2.0](https://de.mathworks.com/matlabcentral/fileexchange/46056-matlab-style-guidelines-2-0) 
+as suggested by Richard Johnson.
 
 Furthermore, adhere to these additional guidelines for the nix-mx project:
 - Keep line length at a maximum of 90 characters.

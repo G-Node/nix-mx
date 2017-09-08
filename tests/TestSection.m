@@ -796,46 +796,46 @@ function [] = testFilterFindSections
     side1 = side.createSection(sideName, 'nixSection');
 
     % test find by id
-    filtered = sl1.FilterFindSections(1, nix.Filter.id, sl41.id);
+    filtered = sl1.filterFindSections(1, nix.Filter.id, sl41.id);
     assert(isempty(filtered));
-    filtered = sl1.FilterFindSections(4, nix.Filter.id, sl41.id);
+    filtered = sl1.filterFindSections(4, nix.Filter.id, sl41.id);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.id, sl41.id));
 
     % test find by ids
     filterids = {sl1.id, sl41.id};
-    filtered = sl1.FilterFindSections(1, nix.Filter.ids, filterids);
+    filtered = sl1.filterFindSections(1, nix.Filter.ids, filterids);
     assert(size(filtered, 1) == 1);
-    filtered = sl1.FilterFindSections(4, nix.Filter.ids, filterids);
+    filtered = sl1.filterFindSections(4, nix.Filter.ids, filterids);
     assert(size(filtered, 1) == 2);
 
     % test find by name
-    filtered = sl1.FilterFindSections(5, nix.Filter.name, sideName);
+    filtered = sl1.filterFindSections(5, nix.Filter.name, sideName);
     assert(isempty(filtered));
-    filtered = sl1.FilterFindSections(1, nix.Filter.name, sl41.name);
+    filtered = sl1.filterFindSections(1, nix.Filter.name, sl41.name);
     assert(isempty(filtered));
-    filtered = sl1.FilterFindSections(4, nix.Filter.name, sl41.name);
+    filtered = sl1.filterFindSections(4, nix.Filter.name, sl41.name);
     assert(size(filtered, 1) == 1);
     assert(strcmp(filtered{1}.name, sl41.name));
 
     % test find by type
-    filtered = sl1.FilterFindSections(1, nix.Filter.type, findSection);
+    filtered = sl1.filterFindSections(1, nix.Filter.type, findSection);
     assert(isempty(filtered));
-    filtered = sl1.FilterFindSections(4, nix.Filter.type, findSection);
+    filtered = sl1.filterFindSections(4, nix.Filter.type, findSection);
     assert(size(filtered, 1) == 3);
     assert(strcmp(filtered{1}.type, findSection));
 
     % test fail on nix.Filter.metadata
     err = 'unknown or unsupported filter';
     try
-        sl1.FilterFindSections(1, nix.Filter.metadata, 'metadata');
+        sl1.filterFindSections(1, nix.Filter.metadata, 'metadata');
     catch ME
         assert(strcmp(ME.message, err));
     end
 
     % test fail on nix.Filter.source
     try
-        sl1.FilterFindSections(1, nix.Filter.source, 'source');
+        sl1.filterFindSections(1, nix.Filter.source, 'source');
     catch ME
         assert(strcmp(ME.message, err));
     end
