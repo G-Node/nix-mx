@@ -1,3 +1,5 @@
+% TestFeature provides tests for all supported nix.Feature methods.
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,34 +9,32 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestFeature
-% TESTFEATURE tests for Feature
-
     funcs = {};
     funcs{end+1} = @testOpenData;
     funcs{end+1} = @testHandleLinkType;
     funcs{end+1} = @testSetData;
 end
 
-%% Test: Open data from feature
+%% Test: Open data from Feature
 function [] = testOpenData ( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
     tmp = b.createDataArray('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
     t = b.createTag('featureTest', 'nixTag', [1, 2]);
-    tmp = t.addFeature(b.dataArrays{1}, nix.LinkType.Tagged);
+    tmp = t.createFeature(b.dataArrays{1}, nix.LinkType.Tagged);
     
     feat = t.features{1};
     assert(~isempty(feat.openData));
 end
 
-%% Test: Get and set nix.LinkType
+%% Test: Get and set LinkType
 function [] = testHandleLinkType ( varargin )
     fileName = 'testRW.h5';
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.Overwrite);
     b = f.createBlock('featureTest', 'nixBlock');
     da = b.createDataArray('featureTestDataArray', 'nixDataArray', nix.DataType.Double, [1 2 3 4 5 6]);
     t = b.createTag('featureTest', 'nixTag', [1, 2]);
-    feat = t.addFeature(b.dataArrays{1}, nix.LinkType.Tagged);
+    feat = t.createFeature(b.dataArrays{1}, nix.LinkType.Tagged);
     
     try
         feat.linkType = '';
@@ -63,7 +63,7 @@ function [] = testHandleLinkType ( varargin )
     assert(f.blocks{1}.tags{1}.features{1}.linkType == 2);
 end
 
-%% Test: Set data by entity, ID and name
+%% Test: Set data by entity, id and name
 function [] = testSetData ( varargin )
     fileName = 'testRW.h5';
     daName1 = 'featTestDA1';
@@ -79,7 +79,7 @@ function [] = testSetData ( varargin )
     da3 = b.createDataArray(daName3, daType, nix.DataType.Double, daData);
     da4 = b.createDataArray(daName4, daType, nix.DataType.Double, daData);
     t = b.createTag('featureTest', 'nixTag', [1, 2]);
-    feat = t.addFeature(b.dataArrays{1}, nix.LinkType.Tagged);
+    feat = t.createFeature(b.dataArrays{1}, nix.LinkType.Tagged);
     
     assert(strcmp(feat.openData.name, daName1));
     feat.setData(da2);

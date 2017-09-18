@@ -1,3 +1,5 @@
+% nix.FileMode provides access to the Modes a NIX file can be opened.
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,7 +9,6 @@
 % LICENSE file in the root of the Project.
 
 classdef FileMode
-    % FILEMODE nix file open modes
 
     properties (Constant)
         ReadOnly = uint8(0);

@@ -1,3 +1,5 @@
+% TestSection provides tests for all supported nix.Section methods.
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,8 +9,6 @@
 % LICENSE file in the root of the Project.
 
 function funcs = TestSection
-% TESTSECTION Tests for the nix.Section object
-
     funcs = {};
     funcs{end+1} = @testCreateSection;
     funcs{end+1} = @testDeleteSection;
@@ -56,7 +56,7 @@ function [] = testCreateSection( varargin )
     assert(size(s.sections, 1) == 2);
 end
 
-%% Test: Delete Section by entity or ID
+%% Test: Delete Section by entity or id
 function [] = testDeleteSection( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
@@ -71,16 +71,16 @@ function [] = testDeleteSection( varargin )
     assert(~s.deleteSection('I do not exist'));
 end
 
-function [] = testListSubsections( varargin )
 %% Test: List/fetch subsections
+function [] = testListSubsections( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     s1 = f.sections{3};
 
     assert(size(s1.sections, 1) == 4);
 end
 
+%% Test: Open subsection by id or name
 function [] = testOpenSection( varargin )
-%% Test: Open subsection by ID or name
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     s1 = f.sections{3};
 
@@ -97,8 +97,8 @@ function [] = testOpenSection( varargin )
     assert(isempty(getSection));
 end
 
-function [] = testOpenSectionIdx( varargin )
 %% Test Open Section by index
+function [] = testOpenSectionIdx( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('testSection', 'nixSection');
     s1 = s.createSection('testSection1', 'nixSection');
@@ -110,8 +110,8 @@ function [] = testOpenSectionIdx( varargin )
     assert(strcmp(f.sections{1}.openSectionIdx(3).name, s3.name));
 end
 
+%% Test: Get parent Section
 function [] = testParent( varargin )
-%% Test: get parent section
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     s1 = f.sections{3};
 
@@ -121,14 +121,17 @@ function [] = testParent( varargin )
     assert(strcmp(s2.parent.id, s1.id));
 end
 
+%% Test: Has Section by id and name
 function [] = testHasSection( varargin )
-%% Test: Has Section
-    f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    root = f.sections{3};
-    child = root.sections{1};
+    testFile = fullfile(pwd, 'tests', 'testRW.h5');
+    f = nix.File(testFile, nix.FileMode.Overwrite);
+    rootSec = f.createSection('mainSection', 'nixSection');
+    subSec1 = rootSec.createSection('subSection1', 'nixSection');
+    subSec2 = rootSec.createSection('subSection2', 'nixSection');
 
-    assert(root.hasSection(child.id));
-    assert(~root.hasSection('whatever'));
+    assert(~rootSec.hasSection('I do not exist'));
+    assert(rootSec.hasSection(subSec1.id));
+    assert(rootSec.hasSection(subSec2.name));
 end
 
 %% Test: Section count
@@ -148,8 +151,8 @@ function [] = testSectionCount( varargin )
 end
 
 
+%% Test: Access Attributes
 function [] = testAttributes( varargin )
-%% Test: Access Attributes / Links
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('foo', 'bar');
 
@@ -173,8 +176,8 @@ function [] = testAttributes( varargin )
     assert(isempty(s.repository));
 end
 
+%% Test: Fetch Properties
 function [] = testProperties( varargin )
-%% Test: Properties
     f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
     trial = f.sections{2}.sections{2}.sections{1};
 
@@ -183,7 +186,7 @@ function [] = testProperties( varargin )
     assert(isempty(f.sections{3}.properties));
 end
 
-%% Test: Create property by data type
+%% Test: Create Property by data type
 function [] = testCreateProperty( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
@@ -195,7 +198,7 @@ function [] = testCreateProperty( varargin )
     assert(strcmp(s.properties{1}.name, 'newProperty1'));
 end
 
-%% Test: Create property with value
+%% Test: Create Property with value
 function [] = testCreatePropertyWithValue( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
@@ -256,35 +259,35 @@ function [] = testCreatePropertyWithValue( varargin )
     assert(strcmpi(s.properties{end}.datatype, 'double'));
 end
 
-%% Test: Delete property by entity, propertyStruct, ID and name
+%% Test: Delete Property by entity, ID and name
 function [] = testDeleteProperty( varargin )
     f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
     s.createProperty('newProperty1', nix.DataType.Double);
     s.createProperty('newProperty2', nix.DataType.Bool);
     s.createProperty('newProperty3', nix.DataType.String);
-    s.createProperty('newProperty4', nix.DataType.Double);
 
-    assert(s.deleteProperty('newProperty4'));
-    assert(s.deleteProperty(s.properties{3}.id));
-    delProp = s.properties{2};
-    assert(s.deleteProperty(delProp));
+    assert(s.deleteProperty('newProperty3'));
+    assert(s.deleteProperty(s.properties{2}.id));
     assert(s.deleteProperty(s.properties{1}));
 
     assert(~s.deleteProperty('I do not exist'));
 end
 
-%% Test: Open property by ID and name
+%% Test: Open Property by id and name
 function [] = testOpenProperty( varargin )
-    f = nix.File(fullfile(pwd, 'tests', 'test.h5'), nix.FileMode.ReadOnly);
-    trial = f.sections{2}.sections{2}.sections{1};
+    f = nix.File(fullfile(pwd,'tests','testRW.h5'), nix.FileMode.Overwrite);
+    s = f.createSection('mainSection', 'nixSection');
+    prop1 = s.createProperty('newProperty1', nix.DataType.Double);
+    prop2 = s.createProperty('newProperty2', nix.DataType.Bool);
 
-    assert(~isempty(trial.openProperty(trial.properties{1}.id)));
-    assert(~isempty(trial.openProperty(trial.properties{1}.name)));
+    assert(isempty(s.openProperty('I do not exist')));
+    assert(~isempty(s.openProperty(prop1.id)));
+    assert(~isempty(s.openProperty(prop2.name)));
 end
 
+%% Test Open Property by index
 function [] = testOpenPropertyIdx( varargin )
-%% Test Open Propery by index
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('testSection', 'nixSection');
     p1 = s.createProperty('testProperty1', nix.DataType.Double);
@@ -312,7 +315,7 @@ function [] = testPropertyCount( varargin )
     assert(f.sections{1}.propertyCount() == 2);
 end
 
-%% Test: set, open and remove section link
+%% Test: Set, open and remove Section link
 function [] = testLink( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     mainSec = f.createSection('mainSection', 'nixSection');
@@ -329,7 +332,7 @@ function [] = testLink( varargin )
     assert(isempty(mainSec.openLink));
 end
 
-%% Test: inherited properties
+%% Test: Inherited Property entities
 function [] = testInheritedProperties( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     s = f.createSection('mainSection', 'nixSection');
@@ -348,7 +351,7 @@ function [] = testInheritedProperties( varargin )
     assert(size(s.inheritedProperties, 1) == 2);
 end
 
-%% Test: referring data arrays
+%% Test: Referring DataArrays
 function [] = testReferringDataArrays( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
@@ -370,7 +373,7 @@ function [] = testReferringDataArrays( varargin )
     assert(isempty(s.referringDataArrays));
 end
 
-%% Test: referring block data arrays
+%% Test: Referring Block DataArrays
 function [] = testReferringBlockDataArrays( varargin )
     err = 'Provide either empty arguments or a single Block entity';
     testName = 'testDataArray1';
@@ -405,7 +408,7 @@ function [] = testReferringBlockDataArrays( varargin )
     assert(strcmp(testDataArray{1}.name, testName));
 end
 
-%% Test: referring tags
+%% Test: Referring Tags
 function [] = testReferringTags( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
@@ -427,7 +430,7 @@ function [] = testReferringTags( varargin )
     assert(isempty(s.referringTags));
 end
 
-%% Test: referring block tags
+%% Test: Referring Block Tags
 function [] = testReferringBlockTags( varargin )
     err = 'Provide either empty arguments or a single Block entity';
     testName = 'testTag1';
@@ -462,7 +465,7 @@ function [] = testReferringBlockTags( varargin )
     assert(strcmp(testTag{1}.name, testName));
 end
 
-%% Test: referring multi tags
+%% Test: Referring MultiTags
 function [] = testReferringMultiTags( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
@@ -486,7 +489,7 @@ function [] = testReferringMultiTags( varargin )
     assert(isempty(s.referringMultiTags));
 end
 
-%% Test: referring block multi tags
+%% Test: Referring Block MultiTags
 function [] = testReferringBlockMultiTags( varargin )
     err = 'Provide either empty arguments or a single Block entity';
     testName = 'testMultiTag1';
@@ -523,7 +526,7 @@ function [] = testReferringBlockMultiTags( varargin )
     assert(strcmp(testTag{1}.name, testName));
 end
 
-%% Test: referring sources
+%% Test: Referring Sources
 function [] = testReferringSources( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
@@ -545,7 +548,7 @@ function [] = testReferringSources( varargin )
     assert(isempty(s.referringSources));
 end
 
-%% Test: referring block sources
+%% Test: Referring Block Sources
 function [] = testReferringBlockSources( varargin )
     err = 'Provide either empty arguments or a single Block entity';
     testName = 'testSource1';
@@ -580,7 +583,7 @@ function [] = testReferringBlockSources( varargin )
     assert(strcmp(testSource{1}.name, testName));
 end
 
-%% Test: referring blocks
+%% Test: Referring Blocks
 function [] = testReferringBlocks( varargin )
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     b1 = f.createBlock('testBlock1', 'nixBlock');
@@ -599,8 +602,8 @@ function [] = testReferringBlocks( varargin )
     assert(size(s.referringBlocks, 1) == 1);
 end
 
+%% Test: Compare Section entities
 function [] = testCompare( varargin )
-%% Test: Compare group entities
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     s1 = f.createSection('testSection1', 'nixSection');
     s2 = f.createSection('testSection2', 'nixSection');
@@ -610,7 +613,7 @@ function [] = testCompare( varargin )
     assert(s2.compare(s1) > 0);
 end
 
-%% Test: filter Sections
+%% Test: Filter Sections
 function [] = testFilterSection( varargin )
     filterName = 'filterMe';
     filterType = 'filterType';
@@ -666,7 +669,7 @@ function [] = testFilterSection( varargin )
     end
 end
 
-%% Test: filter properties
+%% Test: Filter Properties
 function [] = testFilterProperty( varargin )
     filterName = 'filterMe';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
@@ -707,7 +710,6 @@ function [] = testFilterProperty( varargin )
     end
 
     % test fail on nix.Filter.metadata
-    err = 'unknown or unsupported filter';
     try
         f.sections{1}.filterProperties(nix.Filter.metadata, 'someMetadata');
     catch ME
@@ -722,7 +724,7 @@ function [] = testFilterProperty( varargin )
     end
 end
 
-%% Test: Find sections w/o filter
+%% Test: Find Sections w/o filter
 function [] = testFindSection
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
     main = f.createSection('testSection', 'nixSection');
@@ -772,7 +774,7 @@ function [] = testFindSection
     assert(size(filtered, 1) == 1);
 end
 
-%% Test: Find sections with filters
+%% Test: Find Sections with filters
 function [] = testFilterFindSections
     findSection = 'nixFindSection';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);
@@ -841,7 +843,7 @@ function [] = testFilterFindSections
     end
 end
 
-%% Test: Find sections related to the current section
+%% Test: Find Sections related to the invoking Section
 function [] = testFindRelated
     findSectionType = 'nixFindSection';
     f = nix.File(fullfile(pwd, 'tests', 'testRW.h5'), nix.FileMode.Overwrite);

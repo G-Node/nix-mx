@@ -1,3 +1,11 @@
+% Base class for nix entities.
+%
+% Class provides access to the info property and handles the lifetime
+% of a nix entitiy.
+%
+% Utility class, do not use out of context.
+%
+%
 % Copyright (c) 2016, German Neuroinformatics Node (G-Node)
 %
 % All rights reserved.
@@ -7,8 +15,6 @@
 % LICENSE file in the root of the Project.
 
 classdef Entity < dynamicprops
-    % Entity base class for nix entities
-    %   handles object lifetime
 
     properties (Hidden)
         nixhandle
@@ -32,6 +38,8 @@ classdef Entity < dynamicprops
         end
 
         function r = updatedAt(obj)
+            % Provides the time the entity was last updated.
+
             r = nix_mx('Entity::updatedAt', obj.nixhandle);
         end
 
