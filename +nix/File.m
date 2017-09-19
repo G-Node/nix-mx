@@ -82,7 +82,14 @@ classdef File < nix.Entity
             % See also nix.FileMode.
 
             fname = strcat(obj.alias, '::fileMode');
-            r = nix_mx(fname, obj.nixhandle);
+            val = nix_mx(fname, obj.nixhandle);
+            r = nix.FileMode.ReadOnly;
+            switch val
+                case 1
+                    r = nix.FileMode.ReadWrite;
+                case 2
+                    r = nix.FileMode.Overwrite;
+            end
         end
 
         function r = validate(obj)
