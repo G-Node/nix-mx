@@ -5,8 +5,8 @@ To compile NIX-MX for macOS for your MATLAB Version follow these steps:
 
 **Dependencies**
 
-- You have to have a woring build environment including a C++ compiler
-- Install the nix C++ libraries (e.g. via homebrew `brew install nixio`) to build it from source please visit [NIX](https://github.com/G-Node/nix).
+- You have to have a working build environment including a C++ compiler
+- Install the nix C++ libraries (e.g. via homebrew `brew install nixio`) to build it from source please visit [NIX](https://github.com/G-Node/nix)
 - Install cmake and the boost libraries (e.g. via homebrew `brew install boost; brew install cmake`
 - Clone the nix-mx repository `git clone https://github.com/g-node/nix-mx.git`
 - Change into the directory and create a build subfolder: `mkdir build`

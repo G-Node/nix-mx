@@ -1,7 +1,7 @@
 How to contribute to nix-mx
 ===========================
 
-This document gives some information about how to contribute to the nix-mx project.
+This document gives some information about how to contribute to the [nix-mx](https://github.com/G-Node/nix-mx) project.
 
 
 Contributing
