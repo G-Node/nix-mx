@@ -38,7 +38,7 @@ namespace nixblock {
         nix::DataType dtype = nix::string_to_data_type(input.str(4));
         nix::NDSize size = input.ndsize(5);
 
-        nix::DataArray dt = block.createDataArray(name, type, dtype, size);
+        nix::DataArray dt = block.createDataArray(name, type, dtype, size, nix::Compression::None);
         output.set(0, dt);
     }
 
