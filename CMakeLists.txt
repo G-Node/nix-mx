@@ -18,10 +18,16 @@ if(NOT WIN32)
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O2")
 endif()
 
-#packages
+# packages
 
-find_package(Boost 1.49.0 REQUIRED)
+# Provide Boost lib
+set(Boost_USE_STATIC_LIBS ON)
+find_package(Boost 1.49.0 REQUIRED date_time regex program_options system filesystem)
 include_directories(${Boost_INCLUDE_DIR})
+
+# Provide HDF5 lib
+set(HDF5_USE_STATIC_LIBRARIES ON)
+find_package (HDF5 REQUIRED COMPONENTS C)
 
 # The computing environment
 
@@ -56,6 +62,7 @@ if(NOT CE_PACKAGE)
   Install GNU Octave (or MathWorks MATLAB).")
 endif()
 
+set(NIX_USE_STATIC_LIBS ON)
 find_package(NIX REQUIRED)
 
 include_directories(${CE_INCDIR} ${NIX_INCLUDE_DIR} "src" "src/utils")
@@ -71,7 +78,7 @@ endif()
 
 add_library(nix_mx ${LIBTYPE} nix_mx.cc ${SOURCE_FILES} ${INCLUDE_FILES})
 
-target_link_libraries(nix_mx ${CE_LIBRARIES} ${NIX_LIBRARIES})
+target_link_libraries(nix_mx ${CE_LIBRARIES} ${NIX_LIBRARIES} ${Boost_LIBRARIES} ${HDF5_LIBRARIES})
 set_target_properties(nix_mx PROPERTIES
 		              VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
 		              SOVERSION ${VERSION_ABI})
@@ -105,4 +112,6 @@ MESSAGE(STATUS "Computing environment")
 MESSAGE(STATUS "  Package: ${CE_PACKAGE}")
 MESSAGE(STATUS "  Version: ${CE_VERSION}")
 MESSAGE(STATUS "  Module : ${CE_EXTENSION}")
+MESSAGE(STATUS "  BOOST  : ${Boost_LIBRARIES}")
+MESSAGE(STATUS "  NIX    : ${NIX_LIBRARIES}")
 MESSAGE(STATUS "=====================")
