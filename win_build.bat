@@ -88,6 +88,13 @@ cmake --build . --config %BUILD_TYPE% --target testrunner
 IF %ERRORLEVEL% == 1 (EXIT /b)
 
 ECHO --------------------------------------------------------------------------
+ECHO Building nix-tool ...
+ECHO --------------------------------------------------------------------------
+cmake --build . --config %BUILD_TYPE% --target nix-tool
+
+IF %ERRORLEVEL% == 1 (EXIT /b)
+
+ECHO --------------------------------------------------------------------------
 ECHO Testing nix ...
 ECHO --------------------------------------------------------------------------
 %NIX_BUILD_DIR%\TestRunner.exe
@@ -119,6 +126,8 @@ IF %ERRORLEVEL% == 1 (EXIT /b)
 
 REM Copying required nix-mx.mex file to nix-mx root folder
 COPY %NIX_MX_ROOT%\build\%BUILD_TYPE%\nix_mx.mexw* %NIX_MX_ROOT%\ /Y
+REM Provide nix-tool as well for validation and content display
+COPY %NIX_ROOT%\build\%BUILD_TYPE%\nix-tool.exe %NIX_MX_ROOT%\ /Y
 
 CD %NIX_MX_ROOT%
 
