@@ -753,25 +753,29 @@ function [] = testFindSection
         assert(strcmp(ME.message, err));
     end
 
-    % find all
-    filtered = sl1.findSections(5);
-    assert(size(filtered, 1) == 10);
+    % Check invalid entry
+    err = 'Search depth must be positive integers or logicals.';
+    try
+        sl1.findSections(-20);
+    catch ME
+        assert(strcmp(ME.message, err));
+    end
 
-    % find until level 4
+    % find all
     filtered = sl1.findSections(4);
-    assert(size(filtered, 1) == 10);
+    assert(size(filtered, 1) == 9);
 
     % find until level 3
     filtered = sl1.findSections(3);
-    assert(size(filtered, 1) == 6);
+    assert(size(filtered, 1) == 9);
 
     % find until level 2
     filtered = sl1.findSections(2);
-    assert(size(filtered, 1) == 3);
+    assert(size(filtered, 1) == 5);
 
     % find until level 1
     filtered = sl1.findSections(1);
-    assert(size(filtered, 1) == 1);
+    assert(size(filtered, 1) == 2);
 end
 
 %% Test: Find Sections with filters
@@ -805,7 +809,7 @@ function [] = testFilterFindSections
     assert(strcmp(filtered{1}.id, sl41.id));
 
     % test find by ids
-    filterids = {sl1.id, sl41.id};
+    filterids = {sl21.id, sl41.id};
     filtered = sl1.filterFindSections(1, nix.Filter.ids, filterids);
     assert(size(filtered, 1) == 1);
     filtered = sl1.filterFindSections(4, nix.Filter.ids, filterids);
@@ -821,7 +825,7 @@ function [] = testFilterFindSections
     assert(strcmp(filtered{1}.name, sl41.name));
 
     % test find by type
-    filtered = sl1.filterFindSections(1, nix.Filter.type, findSection);
+    filtered = main.filterFindSections(1, nix.Filter.type, findSection);
     assert(isempty(filtered));
     filtered = sl1.filterFindSections(4, nix.Filter.type, findSection);
     assert(size(filtered, 1) == 3);

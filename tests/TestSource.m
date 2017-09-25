@@ -401,23 +401,23 @@ function [] = testFindSource( varargin )
     end
 
     % find all
-    filtered = s.findSources(5);
+    filtered = s.findSources(4);
     assert(size(filtered, 1) == 11);
 
     % find until level 3
-    filtered = s.findSources(4);
+    filtered = s.findSources(3);
     assert(size(filtered, 1) == 7);
 
     % find until level 2
-    filtered = s.findSources(3);
+    filtered = s.findSources(2);
     assert(size(filtered, 1) == 4);
 
     % find until level 1
-    filtered = s.findSources(2);
+    filtered = s.findSources(1);
     assert(size(filtered, 1) == 2);
 
     % find until level 0
-    filtered = s.findSources(1);
+    filtered = s.findSources(0);
     assert(size(filtered, 1) == 1);
 end
 
