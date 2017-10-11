@@ -1,16 +1,31 @@
 @ECHO off
 SET MATLAB_BINARY=c:\work\MATLAB_R2011a\bin
-REM Latest dependencies at https://projects.g-node.org/nix/
+REM Latest Boost dependencies at https://projects.g-node.org/nix/
 SET NIX_DEP=c:\work\nix-dep
 REM clone nix source from https://github.com/G-Node/nix
 SET NIX_ROOT=c:\work\nix
 SET NIX_MX_ROOT=c:\work\nix-mx
+REM This build script requires HDF5 version 1.10.1
+REM Latest HDF5 dependencies for VS 2013 at https://www.hdfgroup.org/downloads/hdf5/
+REM provide them at %NIX-DEP%\x86 or %NIX-DEP%\x64
 SET HDF5_VERSION_DIR=hdf5-1.10.1
+REM Static build requires cmake version 3.9.1
+SET CMAKEVER=3.9.1
+
+ECHO --------------------------------------------------------------------------
+ECHO Checking dependencies ...
+ECHO --------------------------------------------------------------------------
 
 IF NOT EXIST cmake (
-	ECHO Require a valid installation of cmake.
+	ECHO Require a valid installation of cmake.\nExit...
 	EXIT /b
 )
+
+FOR /F "tokens=*" %%a in ('cmake /V ^| find "%CMAKEVER%" /c') DO SET HASCMAKEVER=%%a
+IF NOT [%HASCMAKEVER%]==[1] (
+	ECHO Require cmake version %CMAKEVER%.
+	EXIT /b
+	)
 
 IF NOT EXIST %NIX_DEP% (
 	ECHO Please provide the nix dependency directory.
@@ -53,11 +68,11 @@ SET PATH=%PATH%;%HDF5_BASE%\bin
 SET BOOST_ROOT=%BASE%\boost-1.57.0
 SET BOOST_INCLUDEDIR=%BOOST_ROOT%\include\boost-1_57
 
-ECHO CPPUNIT_INCLUDE_DIR=%CPPUNIT_INCLUDE_DIR%
+ECHO CPPUNIT_INCLUDE_DIR=%CPPUNIT_INCLUDE_DIR%, checking directory...
 IF EXIST %CPPUNIT_INCLUDE_DIR% (ECHO cppunit OK) ElSE (EXIT /b)
-ECHO HDF5_DIR=%HDF5_DIR%
+ECHO HDF5_DIR=%HDF5_DIR%, checking directory...
 IF EXIST %HDF5_DIR% (ECHO hdf5 OK) ELSE (EXIT /b)
-ECHO BOOST_INCLUDEDIR=%BOOST_INCLUDEDIR%
+ECHO BOOST_INCLUDEDIR=%BOOST_INCLUDEDIR%, checking directory...
 IF EXIST %BOOST_ROOT% (ECHO boost OK) ELSE (EXIT /b)
 
 ECHO --------------------------------------------------------------------------
