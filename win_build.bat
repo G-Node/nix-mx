@@ -1,13 +1,34 @@
 @ECHO off
 SET MATLAB_BINARY=c:\work\MATLAB_R2011a\bin
-REM Latest dependencies at https://projects.g-node.org/nix/
+REM Latest Boost dependencies at https://projects.g-node.org/nix/
 SET NIX_DEP=c:\work\nix-dep
 REM clone nix source from https://github.com/G-Node/nix
 SET NIX_ROOT=c:\work\nix
 SET NIX_MX_ROOT=c:\work\nix-mx
+REM This build script requires HDF5 version 1.10.1
+REM Latest HDF5 dependencies for VS 2013 at https://www.hdfgroup.org/downloads/hdf5/
+REM provide them at %NIX-DEP%\x86 or %NIX-DEP%\x64
+SET HDF5_VERSION_DIR=hdf5-1.10.1
+REM Static build requires cmake version 3.9.1
+SET CMAKEVER=3.9.1
+
+ECHO --------------------------------------------------------------------------
+ECHO Checking dependencies ...
+ECHO --------------------------------------------------------------------------
+
+IF NOT EXIST cmake (
+	ECHO Require a valid installation of cmake.\nExit...
+	EXIT /b
+)
+
+FOR /F "tokens=*" %%a in ('cmake /V ^| find "%CMAKEVER%" /c') DO SET HASCMAKEVER=%%a
+IF NOT [%HASCMAKEVER%]==[1] (
+	ECHO Require cmake version %CMAKEVER%.
+	EXIT /b
+	)
 
 IF NOT EXIST %NIX_DEP% (
-	ECHO Please provide valid nix dependencies.
+	ECHO Please provide the nix dependency directory.
 	EXIT /b
 )
 
@@ -40,18 +61,18 @@ SET BASE=%NIX_DEP%\%PLATFORM%\%BUILD_TYPE%
 SET CPPUNIT_INCLUDE_DIR=%BASE%\cppunit-1.13.2\include
 SET PATH=%PATH%;%CPPUNIT_INCLUDE_DIR%
 
-SET HDF5_BASE=%NIX_DEP%\%PLATFORM%\hdf5-1.8.14
-SET HDF5_DIR=%HDF5_BASE%\cmake\hdf5
+SET HDF5_BASE=%NIX_DEP%\%PLATFORM%\%HDF5_VERSION_DIR%
+SET HDF5_DIR=%HDF5_BASE%\cmake
 SET PATH=%PATH%;%HDF5_BASE%\bin
 
 SET BOOST_ROOT=%BASE%\boost-1.57.0
 SET BOOST_INCLUDEDIR=%BOOST_ROOT%\include\boost-1_57
 
-ECHO CPPUNIT_INCLUDE_DIR=%CPPUNIT_INCLUDE_DIR%
+ECHO CPPUNIT_INCLUDE_DIR=%CPPUNIT_INCLUDE_DIR%, checking directory...
 IF EXIST %CPPUNIT_INCLUDE_DIR% (ECHO cppunit OK) ElSE (EXIT /b)
-ECHO HDF5_DIR=%HDF5_DIR%
+ECHO HDF5_DIR=%HDF5_DIR%, checking directory...
 IF EXIST %HDF5_DIR% (ECHO hdf5 OK) ELSE (EXIT /b)
-ECHO BOOST_INCLUDEDIR=%BOOST_INCLUDEDIR%
+ECHO BOOST_INCLUDEDIR=%BOOST_INCLUDEDIR%, checking directory...
 IF EXIST %BOOST_ROOT% (ECHO boost OK) ELSE (EXIT /b)
 
 ECHO --------------------------------------------------------------------------
@@ -65,7 +86,7 @@ REM Clean up build folder to ensure clean build.
 DEL * /S /Q
 RD /S /Q "CMakeFiles" "Testing" "Debug" "Release" "nix-tool.dir" "x64" "TestRunner.dir" "nix.dir"
 
-IF %PROCESSOR_ARCHITECTURE% == x86 ( cmake .. -G "Visual Studio 12") ELSE (cmake .. -G "Visual Studio 12 Win64")
+IF %PROCESSOR_ARCHITECTURE% == x86 ( cmake .. -DBUILD_STATIC=ON -G "Visual Studio 12") ELSE (cmake .. -DBUILD_STATIC=ON -G "Visual Studio 12 Win64")
 
 ECHO --------------------------------------------------------------------------
 ECHO Building nix via %NIX_ROOT%\build\nix.sln ...
@@ -78,6 +99,13 @@ ECHO --------------------------------------------------------------------------
 ECHO Building nix testrunner ...
 ECHO --------------------------------------------------------------------------
 cmake --build . --config %BUILD_TYPE% --target testrunner
+
+IF %ERRORLEVEL% == 1 (EXIT /b)
+
+ECHO --------------------------------------------------------------------------
+ECHO Building nix-tool ...
+ECHO --------------------------------------------------------------------------
+cmake --build . --config %BUILD_TYPE% --target nix-tool
 
 IF %ERRORLEVEL% == 1 (EXIT /b)
 
@@ -102,14 +130,6 @@ REM Clean up build folder to ensure clean build.
 DEL * /S /Q
 RD /S /Q "CMakeFiles" "Debug" "nix_mx.dir" "Release" "Win32" "x64"
 
-REM Copying required libraries to nix-mx root folder
-COPY %NIX_BUILD_DIR%\nix.dll %NIX_MX_ROOT%\ /Y
-COPY %HDF5_BASE%\bin\hdf5.dll %NIX_MX_ROOT%\ /Y
-COPY %HDF5_BASE%\bin\msvcp120.dll %NIX_MX_ROOT%\ /Y
-COPY %HDF5_BASE%\bin\msvcr120.dll %NIX_MX_ROOT%\ /Y
-COPY %HDF5_BASE%\bin\zlib.dll %NIX_MX_ROOT%\ /Y
-COPY %HDF5_BASE%\bin\szip.dll %NIX_MX_ROOT%\ /Y
-
 IF %PROCESSOR_ARCHITECTURE% == x86 (cmake .. -G "Visual Studio 12") ELSE (cmake .. -G "Visual Studio 12 Win64")
 
 ECHO --------------------------------------------------------------------------
@@ -121,6 +141,8 @@ IF %ERRORLEVEL% == 1 (EXIT /b)
 
 REM Copying required nix-mx.mex file to nix-mx root folder
 COPY %NIX_MX_ROOT%\build\%BUILD_TYPE%\nix_mx.mexw* %NIX_MX_ROOT%\ /Y
+REM Provide nix-tool as well for validation and content display
+COPY %NIX_ROOT%\build\%BUILD_TYPE%\nix-tool.exe %NIX_MX_ROOT%\ /Y
 
 CD %NIX_MX_ROOT%
 

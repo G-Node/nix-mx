@@ -12,3 +12,4 @@ tests/*.h5
 # library files
 *.dll
 *.mex*
+*.exe*

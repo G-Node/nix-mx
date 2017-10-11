@@ -1125,23 +1125,23 @@ function [] = testFindSource
     end
 
     % find all
-    filtered = b.findSources(5);
-    assert(size(filtered, 1) == 10);
-
-    % find until level 4
     filtered = b.findSources(4);
     assert(size(filtered, 1) == 10);
 
     % find until level 3
     filtered = b.findSources(3);
-    assert(size(filtered, 1) == 6);
+    assert(size(filtered, 1) == 10);
 
     % find until level 2
     filtered = b.findSources(2);
-    assert(size(filtered, 1) == 3);
+    assert(size(filtered, 1) == 6);
 
     % find until level 1
     filtered = b.findSources(1);
+    assert(size(filtered, 1) == 3);
+
+    % find until level 0
+    filtered = b.findSources(0);
     assert(size(filtered, 1) == 1);
 end
 
@@ -1186,9 +1186,9 @@ function [] = testFindSourceFiltered
     assert(strcmp(filtered{1}.name, sl41.name));
 
     % test find by type
-    filtered = b.filterFindSources(1, nix.Filter.type, findSource);
+    filtered = b.filterFindSources(0, nix.Filter.type, findSource);
     assert(isempty(filtered));
-    filtered = b.filterFindSources(4, nix.Filter.type, findSource);
+    filtered = b.filterFindSources(3, nix.Filter.type, findSource);
     assert(size(filtered, 1) == 3);
     assert(strcmp(filtered{1}.type, findSource));
 
