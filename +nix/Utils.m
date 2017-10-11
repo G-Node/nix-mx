@@ -165,9 +165,6 @@ classdef Utils
 
             nix.Utils.validFilter(filter, val);
 
-            % transform matlab to c++ style index
-            %md = nix.Utils.handleIndex(maxDepth);
-
             mxMethod = strcat(obj.alias, '::', mxMethodName);
             list = nix_mx(mxMethod, obj.nixhandle, maxDepth, uint8(filter), val);
             r = nix.Utils.createEntityArray(list, objConstructor);
