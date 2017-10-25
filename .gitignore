@@ -13,3 +13,7 @@ tests/*.h5
 *.dll
 *.mex*
 *.exe*
+
+# IDE specifics
+.idea/
+cmake-build-debug/
