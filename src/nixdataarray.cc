@@ -85,8 +85,6 @@ namespace nixdataarray {
         mwSize ndims = mxGetNumberOfDimensions(arr);
         const mwSize *dims = mxGetDimensions(arr);
         
-        mwSize tmp = ndims;
-        
         // Quick fix for writing data arrays that have exactly one row.
         // This fix does not resolve more complex arrays that have a 
         // last dimension of exactly one row.
