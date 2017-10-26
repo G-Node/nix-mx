@@ -255,7 +255,7 @@ private:
     fn_t fun;
 };
 
-};
+}
 
 struct registry {
 
