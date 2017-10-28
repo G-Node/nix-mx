@@ -39,7 +39,15 @@ struct struct_builder {
 
         sa = mxCreateStructArray(dims_size, dims_mw.data(), f_size, f.data());
 #else
-        sa = mxCreateStructArray(dims.size(), dims.data(), fields.size(), fields.data());
+        if (dims.size() > static_cast<size_t>(std::numeric_limits<int>::max())) {
+            throw std::invalid_argument(std::string("Dimension size is larger than supported."));
+        }
+        else if (fields.size() > static_cast<size_t>(std::numeric_limits<int>::max())) {
+            throw std::invalid_argument(std::string("Field size is larger than supported."));
+        }
+        else {
+            sa = mxCreateStructArray(static_cast<int>(dims.size()), dims.data(), static_cast<int>(fields.size()), fields.data());
+        }
 #endif
     }
 

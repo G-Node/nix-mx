@@ -7,6 +7,9 @@ set(VERSION_PATCH 0)
 
 set(VERSION_ABI   1)
 
+# Switch static build
+option(BUILD_STATIC "Build static version of the library" ON)
+
 ### include local modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
@@ -21,12 +24,12 @@ endif()
 # packages
 
 # Provide Boost lib
-set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_STATIC_LIBS ${BUILD_STATIC})
 find_package(Boost 1.49.0 REQUIRED date_time regex program_options system filesystem)
 include_directories(${Boost_INCLUDE_DIR})
 
 # Provide HDF5 lib
-set(HDF5_USE_STATIC_LIBRARIES ON)
+set(HDF5_USE_STATIC_LIBRARIES ${BUILD_STATIC})
 find_package (HDF5 REQUIRED COMPONENTS C)
 
 # The computing environment
@@ -62,7 +65,7 @@ if(NOT CE_PACKAGE)
   Install GNU Octave (or MathWorks MATLAB).")
 endif()
 
-set(NIX_USE_STATIC_LIBS ON)
+set(NIX_USE_STATIC_LIBS ${BUILD_STATIC})
 find_package(NIX REQUIRED)
 
 include_directories(${CE_INCDIR} ${NIX_INCLUDE_DIR} "src" "src/utils")
@@ -80,8 +83,8 @@ add_library(nix_mx ${LIBTYPE} nix_mx.cc ${SOURCE_FILES} ${INCLUDE_FILES})
 
 target_link_libraries(nix_mx ${CE_LIBRARIES} ${NIX_LIBRARIES} ${Boost_LIBRARIES} ${HDF5_LIBRARIES})
 set_target_properties(nix_mx PROPERTIES
-		              VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
-		              SOVERSION ${VERSION_ABI})
+                      VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+                      SOVERSION ${VERSION_ABI})
 set_target_properties(nix_mx PROPERTIES PREFIX "")
 set_target_properties(nix_mx PROPERTIES SUFFIX .${CE_EXTENSION})
 
@@ -92,8 +95,6 @@ endif()
 if(DEBUG_GLUE)
    add_definitions(-DDEBUG_GLUE=1)
 endif()
-
-
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_VERSION} GREATER 3.2)
   add_custom_target(macOS_zip COMMAND
@@ -107,11 +108,16 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_VERSION} GREATER 3.2)
     "${CMAKE_BINARY_DIR}/*.mexmac*")
 endif()
 
-MESSAGE(STATUS "=====================")
+MESSAGE(STATUS "===============================")
+MESSAGE(STATUS "READY. ")
+MESSAGE(STATUS "===============================")
 MESSAGE(STATUS "Computing environment")
 MESSAGE(STATUS "  Package: ${CE_PACKAGE}")
 MESSAGE(STATUS "  Version: ${CE_VERSION}")
 MESSAGE(STATUS "  Module : ${CE_EXTENSION}")
 MESSAGE(STATUS "  BOOST  : ${Boost_LIBRARIES}")
 MESSAGE(STATUS "  NIX    : ${NIX_LIBRARIES}")
-MESSAGE(STATUS "=====================")
+MESSAGE(STATUS "===============================")
+MESSAGE(STATUS "CFLAGS:  ${CMAKE_CXX_FLAGS}")
+MESSAGE(STATUS "STATIC:  ${BUILD_STATIC}")
+MESSAGE(STATUS "===============================")

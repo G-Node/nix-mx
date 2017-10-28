@@ -11,6 +11,8 @@ REM provide them at %NIX-DEP%\x86 or %NIX-DEP%\x64
 SET HDF5_VERSION_DIR=hdf5-1.10.1
 REM Static build requires cmake version 3.9.1
 SET CMAKEVER=3.9.1
+REM Leave NIX_MX_ONLY "" for full nix and nix-mx build
+SET NIX_MX_ONLY=""
 
 ECHO --------------------------------------------------------------------------
 ECHO Checking dependencies ...
@@ -75,6 +77,7 @@ IF EXIST %HDF5_DIR% (ECHO hdf5 OK) ELSE (EXIT /b)
 ECHO BOOST_INCLUDEDIR=%BOOST_INCLUDEDIR%, checking directory...
 IF EXIST %BOOST_ROOT% (ECHO boost OK) ELSE (EXIT /b)
 
+IF %NIX_MX_ONLY% == "" (
 ECHO --------------------------------------------------------------------------
 ECHO Setting up nix build ...
 ECHO --------------------------------------------------------------------------
@@ -119,6 +122,7 @@ IF %ERRORLEVEL% == 1 (EXIT /b)
 REM nix-mx requires nixversion file in ../nix/include/nix
 IF EXIST %NIX_ROOT%\build\include\nix\nixversion.hpp (
 	COPY %NIX_ROOT%\build\include\nix\nixversion.hpp %NIX_ROOT%\include\nix\
+)
 )
 
 ECHO --------------------------------------------------------------------------
