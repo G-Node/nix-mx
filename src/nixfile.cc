@@ -28,9 +28,9 @@ mxArray *message(std::vector<nix::valid::Message> mes) {
 
         nix::valid::Message curr = mes[i];
 
-        struct_builder msb({ 1 }, { "id", "name", "msg" });
+        struct_builder msb({ 1 }, { "id", "msg" });
         msb.set(curr.id);
-        msb.set(curr.name);
+        //msb.set(curr.name);
         msb.set(curr.msg);
 
         mxSetCell(list, i, msb.array());
