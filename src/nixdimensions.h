@@ -23,9 +23,14 @@ namespace nixdimensions {
 
     void sampledAxis(const extractor &input, infusor &output);
 
+    void sampledIndexOf(const extractor &input, infusor &output);
+
     void rangeTickAt(const extractor &input, infusor &output);
 
     void rangeAxis(const extractor &input, infusor &output);
+
+    void rangeIndexOf(const extractor &input, infusor &output);
+
 
 } // namespace nixdimensions
 
