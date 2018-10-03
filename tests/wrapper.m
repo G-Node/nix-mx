@@ -23,6 +23,6 @@ function stats = wrapper( func, stats )
         fprintf('Test %s ... ERROR\n', func2str(func));
         TestUtils.printErrorStack(me);
         stats.errorCount = stats.errorCount + 1;
-    end;
+    end
 
 end

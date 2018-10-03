@@ -28,7 +28,7 @@ void check_arg_type(const mxArray *arr, nix::DataType dtype) {
     }
 }
 
-// extractors 
+// extractors
 
 nix::NDSize mx_to_ndsize(const mxArray *arr) {
 
@@ -56,6 +56,9 @@ std::vector<std::string> mx_to_strings(const mxArray *arr) {
     */
     std::vector<std::string> res;
     const mxArray *el_ptr;
+    if (arr == nullptr) {
+      return res;
+    }
 
     mwSize length = mxGetNumberOfElements(arr);
     mwIndex index;
