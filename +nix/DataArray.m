@@ -135,69 +135,49 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             % Example:  dim = currDataArray.appendSetDimension();
             %
             % See also nix.SetDimension.
-
+          
             fname = strcat(obj.alias, '::appendSetDimension');
             h = nix_mx(fname, obj.nixhandle);
             r = nix.Utils.createEntity(h, @nix.SetDimension);
         end
 
-        function r = appendSampledDimension(obj, interval, label, unit, offset)
+        function r = appendSampledDimension(obj, interval)
             % Append a new SampledDimension as last entry to the list of 
             % existing dimension descriptors of the invoking DataArray.
             %
             % Used to describe the regularly sampled dimension of data.
             %
             % interval (double):  The sampling interval of the Dimension to create.
-            % label (string): The label used for the described axis, default empty.
-            % unit (string): The unit of the axis, default empty.
-            % offset (double): The offset of the dimension, default 0.0.
             %
             % Returns:  (nix.SampledDimension) The newly created SampledDimension.
             %
             % Example:  stepSize = 5;
-            %           label = "time";
-            %           unit = "s";
-            %           offset = 1.0;
-            %           dim = currDataArray.appendSampledDimension(stepSize, label, unit, offset);
+            %          
+            %           dim = currDataArray.appendSampledDimension(stepSize);
             %
             % See also nix.SampledDimension.
-            if nargin < 3
-                label = "";
-            end
-            if nargin < 4
-                unit = "";
-            end
-            if nargin < 5
-                offset = 0.0;
-            end
+           
             fname = strcat(obj.alias, '::appendSampledDimension');
-            h = nix_mx(fname, obj.nixhandle, interval, label, unit, offset);
+            h = nix_mx(fname, obj.nixhandle, interval);
             r = nix.Utils.createEntity(h, @nix.SampledDimension);
         end
 
-        function r = appendRangeDimension(obj, ticks, label, unit)
+        function r = appendRangeDimension(obj, ticks)
             % Append a new SampledDimension as last entry to the list of 
             % existing dimension descriptors of the invoking DataArray.
             %
             % Used to describe the irregularly sampled dimension of data.
             %
             % ticks ([double]):  The ticks of the RangeDimension.
-            % label (string): The label used to describe this dimension, default empty
-            % unit (string): The unit of the ticks stored in  this dimsension, default empty
             %
             % Returns:  (nix.RangeDimension) The newly created RangeDimension.
             %
             % Example:  dim = currDataArray.appendRangeDimension([1 10 21 15]);
             %
             % See also nix.SampledDimension.
-            if nargin < 3
-                label = "";
-            end
-            if nargin < 4
-                unit = "";
-            end
+           
             fname = strcat(obj.alias, '::appendRangeDimension');
-            h = nix_mx(fname, obj.nixhandle, ticks, label, unit);
+            h = nix_mx(fname, obj.nixhandle, ticks);
             r = nix.Utils.createEntity(h, @nix.RangeDimension);
         end
 

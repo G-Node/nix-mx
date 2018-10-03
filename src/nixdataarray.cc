@@ -185,4 +185,23 @@ namespace nixdataarray {
         output.set(0, res);
     }
 
+    void arrayAppendSampledDimension(const extractor &input, infusor &output) {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        double si = static_cast<double>(input.num<double>(2));
+        nix::SampledDimension d = currObj.appendSampledDimension(si);
+        output.set(0, d);
+    }
+
+    void arrayAppendSetDimension(const extractor &input, infusor &output) {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        nix::SetDimension d = currObj.appendSetDimension();
+        output.set(0, d);
+    }
+
+    void arrayAppendRangeDimension(const extractor &input, infusor &output) {
+        nix::DataArray currObj = input.entity<nix::DataArray>(1);
+        std::vector<double> ticks = input.vec<double>(2);
+        nix::RangeDimension d = currObj.appendRangeDimension(ticks);
+        output.set(0, d);
+    }
 } // namespace nixdataarray

@@ -49,6 +49,12 @@ namespace nixdataarray {
 
     void sourcesFiltered(const extractor &input, infusor &output);
 
+    void arrayAppendSampledDimension(const extractor &input, infusor &output);
+
+    void arrayAppendRangeDimension(const extractor &input, infusor &output);
+
+    void arrayAppendSetDimension(const extractor &input, infusor &output);
+
 } // namespace nixdataarray
 
 #endif
