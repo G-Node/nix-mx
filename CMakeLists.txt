@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.4)
-project(nix_mx CXX)
+project(nix_mx C CXX)
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 4)
@@ -7,11 +7,10 @@ set(VERSION_PATCH 2)
 
 set(VERSION_ABI   1)
 
-ENABLE_LANGUAGE(C)
-cmake_policy(SET CMP0050 NEW)
 
 # Switch static build
 option(BUILD_STATIC "Build static version of the library" ON)
+set(CMAKE_MACOSX_RPATH NOT${BUILD_STATIC})
 
 ### include local modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
