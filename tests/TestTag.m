@@ -555,12 +555,12 @@ function [] = testRetrieveData( varargin )
 
     % test get referenced data by name
     retData = t.retrieveData('testDataArrayName');
-    assert(size(retData, 2) == t.extent, 'Get by name extent check fail');
+    assert(size(retData, 2) == t.extent + 1, 'Get by name extent check fail');
     assert(retData(1) == rawName(t.position + 1), 'Get by name position check fail');
 
     % test get referenced data by id
     retData = t.retrieveData(d.id);
-    assert(size(retData, 2) == t.extent, 'Get by id extent check fail');
+    assert(size(retData, 2) == t.extent + 1, 'Get by id extent check fail');
     assert(retData(1) == rawID(t.position + 1), 'Get by id position check fail');
 end
 
@@ -584,7 +584,7 @@ function [] = testRetrieveDataIdx( varargin )
     end
 
     retData = t.retrieveDataIdx(1);
-    assert(size(retData, 2) == t.extent, 'Extent check failed');
+    assert(size(retData, 2) == t.extent + 1, 'Extent check failed');
     assert(retData(1) == raw(t.position + 1), 'Position check failed');
 end
 
@@ -622,7 +622,7 @@ function [] = testRetrieveFeatureData( varargin )
     df.appendSampledDimension(1);
     t.createFeature(df, nix.LinkType.Tagged);
     retData = t.retrieveFeatureData(df.id);
-    assert(size(retData, 2) == t.extent, 'Tagged Extent check fail');
+    assert(size(retData, 2) == t.extent + 1, 'Tagged Extent check fail');
     assert(retData(1) == rawFeature(t.position + 1), 'Tagged Position check fail');
 
     % test retrieve indexed feature data by id
@@ -659,7 +659,7 @@ function [] = testRetrieveFeatureDataIdx( varargin )
     df.appendSampledDimension(1);
     t.createFeature(df, nix.LinkType.Tagged);
     retData = t.retrieveFeatureDataIdx(2);
-    assert(size(retData, 2) == t.extent, 'Tagged Extent check fail');
+    assert(size(retData, 2) == t.extent + 1, 'Tagged Extent check fail');
     assert(retData(1) == rawFeature(t.position + 1), 'Tagged Position check fail');
 
     % test retrieve indexed feature data

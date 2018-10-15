@@ -39,6 +39,6 @@ for i = 1:length(all)
     for j = 1:length(all{i}.tests)
         stats = wrapper(all{i}.tests{j}, stats);
     end
-end;
+end
 
 disp([10 'Tests: ' num2str(stats.okCount) ' succeeded, ' num2str(stats.errorCount) ' failed']);

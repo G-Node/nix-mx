@@ -1,14 +1,16 @@
 cmake_minimum_required(VERSION 2.8.4)
-project(nix_mx CXX)
+project(nix_mx C CXX)
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 4)
-set(VERSION_PATCH 0)
+set(VERSION_PATCH 2)
 
 set(VERSION_ABI   1)
 
+
 # Switch static build
 option(BUILD_STATIC "Build static version of the library" ON)
+set(CMAKE_MACOSX_RPATH NOT${BUILD_STATIC})
 
 ### include local modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
@@ -49,7 +51,7 @@ if(OCTAVE_FOUND)
   set(CE_EXTENSION oct)
 endif()
 
-IF(MATLAB_FOUND)
+if(MATLAB_FOUND)
   MESSAGE(STATUS "Matlab found at ${MATLAB_INCLUDE_DIR}")
   add_definitions(-DMATLAB_MEX_FILE)
   set(CE_PACKAGE "Matlab")
@@ -57,7 +59,7 @@ IF(MATLAB_FOUND)
   set(CE_INCDIR ${MATLAB_INCLUDE_DIR})
   set(CE_LIBRARIES ${MATLAB_LIBRARIES})
   set(CE_EXTENSION ${MATLAB_MEXEXT})
-ENDIF(MATLAB_FOUND)
+endif(MATLAB_FOUND)
 
 if(NOT CE_PACKAGE)
   MESSAGE(FATAL_ERROR "
@@ -96,7 +98,7 @@ if(DEBUG_GLUE)
    add_definitions(-DDEBUG_GLUE=1)
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_VERSION} GREATER 3.2)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_VERSION} VERSION_GREATER 3.2)
   add_custom_target(macOS_zip COMMAND
     ${CMAKE_COMMAND} -E tar "cfv" "nix_mx_macOS_${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.zip" --format=zip
     "${CMAKE_CURRENT_SOURCE_DIR}/+nix"

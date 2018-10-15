@@ -424,6 +424,7 @@ function [] = testHasSource( varargin )
 
     clear d s b f;
     f = nix.File(fullfile(pwd, 'tests', fileName), nix.FileMode.ReadOnly);
+
     assert(f.blocks{1}.dataArrays{1}.hasSource(sID));
 end
 
@@ -438,7 +439,7 @@ function [] = testSourceCount( varargin )
     d.addSource(b.createSource('testSource1', 'nixSource'));
     assert(d.sourceCount() == 1);
     d.addSource(b.createSource('testSource2', 'nixSource'));
-    
+    assert(d.sourceCount() == 2);
     clear d b f;
     f = nix.File(testFile, nix.FileMode.ReadOnly);
     assert(f.blocks{1}.dataArrays{1}.sourceCount() == 2);
@@ -450,12 +451,14 @@ function [] = testDimensions( varargin )
     f = nix.File(fileName, nix.FileMode.Overwrite);
     b = f.createBlock('daTestBlock', 'test nixBlock');
     da = b.createDataArray('daTest', 'test nixDataArray', nix.DataType.Double, [1 2]);
-    
+
     assert(isempty(da.dimensions));
     assert(isempty(f.blocks{1}.dataArrays{1}.dimensions));
-    
+
     da.appendSetDimension();
+
     assert(length(da.dimensions) == 1);
+
     assert(strcmp(da.dimensions{1}.dimensionType, 'set'));
     assert(strcmp(f.blocks{1}.dataArrays{1}.dimensions{1}.dimensionType, 'set'));
     
@@ -480,14 +483,14 @@ function [] = testDimensions( varargin )
         da.appendAliasRangeDimension;
     catch ME
         assert(strcmp(ME.identifier, 'nix:arg:inval'));
-    end;
+    end
     
     da.appendSetDimension();
     try
         da.appendAliasRangeDimension();
     catch ME
         assert(strcmp(ME.identifier, 'nix:arg:inval'));
-    end;
+    end
     
     daAlias = b.createDataArray('aliasDimTest', 'nix.DataArray', ...
         nix.DataType.Double, 25);

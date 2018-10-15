@@ -135,7 +135,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             % Example:  dim = currDataArray.appendSetDimension();
             %
             % See also nix.SetDimension.
-
+          
             fname = strcat(obj.alias, '::appendSetDimension');
             h = nix_mx(fname, obj.nixhandle);
             r = nix.Utils.createEntity(h, @nix.SetDimension);
@@ -152,10 +152,11 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             % Returns:  (nix.SampledDimension) The newly created SampledDimension.
             %
             % Example:  stepSize = 5;
+            %          
             %           dim = currDataArray.appendSampledDimension(stepSize);
             %
             % See also nix.SampledDimension.
-
+           
             fname = strcat(obj.alias, '::appendSampledDimension');
             h = nix_mx(fname, obj.nixhandle, interval);
             r = nix.Utils.createEntity(h, @nix.SampledDimension);
@@ -174,7 +175,7 @@ classdef DataArray < nix.NamedEntity & nix.MetadataMixIn & nix.SourcesMixIn
             % Example:  dim = currDataArray.appendRangeDimension([1 10 21 15]);
             %
             % See also nix.SampledDimension.
-
+           
             fname = strcat(obj.alias, '::appendRangeDimension');
             h = nix_mx(fname, obj.nixhandle, ticks);
             r = nix.Utils.createEntity(h, @nix.RangeDimension);

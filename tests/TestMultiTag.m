@@ -655,16 +655,16 @@ function [] = testRetrieveData( varargin )
 
     pos(1,:) = [0, 0]; ext(1,:) = [0, 0]; % result 111
     pos(2,:) = [1, 1]; ext(2,:) = [0, 3]; % result 122 123 124
-    pos(3,:) = [0, 2]; ext(3,:) = [2, 4]; % result 113 114 115 116
+    pos(3,:) = [0, 2]; ext(3,:) = [1, 4]; % result 113 114 115 116
                                           %        123 124 125 126
 
 	d_pos = b.createDataArrayFromData('positionsDA', 'nixDataArray', pos);
-    d_pos.appendSampledDimension(0);
-    d_pos.appendSampledDimension(0);
+    d_pos.appendSetDimension(); 
+    d_pos.appendSetDimension();
 
     d_ext = b.createDataArrayFromData('extentsDA', 'nixDataArray', ext);
-    d_ext.appendSampledDimension(0);
-    d_ext.appendSampledDimension(0);
+    d_ext.appendSetDimension();
+    d_ext.appendSetDimension();
 
     t = b.createMultiTag('testMultiTag', 'nixMultiTag', d_pos);
     t.setExtents(d_ext);
@@ -707,8 +707,8 @@ function [] = testRetrieveData( varargin )
     clear ME;
  
     assert(isequal(t.retrieveData(1, d1.name), raw1(1:1)), 'Retrieve pos 1, ref 1 fail');
-    assert(isequal(t.retrieveData(2, d1.id), raw1(2, 2:4)), 'Retrieve pos 2, ref 1 fail');
-    assert(isequal(t.retrieveData(3, d2.id), raw2(1:2, 3:6)), 'Retrieve pos 3, ref 2 fail');
+    assert(isequal(t.retrieveData(2, d1.id), raw1(2, 2:5)), 'Retrieve pos 2, ref 1 fail');
+    assert(isequal(t.retrieveData(3, d2.id), raw2(1:2, 3:7)), 'Retrieve pos 3, ref 2 fail');
 end
 
 %% Test: Retrieve reference data by index
@@ -718,16 +718,16 @@ function [] = testRetrieveDataIdx( varargin )
 
     pos(1,:) = [0, 0]; ext(1,:) = [0, 0]; % result 111
     pos(2,:) = [1, 1]; ext(2,:) = [0, 3]; % result 122 123 124
-    pos(3,:) = [0, 2]; ext(3,:) = [2, 4]; % result 113 114 115 116
+    pos(3,:) = [0, 2]; ext(3,:) = [1, 4]; % result 113 114 115 116
                                           %        123 124 125 126
 
 	d_pos = b.createDataArrayFromData('positionsDA', 'nixDataArray', pos);
-    d_pos.appendSampledDimension(0);
-    d_pos.appendSampledDimension(0);
+    d_pos.appendSetDimension();
+    d_pos.appendSetDimension();
 
     d_ext = b.createDataArrayFromData('extentsDA', 'nixDataArray', ext);
-    d_ext.appendSampledDimension(0);
-    d_ext.appendSampledDimension(0);
+    d_ext.appendSetDimension();
+    d_ext.appendSetDimension();
 
     t = b.createMultiTag('testMultiTag', 'nixMultiTag', d_pos);
     t.setExtents(d_ext);
@@ -766,8 +766,8 @@ function [] = testRetrieveDataIdx( varargin )
     end
     
     assert(isequal(t.retrieveDataIdx(1, 1), raw1(1:1)), 'Retrieve pos 1, ref 1 fail');
-    assert(isequal(t.retrieveDataIdx(2, 1), raw1(2, 2:4)), 'Retrieve pos 2, ref 1 fail');
-    assert(isequal(t.retrieveDataIdx(3, 2), raw2(1:2, 3:6)), 'Retrieve pos 3, ref 2 fail');
+    assert(isequal(t.retrieveDataIdx(2, 1), raw1(2, 2:5)), 'Retrieve pos 2, ref 1 fail');
+    assert(isequal(t.retrieveDataIdx(3, 2), raw2(1:2, 3:7)), 'Retrieve pos 3, ref 2 fail');
 end
 
 %% Test: Retrieve Feature data by id or name
@@ -790,14 +790,14 @@ function [] = testRetrieveFeatureData( varargin )
     da_feat3.appendSampledDimension(1);
 
     % create position, extents DA and multi tag
-    pos = [0; 3; 5];
-    ext = [1; 1; 3];
+    pos = [0 3 4];
+    ext = [1 1 3];
 
     da_pos = b.createDataArrayFromData('positions', 'nixDataArray', pos);
     da_ext = b.createDataArrayFromData('extents', 'nixDataArray', ext);
 
-    da_pos.appendSampledDimension(0);
-    da_ext.appendSampledDimension(0);
+    da_pos.appendSetDimension();
+    da_ext.appendSetDimension();
 
     t = b.createMultiTag('testMultiTag', 'nixMultiTag', da_pos);
     t.setExtents(da_ext);
@@ -828,31 +828,31 @@ function [] = testRetrieveFeatureData( varargin )
     clear ME;
 
     % test untagged ignores position and returns full data
-    retData = t.retrieveFeatureData(100, da_feat1.name);
+    retData = t.retrieveFeatureData(1, da_feat1.name);
     assert(isequal(raw_feat1, retData), 'Untagged fail');
 
     % test tagged properly applies position and extents
     retData = t.retrieveFeatureData(1, da_feat2.id);
-    assert(isequal(retData, [21]), 'Tagged pos 1 fail');
+    assert(isequal(retData, [21, 22]), 'Tagged pos 1 fail');
 
     retData = t.retrieveFeatureData(2, da_feat2.name);
-    assert(isequal(retData, [24]), 'Tagged pos 2 fail');
+    assert(isequal(retData, [24, 25]), 'Tagged pos 2 fail');
 
     retData = t.retrieveFeatureData(3, da_feat2.id);
-    assert(isequal(retData, [26, 27, 28]), 'Tagged pos 3 fail');
+    assert(isequal(retData, [25, 26, 27, 28]), 'Tagged pos 3 fail');
 
     % test indexed returns first and last index value
     retData = t.retrieveFeatureData(1, da_feat3.id);
     assert(isequal(retData, raw_feat3(1)), 'Indexed first pos fail');
     
-    retData = t.retrieveFeatureData(8, da_feat3.name);
-    assert(isequal(retData, raw_feat3(end)), 'Indexed last pos fail');
+    retData = t.retrieveFeatureData(2, da_feat3.name);
+    assert(isequal(retData, raw_feat3(2)), 'Indexed last pos fail');
     
     % test indexed fail when accessing position > length of referenced array
     try
         t.retrieveFeatureData(size(raw_feat3, 2) + 2, da_feat3.id);
     catch ME
-        assert(~isempty(strfind(ME.message, 'than the data stored in the feature')), ...
+        assert(~isempty(strfind(ME.message, 'ounds of positions')), ...
             'Indexed out of length fail');
     end
     assert(exist('ME') == 1, 'Indexed out of length fail, error not raised');
@@ -879,14 +879,14 @@ function [] = testRetrieveFeatureDataIdx( varargin )
     da_feat3.appendSampledDimension(1);
 
     % create position, extents DA and multi tag
-    pos = [0; 3; 5];
-    ext = [1; 1; 3];
+    pos = [0 3 4];
+    ext = [1 1 3];
 
     da_pos = b.createDataArrayFromData('positions', 'nixDataArray', pos);
     da_ext = b.createDataArrayFromData('extents', 'nixDataArray', ext);
 
-    da_pos.appendSampledDimension(0);
-    da_ext.appendSampledDimension(0);
+    da_pos.appendSetDimension();
+    da_ext.appendSetDimension();
 
     t = b.createMultiTag('testMultiTag', 'nixMultiTag', da_pos);
     t.setExtents(da_ext);
@@ -917,31 +917,31 @@ function [] = testRetrieveFeatureDataIdx( varargin )
     clear ME;
 
     % test untagged ignores position and returns full data
-    retData = t.retrieveFeatureDataIdx(100, 1);
+    retData = t.retrieveFeatureDataIdx(1, 1);
     assert(isequal(raw_feat1, retData), 'Untagged fail');
 
     % test tagged properly applies position and extents
     retData = t.retrieveFeatureDataIdx(1, 2);
-    assert(isequal(retData, [21]), 'Tagged pos 1 fail');
+    assert(isequal(retData, [21, 22]), 'Tagged pos 1 fail');
 
     retData = t.retrieveFeatureDataIdx(2, 2);
-    assert(isequal(retData, [24]), 'Tagged pos 2 fail');
+    assert(isequal(retData, [24, 25]), 'Tagged pos 2 fail');
 
     retData = t.retrieveFeatureDataIdx(3, 2);
-    assert(isequal(retData, [26, 27, 28]), 'Tagged pos 3 fail');
+    assert(isequal(retData, [25, 26, 27, 28]), 'Tagged pos 3 fail');
 
     % test indexed returns first and last index value
     retData = t.retrieveFeatureDataIdx(1, 3);
     assert(isequal(retData, raw_feat3(1)), 'Indexed first pos fail');
     
-    retData = t.retrieveFeatureDataIdx(8, 3);
-    assert(isequal(retData, raw_feat3(end)), 'Indexed last pos fail');
+    retData = t.retrieveFeatureDataIdx(3, 3);
+    assert(isequal(retData, raw_feat3(3)), 'Indexed last pos fail');
     
     % test indexed fail when accessing position > length of referenced array
     try
         t.retrieveFeatureDataIdx(size(raw_feat3, 2) + 2, 3);
     catch ME
-        assert(~isempty(strfind(ME.message, 'than the data stored in the feature')), ...
+        assert(~isempty(strfind(ME.message, 'ounds of positions')), ...
             'Indexed out of length fail');
     end
     assert(exist('ME') == 1, 'Indexed out of length fail, error not raised');

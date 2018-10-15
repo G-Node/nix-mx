@@ -242,6 +242,9 @@ void mexFunction(int            nlhs,
             .add("openDimensionIdx", nixdataarray::openDimensionIdx)
             .add("compare", nixdataarray::compare)
             .add("sourcesFiltered", nixdataarray::sourcesFiltered)
+            .add("appendSampledDimension", nixdataarray::arrayAppendSampledDimension)
+            .add("appendSetDimension", nixdataarray::arrayAppendSetDimension)
+            .add("appendRangeDimension", nixdataarray::arrayAppendRangeDimension)
             .reg("sources", IDATAARRAY(std::vector<nix::Source>, EntityWithSources, std::function<bool(const nix::Source &)>, sources, const))
             .reg("openMetadataSection", IDATAARRAY(nix::Section, EntityWithMetadata, , metadata, const))
             .reg("setMetadata", IDATAARRAY(void, EntityWithMetadata, const std::string&, metadata, ))
@@ -257,10 +260,10 @@ void mexFunction(int            nlhs,
             .reg("setNoneExpansionOrigin", SETTER(boost::none_t, nix::DataArray, expansionOrigin))
             .reg("setNonePolynomCoefficients", SETTER(boost::none_t, nix::DataArray, polynomCoefficients))
             .reg("dimensions", FILTER(std::vector<nix::Dimension>, nix::DataArray, , dimensions))
-            .reg("appendSetDimension", &nix::DataArray::appendSetDimension)
-            .reg("appendRangeDimension", &nix::DataArray::appendRangeDimension)
+            //.reg("appendSetDimension", &nix::DataArray::appendSetDimension)
+            //.reg("appendRangeDimension", &nix::DataArray::appendRangeDimension)
             .reg("appendAliasRangeDimension", &nix::DataArray::appendAliasRangeDimension)
-            .reg("appendSampledDimension", &nix::DataArray::appendSampledDimension)
+            //.reg("appendSampledDimension", &nix::DataArray::appendSampledDimension)
             .reg("createSetDimension", &nix::DataArray::createSetDimension)
             .reg("createRangeDimension", &nix::DataArray::createRangeDimension)
             .reg("createAliasRangeDimension", &nix::DataArray::createAliasRangeDimension)
@@ -453,26 +456,27 @@ void mexFunction(int            nlhs,
             .desc(&nixdimensions::describe)
             .add("positionAt", nixdimensions::sampledPositionAt)
             .add("axis", nixdimensions::sampledAxis)
+            .add("indexOf", nixdimensions::sampledIndexOf)
             .reg("setLabel", SETTER(const std::string&, nix::SampledDimension, label))
             .reg("setNoneLabel", SETTER(const boost::none_t, nix::SampledDimension, label))
             .reg("setUnit", SETTER(const std::string&, nix::SampledDimension, unit))
             .reg("setNoneUnit", SETTER(const boost::none_t, nix::SampledDimension, unit))
             .reg("setSamplingInterval", SETTER(double, nix::SampledDimension, samplingInterval))
             .reg("setOffset", SETTER(double, nix::SampledDimension, offset))
-            .reg("setNoneOffset", SETTER(const boost::none_t, nix::SampledDimension, offset))
-            .reg("indexOf", &nix::SampledDimension::indexOf);
+            .reg("setNoneOffset", SETTER(const boost::none_t, nix::SampledDimension, offset));
 
         classdef<nix::RangeDimension>("RangeDimension", methods)
             .desc(&nixdimensions::describe)
             .add("tickAt", nixdimensions::rangeTickAt)
             .add("axis", nixdimensions::rangeAxis)
+            .add("indexOf", nixdimensions::rangeIndexOf)
             .reg("setLabel", SETTER(const std::string&, nix::RangeDimension, label))
             .reg("setNoneLabel", SETTER(const boost::none_t, nix::RangeDimension, label))
             .reg("setUnit", SETTER(const std::string&, nix::RangeDimension, unit))
             .reg("setNoneUnit", SETTER(const boost::none_t, nix::RangeDimension, unit))
-            .reg("setTicks", SETTER(const std::vector<double>&, nix::RangeDimension, ticks))
-            .reg("indexOf", &nix::RangeDimension::indexOf);
+            .reg("setTicks", SETTER(const std::vector<double>&, nix::RangeDimension, ticks));
 
+        
         mexAtExit(on_exit);
     });
 
