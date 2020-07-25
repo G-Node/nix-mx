@@ -14,14 +14,13 @@ if(NIX_USE_STATIC_LIBS)
   endif()
 endif()
 
-
 find_path(NIX_INCLUDE_DIR nix.hpp
   HINTS /usr/local/include
   /usr/include
   $ENV{NIX_ROOT}/include
   PATH_SUFFIXES nix)
 
-find_library(NIX_LIBRARY NAMES nix libnix
+find_library(NIX_LIBRARY NAMES nix libnix nixio libnixio
   HINTS $ENV{NIX_ROOT}/build/Release
   HINTS $ENV{NIX_BUILD_DIR}
   HINTS ${NIX_INCLUDE_DIR}/../lib
