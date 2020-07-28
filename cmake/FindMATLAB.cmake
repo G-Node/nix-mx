@@ -40,7 +40,7 @@
 SET(MATLAB_FOUND 0)
 IF(WIN32)
   # Search for a version of Matlab available, starting from the most modern one to older versions
-  FOREACH(MATVER "9.5" "9.4" "9.3" "9.2" "9.1" "8.6" "8.5" "8.4" "8.3" "8.2" "8.1" "8" "7.14" "7.12" "7.11" "7.10" "7.9" "7.8" "7.7" "7.6" "7.5" "7.4")
+  FOREACH(MATVER "9.8" "9.7" "9.6" "9.5" "9.4" "9.3" "9.2" "9.1" "8.6" "8.5" "8.4" "8.3" "8.2" "8.1" "8" "7.14" "7.12" "7.11" "7.10" "7.9" "7.8" "7.7" "7.6" "7.5" "7.4")
     IF((NOT DEFINED MATLAB_ROOT)
         OR ("${MATLAB_ROOT}" STREQUAL "")
         OR ("${MATLAB_ROOT}" STREQUAL "/registry"))
@@ -126,7 +126,7 @@ ELSE(WIN32)
     IF((NOT DEFINED MATLAB_ROOT) OR ("${MATLAB_ROOT}" STREQUAL ""))
 
     # Search for a version of Matlab available, starting from the most modern one to older versions
-      FOREACH(MATVER "R2018b" "R2018a" "R2017b" "R2017a" "R2016b" "R2016a" "R2015b" "R2015a" "R2014b" "R2014a" "R2013b" "R2013a" "R2012b" "R2012a" "R2011b" "R2011a" "R2010b" "R2010a" "R2009b" "R2009a" "R2008b")
+      FOREACH(MATVER "R2020a" "R2019b" "R2019a" "R2018b" "R2018a" "R2017b" "R2017a" "R2016b" "R2016a" "R2015b" "R2015a" "R2014b" "R2014a" "R2013b" "R2013a" "R2012b" "R2012a" "R2011b" "R2011a" "R2010b" "R2010a" "R2009b" "R2009a" "R2008b")
         SET(MATLAB_VERSION ${MATVER})
         IF((NOT DEFINED MATLAB_ROOT) OR ("${MATLAB_ROOT}" STREQUAL ""))
           IF(EXISTS /Applications/MATLAB_${MATVER}.app)

@@ -1,8 +1,8 @@
 # - Try to find NIX
 # Once done this will define
-#  NIX_FOUND - System has Nix
-#  NIX_INCLUDE_DIRS - The Nix include directories
-#  NIX_LIBRARIES - The libraries needed to use Nix
+#  NIX_FOUND - System has NIX
+#  NIX_INCLUDE_DIRS - The NIX include directories
+#  NIX_LIBRARIES - The libraries needed to use NIX
 
 # Support preference of static libs by adjusting CMAKE_FIND_LIBRARY_SUFFIXES
 if(NIX_USE_STATIC_LIBS)
@@ -14,14 +14,13 @@ if(NIX_USE_STATIC_LIBS)
   endif()
 endif()
 
-
 find_path(NIX_INCLUDE_DIR nix.hpp
   HINTS /usr/local/include
   /usr/include
   $ENV{NIX_ROOT}/include
   PATH_SUFFIXES nix)
 
-find_library(NIX_LIBRARY NAMES nix libnix
+find_library(NIX_LIBRARY NAMES nix libnix nixio libnixio
   HINTS $ENV{NIX_ROOT}/build/Release
   HINTS $ENV{NIX_BUILD_DIR}
   HINTS ${NIX_INCLUDE_DIR}/../lib
@@ -35,7 +34,7 @@ set(NIX_INCLUDE_DIRS ${NIX_INCLUDE_DIR})
 include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set NIX_FOUND to TRUE
 # if all listed variables are TRUE
-find_package_handle_standard_args(Nix DEFAULT_MSG
+find_package_handle_standard_args(NIX DEFAULT_MSG
   NIX_LIBRARY NIX_INCLUDE_DIR)
 
 mark_as_advanced(NIX_INCLUDE_DIR NIX_LIBRARIES)

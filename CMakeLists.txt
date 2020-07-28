@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 2.8.4)
 project(nix_mx C CXX)
-
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 4)
 set(VERSION_PATCH 2)
@@ -99,15 +98,30 @@ if(DEBUG_GLUE)
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_VERSION} VERSION_GREATER 3.2)
-  add_custom_target(macOS_zip COMMAND
-    ${CMAKE_COMMAND} -E tar "cfv" "nix_mx_macOS_${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.zip" --format=zip
-    "${CMAKE_CURRENT_SOURCE_DIR}/+nix"
-    "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt"
-    "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
-    "${CMAKE_CURRENT_SOURCE_DIR}/tests"
-    "${CMAKE_CURRENT_SOURCE_DIR}/examples"
-    "${CMAKE_CURRENT_SOURCE_DIR}/startup.m"
-    "${CMAKE_BINARY_DIR}/*.mexmac*")
+  set(ZIP_FILE_NAME "nix_mx_macOS_${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.zip")
+
+  add_custom_target( 
+    macOS_zip 
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/+nix ${CMAKE_BINARY_DIR}/+nix
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/examples ${CMAKE_BINARY_DIR}/examples
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/tests ${CMAKE_BINARY_DIR}/tests
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/startup.m ${CMAKE_BINARY_DIR}/
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/LICENSE.txt ${CMAKE_BINARY_DIR}/
+    COMMAND ${CMAKE_COMMAND} -E tar "cf" ${ZIP_FILE_NAME} --format=zip 
+      "${CMAKE_BINARY_DIR}/+nix"
+      "${CMAKE_BINARY_DIR}/LICENSE.txt"
+      "${CMAKE_BINARY_DIR}/README.md"
+      "${CMAKE_BINARY_DIR}/tests"
+      "${CMAKE_BINARY_DIR}/examples"
+      "${CMAKE_BINARY_DIR}/startup.m"
+      "${CMAKE_BINARY_DIR}/*.mexmac*"
+    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/+nix
+    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/tests
+    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/examples
+    COMMAND ${CMAKE_COMMAND} -E rm ${CMAKE_BINARY_DIR}/LICENSE.txt
+    COMMAND ${CMAKE_COMMAND} -E rm ${CMAKE_BINARY_DIR}/README.md
+    COMMAND ${CMAKE_COMMAND} -E rm ${CMAKE_BINARY_DIR}/startup.m)
 endif()
 
 MESSAGE(STATUS "===============================")
