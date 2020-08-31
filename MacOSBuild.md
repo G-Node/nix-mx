@@ -30,7 +30,7 @@ cmake ..
 make
 
 # 6. create a zip file
-make maOS_zip
+make macOS_zip
 ```
 
 - Move the zip file to your preferred installation folder and extract it there.
