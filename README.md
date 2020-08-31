@@ -40,7 +40,7 @@ the build guide and set up all required paths and repositories accordingly.
 ### Quick start packages, Release 1.4.1
 
 The quick start packages (https://github.com/G-Node/nix-mx/releases)
-are compiled under macOS Sierra using Matlab 2020a and contain a statically built mex file, 
+are compiled under macOS Catalina using Matlab 2020a and contain a statically built mex file, 
 nix m-files, tests, and a `startup.m` script. To use nix-mx unzip the file and run the 
 `startup.m` script in MATLAB. This simply adds the current folder containing the mex 
 files to the MATLAB path. Do not change the file/folder structure.
