@@ -17,3 +17,4 @@ tests/*.h5
 # IDE specifics
 .idea/
 cmake-build-debug/
+.vscode/
